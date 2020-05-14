@@ -10,7 +10,7 @@
 
 #include "feasst.h"
 
-int main() {  // PatchKF, REFCONF_REINHARDT
+int main() {  // PatchKF, REFCONF_REINHARDT2
   auto space = feasst::makeSpace(
    {{"dimen", "2"},
     {"boxLength", "20."}});
