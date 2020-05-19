@@ -35,7 +35,7 @@ T = 300.
 p = 1. # bar
 V = kB * T / (p * 1.e5)  #molecular volume in m3
 
-test_input = { "adsorptive": "data.ethane_trappe",
+test_input = { "adsorptive": "data.C2",
                "adsorbent": "./LTA_replicate",
                "temperature": T,
                "rcut": 15.,
