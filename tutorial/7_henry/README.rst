@@ -7,5 +7,3 @@ Henry Coefficient: Example
 
 Example of computing a Henry coefficient for ethane adsorption in a LTA zeolite.
 
-Requires `pip install ase`
-
