@@ -22,8 +22,13 @@ import feasst
 import pyfeasst
 
 from FEASST_Henry_Coefficient_Rigid import *
-from Molecule_Tools import *
 from Uncertainty_Tools import *
+
+#Relevant CODATA Constants
+amu = 1.6605390400e-27 #kg/amu
+kB = 1.380649030e-23 #J/K
+Na = 6.022140760E23  #1/mol
+h = 6.6260701500E-34  #J s
 
 #Confidence Level
 conf_level = 0.95
