@@ -1,0 +1,33 @@
+# LAMMPS data file
+# ['ethane']
+
+2 atoms
+1 bonds
+1 atom types
+1 bond types
+
+-0.06905 3.47095 xlo xhi
+-0.91936 1.08064 ylo yhi
+-0.99688 1.00312 zlo zhi
+
+Masses
+
+1 15.03422
+
+
+Pair Coeffs
+
+1 0.81481707224 3.75
+
+Bond Coeffs
+
+1 -1 1.5400
+
+Atoms
+
+1 1 1 0.000 0.0 0.0 0.0 0 0 0
+2 1 1 0.000 1.54 0.0 0.0 0 0 0
+
+Bonds
+
+1 1 1  2
