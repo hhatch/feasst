@@ -22,7 +22,6 @@ import feasst
 import pyfeasst
 
 from FEASST_Henry_Coefficient_Rigid import *
-from Uncertainty_Tools import *
 
 #Relevant CODATA Constants
 amu = 1.6605390400e-27 #kg/amu
@@ -57,21 +56,45 @@ test_input = { "adsorptive": "data.C2",
 #Kcoeffs, Kcoeffs_var, beta = HenryCoefficient(debug=False,seed=835279,**test_input)
 Kcoeffs, Kcoeffs_var, beta = Parallel_HenryCoefficient(nthreads=4,seed=835279,**test_input)
 
-# Calculate deltaS from the Henry Law coefficients
-deltaS_canonical = np.log(Kcoeffs[0]) - beta*Kcoeffs[1]/Kcoeffs[0]
+# Compute the cell mass and volume from the XYZ file
+# NOTE: This is specific to SiO2 cells.
+cell_mass = 0.
+with open(test_input["adsorbent"]+'.xyz',mode='r') as f:
+    lines = f.readlines()
+    for i,line in enumerate(lines):
+        if i == 1:
+             cell = [float(x) for x in line.split()]
+        elif i > 1:
+            atom = line.split()[0]
+            if atom == 'Si':
+                cell_mass += 28.0855  #amu
+            elif atom == 'O':
+                cell_mass += 15.999   #amu
+cell_volume = cell[0]*cell[1]*cell[2] #ang^3
+print('mass:', cell_mass)
+print('vol: ', cell_volume)
+rhoS = (cell_mass * amu) / (cell_volume * 1.e-30) #Skeletal Density in kg/m3
+print('density:', rhoS)
 
-# Estimate confidence intervals
-CI_Kcoeffs, CI_deltaS_canonical = deltaS_Uncertainty_Canonical(Kcoeffs, Kcoeffs_var, beta, test_input, conf_level)
+# Calculate the Henry Coefficient
+Kh = Kcoeffs[0] * beta / rhoS
+# Units:
+#   beta = mol/kJ
+#   rhoS = kg/m3
+#   Kcoeffs[0] = dimensionless
+#   Kh = (mol/kJ)/(kg/m3) = (mol/kg)(m3/1000J) = (mmol/kg)(1/Pa)
+#     that is, millimoles adsorbate per kilogram adsorbent per Pascal
+# Uncertainty in Kh
 
-#print(test_input["adsorptive"])
-#print('dedeltaS_canonical, CI_deltaS_canonical)
 
+# Calculate the infinite-dilution Isosteric Heat
+Qst_inf = 1./beta + Kcoeffs[1]/Kcoeffs[0]  #FEASST native units = kJ/mol
+#   Uncertainty in Qst_inf
+
+
+# Output to screen
 print(test_input["adsorptive"])
 print(test_input["adsorbent"])
-print('   deltaS_{ads}^{\infty}/R = '+str(deltaS_canonical))
-print('     confidence interval   = '+str(CI_deltaS_canonical))
-
-#NOTE: the "CI_deltaS_canonical" variable is the confidence interval, based on the chosen confidence level,
-#  and assumption of linearized uncertainty propagation and the Welch-Satterthwaite approximation for the
-#  number of degrees of freedom in the (derived) deltaS_canonical.
-
+print('   Henry Coefficient            = '+str(Kh)+' mmol/(kg Pa)')
+#print('     confidence interval   = '+str(CI_deltaS_canonical))
+print('   Isosteric Heat (inf. dilute) = '+str(Qst_inf)+' kJ/mol')
