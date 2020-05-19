@@ -41,7 +41,7 @@ def process(in_file_name):
     return data
 
 def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
-    
+
 #     print("******************************* NOTE *******************************")
 #     print("* Beware the subtle difference in xyz file formats.")
 #     print("* FEASST uses the second line as [order_param, lx, ly, lz]")
@@ -72,7 +72,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
             feasst.ranInitForRepro( seed )
         except:
             feasst.ranInitByDate()
-    
+
     #----------------------------
     #  MODEL PARAMETERS
     temp = input_parameters["temperature"]   # kelvin, assumes epsilons are kJ/mol
@@ -84,7 +84,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
     space = feasst.makeSpace(feasst.args(
         {"dimen" : "3"}))
     in_file_name = input_parameters["adsorbent"]
-    
+
     # potential Type
     if input_parameters["pair_type"] == "LJCoulEwald":
         pair = feasst.makePairLJCoulEwald(space, feasst.args(
@@ -113,7 +113,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
         pair.initData(data_file_name)
         for i in range(types[atom]):
             pair.addMol(data_file_name)
-            
+
     # read the framework coordinates sorted by process.py
     space.readXYZAlt(in_file_name + "_out.xyz")
 
@@ -154,7 +154,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
         peQReal_bare = pair.peQReal()
         peQFrr_bare = pair.peQFrr()
         peQFrrSelf_bare = pair.peQFrrSelf()
-    
+
     # add molecules up to nMolMin
     n_framework = space.nMol()
     mc.nMolSeek(n_framework + 1)
@@ -162,7 +162,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
     pair.initEnergy()
     # identify the "insertion" atoms
     mpart = [x for x in range(n_framework,n_atoms_tot)]
-    
+
     # initialize the accumulators
     ncoeffs = input_parameters["ncoeffs"]
     Kcoeff = [ 0. ] * ncoeffs
@@ -219,7 +219,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
     Kcoeff = [ Kcoeff[j]/(scale_factor**j) for j in range(ncoeffs) ]
     Kcoeff_var = [ (Kcoeff_var[j]/(scale_factor**(2*j)) - Kcoeff[j]**2) * float(input_parameters["trials"])/float(input_parameters["trials"]-1)
                    for j in range(ncoeffs) ]
-        
+
     return Kcoeff, Kcoeff_var, criteria.beta()
 
 # Wrapper function [preserves payload for the serial function]
@@ -244,11 +244,11 @@ def Parallel_HenryCoefficient(nthreads=4,seed=123456,**kwargs):
     # Process the input XYZ file
     #  NOTE: this is done prior to the parallel fork to prevent collisions
     process(input_dict["adsorbent"])
-    
+
     # Assemble and Execute the Parallel Job
     with mp.Pool(processes = nthreads) as pool:
         results = pool.map(HenryCoefficient_wrapper, arg)
-    
+
     # Reassemble the parallel results
     ncoeffs = input_dict["ncoeffs"]
     trials_per_thread = input_dict["trials"]
@@ -258,10 +258,10 @@ def Parallel_HenryCoefficient(nthreads=4,seed=123456,**kwargs):
         for i in range(ncoeffs):
             Kh[i] += coeffs[i]*trials_per_thread
             Kh_var[i] += (var[i]*(trials_per_thread-1.)/trials_per_thread + coeffs[i]**2)*trials_per_thread
-            
+
     Kh = [ Kh[i]/float(trials_per_thread*nthreads) for i in range(ncoeffs)]
     Kh_var = [ (Kh_var[i]/float(trials_per_thread*nthreads) - Kh[i]**2)
-               *float(trials_per_thread*nthreads)/(float(trials_per_thread*nthreads)-1.)  
+               *float(trials_per_thread*nthreads)/(float(trials_per_thread*nthreads)-1.)
                 for i in range(ncoeffs)]
 
     return Kh, Kh_var, beta

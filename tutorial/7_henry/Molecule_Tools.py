@@ -38,10 +38,10 @@ def read_feasst_molecule(filename):
                     write_line = True #start writing with next line
             else:
                 if write_line: f.write(line) ; f.write('\n')
-                
+
     molecule = ase.io.read(tempfile, format='lammps-data')
     os.remove(tempfile)
-    
+
     return molecule
 
 def deBroglie(mass,T):
@@ -51,7 +51,7 @@ def deBroglie(mass,T):
 def translational_S(T,molecule,V,N):
     mass = sum(molecule.get_masses())
     Lambda = deBroglie(mass,T)
-    
+
     # Analytic
     S_trans = 1.5 + np.log(V/(Lambda**3)) -np.log(np.prod(range(1,N+1)))/float(N)
     # Stirling lnN! = NlnN - N
@@ -60,7 +60,7 @@ def translational_S(T,molecule,V,N):
     #S_trans = 2.5 + np.log(V/(float(N)*Lambda**3)) - 1./float(N)
     # Stirling lnN! = (N+1/2)lnN - N + (1/2)ln(2Pi)
     #S_trans = 2.5 + np.log(V/(float(N)*Lambda**3)) -np.log(2.*np.pi*float(N))/(2.*float(N))
-    
+
     return S_trans #divided by kB
 
 def rotational_S(T,molecule,sigma):
@@ -85,7 +85,7 @@ def rotational_S(T,molecule,sigma):
             Theta = (h**2)/(8. * (np.pi**2) * I_conv * kB)
             Qrot = Qrot * np.sqrt(T/Theta)
         S_rot = 3./2. + np.log(Qrot)
-    
+
     return S_rot  #divided by kB
 
 def radius_of_gyration(input_mol):
@@ -99,5 +99,5 @@ def radius_of_gyration(input_mol):
     Rg = sum( [masses[i]*(np.linalg.norm(r[i]-COM)**2 ) for i in range(len(masses)) ] )
     Rg /= sum(masses)
     Rg = np.sqrt(Rg)
-    
+
     return Rg
