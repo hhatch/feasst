@@ -3,7 +3,6 @@ import feasst
 import pyfeasst
 import numpy as np
 import multiprocessing as mp
-import tqdm
 import json
 
 def process(in_file_name):
@@ -198,7 +197,7 @@ def HenryCoefficient_worker(debug=False,seed=123456,**kwargs):
 
     # Monte Carlo Integration
     output_freq = int(input_parameters["trials"])/10
-    for i in tqdm.tqdm( range(int(input_parameters["trials"])), disable=disable_flag ):
+    for i in range(int(input_parameters["trials"])):
         space.randDisp(mpart,-1)
         space.randRotate(mpart,-1)
 

@@ -20,7 +20,6 @@
 
 import feasst
 import pyfeasst
-import tqdm
 
 from FEASST_Henry_Coefficient_Rigid import *
 from Molecule_Tools import *
