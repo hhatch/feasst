@@ -254,6 +254,31 @@ void feasst_deserialize(std::vector<std::vector<std::vector<std::vector<
   }
 }
 
+/// Serialize the 5D vector.
+template <typename T>
+void feasst_serialize_fstob(const std::vector<std::vector<std::vector<std::vector<
+    std::vector<T> > > > >& vector,
+    std::ostream& ostr) {
+  ostr << vector.size() << " ";
+  for (const std::vector<std::vector<std::vector<std::vector<T> > > >& vec2
+    : vector) {
+    feasst_serialize_fstobj(vec2, ostr);
+  }
+}
+
+/// Deserialize the 5D vector.
+template <typename T>
+void feasst_deserialize_fstobj(std::vector<std::vector<std::vector<std::vector<
+    std::vector<T> > > > > * vector,
+    std::istream& istr) {
+  int dim;
+  istr >> dim;
+  vector->resize(dim);
+  for (int index = 0; index < dim; ++index) {
+    feasst_deserialize_fstobj(&((*vector)[index]), istr);
+  }
+}
+
 /// Serialize the 6D vector.
 template <typename T>
 void feasst_serialize(const std::vector<std::vector<std::vector<std::vector<
