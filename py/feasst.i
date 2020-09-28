@@ -168,6 +168,7 @@
 #include "steppers/include/num_particles.h"
 #include "steppers/include/mean_squared_displacement.h"
 #include "steppers/include/cpu_time.h"
+#include "steppers/include/extensive_moments.h"
 #include "steppers/include/check.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/check_physicality.h"
@@ -231,6 +232,7 @@
 #include "mayer/include/criteria_mayer.h"
 #include "mayer/include/trial.h"
 #include "confinement/include/model_lj_shape.h"
+#include "confinement/include/model_square_well_shape.h"
 #include "confinement/include/always_accept.h"
 #include "confinement/include/henry_coefficient.h"
 #include "confinement/include/model_hard_shape.h"
@@ -451,6 +453,7 @@ using namespace std;
 %shared_ptr(feasst::NumParticles);
 %shared_ptr(feasst::MeanSquaredDisplacement);
 %shared_ptr(feasst::CPUTime);
+%shared_ptr(feasst::ExtensiveMoments);
 %shared_ptr(feasst::Check);
 %shared_ptr(feasst::CheckEnergy);
 %shared_ptr(feasst::CheckPhysicality);
@@ -520,6 +523,7 @@ using namespace std;
 %shared_ptr(feasst::TrialTranslateNewOnly);
 %shared_ptr(feasst::TrialRotateNewOnly);
 %shared_ptr(feasst::ModelLJShape);
+%shared_ptr(feasst::ModelSquareWellShape);
 %shared_ptr(feasst::AlwaysAccept);
 %shared_ptr(feasst::HenryCoefficient);
 %shared_ptr(feasst::ModelHardShape);
@@ -704,6 +708,7 @@ using namespace std;
 %include steppers/include/num_particles.h
 %include steppers/include/mean_squared_displacement.h
 %include steppers/include/cpu_time.h
+%include steppers/include/extensive_moments.h
 %include steppers/include/check.h
 %include steppers/include/check_energy.h
 %include steppers/include/check_physicality.h
@@ -767,6 +772,7 @@ using namespace std;
 %include mayer/include/criteria_mayer.h
 %include mayer/include/trial.h
 %include confinement/include/model_lj_shape.h
+%include confinement/include/model_square_well_shape.h
 %include confinement/include/always_accept.h
 %include confinement/include/henry_coefficient.h
 %include confinement/include/model_hard_shape.h

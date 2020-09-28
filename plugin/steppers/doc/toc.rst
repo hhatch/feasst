@@ -11,6 +11,7 @@
    NumParticles
    MeanSquaredDisplacement
    CPUTime
+   ExtensiveMoments
    Check
    CheckEnergy
    CheckPhysicality
