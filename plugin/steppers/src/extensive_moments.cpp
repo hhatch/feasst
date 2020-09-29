@@ -97,4 +97,10 @@ ExtensiveMoments::ExtensiveMoments(std::istream& istr) : Analyze(istr) {
   feasst_deserialize(&n_i_, istr);
 }
 
+ExtensiveMoments::ExtensiveMoments(const Analyze& extensive_moments) {
+  std::stringstream ss;
+  extensive_moments.serialize(ss);
+  *this = ExtensiveMoments(ss);
+}
+
 }  // namespace feasst

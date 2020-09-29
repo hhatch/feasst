@@ -69,8 +69,14 @@ class Accumulator {
   /// Return sum of all values accumulated.
   long double sum() const { return sum_; }
 
+  /// Same as above, but truncated to double precision for Python interface.
+  double sum_dble() const { return static_cast<double>(sum_); }
+
   /// Return sum of the square of all values accumulated.
   long double sum_of_squared() const { return sum_squared_; }
+
+  /// Same as above, but truncated to double precision for Python interface.
+  double sum_of_squared_dble() const { return static_cast<double>(sum_squared_); }
 
   /// Zero all accumulated values.
   void reset();

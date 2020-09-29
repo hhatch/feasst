@@ -54,6 +54,7 @@ class ExtensiveMoments : public Analyze {
     return std::make_shared<ExtensiveMoments>(istr); }
   void serialize(std::ostream& ostr) const override;
   explicit ExtensiveMoments(std::istream& istr);
+  explicit ExtensiveMoments(const Analyze& extensive_moments);
 
  private:
   int max_order_;
