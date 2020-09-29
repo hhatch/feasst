@@ -34,6 +34,11 @@ cd \$PWD
   --particle1 ../data.ethene \
   --num_hours $num_hours \
   --num_procs $num_procs
+  --lx 50
+  --ly 50
+  --lz 50
+  --radius 25
+  --cyl_rcut 10
 
 echo "Job is done"
 echo "Time is \$(date)"

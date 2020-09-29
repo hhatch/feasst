@@ -5,6 +5,7 @@ feasst::ArgumentParse args(
 "A grand canonical ensemble flat histogram Monte Carlo simulation of a bulk fluid.\n\n"
 
 "options:\n"
+"--help/-h          : print this documentation to screen.\n"
 "--task             : SLURM job array index (default=0).\n"
 "--num_procs        : number of processors (default=12).\n"
 "--num_hours        : number of hours before restart (default=5*24).\n"
@@ -21,7 +22,7 @@ feasst::ArgumentParse args(
 "--min_flatness     : number of WL flatness to switch to TM (default=22).\n"
 "--beta_mu          : baseline chemical potential of each species (default=-7).\n"
 "--delta_betamu_0   : delta_betamu_0 (default=0.)\n"
-"--radius           : radius of cylindrical confinement, not used if empty (default).\n"
+"--radius           : radius of cylindrical confinement, not used if < 0 (default: -1).\n"
 "--cyl_rcut         : square well interaction distance from cylinder to point (default: 10).\n"
 );
 
@@ -54,10 +55,10 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
   mc->add(feasst::Configuration(feasst::MakeDomain(domain_args), config_args));
   mc->add(feasst::Potential(feasst::MakeLennardJones()));
   mc->add(feasst::Potential(feasst::MakeLongRangeCorrections()));
-  const std::string radius = args.get("--radius");
-  if (!radius.empty()) {
+  const double radius = args.get_double("--radius", -1.);
+  if (radius > 0) {
     feasst::Potential cylinder(feasst::MakeModelSquareWellShape(feasst::MakeCylinder(
-      {{"radius", radius}},
+      {{"radius", feasst::str(radius)}},
       feasst::Position({{"x", "0"}, {"y", "0"}, {"z", "0"}}),
       feasst::Position({{"x", "0"}, {"y", "0"}, {"z", "1"}}))));
     cylinder.set_model_params(mc->configuration());
@@ -107,9 +108,9 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
   }
   mc->add(feasst::MakeCheckEnergy({{"steps_per", steps_per}, {"tolerance", "0.0001"}}));
   mc->add(feasst::MakeTuner({{"steps_per", steps_per}, {"stop_after_phase", "0"}}));
-//    mc->add(feasst::MakeLogAndMovie(feasst::args({"steps_per", steps_per,
-//                                         "file_name", "clones" + feasst::str(thread),
-//                                         "file_name_append_phase", "True"})))
+  mc->add(feasst::MakeLogAndMovie({{"steps_per", steps_per},
+                                   {"file_name", "clones" + feasst::str(thread)},
+                                   {"file_name_append_phase", "True"}}));
   if (mc->configuration().num_particle_types() > 1) {
     mc->add(feasst::MakeNumParticles({
       {"particle_type", "0"},
