@@ -84,6 +84,13 @@ def mc(thread, mn, mx):
 #    mc.add(fst.MakeLogAndMovie(fst.args({"steps_per": str(steps_per),
 #                                         "file_name": "clones" + str(thread),
 #                                         "file_name_append_phase": "True"})))
+      mc.add(fst.MakeEnergy(fst.args({
+        "file_name": "en" + str(thread) + '.txt',
+        "file_name_append_phase": "True",
+        "start_after_phase": "0",
+        "steps_per_write": str(steps_per),
+        "steps_per_update": "1",
+        "multistate": "True"})))
     if mc.configuration().num_particle_types() > 1:
         mc.add(fst.MakeNumParticles(fst.args({
           "particle_type": "0",

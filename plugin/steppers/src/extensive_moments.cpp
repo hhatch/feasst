@@ -52,10 +52,12 @@ void ExtensiveMoments::update(const Criteria& criteria,
   // precompute powers
   const double energy = criteria.current_energy();
   u_p_[0] = 1.;
-  n_i_[0] = std::vector<double>(max_order_ + 1, 1.);
   for (int order = 1; order <= max_order_; ++order) {
     u_p_[order] = energy*u_p_[order - 1];
-    for (int ptype = 0; ptype < num_ptypes; ++ptype) {
+  }
+  for (int ptype = 0; ptype < num_ptypes; ++ptype) {
+    n_i_[ptype][0] = 1.;
+    for (int order = 1; order <= max_order_; ++order) {
       n_i_[ptype][order] = system.configuration().num_particles_of_type(ptype)*
                            n_i_[ptype][order - 1];
     }

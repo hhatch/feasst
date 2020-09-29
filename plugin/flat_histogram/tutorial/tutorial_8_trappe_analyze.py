@@ -50,6 +50,7 @@ print('saturation pressure (kPa)',
 num_analyzers = clones.clone(0).num_analyzers()
 num_index = num_analyzers - 4
 assert(clones.clone(0).analyze(num_index).class_name() == "AnalyzeFactory")
+assert(clones.clone(0).analyze(num_index).analyze(0).class_name() == "NumParticles")
 print(clones.clone(0).analyze(num_index).analyze(3).accumulator().average())
 
 num0 = list()
@@ -67,9 +68,21 @@ print('liquid x_C2H4', 1 - num_liquid/sat.average_macrostate(1))
 
 # obtain extensive moments
 extmom_index = num_analyzers - 3
-assert(clones.clone(0).analyze(extmom_index).class_name() == "ExtensiveMoments")
-# HWH fix this: one for each macrostate
-#extmom = fst.ExtensiveMoments(clones.clone(0).analyze(extmom_index))
-#print(extmom.moments(2, 0, 0, 0, 0).sum_dble())
-#print(extmom.moments(2, 0, 0, 0, 0).sum_of_squared_dble())
+assert(clones.clone(0).analyze(extmom_index).class_name() == "AnalyzeFactory")
+assert(clones.clone(0).analyze(extmom_index).analyze(0).class_name() == "ExtensiveMoments")
+
+# Return ExtensiveMoments, dervied class of Analyze, by serialization, which is relatively slow.
+# see steppers/include/ExtensiveMoments.h for moments API
+def extensive_moment(window, state):
+    return fst.ExtensiveMoments(clones.clone(window).analyze(extmom_index).analyze(state))
+
+extmom = extensive_moment(2, 3)
+for p in range(2):
+    for m in range(1):
+        for k in range(2):
+            for j in range(1):
+                for i in range(1):
+                    print(p, m, k, j, i, extmom.moments(p, m, k, j, i).num_values())
+                    print(extmom.moments(p, m, k, j, i).sum_dble())
+                    #print(extmom.moments(2, 0, 0, 0, 0).sum_of_squared_dble())
 

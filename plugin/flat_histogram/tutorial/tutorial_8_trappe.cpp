@@ -110,9 +110,16 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
   }
   mc->add(feasst::MakeCheckEnergy({{"steps_per", steps_per}, {"tolerance", "0.0001"}}));
   mc->add(feasst::MakeTuner({{"steps_per", steps_per}, {"stop_after_phase", "0"}}));
-  mc->add(feasst::MakeLogAndMovie({{"steps_per", steps_per},
-                                   {"file_name", "clones" + feasst::str(thread)},
-                                   {"file_name_append_phase", "True"}}));
+  // mc->add(feasst::MakeLogAndMovie({{"steps_per", steps_per},
+  //                                  {"file_name", "clones" + feasst::str(thread)},
+  //                                  {"file_name_append_phase", "True"}}));
+  mc->add(feasst::MakeEnergy({
+    {"file_name", "en" + feasst::str(thread) + ".txt"},
+    {"file_name_append_phase", "true"},
+    {"start_after_phase", "0"},
+    {"steps_per_write", steps_per},
+    {"steps_per_update", "1"},
+    {"multistate", "True"}}));
   if (mc->configuration().num_particle_types() > 1) {
     mc->add(feasst::MakeNumParticles({
       {"particle_type", "0"},
