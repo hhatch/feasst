@@ -61,7 +61,7 @@ class ExtensiveMoments : public Analyze {
   // moments_[p][m][k][j][i]
   std::vector<std::vector<std::vector<std::vector<std::vector<Accumulator> > > > > moments_;
   std::vector<double> u_p_;
-  std::vector<std::vector<double> > n_i_;
+  std::vector<std::vector<double> > n_i_j_;
 };
 
 inline std::shared_ptr<ExtensiveMoments> MakeExtensiveMoments(const argtype &args = argtype()) {

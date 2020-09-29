@@ -31,7 +31,7 @@ void ExtensiveMoments::initialize(Criteria * criteria,
          num_ptypes,
          &moments_);
   u_p_.resize(max_order_ + 1);
-  resize(num_ptypes, max_order_ + 1, &n_i_);
+  resize(num_ptypes, max_order_ + 1, &n_i_j_);
   printer(header(*criteria, *system, *trial_factory),
           file_name(*criteria));
 }
@@ -56,10 +56,10 @@ void ExtensiveMoments::update(const Criteria& criteria,
     u_p_[order] = energy*u_p_[order - 1];
   }
   for (int ptype = 0; ptype < num_ptypes; ++ptype) {
-    n_i_[ptype][0] = 1.;
+    n_i_j_[ptype][0] = 1.;
     for (int order = 1; order <= max_order_; ++order) {
-      n_i_[ptype][order] = system.configuration().num_particles_of_type(ptype)*
-                           n_i_[ptype][order - 1];
+      n_i_j_[ptype][order] = system.configuration().num_particles_of_type(ptype)*
+                           n_i_j_[ptype][order - 1];
     }
   }
 
@@ -69,7 +69,7 @@ void ExtensiveMoments::update(const Criteria& criteria,
   for (int k = 0; k < num_ptypes; ++k) {
   for (int j = 0; j <= max_order_; ++j) {
   for (int i = 0; i < num_ptypes; ++i) {
-    moments_[p][m][k][j][i].accumulate(n_i_[i][j]*n_i_[k][m]*u_p_[p]);
+    moments_[p][m][k][j][i].accumulate(n_i_j_[i][j]*n_i_j_[k][m]*u_p_[p]);
   }}}}}
 }
 
@@ -87,7 +87,7 @@ void ExtensiveMoments::serialize(std::ostream& ostr) const {
   feasst_serialize(max_order_, ostr);
   feasst_serialize_fstobj(moments_, ostr);
   feasst_serialize(u_p_, ostr);
-  feasst_serialize(n_i_, ostr);
+  feasst_serialize(n_i_j_, ostr);
 }
 
 ExtensiveMoments::ExtensiveMoments(std::istream& istr) : Analyze(istr) {
@@ -96,7 +96,7 @@ ExtensiveMoments::ExtensiveMoments(std::istream& istr) : Analyze(istr) {
   feasst_deserialize(&max_order_, istr);
   feasst_deserialize_fstobj(&moments_, istr);
   feasst_deserialize(&u_p_, istr);
-  feasst_deserialize(&n_i_, istr);
+  feasst_deserialize(&n_i_j_, istr);
 }
 
 ExtensiveMoments::ExtensiveMoments(const Analyze& extensive_moments) {
