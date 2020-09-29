@@ -23,9 +23,6 @@ class ModelSquareWellShape : public ModelOneBody,
   // Constructor
   ModelSquareWellShape(
     std::shared_ptr<Shape> shape,
-    /**
-      alpha: set the exponent (default: 3).
-     */
     const argtype& args = argtype());
 
   double energy(

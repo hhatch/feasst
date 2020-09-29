@@ -19,20 +19,17 @@ static MapModelSquareWellShape map_model_hard_shape_ = MapModelSquareWellShape()
 ModelSquareWellShape::ModelSquareWellShape(std::shared_ptr<Shape> shape,
   const argtype& args) : ModelOneBody(), ShapedEntity(shape) {
   args_.init(args);
-  alpha_ = args_.key("alpha").dflt("3").dble();
 }
 
 void ModelSquareWellShape::serialize(std::ostream& ostr) const {
   ostr << class_name_ << " ";
   ShapedEntity::serialize(ostr);
   feasst_serialize_version(6482, ostr);
-  feasst_serialize(alpha_, ostr);
 }
 
 ModelSquareWellShape::ModelSquareWellShape(std::istream& istr)
   : ModelOneBody(), ShapedEntity(istr) {
   const int version = feasst_deserialize_version(istr);
-  feasst_deserialize(&alpha_, istr);
   ASSERT(version == 6482, "unrecognized verison: " << version);
 }
 

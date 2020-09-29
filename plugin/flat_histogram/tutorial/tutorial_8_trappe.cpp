@@ -16,11 +16,13 @@ feasst::ArgumentParse args(
 "--max_particles    : maximum number of particles (default=400).\n"
 "--temperature      : temperature in Kelvin (default=263.15).\n"
 "--particle0        : particle type 0.\n"
-"--particle1        : particle type 1 (default=None).\n"
+"--particle1        : particle type 1, not used if empty (default).\n"
 "--collect_flatness : number of WL flatness to begin collection (default=18).\n"
 "--min_flatness     : number of WL flatness to switch to TM (default=22).\n"
 "--beta_mu          : baseline chemical potential of each species (default=-7).\n"
 "--delta_betamu_0   : delta_betamu_0 (default=0.)\n"
+"--radius           : radius of cylindrical confinement, not used if empty (default).\n"
+"--cyl_rcut         : square well interaction distance from cylinder to point (default: 10).\n"
 );
 
 std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int mx) {
@@ -52,6 +54,18 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
   mc->add(feasst::Configuration(feasst::MakeDomain(domain_args), config_args));
   mc->add(feasst::Potential(feasst::MakeLennardJones()));
   mc->add(feasst::Potential(feasst::MakeLongRangeCorrections()));
+  const std::string radius = args.get("--radius");
+  if (!radius.empty()) {
+    feasst::Potential cylinder(feasst::MakeModelSquareWellShape(feasst::MakeCylinder(
+      {{"radius", radius}},
+      feasst::Position({{"x", "0"}, {"y", "0"}, {"z", "0"}}),
+      feasst::Position({{"x", "0"}, {"y", "0"}, {"z", "1"}}))));
+    cylinder.set_model_params(mc->configuration());
+    for (int site_type = 0; site_type < mc->configuration().num_site_types(); ++site_type) {
+      cylinder.set_model_param("cutoff", site_type, args.get_double("--cyl_rcut", 10));
+    }
+    mc->add(cylinder);
+  }
   if (mx > dccb_begin) {
     feasst::Potential reference(feasst::MakeLennardJones());
     if (mc->configuration().domain().num_cells() > 0) {
