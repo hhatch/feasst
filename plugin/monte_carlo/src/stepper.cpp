@@ -95,6 +95,7 @@ void Stepper::serialize(std::ostream& ostr) const {
   feasst_serialize(append_, ostr);
   feasst_serialize(stop_after_phase_, ostr);
   feasst_serialize(start_after_phase_, ostr);
+  feasst_serialize(file_name_append_phase_, ostr);
   feasst_serialize(is_multistate_, ostr);
   feasst_serialize(is_multistate_aggregate_, ostr);
   feasst_serialize(state_, ostr);
@@ -116,6 +117,7 @@ Stepper::Stepper(std::istream& istr) {
   feasst_deserialize(&append_, istr);
   feasst_deserialize(&stop_after_phase_, istr);
   feasst_deserialize(&start_after_phase_, istr);
+  feasst_deserialize(&file_name_append_phase_, istr);
   feasst_deserialize(&is_multistate_, istr);
   feasst_deserialize(&is_multistate_aggregate_, istr);
   feasst_deserialize(&state_, istr);
