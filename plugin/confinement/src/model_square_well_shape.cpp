@@ -40,12 +40,16 @@ double ModelSquareWellShape::energy(
     const ModelParams& model_params) const {
   const int type = site.type();
   const double sigma = model_params.sigma().value(type);
-  const double distance = shape()->nearest_distance(wrapped_site);
+  const double cutoff = model_params.cutoff().value(type);
+  const double distance = -shape()->nearest_distance(wrapped_site);
   if (distance <= sigma) {
     return NEAR_INFINITY;
+  } else if (distance <= cutoff) {
+    const double epsilon = model_params.epsilon().value(type);
+    return -epsilon;
+  } else {
+    return 0.;
   }
-  const double epsilon = model_params.epsilon().value(type);
-  return -epsilon;
 }
 
 }  // namespace feasst

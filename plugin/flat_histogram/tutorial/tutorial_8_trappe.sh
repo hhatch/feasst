@@ -30,15 +30,23 @@ cd \$PWD
 
 ./tutorial \
   --task \$SLURM_ARRAY_TASK_ID \
-  --particle0 ../data.ethane \
-  --particle1 ../data.ethene \
+  --particle0 data.ethane \
+  --particle1 data.ethene \
   --num_hours $num_hours \
   --num_procs $num_procs
-  --lx 50
-  --ly 50
-  --lz 50
-  --radius 25
-  --cyl_rcut 10
+
+## cylinder example
+#./tutorial --task \$SLURM_ARRAY_TASK_ID \
+#  --particle0 data.ethane \
+#  --particle1 data.ethene \
+#  --num_hours $num_hours \
+#  --num_procs $num_procs \
+#  --lx 50 \
+#  --ly 50 \
+#  --lz 50 \
+#  --cyl_radius 25 \
+#  --cyl_rcut 10 \
+#  --max_particles 50
 
 echo "Job is done"
 echo "Time is \$(date)"
