@@ -3,7 +3,8 @@ import feasst as fst
 import pyfeasst
 
 # read checkpoints
-clones = fst.MakeClones('checkpoint', 12)
+num_procs = 12
+clones = fst.MakeClones('checkpoint', num_procs)
 
 #import matplotlib.pyplot as plt
 #plt.plot(clones.ln_prob().values())
@@ -76,13 +77,13 @@ assert(clones.clone(0).analyze(extmom_index).analyze(0).class_name() == "Extensi
 def extensive_moment(window, state):
     return fst.ExtensiveMoments(clones.clone(window).analyze(extmom_index).analyze(state))
 
-extmom = extensive_moment(2, 3)
-for p in range(2):
-    for m in range(1):
+extmom = extensive_moment(2, 30)
+for p in range(3):
+    for m in range(2):
         for k in range(2):
             for j in range(1):
                 for i in range(1):
-                    print(p, m, k, j, i, extmom.moments(p, m, k, j, i).num_values())
-                    print(extmom.moments(p, m, k, j, i).sum_dble())
-                    #print(extmom.moments(2, 0, 0, 0, 0).sum_of_squared_dble())
+                    print(p, m, k, j, i,
+                          extmom.moments(p, m, k, j, i).num_values(),
+                          extmom.moments(p, m, k, j, i).sum_dble())
 

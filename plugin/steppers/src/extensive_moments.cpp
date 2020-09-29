@@ -56,10 +56,10 @@ void ExtensiveMoments::update(const Criteria& criteria,
     u_p_[order] = energy*u_p_[order - 1];
   }
   for (int ptype = 0; ptype < num_ptypes; ++ptype) {
+    const int num = system.configuration().num_particles_of_type(ptype);
     n_i_j_[ptype][0] = 1.;
     for (int order = 1; order <= max_order_; ++order) {
-      n_i_j_[ptype][order] = system.configuration().num_particles_of_type(ptype)*
-                           n_i_j_[ptype][order - 1];
+      n_i_j_[ptype][order] = num*n_i_j_[ptype][order - 1];
     }
   }
 

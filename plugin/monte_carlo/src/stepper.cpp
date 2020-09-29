@@ -35,9 +35,8 @@ Stepper::Stepper(const argtype &args) {
   is_multistate_aggregate_ =
     args_.key("multistate_aggregate").dflt("true").boolean();
 
-  if (args_.key("num_block").used()) {
-    accumulator_.set_block(args_.integer());
-  }
+  if (args_.key("num_block").used()) accumulator_.set_block(args_.integer());
+  if (args_.key("num_moments").used()) accumulator_.set_moments(args_.integer());
   configuration_ = args_.key("configuration").dflt("0").integer();
 }
 
