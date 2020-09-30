@@ -13,4 +13,5 @@
    Macrostate
    MacrostateNumParticles
    FlatHistogram
+   Ensemble
    Clones

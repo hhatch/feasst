@@ -13,8 +13,6 @@ namespace feasst {
 
 class Random;
 
-// HWH Use MacrostateAccumulator to compute custom per-macrostate quantities.
-// HWH OR remove MacrostateAccumulator for multistate analysis instead?
 /**
   Flat histogram acceptance criteria uses a bias to improve sampling and attempt
   to recover the free energy of the system as a function of the give macrostate.

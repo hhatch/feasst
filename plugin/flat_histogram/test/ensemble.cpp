@@ -14,7 +14,7 @@ TEST(Ensemble, reweight) {
     {{"beta", str(1./1.5)},
      {"chemical_potential", "-2.352321"}});
 //    {{"soft_max", "5"}, {"soft_min", "1"}}));
-  LnProbability lnpirw = Ensemble().reweight(*criteria, 1.5);
+  LnProbability lnpirw = Ensemble(*criteria).reweight(1.5);
   EXPECT_NEAR(-7.75236, lnpirw.values()[0], 1e-5);
 }
 

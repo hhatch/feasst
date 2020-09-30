@@ -254,6 +254,7 @@
 #include "growth_expanded/include/macrostate_growth_expanded.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 #include "flat_histogram/include/flat_histogram.h"
+#include "flat_histogram/include/ensemble.h"
 #include "flat_histogram/include/clones.h"
 using namespace feasst;
 %}
@@ -548,6 +549,8 @@ using namespace std;
 %shared_ptr(feasst::MacrostateGrowthExpanded);
 %shared_ptr(feasst::MacrostateNumParticles);
 %shared_ptr(feasst::FlatHistogram);
+%shared_ptr(feasst::Ensemble);
+%shared_ptr(feasst::GrandCanonicalEnsemble);
 %shared_ptr(feasst::Clones);
 %include configuration/include/properties.h
 %include configuration/include/typed_entity.h
@@ -794,4 +797,5 @@ using namespace std;
 %include growth_expanded/include/macrostate_growth_expanded.h
 %include flat_histogram/include/macrostate_num_particles.h
 %include flat_histogram/include/flat_histogram.h
+%include flat_histogram/include/ensemble.h
 %include flat_histogram/include/clones.h

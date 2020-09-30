@@ -65,12 +65,11 @@ TEST(MonteCarlo, ideal_gas_fh_eos_LONG) {
   monte_carlo.add(MakeCriteriaUpdater({{"steps_per", str(1e5)}}));
   monte_carlo.add(MakeCriteriaWriter({{"steps_per", str(1e5)}, {"file_name", "tmp/id_fh.txt"}}));
   monte_carlo.run_until_complete();
-  GrandCanonicalEnsemble gce;
+  GrandCanonicalEnsemble gce(*criteria);
   for (double delta_conjugate = -6; delta_conjugate < 1; delta_conjugate += 0.1) {
-    gce.reweight(*criteria, delta_conjugate);
+    gce.reweight(delta_conjugate);
     if (gce.ln_prob().value(gce.ln_prob().size() - 1) < -6) {
-      const double N = gce.average(criteria->macrostate());
-      EXPECT_NEAR(N, gce.betaPV(), 1e-4);
+      EXPECT_NEAR(gce.average_macrostate(), gce.betaPV(), 0.075);
     }
   }
 }

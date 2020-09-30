@@ -56,18 +56,16 @@ def read_checkpoint(filename):
 #def forcefield_dir(filename=''):
 #    return os.path.dirname(os.path.realpath(feasst.__file__)) + '/forcefield/' + filename
 
-# return saturation objective function
-def saturation_objective(criteria, beta_mu_rw):
-    delta_conjugate = beta_mu_rw - criteria.beta_mu()
-    ln_prob_rw = criteria.reweight(delta_conjugate)
-    return ln_prob_rw.saturation_objective(delta_conjugate)
+# return equilibrium objective function
+def equilibrium_objective(gce, beta_mu_rw):
+    delta_conjugate = beta_mu_rw - gce.original_conjugate()
+    gce.reweight(delta_conjugate)
+    return gce.ln_prob().equilibrium_objective()
 
-# find saturation
-def find_saturation(criteria, beta_mu_guess=-1):
+# find equilibrium
+def find_equilibrium(gce, beta_mu_guess=-1):
     from scipy.optimize import minimize
-    res = minimize(lambda beta_mu_rw: saturation_objective(criteria, beta_mu_rw[0]), beta_mu_guess, tol=1e-8)
-    mu_saturation = res["x"][-1]/criteria.beta()
-    delta_conjugate = criteria.beta()*mu_saturation - criteria.beta_mu()
-    criteria.set_chemical_potential(mu_saturation)
-    criteria.set_ln_prob(criteria.reweight(delta_conjugate))
-    return criteria
+    res = minimize(lambda beta_mu_rw: equilibrium_objective(gce, beta_mu_rw[0]), beta_mu_guess, tol=1e-8)
+    beta_mu_equilibrium = res["x"][-1]
+    gce.reweight(beta_mu_equilibrium - gce.original_conjugate())
+    return gce
