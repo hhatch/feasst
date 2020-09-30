@@ -17,10 +17,12 @@ criteria = fst.FlatHistogram(
 criteria.set_ln_prob(clones.ln_prob())
 
 # reweight criteria
-dbetamurw = -1
-lnpi_rw = criteria.reweight(dbetamurw)
-criteria.set_ln_prob(lnpi_rw)
-criteria.set_chemical_potential(criteria.chemical_potential()+dbetamurw/criteria.beta())
+#dbetamurw = -1
+gce = fst.GrandCanonicalEnsemble(criteria)
+gce.reweight(-1)
+#lnpi_rw = criteria.reweight(dbetamurw)
+#criteria.set_ln_prob(lnpi_rw)
+#criteria.set_chemical_potential(criteria.chemical_potential()+dbetamurw/criteria.beta())
 
 import matplotlib.pyplot as plt
 plt.plot(criteria.bias().ln_prob().values())
@@ -50,10 +52,10 @@ print(len(u2_nvt))
 print(u_nvt[-1])
 print(u2_nvt[-1])
 
-gc_u_nvt = criteria.average(u_nvt)
-gc_u2_nvt = criteria.average(u2_nvt)
-gc_nu = criteria.average(nu)
-gc_n = criteria.average_macrostate()
+gc_u_nvt = gce.average(u_nvt)
+gc_u2_nvt = gce.average(u2_nvt)
+gc_nu = gce.average(nu)
+gc_n = gce.average_macrostate()
 
 ln_prob_new = clones.ln_prob()
 u_nvt_new = u_nvt
@@ -72,20 +74,21 @@ plt.plot(ln_prob_new.values())
 #plt.show()
 
 criteria.set_ln_prob(ln_prob_new)
-criteria.set_beta(criteria.beta() + dbeta)
+#criteria.set_beta(criteria.beta() + dbeta)
+gce = fst.GrandCanonicalEnsemble(criteria)
 print('bm', criteria.beta_mu())
-sat=pyfeasst.find_saturation(criteria)
+gce=pyfeasst.find_equilibrium(gce)
 
 volume = clones.clone(0).configuration().domain().volume()
-num_vapor = sat.average_macrostate(0)
-num_liquid = sat.average_macrostate(1)
+num_vapor = gce.average_macrostate(0)
+num_liquid = gce.average_macrostate(1)
 print('vapor density', num_vapor/volume)
 print('liquid density', num_liquid/volume)
-print('pressure', sat.pressure(volume, 0))
-print('vapor en', sat.average(u_nvt_new, 0)/num_vapor)
-print('liquid en', sat.average(u_nvt_new, 1)/num_liquid)
+print('pressure', gce.betaPV()/volume/criteria.beta())
+print('vapor en', gce.average(u_nvt_new, 0)/num_vapor)
+print('liquid en', gce.average(u_nvt_new, 1)/num_liquid)
 #print('betamu', sat.beta_mu())
 
-plt.plot(sat.bias().ln_prob().values())
+plt.plot(gce.ln_prob().values())
 plt.show()
 

@@ -17,7 +17,8 @@ criteria = fst.FlatHistogram(
               "chemical_potential1": str(clones.clone(0).criteria().chemical_potential(1))}))
 criteria.set_ln_prob(clones.ln_prob())
 
-sat=pyfeasst.find_saturation(criteria)
+gce = fst.GrandCanonicalEnsemble(criteria)
+gce = pyfeasst.find_equilibrium(gce)
 #plt.plot(sat.bias().ln_prob().values())
 #plt.title(r'$\beta\mu=$'+ str(sat.beta_mu(0)))
 #plt.show()
@@ -27,7 +28,7 @@ R=clones.clone(0).configuration().physical_constants().ideal_gas_constant()
 na=clones.clone(0).configuration().physical_constants().avogadro_constant()
 press_conv=R/1e3*1e30/na
 print('saturation pressure (kPa)',
-      sat.pressure(clones.clone(0).configuration().domain().volume(), 0)*press_conv)
+      gce.betaPV()/clones.clone(0).configuration().domain().volume()/criteria.beta()*press_conv)
 
 # compute saturation compositions
 num_analyzers = clones.clone(0).num_analyzers()
@@ -41,11 +42,11 @@ for iclone in range(clones.num()):
     for state in range(num_states):
         if iclone == clones.num() - 1 or state < num_states - 3:  # ignore last 3 states for all but last processor
             num0.append(clones.clone(iclone).analyze(num_index).analyze(state).accumulator().average())
-num_vapor = sat.average(num0, 0)
-num_liquid = sat.average(num0, 1)
+num_vapor = gce.average(num0, 0)
+num_liquid = gce.average(num0, 1)
 
-print('vapor y_C2H4', 1 - num_vapor/sat.average_macrostate(0))
-print('liquid x_C2H4', 1 - num_liquid/sat.average_macrostate(1))
+print('vapor y_C2H4', 1 - num_vapor/gce.average_macrostate(0))
+print('liquid x_C2H4', 1 - num_liquid/gce.average_macrostate(1))
 
 # obtain extensive moments
 extmom_index = num_analyzers - 3
