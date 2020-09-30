@@ -67,7 +67,7 @@ class LnProbability {
       probabilities of the two phases.
     */
   double saturation_objective_boundary(
-    /// See FlatHistogram::reweight()
+    /// See EnsembleAverage::reweight()
     const double delta_conjugate,
     /// Index which is the boundary between phases.
     /// The exact index value is included in the second phase.
