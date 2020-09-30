@@ -12,18 +12,20 @@ namespace feasst {
 
 class Random;
 
+// HWH Use MacrostateAccumulator to compute custom per-macrostate quantities.
+// HWH OR remove MacrostateAccumulator for multistate analysis instead?
 /**
   Flat histogram acceptance criteria uses a bias to improve sampling and attempt
   to recover the free energy of the system as a function of the give macrostate.
 
   The Macrostate must be defined before the bias.
-
-  Use MacrostateAccumulator to compute custom per-macrostate quantities.
  */
 class FlatHistogram : public Criteria {
  public:
+  // Only used for reweighting
   FlatHistogram(const argtype &args = argtype());
 
+  /// Constructor
   FlatHistogram(std::shared_ptr<Macrostate> macrostate,
       std::shared_ptr<Bias> bias,
       const argtype &args = argtype());

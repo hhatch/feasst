@@ -93,6 +93,10 @@ class Accumulator {
   /// Return the moments.
   std::vector<long double> moments() const { return val_moment_; }
 
+  /// Return the moments as a double.
+  double moment(const int index) const {
+    return static_cast<double>(val_moment_[index]); }
+
   /// Return the header of the human readable status.
   std::string status_header() const;
 

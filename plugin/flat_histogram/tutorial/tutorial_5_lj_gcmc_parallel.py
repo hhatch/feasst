@@ -23,8 +23,8 @@ def mc(thread, mn, mx):
         fst.MakeMacrostateNumParticles(
             fst.Histogram(fst.args({"width": "1", "max": str(mx), "min": str(mn)}))),
         # fst.MakeTransitionMatrix(fst.args({"min_sweeps": "10"})),
-        fst.MakeWLTM(fst.args({"collect_flatness": "20",
-                               "min_flatness": "25",
+        fst.MakeWLTM(fst.args({"collect_flatness": "18",
+                               "min_flatness": "22",
                                "min_sweeps": "10"})),
         fst.args({"beta": str(1./1.5), "chemical_potential": "-2.352321"})))
     mc.add(fst.MakeTrialTranslate(fst.args({
@@ -57,7 +57,7 @@ def mc(thread, mn, mx):
     return mc
 
 windows=fst.WindowExponential(fst.args({
-  "alpha": "1.5",
+  "alpha": "2.25",
   "num": str(args.num_procs),
   "maximum": "370",
   "extra_overlap": "2"})).boundaries()
