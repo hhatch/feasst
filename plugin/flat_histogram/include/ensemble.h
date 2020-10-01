@@ -4,31 +4,37 @@
 
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/macrostate.h"
-#include "flat_histogram/include/flat_histogram.h"
 
 namespace feasst {
 
-//class FlatHistogram;
+class FlatHistogram;
+class Clones;
 
 /**
   Perform reweighting and ensemble averages using macrostate distributions
  */
 class Ensemble {
  public:
-  /// Store the original macrostate distribution
+  /// Store the original conjugate, macrostate and distribution.
+  Ensemble(const Histogram& macrostates,
+           const LnProbability& ln_prob,
+           const double conjugate = 0.) { init_(macrostates, ln_prob); }
+
+  /// Same as above, but taken from FlatHistogram.
   Ensemble(const FlatHistogram& flat_hist);
 
+  /// Same as above, but taken from spliced Clones.
+  Ensemble(const Clones& clones);
+
   /// Return the stored macrostate distribution from the original simulation.
-  const LnProbability& ln_prob_original() const { return flat_hist_.ln_prob(); }
+  const LnProbability& ln_prob_original() const { return ln_prob_original_; }
 
   /// Return the LnProbability (that may have been reweighted).
   const LnProbability& ln_prob() const { return ln_prob_; }
 
-  /// Return the stored macrostate from the original simulation.
-  const Macrostate& macrostate() const { return flat_hist_.macrostate(); }
-
-  /// Return the stored FlatHistogram from the original simulation.
-  const FlatHistogram& flat_histogram() const { return flat_hist_; }
+  /// Return the stored Histogram representing the macrostates of the original
+  /// simulation.
+  const Histogram& macrostates() const { return macrostates_; }
 
   /// Determine min and max macrostate indices for a given phase
   /// Return -1 if no phase boundary.
@@ -36,7 +42,7 @@ class Ensemble {
 
   /// Return the conjugate thermodynamic variable of the macrostate from the
   /// original simulation.
-  virtual double original_conjugate() const;
+  double original_conjugate() const { return original_conjugate_; }
 
   /**
     Store and return a reweighted macrostate distribution due to a change
@@ -66,8 +72,14 @@ class Ensemble {
     /// Assumes default method of dividing phase boundary.
     const int phase = 0) const;
 
+ protected:
+  void init_(const Histogram& macrostates,
+             const LnProbability& ln_prob);
+  double original_conjugate_ = 0.;
+
  private:
-  FlatHistogram flat_hist_;
+  LnProbability ln_prob_original_;
+  Histogram macrostates_;
   LnProbability ln_prob_;
   double delta_conjugate_ = 0.; // record reweight change in conjugate
 };
@@ -78,8 +90,15 @@ class Ensemble {
 class GrandCanonicalEnsemble : public Ensemble {
  public:
   /// Store \f$\beta\f$, \f$\mu\f$ and the original ln_prob_.
+  GrandCanonicalEnsemble(const Histogram& macrostates,
+    const LnProbability& ln_prob,
+    const double conjugate = 0.);
+
+  // Same as above, but taken from FlatHistogram.
   GrandCanonicalEnsemble(const FlatHistogram& flat_histogram);
-  double original_conjugate() const override;
+
+  // Same as above, but taken from spliced Clones.
+  GrandCanonicalEnsemble(const Clones& clones);
 
   /// Return the conjugate to the macrostate, \f$\beta\mu\f$.
   double beta_mu() const { return conjugate(); }
@@ -90,8 +109,6 @@ class GrandCanonicalEnsemble : public Ensemble {
       /// Select phase by order of macrostate.
       /// Assumes default method of dividing phase boundary.
       const int phase = 0) const;
-
- private:
 };
 
 }  // namespace feasst

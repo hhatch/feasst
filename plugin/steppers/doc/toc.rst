@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   SeekAnalyze
    CriteriaUpdater
    CheckProperties
    Tuner

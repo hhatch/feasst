@@ -1,15 +1,29 @@
 #include <cmath>
-#include "utils/include/serialize.h"  // deep_copy
+#include "utils/include/serialize.h"
 #include "flat_histogram/include/ensemble.h"
+#include "flat_histogram/include/flat_histogram.h"
+#include "flat_histogram/include/clones.h"
 
 namespace feasst {
 
-Ensemble::Ensemble(const FlatHistogram& flat_hist) {
-  flat_hist_ = deep_copy(flat_hist);//flat_hist;
-  ASSERT(ln_prob_original().size() == macrostate().histogram().size(),
-    "ln_prob(" << ln_prob_original().size() << ") or macrostate (" << 
-    macrostate().histogram().size() << " ) are not of same size.");
+void Ensemble::init_(const Histogram& macrostates,
+                     const LnProbability& ln_prob) {
+  ln_prob_original_ = ln_prob;
+  macrostates_ = macrostates;
+  ASSERT(ln_prob_original().size() == macrostates_.size(),
+    "ln_prob(" << ln_prob_original().size() << ") or macrostate (" <<
+    macrostates_.size() << " ) are not of same size.");
   ln_prob_ = ln_prob_original();
+}
+
+Ensemble::Ensemble(const FlatHistogram& flat_hist)
+  : Ensemble(flat_hist.macrostate().histogram(),
+             flat_hist.ln_prob()) {}
+
+Ensemble::Ensemble(const Clones& clones) {
+  Histogram macrostates;
+  LnProbability ln_prob = clones.ln_prob(&macrostates);
+  init_(macrostates, ln_prob);
 }
 
 void Ensemble::phase_boundary(const int phase, int * min, int * max) const {
@@ -37,14 +51,12 @@ const LnProbability& Ensemble::reweight(const double delta_conjugate) {
   delta_conjugate_ = delta_conjugate;
   ln_prob_ = ln_prob_original();
   for (int macro = 0; macro < ln_prob_.size(); ++macro) {
-    ln_prob_.add(macro, macrostate().histogram().center_of_bin(macro)
+    ln_prob_.add(macro, macrostates().center_of_bin(macro)
                  *delta_conjugate);
   }
   ln_prob_.normalize();
   return ln_prob_;
 }
-
-double Ensemble::original_conjugate() const { FATAL("not implemented"); }
 
 double Ensemble::average(const std::vector<double>& macrostate_averages,
      const int phase) const {
@@ -65,17 +77,25 @@ double Ensemble::average_macrostate(const int phase) const {
   phase_boundary(phase, &min, &max);
   double average = 0.;
   for (int bin = min; bin < max + 1; ++bin) {
-    average += macrostate().value(bin)*std::exp(ln_prob().value(bin));
+    average += macrostates().center_of_bin(bin)*std::exp(ln_prob().value(bin));
   }
   return average/ln_prob().sum_probability(min, max);
 }
 
-GrandCanonicalEnsemble::GrandCanonicalEnsemble(
-    const FlatHistogram& flat_histogram) : Ensemble(flat_histogram) {
+GrandCanonicalEnsemble::GrandCanonicalEnsemble(const Histogram& macrostates,
+  const LnProbability& ln_prob,
+  const double conjugate) : Ensemble(macrostates, ln_prob) {
+  original_conjugate_ = conjugate;
 }
 
-double GrandCanonicalEnsemble::original_conjugate() const {
-  return flat_histogram().beta_mu(); 
+GrandCanonicalEnsemble::GrandCanonicalEnsemble(
+    const FlatHistogram& flat_histogram) : Ensemble(flat_histogram) {
+  original_conjugate_ = flat_histogram.beta_mu();
+}
+
+GrandCanonicalEnsemble::GrandCanonicalEnsemble(
+    const Clones& clones) : Ensemble(clones) {
+  original_conjugate_ = clones.clone(0).criteria().beta_mu();
 }
 
 double GrandCanonicalEnsemble::betaPV(const int phase) const {

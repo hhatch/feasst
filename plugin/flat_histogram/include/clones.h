@@ -14,6 +14,7 @@
 namespace feasst {
 
 class Checkpoint;
+class Histogram;
 
 /**
   Container for initializing, running and analyzing groups of FlatHistogram
@@ -95,7 +96,9 @@ class Clones {
   FlatHistogram flat_histogram(const int index) const;
 
   /// Return the LnProbability of all clones.
-  LnProbability ln_prob(const argtype& args = argtype()) const;
+  LnProbability ln_prob(
+    /// Optionally, also return spliced macrostates, if not NULL.
+    Histogram * macrostates = NULL) const;
 
   /// Serialize
   void serialize(std::ostream& ostr) const;
@@ -124,7 +127,8 @@ class Clones {
 };
 
 /// Construct Clones
-std::shared_ptr<Clones> MakeClones() { return std::make_shared<Clones>(); }
+inline std::shared_ptr<Clones> MakeClones() {
+  return std::make_shared<Clones>(); }
 
 /// Construct Clones from a vector of checkpoint file names.
 std::shared_ptr<Clones> MakeClones(const std::vector<std::string> file_names);

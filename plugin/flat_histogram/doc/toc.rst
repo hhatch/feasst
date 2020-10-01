@@ -12,6 +12,6 @@
    WLTM
    Macrostate
    MacrostateNumParticles
-   FlatHistogram
    Ensemble
+   FlatHistogram
    Clones

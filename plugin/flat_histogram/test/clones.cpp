@@ -97,6 +97,13 @@ TEST(Clones, lj_fh) {
   Clones clones3;
   MakeCheckpoint({{"file_name", "tmp/rstclone"}})->read(&clones3);
   EXPECT_TRUE(clones3.ln_prob().is_equal(clones2.ln_prob(), 1e-8));
+
+  Histogram macrostates;
+  clones3.ln_prob(&macrostates);
+  EXPECT_EQ(macrostates.center_of_bin(0), 0);
+  EXPECT_EQ(macrostates.center_of_bin(10), 10);
+  EXPECT_EQ(macrostates.center_of_bin(11), 11);
+  EXPECT_EQ(macrostates.center_of_bin(12), 12);
 }
 
 double energy_av4(const int macro, const MonteCarlo& mc) {

@@ -11,6 +11,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/checkpoint.h"
 #include "math/include/constants.h"
+#include "math/include/histogram.h"
 #include "math/include/utils_math.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
@@ -207,8 +208,9 @@ FlatHistogram Clones::flat_histogram(const int index) const {
   return FlatHistogram(ss);
 }
 
-LnProbability Clones::ln_prob(const argtype& args) const {
+LnProbability Clones::ln_prob(Histogram * macrostates) const {
   std::vector<double> ln_prob;
+  std::vector<double> edges;
   double shift = 0.;
   int starting_lower_bin = 0;
   for (int fh_index = 0; fh_index < num() - 1; ++fh_index) {
@@ -246,6 +248,10 @@ LnProbability Clones::ln_prob(const argtype& args) const {
         DEBUG("lower " << ln_prob_lower);
         ++upper_index;
       }
+      if (macrostates) {
+        const double lower = fh_lower.macrostate().histogram().edges()[bin];
+        edges.push_back(lower);
+      }
     }
     ASSERT(upper_index > index_upper_min,
       "No overlap. If TransitionMatrix, did you add at least two extra " <<
@@ -269,6 +275,15 @@ LnProbability Clones::ln_prob(const argtype& args) const {
   FlatHistogram fh = flat_histogram(num() - 1);
   for (int bin = starting_lower_bin; bin < fh.bias().ln_prob().size(); ++bin) {
     ln_prob.push_back(fh.bias().ln_prob().value(bin) + shift);
+    if (macrostates) {
+      const double macro = fh.macrostate().histogram().edges()[bin];
+      edges.push_back(macro);
+    }
+  }
+  if (macrostates) {
+    edges.push_back(fh.macrostate().histogram().edges().back());
+    *macrostates = Histogram();
+    macrostates->set_edges(edges);
   }
 
   LnProbability lnpi(ln_prob);

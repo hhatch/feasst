@@ -17,6 +17,7 @@
 #include "system/include/synchronize_data.h"
 #include "threads/include/thread.h"
 #include "threads/include/thread_omp.h"
+#include "steppers/include/seek_analyze.h"
 #include "utils/include/timer.h"
 #include "utils/include/file.h"
 #include "utils/include/argument_parse.h"
@@ -253,8 +254,8 @@
 #include "growth_expanded/include/macrostate_morph.h"
 #include "growth_expanded/include/macrostate_growth_expanded.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
-#include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/ensemble.h"
+#include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
 using namespace feasst;
 %}
@@ -285,6 +286,7 @@ using namespace std;
 %shared_ptr(feasst::SynchronizeData);
 %shared_ptr(feasst::Thread);
 %shared_ptr(feasst::ThreadOMP);
+%shared_ptr(feasst::SeekAnalyze);
 %shared_ptr(feasst::Timer);
 %shared_ptr(feasst::ArgumentParse);
 %shared_ptr(feasst::CustomException);
@@ -548,9 +550,9 @@ using namespace std;
 %shared_ptr(feasst::MacrostateMorph);
 %shared_ptr(feasst::MacrostateGrowthExpanded);
 %shared_ptr(feasst::MacrostateNumParticles);
-%shared_ptr(feasst::FlatHistogram);
 %shared_ptr(feasst::Ensemble);
 %shared_ptr(feasst::GrandCanonicalEnsemble);
+%shared_ptr(feasst::FlatHistogram);
 %shared_ptr(feasst::Clones);
 %include configuration/include/properties.h
 %include configuration/include/typed_entity.h
@@ -560,6 +562,7 @@ using namespace std;
 %include system/include/synchronize_data.h
 %include threads/include/thread.h
 %include threads/include/thread_omp.h
+%include steppers/include/seek_analyze.h
 %include utils/include/timer.h
 %include utils/include/file.h
 %include utils/include/argument_parse.h
@@ -796,6 +799,6 @@ using namespace std;
 %include growth_expanded/include/macrostate_morph.h
 %include growth_expanded/include/macrostate_growth_expanded.h
 %include flat_histogram/include/macrostate_num_particles.h
-%include flat_histogram/include/flat_histogram.h
 %include flat_histogram/include/ensemble.h
+%include flat_histogram/include/flat_histogram.h
 %include flat_histogram/include/clones.h
