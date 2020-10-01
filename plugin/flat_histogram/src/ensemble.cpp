@@ -174,7 +174,7 @@ ExtrapolateBetaGCE::ExtrapolateBetaGCE(
     const argtype& args) : GrandCanonicalEnsemble(flat_hist) {
   const Analyze& an = SeekAnalyze().reference("Energy", mc);
   const int num_moments = static_cast<int>(an.accumulator().moments().size());
-  INFO("num_moments " << num_moments);
+  DEBUG("num_moments " << num_moments);
   std::vector<std::vector<double> > energy_moments(num_moments);
   for (int mom = 0; mom < num_moments; ++mom) {
     energy_moments[mom] =
@@ -187,7 +187,7 @@ ExtrapolateBetaGCE::ExtrapolateBetaGCE(const Clones& clones,
     const argtype& args) : GrandCanonicalEnsemble(clones) {
   const Analyze& an = SeekAnalyze().reference("Energy", clones.clone(0));
   const int num_moments = static_cast<int>(an.accumulator().moments().size());
-  INFO("num_moments " << num_moments);
+  DEBUG("num_moments " << num_moments);
   std::vector<std::vector<double> > energy_moments(num_moments);
   for (int mom = 0; mom < num_moments; ++mom) {
     clones.stitch(&energy_moments[mom], "Energy", AccumulatorMoment(mom));

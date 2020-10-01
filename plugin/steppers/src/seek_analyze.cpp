@@ -8,12 +8,12 @@ namespace feasst {
 //int SeekAnalyze::index(const MonteCarlo& mc) const;
 std::vector<int> SeekAnalyze::index(const std::string class_name,
                        const MonteCarlo& mc) const {
-  INFO("Looking for " << class_name);
-  INFO("num " << mc.num_analyzers());
+  DEBUG("Looking for " << class_name);
+  DEBUG("num " << mc.num_analyzers());
   for (int index1 = 0; index1 < mc.num_analyzers(); ++index1) {
     const Analyze& an = mc.analyze(index1);
     std::string name = an.class_name();
-    INFO("found " << name);
+    DEBUG("found " << name);
     if (name == class_name) {
       return {index1, -1};
     }
@@ -43,7 +43,7 @@ std::vector<double> SeekAnalyze::multistate_data(
     const MonteCarlo& mc,
     const AnalyzeData& get) const {
   const std::vector<int> ndx = index(class_name, mc);
-  INFO(feasst_str(ndx));
+  DEBUG(feasst_str(ndx));
   ASSERT(ndx[0] != -1, "class_name:" << class_name << " not found");
   ASSERT(ndx[1] != -1, "class_name:" << class_name << " is not multistate");
   std::vector<double> data;
