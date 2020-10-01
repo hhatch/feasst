@@ -466,6 +466,7 @@ using namespace std;
 %shared_ptr(feasst::AccumulatorAverage);
 %shared_ptr(feasst::AccumulatorSum);
 %shared_ptr(feasst::AccumulatorSumOfSquared);
+%shared_ptr(feasst::AccumulatorMoment);
 %shared_ptr(feasst::SeekAnalyze);
 %shared_ptr(feasst::AnalyzeFactory);
 %shared_ptr(feasst::LogAndMovie);

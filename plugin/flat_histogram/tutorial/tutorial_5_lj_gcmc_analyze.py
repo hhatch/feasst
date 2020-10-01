@@ -35,22 +35,12 @@ num_index = num_analyzers - 2
 assert(clones.clone(0).analyze(num_index).class_name() == "AnalyzeFactory")
 assert(clones.clone(0).analyze(num_index).analyze(0).class_name() == "Energy")
 
-u_nvt = list()
-u2_nvt = list()
+u_nvt = fst.DoubleVector()
+clones.stitch(u_nvt, "Energy", fst.AccumulatorMoment(0));
+u2_nvt = fst.DoubleVector()
+clones.stitch(u2_nvt, "Energy", fst.AccumulatorMoment(1));
 nu = list()
-for iclone in range(clones.num()):
-    num_states = clones.flat_histogram(iclone).num_states()
-    for state in range(num_states):
-        if iclone == clones.num() - 1 or state < num_states - 3:  # ignore last 3 states for all but last processor
-            acc = clones.clone(iclone).analyze(num_index).analyze(state).accumulator()
-            u_nvt.append(acc.moment(0)/acc.num_values())
-            u2_nvt.append(acc.moment(1)/acc.num_values())
-            nu.append(u_nvt[-1]*clones.flat_histogram(iclone).macrostate().histogram().center_of_bin(state))
-
-print(len(u_nvt))
-print(len(u2_nvt))
-print(u_nvt[-1])
-print(u2_nvt[-1])
+for num, energy in enumerate(u_nvt): nu.append(num*energy)
 
 gc_u_nvt = gce.average(u_nvt)
 gc_u2_nvt = gce.average(u2_nvt)

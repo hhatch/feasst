@@ -23,7 +23,7 @@ class AccumulatorAverage : public AnalyzeData {
   }
 };
 
-/// Obtain Accumulator sum in Analyze.
+/// Obtain Accumulator sum
 class AccumulatorSum : public AnalyzeData {
  public:
   double get(const Analyze& analyze) const override {
@@ -31,12 +31,24 @@ class AccumulatorSum : public AnalyzeData {
   }
 };
 
-/// Obtain Accumulator sum of squared in Analyze.
+/// Obtain Accumulator sum of squared
 class AccumulatorSumOfSquared : public AnalyzeData {
  public:
   double get(const Analyze& analyze) const override {
     return analyze.accumulator().sum_of_squared();
   }
+};
+
+/// Obtain the average moment of Accumulator
+class AccumulatorMoment : public AnalyzeData {
+ public:
+  AccumulatorMoment(const int moment = 0) { moment_ = moment; }
+  double get(const Analyze& analyze) const override {
+    const Accumulator& acc = analyze.accumulator();
+    return acc.moment(moment_)/acc.num_values();
+  }
+ private:
+  int moment_;
 };
 
 /**

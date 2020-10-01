@@ -17,6 +17,10 @@ AnalyzeData
    :project: FEASST
    :members:
 
+.. doxygenclass:: feasst::AccumulatorMoment
+   :project: FEASST
+   :members:
+
 .. doxygenclass:: feasst::SeekAnalyze
    :project: FEASST
    :members:

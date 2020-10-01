@@ -1,4 +1,3 @@
-import pandas as pd
 import feasst as fst
 import pyfeasst
 
@@ -7,11 +6,7 @@ num_procs = 12
 clones = fst.MakeClones('checkpoint', num_procs)
 volume = clones.clone(0).configuration().domain().volume()
 beta = clones.clone(0).criteria().beta()
-
 gce = pyfeasst.find_equilibrium(fst.GrandCanonicalEnsemble(clones))
-#plt.plot(sat.bias().ln_prob().values())
-#plt.title(r'$\beta\mu=$'+ str(sat.beta_mu(0)))
-#plt.show()
 
 # compute saturation pressure
 R=clones.clone(0).configuration().physical_constants().ideal_gas_constant()
