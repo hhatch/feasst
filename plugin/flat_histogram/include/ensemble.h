@@ -2,6 +2,8 @@
 #ifndef FEASST_FLAT_HISTOGRAM_ENSEMBLE_H_
 #define FEASST_FLAT_HISTOGRAM_ENSEMBLE_H_
 
+#include <vector>
+#include "utils/include/arguments.h"
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/macrostate.h"
 
@@ -32,13 +34,20 @@ class Ensemble {
   /// Return the LnProbability (that may have been reweighted).
   const LnProbability& ln_prob() const { return ln_prob_; }
 
+  // HWH used for extrapoltaion.. depreciate?
+  // Set the ln_prob.
+  void set_ln_prob(const LnProbability& ln_prob) { ln_prob_ = ln_prob; }
+
   /// Return the stored Histogram representing the macrostates of the original
   /// simulation.
   const Histogram& macrostates() const { return macrostates_; }
 
   /// Determine min and max macrostate indices for a given phase
-  /// Return -1 if no phase boundary.
+  /// Return 1 if no phase boundary, or 0 for success.
   void phase_boundary(const int phase, int * min, int * max) const;
+
+  /// Return true if phase boundary is found.
+  bool is_phase_boundary() const;
 
   /// Return the conjugate thermodynamic variable of the macrostate from the
   /// original simulation.
@@ -76,9 +85,9 @@ class Ensemble {
   void init_(const Histogram& macrostates,
              const LnProbability& ln_prob);
   double original_conjugate_ = 0.;
+  LnProbability ln_prob_original_;
 
  private:
-  LnProbability ln_prob_original_;
   Histogram macrostates_;
   LnProbability ln_prob_;
   double delta_conjugate_ = 0.; // record reweight change in conjugate
@@ -109,6 +118,25 @@ class GrandCanonicalEnsemble : public Ensemble {
       /// Select phase by order of macrostate.
       /// Assumes default method of dividing phase boundary.
       const int phase = 0) const;
+
+  /**
+    Extrapolate the original simulation data to a different \f$\beta\f$.
+    Note, this changes ln_prob_original, not ln_prob.
+    Assumes a single component.
+
+    args:
+    - beta_new: \f$\beta\f$ to extrapolate toward.
+    - beta_original: original \f$\beta\f$ of the simulation.
+    - order: truncate Taylor series at this order (default: 2).
+   */
+  void extrapolate_beta(
+    /// Canonical ensemble average moments of extensive energy.
+    /// The first index is the order of the moment.
+    /// The second index is the macrostate.
+    /// The first moment (corresponding to U) is modified to be the new energy
+    /// at the new, extrapolated value of \f$\beta\f$.
+    std::vector<std::vector<double> > * energy_moments,
+    const argtype& args = argtype());
 };
 
 }  // namespace feasst

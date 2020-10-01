@@ -1,5 +1,6 @@
 #include <cmath>
 #include "utils/include/serialize.h"
+#include "math/include/constants.h"
 #include "flat_histogram/include/ensemble.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
@@ -43,8 +44,17 @@ void Ensemble::phase_boundary(const int phase, int * min, int * max) const {
       ERROR("unrecognized phase: " << phase);
     }
   } else {
-    ERROR("multiple minima: " << num_min << " not implemented");
+    FATAL("multiple minima: " << num_min << " not implemented");
   }
+}
+
+bool Ensemble::is_phase_boundary() const {
+  int min, max;
+  phase_boundary(0, &min, &max);
+  if (min == 0 && max == ln_prob().size() - 1) {
+    return false;
+  }
+  return true;
 }
 
 const LnProbability& Ensemble::reweight(const double delta_conjugate) {
@@ -104,8 +114,44 @@ double GrandCanonicalEnsemble::betaPV(const int phase) const {
   return -ln_prob().value(0) + std::log(ln_prob().sum_probability(min, max));
 }
 
-//double beta() const;
-//  { return beta_; }
-//  double beta_mu() const { return beta_chemical potential
+void GrandCanonicalEnsemble::extrapolate_beta(
+    std::vector<std::vector<double> > * energy,
+    const argtype& args) {
+  Arguments args_(args);
+  const int order = args_.key("order").dflt("2").integer();
+  ASSERT(order == 2, "Only second order is currently implemented");
+  ASSERT(static_cast<int>(energy->size()) == order,
+    "order: " << order << " doesn't match energy: " << energy->size());
+  ASSERT(static_cast<int>((*energy)[0].size()) == ln_prob_original_.size(),
+    "size of energy:" << (*energy)[0].size() << " doesn't match ln_prob: " <<
+    ln_prob_original_.size());
+  ASSERT(!is_phase_boundary(), "assumes no phase boundary when averaging.");
+  // add option to ignore phases, phase=-1
+  ASSERT(std::abs(macrostates().center_of_bin(0)) < NEAR_ZERO,
+    "assumes first marcostate is 0 particles for N and <NU>");
+  const double beta_new = args_.key("beta_new").dble();
+  const double beta_original = args_.key("beta_original").dble();
+  const double dbeta = beta_new - beta_original;
+  std::vector<double> nu(ln_prob_original_.size());
+  for (int bin = 0; bin < ln_prob_original_.size(); ++bin) {
+    const double n = macrostates().center_of_bin(bin);
+    nu[bin] = n*(*energy)[0][bin];
+  }
+  const double gc_u  = average((*energy)[0]);
+  const double gc_u2 = average((*energy)[1]);
+  const double gc_n = average_macrostate();
+  const double gc_nu = average(nu);
+  const double mu = original_conjugate()/beta_original;
+  for (int state = 0; state < ln_prob_original_.size(); ++state) {
+    const double n = macrostates().center_of_bin(state);
+    const double u  = (*energy)[0][state];
+    const double u2 = (*energy)[1][state];
+    const double dlnpdb = -u * gc_u + mu*n;
+    const double dudb = -u2 + u*u;
+    const double d2lnpdb2 = -dudb - gc_u2 + gc_u*gc_u - mu*(gc_nu - gc_n*gc_u);
+    (*energy)[0][state] += dudb*dbeta;
+    ln_prob_original_.add(state, dlnpdb*dbeta + d2lnpdb2*dbeta*dbeta/2.);
+  }
+}
 
 }  // namespace feasst
