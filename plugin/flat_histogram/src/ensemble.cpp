@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "monte_carlo/include/monte_carlo.h"
 #include "flat_histogram/include/ensemble.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
@@ -114,7 +115,7 @@ double GrandCanonicalEnsemble::betaPV(const int phase) const {
   return -ln_prob().value(0) + std::log(ln_prob().sum_probability(min, max));
 }
 
-void ExtrapolateBetaGCE::extrapolateBetaGCE(
+void ExtrapolateBetaGCE::extrapolateBetaGCE_(
     const std::vector<std::vector<double> >& energy_moments,
     const argtype& args) {
   Arguments args_(args);
@@ -167,6 +168,21 @@ void ExtrapolateBetaGCE::extrapolateBetaGCE(
   }
 }
 
+ExtrapolateBetaGCE::ExtrapolateBetaGCE(
+    const MonteCarlo& mc,
+    const FlatHistogram& flat_hist,
+    const argtype& args) : GrandCanonicalEnsemble(flat_hist) {
+  const Analyze& an = SeekAnalyze().reference("Energy", mc);
+  const int num_moments = static_cast<int>(an.accumulator().moments().size());
+  INFO("num_moments " << num_moments);
+  std::vector<std::vector<double> > energy_moments(num_moments);
+  for (int mom = 0; mom < num_moments; ++mom) {
+    energy_moments[mom] =
+      SeekAnalyze().multistate_data("Energy", mc, AccumulatorMoment(mom));
+  }
+  extrapolateBetaGCE_(energy_moments, args);
+}
+
 ExtrapolateBetaGCE::ExtrapolateBetaGCE(const Clones& clones,
     const argtype& args) : GrandCanonicalEnsemble(clones) {
   const Analyze& an = SeekAnalyze().reference("Energy", clones.clone(0));
@@ -176,7 +192,7 @@ ExtrapolateBetaGCE::ExtrapolateBetaGCE(const Clones& clones,
   for (int mom = 0; mom < num_moments; ++mom) {
     clones.stitch(&energy_moments[mom], "Energy", AccumulatorMoment(mom));
   }
-  extrapolateBetaGCE(energy_moments, args);
+  extrapolateBetaGCE_(energy_moments, args);
 }
 
 }  // namespace feasst

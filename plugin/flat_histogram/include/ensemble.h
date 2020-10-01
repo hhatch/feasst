@@ -9,6 +9,7 @@
 
 namespace feasst {
 
+class MonteCarlo;
 class FlatHistogram;
 class Clones;
 
@@ -134,16 +135,11 @@ class ExtrapolateBetaGCE : public GrandCanonicalEnsemble {
     - beta_original: original \f$\beta\f$ of the simulation.
     - order: truncate Taylor series at this order (default: 2).
    */
-  void extrapolateBetaGCE(
-    /// Canonical ensemble average moments of extensive energy.
-    /// The first index is the order of the moment.
-    /// The second index is the macrostate.
-    /// The first moment (corresponding to U) is modified to be the new energy
-    /// at the new, extrapolated value of \f$\beta\f$.
-    const std::vector<std::vector<double> >& energy_moments,
-    const argtype& args = argtype());
+  ExtrapolateBetaGCE(const MonteCarlo& monte_carlo,
+                     const FlatHistogram& flat_histogram,
+                     const argtype& args = argtype());
 
-  /// Same as above, except that the moments are extracted from clones.
+  /// Same as above, but stitched together from parallel Clones.
   ExtrapolateBetaGCE(const Clones& clones,
     const argtype& args = argtype());
 
@@ -152,6 +148,15 @@ class ExtrapolateBetaGCE : public GrandCanonicalEnsemble {
 
  private:
   std::vector<double> energy_;
+
+  void extrapolateBetaGCE_(
+    /// Canonical ensemble average moments of extensive energy.
+    /// The first index is the order of the moment.
+    /// The second index is the macrostate.
+    /// The first moment (corresponding to U) is modified to be the new energy
+    /// at the new, extrapolated value of \f$\beta\f$.
+    const std::vector<std::vector<double> >& energy_moments,
+    const argtype& args = argtype());
 };
 
 }  // namespace feasst
