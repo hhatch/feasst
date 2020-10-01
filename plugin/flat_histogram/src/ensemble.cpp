@@ -132,6 +132,7 @@ void GrandCanonicalEnsemble::extrapolate_beta(
   const double beta_new = args_.key("beta_new").dble();
   const double beta_original = args_.key("beta_original").dble();
   const double dbeta = beta_new - beta_original;
+  DEBUG("dbeta " << dbeta);
   std::vector<double> nu(ln_prob_original_.size());
   for (int bin = 0; bin < ln_prob_original_.size(); ++bin) {
     const double n = macrostates().center_of_bin(bin);
@@ -142,13 +143,24 @@ void GrandCanonicalEnsemble::extrapolate_beta(
   const double gc_n = average_macrostate();
   const double gc_nu = average(nu);
   const double mu = original_conjugate()/beta_original;
+  DEBUG("mu " << mu);
+  DEBUG("gc_u " << gc_u);
+  DEBUG("gc_u2 " << gc_u2);
+  DEBUG("gc_n " << gc_n);
+  DEBUG("gc_nu " << gc_nu);
   for (int state = 0; state < ln_prob_original_.size(); ++state) {
     const double n = macrostates().center_of_bin(state);
+    DEBUG("n " << n);
     const double u  = (*energy)[0][state];
+    DEBUG("u " << u);
     const double u2 = (*energy)[1][state];
-    const double dlnpdb = -u * gc_u + mu*n;
+    DEBUG("u2 " << u2);
+    const double dlnpdb = -u + gc_u + mu*n;
+    DEBUG("dlnpdb " << dlnpdb);
     const double dudb = -u2 + u*u;
+    DEBUG("dudb " << dudb);
     const double d2lnpdb2 = -dudb - gc_u2 + gc_u*gc_u - mu*(gc_nu - gc_n*gc_u);
+    DEBUG("d2lnpdb2 " << d2lnpdb2);
     (*energy)[0][state] += dudb*dbeta;
     ln_prob_original_.add(state, dlnpdb*dbeta + d2lnpdb2*dbeta*dbeta/2.);
   }
