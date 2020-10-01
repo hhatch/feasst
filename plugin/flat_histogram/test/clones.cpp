@@ -100,7 +100,7 @@ TEST(Clones, lj_fh) {
 
   Histogram macrostates;
   std::vector<double> energy, energy0, energy1;
-  clones3.ln_prob(&macrostates, &energy, "Energy");
+  clones3.stitch(&macrostates, &energy, "Energy");
   EXPECT_EQ(macrostates.center_of_bin(0), 0);
   EXPECT_EQ(macrostates.center_of_bin(10), 10);
   EXPECT_EQ(macrostates.center_of_bin(11), 11);

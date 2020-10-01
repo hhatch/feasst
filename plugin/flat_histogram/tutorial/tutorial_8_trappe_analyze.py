@@ -20,17 +20,10 @@ press_conv=R/1e3*1e30/na
 print('saturation pressure (kPa)', gce.betaPV()/volume/beta*press_conv)
 
 # compute saturation compositions
-num_index = fst.SeekAnalyze().index("NumParticles", clones.clone(0))[0]
-num0 = list()
-for iclone in range(clones.num()):
-    num_states = clones.flat_histogram(iclone).num_states()
-    for state in range(num_states):
-        if iclone == clones.num() - 1 or state < num_states - 3:  # ignore last 3 states for all but last processor
-            num0.append(clones.clone(iclone).analyze(num_index).analyze(state).accumulator().average())
+num0 = fst.DoubleVector()
+clones.stitch(num0, "NumParticles", fst.AccumulatorAverage())
 num_vapor = gce.average(num0, 0)
 num_liquid = gce.average(num0, 1)
-print(fst.SeekAnalyze().multistate_data("NumParticles", clones.clone(0), fst.AccumulatorAverage()))
-print(len(fst.SeekAnalyze().multistate_data("NumParticles", clones.clone(0))))
 
 print('vapor y_C2H4', 1 - num_vapor/gce.average_macrostate(0))
 print('liquid x_C2H4', 1 - num_liquid/gce.average_macrostate(1))

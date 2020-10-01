@@ -107,11 +107,19 @@ class Clones {
     /// Source of data in Analyze
     const AnalyzeData& get = AccumulatorAverage()) const;
 
-  /// Same as above, but without spliced macrostates.
-  LnProbability ln_prob(std::vector<double> * multistate_data,
-    const std::string analyze_name,
-    const AnalyzeData& get) const {
-    return ln_prob(NULL, multistate_data, analyze_name, get); }
+  /// Same as above, but without ln_prob
+  void stitch(
+    Histogram * macrostates = NULL,
+    std::vector<double> * multistate_data = NULL,
+    const std::string analyze_name = "",
+    const AnalyzeData& get = AccumulatorAverage()) const {
+    ln_prob(macrostates, multistate_data, analyze_name, get); }
+
+  /// Same as above, but without ln_prob or spliced macrostates.
+  void stitch(std::vector<double> * multistate_data,
+      const std::string analyze_name,
+      const AnalyzeData& get) const {
+    ln_prob(NULL, multistate_data, analyze_name, get); }
 
   /// Serialize
   void serialize(std::ostream& ostr) const;
