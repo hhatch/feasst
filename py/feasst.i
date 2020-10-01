@@ -17,7 +17,6 @@
 #include "system/include/synchronize_data.h"
 #include "threads/include/thread.h"
 #include "threads/include/thread_omp.h"
-#include "steppers/include/seek_analyze.h"
 #include "utils/include/timer.h"
 #include "utils/include/file.h"
 #include "utils/include/argument_parse.h"
@@ -176,6 +175,7 @@
 #include "steppers/include/volume.h"
 #include "steppers/include/profile_trials.h"
 #include "steppers/include/wall_clock_limit.h"
+#include "steppers/include/seek_analyze.h"
 #include "monte_carlo/include/analyze_factory.h"
 #include "steppers/include/log_and_movie.h"
 #include "monte_carlo/include/monte_carlo.h"
@@ -286,7 +286,6 @@ using namespace std;
 %shared_ptr(feasst::SynchronizeData);
 %shared_ptr(feasst::Thread);
 %shared_ptr(feasst::ThreadOMP);
-%shared_ptr(feasst::SeekAnalyze);
 %shared_ptr(feasst::Timer);
 %shared_ptr(feasst::ArgumentParse);
 %shared_ptr(feasst::CustomException);
@@ -463,6 +462,11 @@ using namespace std;
 %shared_ptr(feasst::Volume);
 %shared_ptr(feasst::ProfileTrials);
 %shared_ptr(feasst::WallClockLimit);
+%shared_ptr(feasst::AnalyzeData);
+%shared_ptr(feasst::AccumulatorAverage);
+%shared_ptr(feasst::AccumulatorSum);
+%shared_ptr(feasst::AccumulatorSumOfSquared);
+%shared_ptr(feasst::SeekAnalyze);
 %shared_ptr(feasst::AnalyzeFactory);
 %shared_ptr(feasst::LogAndMovie);
 %shared_ptr(feasst::MonteCarlo);
@@ -562,7 +566,6 @@ using namespace std;
 %include system/include/synchronize_data.h
 %include threads/include/thread.h
 %include threads/include/thread_omp.h
-%include steppers/include/seek_analyze.h
 %include utils/include/timer.h
 %include utils/include/file.h
 %include utils/include/argument_parse.h
@@ -721,6 +724,7 @@ using namespace std;
 %include steppers/include/volume.h
 %include steppers/include/profile_trials.h
 %include steppers/include/wall_clock_limit.h
+%include steppers/include/seek_analyze.h
 %include monte_carlo/include/analyze_factory.h
 %include steppers/include/log_and_movie.h
 %include monte_carlo/include/monte_carlo.h

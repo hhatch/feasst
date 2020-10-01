@@ -31,15 +31,14 @@ std::vector<int> SeekAnalyze::index(const std::string class_name,
 
 std::vector<double> SeekAnalyze::multistate_average(
     const std::string class_name,
-    const MonteCarlo& mc) const {
+    const MonteCarlo& mc,
+    const AnalyzeData& get) const {
   const std::vector<int> ndx = index(class_name, mc);
   ASSERT(ndx[0] != -1, "class_name:" << class_name << " not found");
   ASSERT(ndx[1] != -1, "class_name:" << class_name << " is not multistate");
   std::vector<double> data;
   const auto& ans = mc.analyze(ndx[0]).analyzers();
-  for (const auto& an : ans) {
-    data.push_back(an->accumulator().average());
-  }
+  for (const auto& an : ans) data.push_back(get.get(*an));
   return data;
 }
 

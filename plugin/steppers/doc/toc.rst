@@ -1,7 +1,6 @@
 
 .. toctree::
 
-   SeekAnalyze
    CriteriaUpdater
    CheckProperties
    Tuner
@@ -19,5 +18,6 @@
    Volume
    ProfileTrials
    WallClockLimit
+   AnalyzeData
    LogAndMovie
    Movie
