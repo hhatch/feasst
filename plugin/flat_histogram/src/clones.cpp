@@ -208,7 +208,10 @@ FlatHistogram Clones::flat_histogram(const int index) const {
   return FlatHistogram(ss);
 }
 
-LnProbability Clones::ln_prob(Histogram * macrostates) const {
+LnProbability Clones::ln_prob(Histogram * macrostates,
+    std::vector<double> * multistate_data,
+    const std::string analyze_name,
+    const AnalyzeData& get) const {
   std::vector<double> ln_prob;
   std::vector<double> edges;
   double shift = 0.;
@@ -228,6 +231,14 @@ LnProbability Clones::ln_prob(Histogram * macrostates) const {
     int truncate = 0;
     if (fh_lower.bias().class_name() == "TransitionMatrix") ++truncate;
 
+    // Optionally, extract multistate_data
+    std::vector<double> lower_data, upper_data;
+    if (multistate_data) {
+      SeekAnalyze seek;
+      lower_data = seek.multistate_data(analyze_name, clone(fh_index), get);
+      upper_data = seek.multistate_data(analyze_name, clone(fh_index + 1), get);
+    }
+
     int upper_index = index_upper_min;
     std::vector<double> overlap_upper;
     std::vector<double> overlap_lower;
@@ -239,6 +250,7 @@ LnProbability Clones::ln_prob(Histogram * macrostates) const {
       if (std::abs(macro_lower - macro_upper_min) > NEAR_ZERO &&
           upper_index == index_upper_min) {
         ln_prob.push_back(ln_prob_lower + shift);
+        if (multistate_data) multistate_data->push_back(lower_data[bin]);
       } else {
         DEBUG("upper index " << upper_index);
         DEBUG("stitch " << bin);
@@ -246,6 +258,12 @@ LnProbability Clones::ln_prob(Histogram * macrostates) const {
         overlap_lower.push_back(ln_prob_lower);
         DEBUG("upper " << fh_upper.bias().ln_prob().value(upper_index));
         DEBUG("lower " << ln_prob_lower);
+        if (multistate_data) {
+          DEBUG("lower data " << lower_data[bin]);
+          DEBUG("upper data " << upper_data[upper_index]);
+          multistate_data->push_back(
+            0.5*(lower_data[bin] + upper_data[upper_index]));
+        }
         ++upper_index;
       }
       if (macrostates) {
@@ -273,12 +291,17 @@ LnProbability Clones::ln_prob(Histogram * macrostates) const {
 
   // now add the non-overlapping part of the last clone
   FlatHistogram fh = flat_histogram(num() - 1);
+  std::vector<double> data;
+  if (multistate_data) {
+    data = SeekAnalyze().multistate_data(analyze_name, clone(num() - 1), get);
+  }
   for (int bin = starting_lower_bin; bin < fh.bias().ln_prob().size(); ++bin) {
     ln_prob.push_back(fh.bias().ln_prob().value(bin) + shift);
     if (macrostates) {
       const double macro = fh.macrostate().histogram().edges()[bin];
       edges.push_back(macro);
     }
+    if (multistate_data) multistate_data->push_back(data[bin]);
   }
   if (macrostates) {
     edges.push_back(fh.macrostate().histogram().edges().back());

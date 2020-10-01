@@ -57,7 +57,7 @@ class SeekAnalyze {
     For multistate Analyze with given class_name,
     Return average Accumulator as a function of state.
    */
-  std::vector<double> multistate_average(
+  std::vector<double> multistate_data(
     const std::string class_name,
     const MonteCarlo& mc,
     /// Optionally specify where to get data from Analyze

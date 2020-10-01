@@ -29,8 +29,8 @@ for iclone in range(clones.num()):
             num0.append(clones.clone(iclone).analyze(num_index).analyze(state).accumulator().average())
 num_vapor = gce.average(num0, 0)
 num_liquid = gce.average(num0, 1)
-print(fst.SeekAnalyze().multistate_average("NumParticles", clones.clone(0), fst.AccumulatorAverage()))
-print(len(fst.SeekAnalyze().multistate_average("NumParticles", clones.clone(0))))
+print(fst.SeekAnalyze().multistate_data("NumParticles", clones.clone(0), fst.AccumulatorAverage()))
+print(len(fst.SeekAnalyze().multistate_data("NumParticles", clones.clone(0))))
 
 print('vapor y_C2H4', 1 - num_vapor/gce.average_macrostate(0))
 print('liquid x_C2H4', 1 - num_liquid/gce.average_macrostate(1))

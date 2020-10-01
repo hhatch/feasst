@@ -29,7 +29,7 @@ std::vector<int> SeekAnalyze::index(const std::string class_name,
   return {-1, -1};
 }
 
-std::vector<double> SeekAnalyze::multistate_average(
+std::vector<double> SeekAnalyze::multistate_data(
     const std::string class_name,
     const MonteCarlo& mc,
     const AnalyzeData& get) const {

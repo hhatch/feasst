@@ -10,6 +10,7 @@
 #include "flat_histogram/include/window.h"
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/flat_histogram.h"
+#include "steppers/include/seek_analyze.h"
 
 namespace feasst {
 
@@ -95,10 +96,22 @@ class Clones {
   /// Return the FlatHistogram of a given clone index.
   FlatHistogram flat_histogram(const int index) const;
 
-  /// Return the LnProbability of all clones.
+  /// Stitch together and return the LnProbability of all clones.
   LnProbability ln_prob(
-    /// Optionally, also return spliced macrostates, if not NULL.
-    Histogram * macrostates = NULL) const;
+    /// Optionally return spliced macrostates, if not NULL.
+    Histogram * macrostates = NULL,
+    /// Optionally return spliced multistate data, it not NULL.
+    std::vector<double> * multistate_data = NULL,
+    /// Name of Analyze to extract data.
+    const std::string analyze_name = "",
+    /// Source of data in Analyze
+    const AnalyzeData& get = AccumulatorAverage()) const;
+
+  /// Same as above, but without spliced macrostates.
+  LnProbability ln_prob(std::vector<double> * multistate_data,
+    const std::string analyze_name,
+    const AnalyzeData& get) const {
+    return ln_prob(NULL, multistate_data, analyze_name, get); }
 
   /// Serialize
   void serialize(std::ostream& ostr) const;
