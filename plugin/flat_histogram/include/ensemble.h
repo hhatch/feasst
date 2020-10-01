@@ -118,25 +118,40 @@ class GrandCanonicalEnsemble : public Ensemble {
       /// Select phase by order of macrostate.
       /// Assumes default method of dividing phase boundary.
       const int phase = 0) const;
+};
 
+class ExtrapolateBetaGCE : public GrandCanonicalEnsemble {
+ public:
   /**
     Extrapolate the original simulation data to a different \f$\beta\f$.
-    Note, this changes ln_prob_original, not ln_prob.
+    See: https://doi.org/10.1063/1.4975331
     Assumes a single component.
+    In this implementation, extrapolation should be done before reweighting
+    because this function changes ln_prob_original, not ln_prob.
 
     args:
     - beta_new: \f$\beta\f$ to extrapolate toward.
     - beta_original: original \f$\beta\f$ of the simulation.
     - order: truncate Taylor series at this order (default: 2).
    */
-  void extrapolate_beta(
+  void extrapolateBetaGCE(
     /// Canonical ensemble average moments of extensive energy.
     /// The first index is the order of the moment.
     /// The second index is the macrostate.
     /// The first moment (corresponding to U) is modified to be the new energy
     /// at the new, extrapolated value of \f$\beta\f$.
-    std::vector<std::vector<double> > * energy_moments,
+    const std::vector<std::vector<double> >& energy_moments,
     const argtype& args = argtype());
+
+  /// Same as above, except that the moments are extracted from clones.
+  ExtrapolateBetaGCE(const Clones& clones,
+    const argtype& args = argtype());
+
+  /// Return the new energies based on extrapolation.
+  const std::vector<double> energy() const { return energy_; }
+
+ private:
+  std::vector<double> energy_;
 };
 
 }  // namespace feasst

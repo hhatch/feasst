@@ -1,39 +1,35 @@
 import copy
+import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import feasst as fst
 import pyfeasst
 
-for temp in [1.2, 1, 0.8]:
-    # read checkpoints
-    num_procs = 4
-    clones = fst.MakeClones('checkpoint', num_procs)
-    gce = fst.GrandCanonicalEnsemble(clones)
-    if temp == 1.2: plt.plot(gce.ln_prob().values(),
-                             label='T*='+str(1./clones.clone(0).criteria().beta()))
-
-    # collect the energy moments
-    u_moments = fst.Double2DVector(2)
-    for moment in range(2):
-        u = fst.DoubleVector()
-        clones.stitch(u, "Energy", fst.AccumulatorMoment(moment))
-        u_moments[moment] = u
-
-    gce.extrapolate_beta(u_moments,
+num_procs = 12
+clones = fst.MakeClones('checkpoint', num_procs)
+beta = clones.clone(0).criteria().beta()
+volume = clones.clone(0).configuration().domain().volume()
+plt.plot(clones.ln_prob().values(), label='T*='+str(1./beta))
+sat=list()
+for temp in np.arange(0.8, 1.201, 0.05):
+    extrap = fst.ExtrapolateBetaGCE(clones,
         fst.args({"beta_new": str(1/temp),
-                  "beta_original": str(clones.clone(0).criteria().beta())}))
-    gce=pyfeasst.find_equilibrium(gce)
+                  "beta_original": str(beta)}))
+    extrap=pyfeasst.find_equilibrium(extrap, beta_mu_guess=-6)
+    plt.plot(extrap.ln_prob().values(), label='T*='+str(round(temp,2)))
 
-    volume = clones.clone(0).configuration().domain().volume()
-    num_vapor = gce.average_macrostate(0)
-    num_liquid = gce.average_macrostate(1)
-    print('vapor density', num_vapor/volume)
-    print('liquid density', num_liquid/volume)
-    print('pressure', gce.betaPV()/volume/clones.clone(0).criteria().beta())
-    print('vapor en', gce.average(u_moments[0], 0)/num_vapor)
-    print('liquid en', gce.average(u_moments[0], 1)/num_liquid)
-    #print('betamu', sat.beta_mu())
+    # tabulate saturation properties
+    num_vapor = extrap.average_macrostate(0)
+    num_liquid = extrap.average_macrostate(1)
+    sat.append([temp,
+        num_vapor/volume,
+        num_liquid/volume,
+        extrap.betaPV()/volume/beta,
+        extrap.average(extrap.energy(), 0)/num_vapor,
+        extrap.average(extrap.energy(), 1)/num_liquid])
 
-    plt.plot(gce.ln_prob().values(), label='T*='+str(temp))
-
+print(pd.DataFrame(sat, columns=['T', 'rhov', 'rhol', 'pressure', 'uv', 'ul']))
 plt.legend()
+plt.xlabel(r'$N$', fontsize=16)
+plt.ylabel(r'$\ln\Pi$', fontsize=16)
 plt.show()

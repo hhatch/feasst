@@ -114,16 +114,16 @@ double GrandCanonicalEnsemble::betaPV(const int phase) const {
   return -ln_prob().value(0) + std::log(ln_prob().sum_probability(min, max));
 }
 
-void GrandCanonicalEnsemble::extrapolate_beta(
-    std::vector<std::vector<double> > * energy,
+void ExtrapolateBetaGCE::extrapolateBetaGCE(
+    const std::vector<std::vector<double> >& energy_moments,
     const argtype& args) {
   Arguments args_(args);
   const int order = args_.key("order").dflt("2").integer();
   ASSERT(order == 2, "Only second order is currently implemented");
-  ASSERT(static_cast<int>(energy->size()) == order,
-    "order: " << order << " doesn't match energy: " << energy->size());
-  ASSERT(static_cast<int>((*energy)[0].size()) == ln_prob_original_.size(),
-    "size of energy:" << (*energy)[0].size() << " doesn't match ln_prob: " <<
+  ASSERT(static_cast<int>(energy_moments.size()) == order,
+    "order: " << order << " doesn't match energy: " << energy_moments.size());
+  ASSERT(static_cast<int>(energy_moments[0].size()) == ln_prob_original_.size(),
+    "size of energy:" << energy_moments[0].size() << " doesn't match ln_prob: " <<
     ln_prob_original_.size());
   ASSERT(!is_phase_boundary(), "assumes no phase boundary when averaging.");
   // add option to ignore phases, phase=-1
@@ -136,10 +136,10 @@ void GrandCanonicalEnsemble::extrapolate_beta(
   std::vector<double> nu(ln_prob_original_.size());
   for (int bin = 0; bin < ln_prob_original_.size(); ++bin) {
     const double n = macrostates().center_of_bin(bin);
-    nu[bin] = n*(*energy)[0][bin];
+    nu[bin] = n*energy_moments[0][bin];
   }
-  const double gc_u  = average((*energy)[0]);
-  const double gc_u2 = average((*energy)[1]);
+  const double gc_u  = average(energy_moments[0]);
+  const double gc_u2 = average(energy_moments[1]);
   const double gc_n = average_macrostate();
   const double gc_nu = average(nu);
   const double mu = original_conjugate()/beta_original;
@@ -148,12 +148,13 @@ void GrandCanonicalEnsemble::extrapolate_beta(
   DEBUG("gc_u2 " << gc_u2);
   DEBUG("gc_n " << gc_n);
   DEBUG("gc_nu " << gc_nu);
+  energy_ = energy_moments[0];
   for (int state = 0; state < ln_prob_original_.size(); ++state) {
     const double n = macrostates().center_of_bin(state);
     DEBUG("n " << n);
-    const double u  = (*energy)[0][state];
+    const double u  = energy_moments[0][state];
     DEBUG("u " << u);
-    const double u2 = (*energy)[1][state];
+    const double u2 = energy_moments[1][state];
     DEBUG("u2 " << u2);
     const double dlnpdb = -u + gc_u + mu*n;
     DEBUG("dlnpdb " << dlnpdb);
@@ -161,9 +162,21 @@ void GrandCanonicalEnsemble::extrapolate_beta(
     DEBUG("dudb " << dudb);
     const double d2lnpdb2 = -dudb - gc_u2 + gc_u*gc_u - mu*(gc_nu - gc_n*gc_u);
     DEBUG("d2lnpdb2 " << d2lnpdb2);
-    (*energy)[0][state] += dudb*dbeta;
+    energy_[state] += dudb*dbeta;
     ln_prob_original_.add(state, dlnpdb*dbeta + d2lnpdb2*dbeta*dbeta/2.);
   }
+}
+
+ExtrapolateBetaGCE::ExtrapolateBetaGCE(const Clones& clones,
+    const argtype& args) : GrandCanonicalEnsemble(clones) {
+  const Analyze& an = SeekAnalyze().reference("Energy", clones.clone(0));
+  const int num_moments = static_cast<int>(an.accumulator().moments().size());
+  INFO("num_moments " << num_moments);
+  std::vector<std::vector<double> > energy_moments(num_moments);
+  for (int mom = 0; mom < num_moments; ++mom) {
+    clones.stitch(&energy_moments[mom], "Energy", AccumulatorMoment(mom));
+  }
+  extrapolateBetaGCE(energy_moments, args);
 }
 
 }  // namespace feasst

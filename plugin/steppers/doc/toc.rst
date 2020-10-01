@@ -1,23 +1,23 @@
 
 .. toctree::
 
-   CriteriaUpdater
-   CheckProperties
-   Tuner
-   CheckEnergyAndTune
-   CriteriaWriter
-   Energy
-   Log
-   NumParticles
-   MeanSquaredDisplacement
-   CPUTime
-   ExtensiveMoments
-   Check
-   CheckEnergy
-   CheckPhysicality
-   Volume
-   ProfileTrials
-   WallClockLimit
-   AnalyzeData
    LogAndMovie
+   AnalyzeData
+   WallClockLimit
+   ProfileTrials
+   Volume
+   CheckPhysicality
+   Check
+   ExtensiveMoments
+   CPUTime
+   MeanSquaredDisplacement
+   NumParticles
+   Log
+   Energy
+   CriteriaWriter
+   CheckEnergy
+   CheckEnergyAndTune
+   Tuner
+   CheckProperties
+   CriteriaUpdater
    Movie

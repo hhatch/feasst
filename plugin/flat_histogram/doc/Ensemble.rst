@@ -8,3 +8,7 @@ Ensemble
 .. doxygenclass:: feasst::GrandCanonicalEnsemble
    :project: FEASST
    :members:
+
+.. doxygenclass:: feasst::ExtrapolateBetaGCE
+   :project: FEASST
+   :members:

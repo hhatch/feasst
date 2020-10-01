@@ -65,6 +65,10 @@ class SeekAnalyze {
   std::vector<int> index(const std::string class_name,
                          const MonteCarlo& mc) const;
 
+  /// Return an Analyzer of given name.
+  const Analyze& reference(const std::string class_name,
+                           const MonteCarlo& mc) const;
+
   /**
     For multistate Analyze with given class_name,
     Return average Accumulator as a function of state.
