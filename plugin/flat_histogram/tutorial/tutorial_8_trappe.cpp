@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <fstream>
 #include "feasst.h"
 
@@ -14,6 +15,7 @@ feasst::ArgumentParse args(
 "--lx               : box length in x (default=33.0).\n"
 "--ly               : box length in y (default=33.0).\n"
 "--lz               : box length in z (default=33.0).\n"
+"--min_particles    : minimum number of particles (default=0).\n"
 "--max_particles    : maximum number of particles (default=400).\n"
 "--temperature      : temperature in Kelvin (default=263.15).\n"
 "--particle0        : particle type 0.\n"
@@ -21,14 +23,16 @@ feasst::ArgumentParse args(
 "--collect_flatness : number of WL flatness to begin collection (default=18).\n"
 "--min_flatness     : number of WL flatness to switch to TM (default=22).\n"
 "--beta_mu          : baseline chemical potential of each species (default=-7).\n"
-"--delta_betamu_0   : delta_betamu_0 (default=0.)\n"
+"--delta_beta_mu1   : beta_mu1 = beta_mu0 + delta_beta_mu1 (default=0.)\n"
 "--cyl_radius       : radius of cylindrical confinement, not used if < 0 (default: -1).\n"
 "--cyl_cutoff       : square well interaction distance from cylinder to point (default: 6).\n"
 "--cyl_epsilon      : square well interaction strength (default: 500).\n"
+"--file_xyz         : file name of xyz positions of initial configuration.\n"
+"                     Assume all particle0, and do not use if empty (default: empty).\n"
 );
 
 std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int mx) {
-  const std::string steps_per = feasst::str(1e4);
+  const std::string steps_per = feasst::str(1e5);
   auto mc = feasst::MakeMonteCarlo();
   feasst::argtype domain_args = {
     {"side_length0", args.get("--lx", "33")},
@@ -47,13 +51,19 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
   const double beta_mu = args.get_double("--beta_mu", -7.);
   feasst::argtype config_args = {{"particle_type0", args.get("--particle0")}};
   feasst::argtype criteria_args = {{"beta", feasst::str(beta)},
-    {"chemical_potential0", feasst::str((beta_mu+args.get_double("--delta_betamu_0", 0))/beta)}};
-  const std::string part1 = args.get("--particle1");
-  if (!part1.empty()) {
-    config_args.insert({"particle_type1", part1});
-    criteria_args.insert({"chemical_potential1", feasst::str(beta_mu/beta)});
+    {"chemical_potential0", feasst::str(beta_mu/beta)}};
+  if (args.option_given("--particle1")) {
+    config_args.insert({"particle_type1", args.get("--particle1")});
+    criteria_args.insert({"chemical_potential1", feasst::str((beta_mu + args.get_double("--delta_beta_mu1", 0))/beta)});
   }
-  mc->add(feasst::Configuration(feasst::MakeDomain(domain_args), config_args));
+  if (args.option_given("--file_xyz")) {
+    assert(thread == 0); // cannot initialize multiple threads to same configuration
+    feasst::Configuration config(feasst::MakeDomain(domain_args), config_args);
+    feasst::FileXYZ().load(args.get("--file_xyz"), &config);
+    mc->add(config);
+  } else {
+    mc->add(feasst::Configuration(feasst::MakeDomain(domain_args), config_args));
+  }
   mc->add(feasst::Potential(feasst::MakeLennardJones()));
   mc->add(feasst::Potential(feasst::MakeLongRangeCorrections()));
   const double cyl_radius = args.get_double("--cyl_radius", -1.);
@@ -89,6 +99,7 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
       {"min_flatness", args.get("--min_flatness", "22")},
       {"min_sweeps", "1000"}}),
     criteria_args));
+  std::cout << "Initial energy: " << MAX_PRECISION << mc->criteria().current_energy() << std::endl;
   for (int particle_type = 0; particle_type < mc->configuration().num_particle_types(); ++particle_type) {
     mc->add(feasst::MakeTrialTranslate({
       {"particle_type", feasst::str(particle_type)},
@@ -148,13 +159,16 @@ std::shared_ptr<feasst::MonteCarlo> mc(const int thread, const int mn, const int
 }
 
 int main(int argc, char ** argv) {
-  INFO(feasst::version());
-  INFO("args: " << args.parse(argc, argv));
+  std::cout << feasst::version() << std::endl;
+  std::cout << "args: " << args.parse(argc, argv) << std::endl;
+  const int max_particles = args.get_int("--max_particles", 400);
+  const int min_particles = args.get_int("--min_particles", 0);
   const int num_procs = args.get_int("--num_procs", 12);
   auto windows = feasst::WindowExponential({
     {"alpha", "1.75"},
     {"num", feasst::str(num_procs)},
-    {"maximum", args.get("--max_particles", "400")},
+    {"minimum", feasst::str(min_particles)},
+    {"maximum", feasst::str(max_particles)},
     {"extra_overlap", "2"}}).boundaries();
   INFO(feasst::feasst_str(windows));
   auto clones = feasst::MakeClones();
