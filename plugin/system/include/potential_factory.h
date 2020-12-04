@@ -2,6 +2,7 @@
 #ifndef FEASST_SYSTEM_POTENTIAL_FACTORY_H_
 #define FEASST_SYSTEM_POTENTIAL_FACTORY_H_
 
+#include <memory>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -18,13 +19,18 @@ class PotentialFactory {
   PotentialFactory() {}
 
   /// Add potential.
-  void add(const Potential& potential);
+  void add(std::shared_ptr<Potential> potential);
 
   /// Set a potential.
-  void set(const int index, const Potential& potential);
+  void set(const int index, std::shared_ptr<Potential> potential);
 
   /// Return the potentials.
-  const std::vector<Potential>& potentials() const { return potentials_; }
+  const std::vector<std::shared_ptr<Potential> >& potentials() const {
+    return potentials_; }
+
+  /// Return a potential by index of order added.
+  const Potential& potential(const int index) const {
+    return const_cast<Potential&>(*potentials_[index]); }
 
   /// Return the number of potentials.
   int num() const { return static_cast<int>(potentials_.size()); }
@@ -76,7 +82,7 @@ class PotentialFactory {
   explicit PotentialFactory(std::istream& sstr);
 
  private:
-  std::vector<Potential> potentials_;
+  std::vector<std::shared_ptr<Potential> > potentials_;
 //  Timer timer_;
 };
 

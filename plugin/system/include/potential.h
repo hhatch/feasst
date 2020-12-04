@@ -134,6 +134,30 @@ class Potential {
   bool prevent_cache_;
 };
 
+inline std::shared_ptr<Potential> MakePotential(
+    const argtype& args = argtype()) {
+  return std::make_shared<Potential>(args);
+}
+
+inline std::shared_ptr<Potential> MakePotential(
+    std::shared_ptr<Model> model,
+    const argtype& args = argtype()) {
+  return std::make_shared<Potential>(model, args);
+}
+
+inline std::shared_ptr<Potential> MakePotential(
+    std::shared_ptr<VisitModel> visit_model,
+    const argtype& args = argtype()) {
+  return std::make_shared<Potential>(visit_model, args);
+}
+
+inline std::shared_ptr<Potential> MakePotential(
+    std::shared_ptr<Model> model,
+    std::shared_ptr<VisitModel> visit_model,
+    const argtype& args = argtype()) {
+  return std::make_shared<Potential>(model, visit_model, args);
+}
+
 }  // namespace feasst
 
 #endif  // FEASST_SYSTEM_POTENTIAL_H_
