@@ -45,7 +45,7 @@ class PotentialFactory {
   double energy(Configuration * config);
 
   /// Compute the energy of the selection in the configuration.
-  double energy(const Select& select, Configuration * config);
+  double select_energy(const Select& select, Configuration * config);
 
   /// Return the profile of energies that were last computed.
   std::vector<double> stored_energy_profile() const;
@@ -80,6 +80,7 @@ class PotentialFactory {
 
   /// Deserialize.
   explicit PotentialFactory(std::istream& sstr);
+  virtual ~PotentialFactory() {}
 
  private:
   std::vector<std::shared_ptr<Potential> > potentials_;

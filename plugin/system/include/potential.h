@@ -85,10 +85,10 @@ class Potential {
   void precompute(Configuration * config);
 
   /// Compute the energy of the entire configuration.
-  double energy(Configuration * config);
+  virtual double energy(Configuration * config);
 
   /// Compute the energy of a selection of the configuration.
-  double energy(const Select& select, Configuration * config);
+  virtual double select_energy(const Select& select, Configuration * config);
 
   /// Return the last computed value of the energy.
   double stored_energy() const { return stored_energy_; }
@@ -122,6 +122,7 @@ class Potential {
 
   /// Deserialize.
   explicit Potential(std::istream& istr);
+  virtual ~Potential() {}
 
  private:
   int group_index_;

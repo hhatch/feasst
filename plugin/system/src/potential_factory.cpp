@@ -41,12 +41,12 @@ double PotentialFactory::energy(Configuration * config) {
   return en;
 }
 
-double PotentialFactory::energy(const Select& select, Configuration * config) {
+double PotentialFactory::select_energy(const Select& select, Configuration * config) {
   double en = 0;
   int index = 0;
   while ((index < static_cast<int>(potentials_.size())) and
          (en < NEAR_INFINITY)) {
-    en += potentials_[index]->energy(select, config);
+    en += potentials_[index]->select_energy(select, config);
     ++index;
   }
   DEBUG("en " << en);
@@ -96,7 +96,18 @@ void PotentialFactory::serialize(std::ostream& sstr) const {
 PotentialFactory::PotentialFactory(std::istream& sstr) {
   const int version = feasst_deserialize_version(sstr);
   ASSERT(version == 8655, "unrecognized verison: " << version);
-  feasst_deserialize(&potentials_, sstr);
+  // HWH for unknown reasons, this does not work
+  // feasst_deserialize(&potentials_, sstr);
+  int dim1;
+  sstr >> dim1;
+  potentials_.resize(dim1);
+  for (int index = 0; index < dim1; ++index) {
+    int existing;
+    sstr >> existing;
+    if (existing != 0) {
+      potentials_[index] = std::make_shared<Potential>(sstr);
+    }
+  }
 }
 
 void PotentialFactory::load_cache(const bool load) {

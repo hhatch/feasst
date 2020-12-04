@@ -106,7 +106,7 @@ double System::energy(const int config) {
 double System::perturbed_energy(const Select& select, const int config) {
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  return potentials_()->energy(select, &configurations_[config]);
+  return potentials_()->select_energy(select, &configurations_[config]);
 }
 
 double System::reference_energy(const int ref, const int config) {
@@ -120,7 +120,7 @@ double System::reference_energy(const Select& select,
     const int config) {
   ref_used_last_ = ref;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  return reference_(ref)->energy(select, &configurations_[config]);
+  return reference_(ref)->select_energy(select, &configurations_[config]);
 }
 
 void System::serialize(std::ostream& sstr) const {

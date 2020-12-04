@@ -127,7 +127,17 @@ with pyfeasst.cd(args.source_dir+'/plugin/'):
    usage: "+usage+"\n\
  */\n\
 \n\
-%module feasst\n\
+%module(directors=\"1\") feasst\n\
+\n\
+%feature(\"director:except\") {\n\
+  if( $error != NULL ) {\n\
+    PyObject *ptype, *pvalue, *ptraceback;\n\
+    PyErr_Fetch( &ptype, &pvalue, &ptraceback );\n\
+    PyErr_Restore( ptype, pvalue, ptraceback );\n\
+    PyErr_Print();\n\
+    Py_Exit(1);\n\
+  }\n\
+}\n\
 \n\
 %{\n\
 ")
@@ -154,6 +164,7 @@ using namespace std;\n\
 
     if 'system' in include_plugin:
         swig_file.write("%template(ModelTwoBodyVector) std::vector<std::shared_ptr<ModelTwoBody> >;\n")
+        swig_file.write("%feature(\"director\") Potential;\n")
 
     for cls in classes:
       for icl in cls:
