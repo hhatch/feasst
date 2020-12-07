@@ -17,16 +17,6 @@ parser.add_argument("--trials", type=int, help="number of Monte Carlo trials",
 args = parser.parse_args()
 print("args:", args)
 
-class PyPotential(fst.Potential):
-    def __init__(self):
-        fst.Potential.__init__(self)
-    def energy(self, config):
-        print("periodic whole system update")
-        return 0.
-    def select_energy(self, select, config):
-        #print("here")
-        return 0.
-
 mc = fst.MonteCarlo()
 if args.task > 0:
     mc = fst.MakeMonteCarlo("checkpoint.fst")
@@ -37,8 +27,6 @@ mc.add(fst.Configuration(
     fst.MakeDomain(fst.args({"cubic_box_length": str(args.length)})),
     fst.args({"particle_type": args.data})))
 mc.add(fst.MakePotential(fst.MakeLennardJones()))
-py_pot = PyPotential()
-mc.add(py_pot)
 mc.add(fst.MakePotential(fst.MakeLongRangeCorrections()))
 mc.set(fst.MakeThermoParams(fst.args({"beta": str(args.beta)})))
 mc.set(fst.MakeMetropolis())
