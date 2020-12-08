@@ -5,23 +5,20 @@
    Stepper
    Rosenbluth
    Acceptance
-   Criteria
-   Metropolis
-   Constraint
-   ConstrainNumParticles
    TrialSelect
    TrialSelectBond
    TrialSelectAngle
-   TrialSelectParticle
    Perturb
    PerturbMove
    PerturbTranslate
    PerturbDistance
+   PerturbVolume
+   TrialSelectParticle
+   Criteria
+   Metropolis
    TrialStage
    TrialCompute
-   TrialComputeMove
    Trial
-   trial_move
    TrialFactory
    Analyze
    AnalyzeFactory
@@ -30,10 +27,13 @@
    MonteCarlo
    SeekNumParticles
    trials
-   TrialComputeAdd
-   TrialComputeRemove
    TrialComputeVolume
-   PerturbVolume
+   TrialComputeRemove
+   TrialComputeAdd
+   TrialComputeMove
+   trial_move
+   Constraint
+   ConstrainNumParticles
    PerturbRotate
    PerturbAnywhere
    PerturbAdd

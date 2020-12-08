@@ -23,9 +23,10 @@ void TrialComputeMove::perturb_and_acceptance(
     Acceptance * acceptance,
     std::vector<TrialStage*> * stages,
     Random * random) {
-  DEBUG("TrialComputeMove");
+  INFO("TrialComputeMove");
   compute_rosenbluth(1, criteria, system, acceptance, stages, random);
   for (TrialStage * stage : *stages) stage->mid_stage(system);
+  INFO("New");
   compute_rosenbluth(0, criteria, system, acceptance, stages, random);
   DEBUG("old: " << criteria->current_energy() << " " << acceptance->energy_old());
   DEBUG("new: " << acceptance->energy_new());

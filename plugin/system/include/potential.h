@@ -6,12 +6,12 @@
 #include "utils/include/cache.h"
 #include "utils/include/arguments.h"
 #include "configuration/include/model_params.h"
+#include "configuration/include/select.h"
+#include "configuration/include/configuration.h"
 #include "system/include/visit_model.h"
 #include "system/include/model.h"
 
 namespace feasst {
-
-class Configuration;
 
 /**
   A potential represents both the model and the method used to compute the

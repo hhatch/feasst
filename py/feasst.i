@@ -55,8 +55,14 @@
 #include "system/include/bond_visitor.h"
 #include "system/include/bond_square_well.h"
 #include "system/include/neighbor_criteria.h"
+#include "cluster/include/energy_map_all.h"
+#include "cluster/include/energy_map_neighbor.h"
+#include "cluster/include/energy_map_neighbor_criteria.h"
+#include "cluster/include/energy_map_all_criteria.h"
 #include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
+#include "models/include/yukawa.h"
+#include "models/include/square_well.h"
 #include "system/include/ideal_gas.h"
 #include "system/include/model_two_body_factory.h"
 #include "system/include/hard_sphere.h"
@@ -73,8 +79,9 @@
 #include "configuration/include/site.h"
 #include "configuration/include/particle.h"
 #include "configuration/include/model_params.h"
-#include "system/include/potential.h"
-#include "system/include/potential_factory.h"
+#include "models/include/lennard_jones_alpha.h"
+#include "models/include/lennard_jones_cut_shift.h"
+#include "models/include/lennard_jones_force_shift.h"
 #include "configuration/include/group.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
@@ -83,25 +90,33 @@
 #include "configuration/include/cells.h"
 #include "configuration/include/visit_particles.h"
 #include "configuration/include/configuration.h"
+#include "system/include/potential.h"
+#include "system/include/potential_factory.h"
 #include "system/include/system.h"
-#include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/metropolis.h"
-#include "monte_carlo/include/constraint.h"
-#include "monte_carlo/include/constrain_num_particles.h"
+#include "system/include/utils.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/trial_select_bond.h"
 #include "monte_carlo/include/trial_select_angle.h"
-#include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/perturb_move.h"
 #include "monte_carlo/include/perturb_translate.h"
 #include "monte_carlo/include/perturb_distance.h"
+#include "cluster/include/perturb_point_reflect.h"
+#include "monte_carlo/include/perturb_volume.h"
+#include "monte_carlo/include/trial_select_particle.h"
+#include "cluster/include/select_particle_avb.h"
+#include "cluster/include/select_particle_avb_divalent.h"
+#include "cluster/include/select_cluster.h"
+#include "monte_carlo/include/criteria.h"
+#include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_compute.h"
-#include "monte_carlo/include/trial_compute_move.h"
 #include "monte_carlo/include/trial.h"
-#include "monte_carlo/include/trial_move.h"
+#include "cluster/include/trial_avb4.h"
 #include "monte_carlo/include/trial_factory.h"
+#include "cluster/include/trial_avb2.h"
+#include "cluster/include/trial_transfer_avb_divalent.h"
+#include "cluster/include/trial_transfer_avb.h"
 #include "monte_carlo/include/analyze.h"
 #include "monte_carlo/include/analyze_factory.h"
 #include "steppers/include/log_and_movie.h"
@@ -130,11 +145,22 @@
 #include "steppers/include/criteria_updater.h"
 #include "monte_carlo/include/seek_num_particles.h"
 #include "monte_carlo/include/trials.h"
-#include "monte_carlo/include/trial_compute_add.h"
-#include "monte_carlo/include/trial_compute_remove.h"
+#include "cluster/include/trial_rigid_cluster.h"
 #include "monte_carlo/include/trial_compute_volume.h"
-#include "monte_carlo/include/perturb_volume.h"
-#include "system/include/utils.h"
+#include "monte_carlo/include/trial_compute_remove.h"
+#include "cluster/include/compute_move_cluster.h"
+#include "cluster/include/compute_add_avb.h"
+#include "cluster/include/compute_remove_avb.h"
+#include "cluster/include/compute_gca.h"
+#include "monte_carlo/include/trial_compute_add.h"
+#include "cluster/include/compute_add_avb_divalent.h"
+#include "monte_carlo/include/trial_compute_move.h"
+#include "monte_carlo/include/trial_move.h"
+#include "cluster/include/compute_remove_avb_divalent.h"
+#include "cluster/include/compute_avb2.h"
+#include "cluster/include/compute_avb4.h"
+#include "monte_carlo/include/constraint.h"
+#include "monte_carlo/include/constrain_num_particles.h"
 #include "configuration/include/visit_configuration.h"
 #include "configuration/include/file_xyz.h"
 #include "steppers/include/movie.h"
@@ -149,6 +175,9 @@
 #include "math/include/formula_exponential.h"
 #include "math/include/matrix.h"
 #include "monte_carlo/include/perturb_rotate.h"
+#include "cluster/include/perturb_rotate_com.h"
+#include "cluster/include/perturb_move_avb.h"
+#include "cluster/include/perturb_add_avb.h"
 #include "monte_carlo/include/perturb_anywhere.h"
 #include "monte_carlo/include/perturb_add.h"
 #include "monte_carlo/include/perturb_remove.h"
@@ -177,6 +206,15 @@ using namespace std;
 %template(ArgsVector) std::vector<std::map<std::string, std::string> >;
 %template(ModelTwoBodyVector) std::vector<std::shared_ptr<ModelTwoBody> >;
 %feature("director") Potential;
+%include "std_pair.i"
+%template(Map2) std::vector<std::pair<int, std::vector<double>>>;
+%template(Map2h) std::pair<int, std::vector<std::pair<int, std::vector<double>>>>;
+%template(Map3) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>;
+%template(Map3h) std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>;
+%template(Map4) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>;
+%template(Map4h) std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>>;
+%template(MapNew) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>>>;
+%template(MapOld) std::vector<std::vector<std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>;
 %shared_ptr(feasst::Properties);
 %shared_ptr(feasst::PropertiedEntity);
 %shared_ptr(feasst::TypedEntity);
@@ -219,8 +257,14 @@ using namespace std;
 %shared_ptr(feasst::BondVisitor);
 %shared_ptr(feasst::BondSquareWell);
 %shared_ptr(feasst::NeighborCriteria);
+%shared_ptr(feasst::EnergyMapAll);
+%shared_ptr(feasst::EnergyMapNeighbor);
+%shared_ptr(feasst::EnergyMapNeighborCriteria);
+%shared_ptr(feasst::EnergyMapAllCriteria);
 %shared_ptr(feasst::VisitModel);
 %shared_ptr(feasst::ModelTwoBody);
+%shared_ptr(feasst::Yukawa);
+%shared_ptr(feasst::SquareWell);
 %shared_ptr(feasst::IdealGas);
 %shared_ptr(feasst::ModelTwoBodyFactory);
 %shared_ptr(feasst::HardSphere);
@@ -242,8 +286,11 @@ using namespace std;
 %shared_ptr(feasst::CutOff);
 %shared_ptr(feasst::Charge);
 %shared_ptr(feasst::ModelParams);
-%shared_ptr(feasst::Potential);
-%shared_ptr(feasst::PotentialFactory);
+%shared_ptr(feasst::LennardJonesAlpha);
+%shared_ptr(feasst::EnergyAtCutoff);
+%shared_ptr(feasst::EnergyDerivAtCutoff);
+%shared_ptr(feasst::LennardJonesCutShift);
+%shared_ptr(feasst::LennardJonesForceShift);
 %shared_ptr(feasst::Group);
 %shared_ptr(feasst::ParticleFactory);
 %shared_ptr(feasst::Select);
@@ -253,22 +300,26 @@ using namespace std;
 %shared_ptr(feasst::VisitParticles);
 %shared_ptr(feasst::LoopOneBody);
 %shared_ptr(feasst::Configuration);
+%shared_ptr(feasst::Potential);
+%shared_ptr(feasst::PotentialFactory);
 %shared_ptr(feasst::System);
-%shared_ptr(feasst::Criteria);
-%shared_ptr(feasst::Metropolis);
-%shared_ptr(feasst::Constraint);
-%shared_ptr(feasst::ConstrainNumParticles);
 %shared_ptr(feasst::TrialSelect);
 %shared_ptr(feasst::TrialSelectBond);
 %shared_ptr(feasst::TrialSelectAngle);
-%shared_ptr(feasst::TrialSelectParticle);
 %shared_ptr(feasst::Perturb);
 %shared_ptr(feasst::PerturbMove);
 %shared_ptr(feasst::PerturbTranslate);
 %shared_ptr(feasst::PerturbDistance);
+%shared_ptr(feasst::PerturbPointReflect);
+%shared_ptr(feasst::PerturbVolume);
+%shared_ptr(feasst::TrialSelectParticle);
+%shared_ptr(feasst::SelectParticleAVB);
+%shared_ptr(feasst::SelectParticleAVBDivalent);
+%shared_ptr(feasst::SelectCluster);
+%shared_ptr(feasst::Criteria);
+%shared_ptr(feasst::Metropolis);
 %shared_ptr(feasst::TrialStage);
 %shared_ptr(feasst::TrialCompute);
-%shared_ptr(feasst::TrialComputeMove);
 %shared_ptr(feasst::Trial);
 %shared_ptr(feasst::TrialFactory);
 %shared_ptr(feasst::Analyze);
@@ -307,10 +358,20 @@ using namespace std;
 %shared_ptr(feasst::CheckProperties);
 %shared_ptr(feasst::CriteriaUpdater);
 %shared_ptr(feasst::SeekNumParticles);
-%shared_ptr(feasst::TrialComputeAdd);
-%shared_ptr(feasst::TrialComputeRemove);
 %shared_ptr(feasst::TrialComputeVolume);
-%shared_ptr(feasst::PerturbVolume);
+%shared_ptr(feasst::TrialComputeRemove);
+%shared_ptr(feasst::ComputeMoveCluster);
+%shared_ptr(feasst::ComputeAddAVB);
+%shared_ptr(feasst::ComputeRemoveAVB);
+%shared_ptr(feasst::ComputeGCA);
+%shared_ptr(feasst::TrialComputeAdd);
+%shared_ptr(feasst::ComputeAddAVBDivalent);
+%shared_ptr(feasst::TrialComputeMove);
+%shared_ptr(feasst::ComputeRemoveAVBDivalent);
+%shared_ptr(feasst::ComputeAVB2);
+%shared_ptr(feasst::ComputeAVB4);
+%shared_ptr(feasst::Constraint);
+%shared_ptr(feasst::ConstrainNumParticles);
 %shared_ptr(feasst::VisitConfiguration);
 %shared_ptr(feasst::LoopConfigOneBody);
 %shared_ptr(feasst::FileVMD);
@@ -325,6 +386,9 @@ using namespace std;
 %shared_ptr(feasst::Matrix);
 %shared_ptr(feasst::RotationMatrix);
 %shared_ptr(feasst::PerturbRotate);
+%shared_ptr(feasst::PerturbRotateCOM);
+%shared_ptr(feasst::PerturbMoveAVB);
+%shared_ptr(feasst::PerturbAddAVB);
 %shared_ptr(feasst::PerturbAnywhere);
 %shared_ptr(feasst::PerturbAdd);
 %shared_ptr(feasst::PerturbRemove);
@@ -370,8 +434,14 @@ using namespace std;
 %include system/include/bond_visitor.h
 %include system/include/bond_square_well.h
 %include system/include/neighbor_criteria.h
+%include cluster/include/energy_map_all.h
+%include cluster/include/energy_map_neighbor.h
+%include cluster/include/energy_map_neighbor_criteria.h
+%include cluster/include/energy_map_all_criteria.h
 %include system/include/visit_model.h
 %include system/include/model_two_body.h
+%include models/include/yukawa.h
+%include models/include/square_well.h
 %include system/include/ideal_gas.h
 %include system/include/model_two_body_factory.h
 %include system/include/hard_sphere.h
@@ -388,8 +458,9 @@ using namespace std;
 %include configuration/include/site.h
 %include configuration/include/particle.h
 %include configuration/include/model_params.h
-%include system/include/potential.h
-%include system/include/potential_factory.h
+%include models/include/lennard_jones_alpha.h
+%include models/include/lennard_jones_cut_shift.h
+%include models/include/lennard_jones_force_shift.h
 %include configuration/include/group.h
 %include configuration/include/particle_factory.h
 %include configuration/include/select.h
@@ -398,25 +469,33 @@ using namespace std;
 %include configuration/include/cells.h
 %include configuration/include/visit_particles.h
 %include configuration/include/configuration.h
+%include system/include/potential.h
+%include system/include/potential_factory.h
 %include system/include/system.h
-%include monte_carlo/include/criteria.h
-%include monte_carlo/include/metropolis.h
-%include monte_carlo/include/constraint.h
-%include monte_carlo/include/constrain_num_particles.h
+%include system/include/utils.h
 %include monte_carlo/include/trial_select.h
 %include monte_carlo/include/trial_select_bond.h
 %include monte_carlo/include/trial_select_angle.h
-%include monte_carlo/include/trial_select_particle.h
 %include monte_carlo/include/perturb.h
 %include monte_carlo/include/perturb_move.h
 %include monte_carlo/include/perturb_translate.h
 %include monte_carlo/include/perturb_distance.h
+%include cluster/include/perturb_point_reflect.h
+%include monte_carlo/include/perturb_volume.h
+%include monte_carlo/include/trial_select_particle.h
+%include cluster/include/select_particle_avb.h
+%include cluster/include/select_particle_avb_divalent.h
+%include cluster/include/select_cluster.h
+%include monte_carlo/include/criteria.h
+%include monte_carlo/include/metropolis.h
 %include monte_carlo/include/trial_stage.h
 %include monte_carlo/include/trial_compute.h
-%include monte_carlo/include/trial_compute_move.h
 %include monte_carlo/include/trial.h
-%include monte_carlo/include/trial_move.h
+%include cluster/include/trial_avb4.h
 %include monte_carlo/include/trial_factory.h
+%include cluster/include/trial_avb2.h
+%include cluster/include/trial_transfer_avb_divalent.h
+%include cluster/include/trial_transfer_avb.h
 %include monte_carlo/include/analyze.h
 %include monte_carlo/include/analyze_factory.h
 %include steppers/include/log_and_movie.h
@@ -445,11 +524,22 @@ using namespace std;
 %include steppers/include/criteria_updater.h
 %include monte_carlo/include/seek_num_particles.h
 %include monte_carlo/include/trials.h
-%include monte_carlo/include/trial_compute_add.h
-%include monte_carlo/include/trial_compute_remove.h
+%include cluster/include/trial_rigid_cluster.h
 %include monte_carlo/include/trial_compute_volume.h
-%include monte_carlo/include/perturb_volume.h
-%include system/include/utils.h
+%include monte_carlo/include/trial_compute_remove.h
+%include cluster/include/compute_move_cluster.h
+%include cluster/include/compute_add_avb.h
+%include cluster/include/compute_remove_avb.h
+%include cluster/include/compute_gca.h
+%include monte_carlo/include/trial_compute_add.h
+%include cluster/include/compute_add_avb_divalent.h
+%include monte_carlo/include/trial_compute_move.h
+%include monte_carlo/include/trial_move.h
+%include cluster/include/compute_remove_avb_divalent.h
+%include cluster/include/compute_avb2.h
+%include cluster/include/compute_avb4.h
+%include monte_carlo/include/constraint.h
+%include monte_carlo/include/constrain_num_particles.h
 %include configuration/include/visit_configuration.h
 %include configuration/include/file_xyz.h
 %include steppers/include/movie.h
@@ -464,6 +554,9 @@ using namespace std;
 %include math/include/formula_exponential.h
 %include math/include/matrix.h
 %include monte_carlo/include/perturb_rotate.h
+%include cluster/include/perturb_rotate_com.h
+%include cluster/include/perturb_move_avb.h
+%include cluster/include/perturb_add_avb.h
 %include monte_carlo/include/perturb_anywhere.h
 %include monte_carlo/include/perturb_add.h
 %include monte_carlo/include/perturb_remove.h
