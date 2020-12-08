@@ -208,11 +208,8 @@ using namespace std;
 %feature("director") Potential;
 %include "std_pair.i"
 %template(Map2) std::vector<std::pair<int, std::vector<double>>>;
-%template(Map2h) std::pair<int, std::vector<std::pair<int, std::vector<double>>>>;
 %template(Map3) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>;
-%template(Map3h) std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>;
 %template(Map4) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>;
-%template(Map4h) std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>>;
 %template(MapNew) std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>>>;
 %template(MapOld) std::vector<std::vector<std::vector<std::pair<int, std::vector<std::pair<int, std::vector<double>>>>>>>;
 %shared_ptr(feasst::Properties);
