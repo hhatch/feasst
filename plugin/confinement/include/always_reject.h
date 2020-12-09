@@ -21,7 +21,7 @@ class AlwaysReject : public Criteria {
 
   bool is_accepted(const Acceptance& acceptance,
     const System& system,
-    Random * random) override;
+    Random * random) override { return false; }
 
   std::shared_ptr<Criteria> create(std::istream& istr) const override {
     return std::make_shared<AlwaysReject>(istr); }

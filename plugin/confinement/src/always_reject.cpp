@@ -32,11 +32,4 @@ void AlwaysReject::serialize(std::ostream& ostr) const {
   feasst_serialize_version(4204, ostr);
 }
 
-bool AlwaysReject::is_accepted(const Acceptance& acceptance,
-    const System& system,
-    Random * random) {
-  set_current_energy(acceptance.energy_new());
-  return true;
-}
-
 }  // namespace feasst

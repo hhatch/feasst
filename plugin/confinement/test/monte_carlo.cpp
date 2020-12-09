@@ -180,12 +180,16 @@ System slab(const int num0 = 0, const int num1 = 0, const int num2 = 0) {
   return system;
 }
 
-Accumulator henry(System system) {
+Accumulator henry(System system, const int particle_type = 0) {
   MonteCarlo mc;
   mc.set(system);
-  mc.set(MakeThermoParams({{"beta", "1.0"}, {"chemical_potential", "1"}}));
+  mc.set(MakeThermoParams({{"beta", "1.0"},
+    {"chemical_potential0", "1"},
+    {"chemical_potential1", "1"},
+    {"chemical_potential2", "1"},
+    }));
   mc.set(MakeAlwaysReject());
-  mc.add(MakeTrialAdd({{"particle_type", "0"}}));
+  mc.add(MakeTrialAdd({{"particle_type", feasst::str(particle_type)}}));
   //mc.add(MakeLogAndMovie({{"steps_per", str(1e4)}, {"file_name", "tmp/henry"}}));
   const int henry_index = mc.num_analyzers();
   mc.add(MakeHenryCoefficient());
@@ -194,18 +198,19 @@ Accumulator henry(System system) {
 }
 
 TEST(ModelTableCart3DIntegr, atomistic_slab_henry_LONG) {
-  const Accumulator h = henry(slab(1, 1));
+  const Accumulator h = henry(slab(0, 1));
   EXPECT_NEAR(h.average(), 55.5, 4*h.stdev_of_av());
 }
 
 TEST(ModelTableCart3DIntegr, table_slab_henry_LONG) {
   System table_system = slab(0, 1, 1);
   table_system.energy();
-  auto model = MakeModelTableCart3DIntegr(MakeTable3D({
+  auto table = MakeTable3D({
     {"num0", "51"},
     {"num1", "51"},
     {"num2", "51"},
-    {"default_value", "0."}}));
+    {"default_value", "0."}});
+  auto model = MakeModelTableCart3DIntegr(table);
   const Particle moving_particle = table_system.configuration().particle(1);
   EXPECT_EQ(moving_particle.type(), 2);
   Select select(1, moving_particle);
@@ -214,9 +219,12 @@ TEST(ModelTableCart3DIntegr, table_slab_henry_LONG) {
   #else // _OPENMP
     model->compute_table(&table_system, &select);
   #endif // _OPENMP
-  System system = slab(1);
+  System system = slab(0);
   system.add(Potential(model));  // use table instead of explicit wall
-  const Accumulator h = henry(system);
+  INFO(table->num0());
+  INFO(table->num1());
+  INFO(table->num2());
+  const Accumulator h = henry(system, 2);
   EXPECT_NEAR(h.average(), 52.5, 3*h.stdev_of_av());
 }
 
