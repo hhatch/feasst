@@ -112,10 +112,10 @@ void Trial::finalize(System * system) {
 }
 
 bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
-  INFO("**********************************************************");
-  INFO("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
-  INFO("**********************************************************");
-  INFO("num particles: " << system->configuration().num_particles());
+  DEBUG("**********************************************************");
+  DEBUG("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
+  DEBUG("**********************************************************");
+  DEBUG("num particles: " << system->configuration().num_particles());
   DEBUG("num ghosts: " << system->configuration().particles().num() -
                          system->configuration().num_particles());
   DEBUG("num of type 0: " << system->configuration().num_particles_of_type(0));
