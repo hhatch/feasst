@@ -184,11 +184,7 @@ System slab(const int num0 = 0, const int num1 = 0, const int num2 = 0) {
 Accumulator henry(System system) {
   MonteCarlo mc;
   mc.set(system);
-  mc.set(MakeThermoParams({{"beta", "1.0"},
-    {"chemical_potential0", "1"},
-    {"chemical_potential1", "1"},
-    {"chemical_potential2", "1"},
-    }));
+  mc.set(MakeThermoParams({{"beta", "1.0"}, {"chemical_potential0", "1"}}));
   mc.set(MakeAlwaysReject());
   mc.add(MakeTrialAdd({{"particle_type", "0"}}));
   //mc.add(MakeLogAndMovie({{"steps_per", str(1e4)}, {"file_name", "tmp/henry"}}));
