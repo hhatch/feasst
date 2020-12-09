@@ -22,7 +22,7 @@
 #include "steppers/include/check_energy_and_tune.h"
 #include "confinement/include/model_hard_shape.h"
 #include "confinement/include/model_table_cartesian.h"
-#include "confinement/include/always_accept.h"
+#include "confinement/include/always_reject.h"
 #include "confinement/include/henry_coefficient.h"
 #include "confinement/include/trial_anywhere.h"
 
@@ -183,10 +183,10 @@ System slab(const int num0 = 0, const int num1 = 0, const int num2 = 0) {
 Accumulator henry(System system) {
   MonteCarlo mc;
   mc.set(system);
-  mc.set(MakeThermoParams({{"beta", "1.0"}}));
-  mc.set(MakeAlwaysAccept());
-  mc.add(MakeTrialAnywhere({{"particle_type", "0"}}));
-  mc.add(MakeLogAndMovie({{"steps_per", str(1e4)}, {"file_name", "tmp/henry"}}));
+  mc.set(MakeThermoParams({{"beta", "1.0"}, {"chemical_potential", "1"}}));
+  mc.set(MakeAlwaysReject());
+  mc.add(MakeTrialAdd({{"particle_type", "0"}}));
+  //mc.add(MakeLogAndMovie({{"steps_per", str(1e4)}, {"file_name", "tmp/henry"}}));
   const int henry_index = mc.num_analyzers();
   mc.add(MakeHenryCoefficient());
   mc.attempt(1e6);
