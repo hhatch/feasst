@@ -165,6 +165,7 @@ System slab(const int num0 = 0, const int num1 = 0, const int num2 = 0) {
       {"particle_type0", "../forcefield/data.dimer"},
       {"particle_type1", install_dir() + "/plugin/confinement/forcefield/data.slab5x5"},
       {"particle_type2", "../forcefield/data.lj"}});
+  EXPECT_EQ(3, config.num_site_types());
   for (int site_type = 0; site_type < config.num_site_types(); ++site_type) {
     config.set_model_param("cutoff", site_type, 2.5);
   }
@@ -180,7 +181,7 @@ System slab(const int num0 = 0, const int num1 = 0, const int num2 = 0) {
   return system;
 }
 
-Accumulator henry(System system, const int particle_type = 0) {
+Accumulator henry(System system) {
   MonteCarlo mc;
   mc.set(system);
   mc.set(MakeThermoParams({{"beta", "1.0"},
@@ -189,7 +190,7 @@ Accumulator henry(System system, const int particle_type = 0) {
     {"chemical_potential2", "1"},
     }));
   mc.set(MakeAlwaysReject());
-  mc.add(MakeTrialAdd({{"particle_type", feasst::str(particle_type)}}));
+  mc.add(MakeTrialAdd({{"particle_type", "0"}}));
   //mc.add(MakeLogAndMovie({{"steps_per", str(1e4)}, {"file_name", "tmp/henry"}}));
   const int henry_index = mc.num_analyzers();
   mc.add(MakeHenryCoefficient());
@@ -221,10 +222,7 @@ TEST(ModelTableCart3DIntegr, table_slab_henry_LONG) {
   #endif // _OPENMP
   System system = slab(0);
   system.add(Potential(model));  // use table instead of explicit wall
-  INFO(table->num0());
-  INFO(table->num1());
-  INFO(table->num2());
-  const Accumulator h = henry(system, 2);
+  const Accumulator h = henry(system);
   EXPECT_NEAR(h.average(), 52.5, 3*h.stdev_of_av());
 }
 
