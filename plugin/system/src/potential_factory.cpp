@@ -32,8 +32,9 @@ double PotentialFactory::energy(Configuration * config) {
   double en = 0;
   int index = 0;
   while ((index < num()) && (en < NEAR_INFINITY/10.)) {
-    DEBUG("potential index: " << index);
-    en += potentials_[index]->energy(config);
+    const double potential_en = potentials_[index]->energy(config);
+    DEBUG("potential index: " << index << " potential energy: " << potential_en);
+    en += potential_en;
     ++index;
   }
   DEBUG("en " << en);
@@ -44,7 +45,7 @@ double PotentialFactory::energy(Configuration * config) {
 double PotentialFactory::select_energy(const Select& select, Configuration * config) {
   double en = 0;
   int index = 0;
-  while ((index < static_cast<int>(potentials_.size())) and
+  while ((index < static_cast<int>(potentials_.size())) &&
          (en < NEAR_INFINITY)) {
     en += potentials_[index]->select_energy(select, config);
     ++index;

@@ -93,6 +93,9 @@ class Potential {
   /// Return the last computed value of the energy.
   double stored_energy() const { return stored_energy_; }
 
+  /// Set the last computed value of the energy.
+  void set_stored_energy(const double energy) { stored_energy_ = energy; }
+
   /// Change the volume.
   void change_volume(const double delta_volume, const int dimension) {
     visit_model_->change_volume(delta_volume, dimension); }
