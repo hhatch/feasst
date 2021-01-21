@@ -327,8 +327,8 @@ void MonteCarlo::imitate_trial_rejection_(const int trial_index,
 
 double MonteCarlo::initialize_system() {
   system_.precompute();
-  const double en = system_.unoptimized_energy();
-  system_.energy();
+  system_.unoptimized_energy();
+  const double en = system_.energy();
   for (int ref = 0; ref < system_.num_references(); ++ref) {
     system_.reference_energy(ref);
   }

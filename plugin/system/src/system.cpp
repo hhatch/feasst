@@ -82,8 +82,8 @@ double System::unoptimized_energy(const int config) {
   ASSERT(!std::isinf(en) && !std::isnan(en),
     "Energy(" << en << ") is infinite or not "
     << "a number. Are particles on top of each other?");
-  unoptimized_.finalize(configurations_[config].selection_of_all());
-  ref_used_last_ = -1;
+  //unoptimized_.finalize(configurations_[config].selection_of_all());
+  finalize(config);
   DEBUG("ref_used_last_ " << ref_used_last_);
   return en;
 }
