@@ -64,7 +64,7 @@ double ChargeScreened::energy(
     return NEAR_INFINITY;
   } else if (erfc_) {
     const double mixed_cutoff_p1 =
-      model_params.mixed_cutoff()[type1][type2] + shift_;
+      model_params.cutoff().mixed_max() + shift_;
     const double z = squared_distance/mixed_cutoff_p1/mixed_cutoff_p1;
     const double erffac = erfc_->forward_difference_interpolation(z);
     TRACE("erffac " << erffac);
