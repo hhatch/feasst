@@ -23,6 +23,11 @@ WLTM::WLTM(const argtype &args) {
   DEBUG("wl args " << args_wl.size());
   DEBUG(args_wl["min_flatness"]);
   argtype args_tm = args_.args();
+  auto updates_per_flat_check = args_tm.find("updates_per_flat_check");
+  if (updates_per_flat_check != args_tm.end()) {
+    args_tm.erase(updates_per_flat_check);
+  }
+  args_.key("updates_per_flat_check").dflt("1").remove().integer();
   DEBUG("tm args " << args_tm.size());
   DEBUG(args_tm["min_sweeps"]);
   wang_landau_ = MakeWangLandau(args_wl);

@@ -113,10 +113,11 @@ MonteCarlo test_lj_fh(const int num_steps,
     bias = MakeTransitionMatrix({{"min_sweeps", str(sweeps)}});
   } else if (bias_name == "WL") {
     if (sweeps == 10) sweeps = 20;
-    bias = MakeWangLandau({{"min_flatness", str(sweeps)}});
+    bias = MakeWangLandau({{"min_flatness", str(sweeps)}, {"updates_per_flat_check", "100"}});
   } else if (bias_name == "WLTM") {
     bias = MakeWLTM({{"collect_flatness", "15"},
-      {"min_flatness", "20"}, {"min_sweeps", str(sweeps)}});
+      {"min_flatness", "20"}, {"min_sweeps", str(sweeps)},
+      {"updates_per_flat_check", "100"}});
   } else {
     FATAL("unrecognized");
   }
