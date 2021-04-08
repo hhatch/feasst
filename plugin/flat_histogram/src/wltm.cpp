@@ -27,7 +27,12 @@ WLTM::WLTM(const argtype &args) {
   if (updates_per_flat_check != args_tm.end()) {
     args_tm.erase(updates_per_flat_check);
   }
-  args_.key("updates_per_flat_check").dflt("1").remove().integer();
+  args_.key("updates_per_flat_check").dflt("100").remove().integer();
+  auto min_visit_per_macro = args_tm.find("min_visit_per_macro");
+  if (min_visit_per_macro != args_tm.end()) {
+    args_tm.erase(min_visit_per_macro);
+  }
+  args_.key("min_visit_per_macro").dflt("1000").remove().integer();
   DEBUG("tm args " << args_tm.size());
   DEBUG(args_tm["min_sweeps"]);
   wang_landau_ = MakeWangLandau(args_wl);

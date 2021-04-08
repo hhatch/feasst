@@ -28,8 +28,9 @@ class WangLandau : public Bias {
     - flatness_threshold : The visited states histogram is determined to be flat
       when the percentage between minimum visisted states and average reaches
       this threshold (default: 0.8).
-    - updates_per_flat_check: The number of updates per check for flatness
-      (default: 1). The bias function is also updated during flatness checks.
+    - updates_per_flat_check: Updates per check for flatness (default: 10^2).
+    - min_visit_per_macro: The minimum number of visits for each macrostate
+      required during flatness check (default: 10^3).
    */
   WangLandau(const argtype &args = argtype());
   void update_or_revert(
@@ -53,12 +54,13 @@ class WangLandau : public Bias {
   virtual ~WangLandau() {}
 
  private:
-  LnProbability ln_prob_, ln_prob_new_;
+  LnProbability ln_prob_;
   double add_to_ln_probability_ = 0;
   double reduce_ln_probability_ = 0;
   double flatness_threshold_ = 0;
   int updates_per_flat_check_;
   int updates_since_flat_check_ = 0;
+  int min_visit_per_macro_;
 
   /// Count of the number of times a state has been visited since the last time
   /// this histogram was reset after it was deemed to be sufficiently flat.
