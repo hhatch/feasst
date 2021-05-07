@@ -38,7 +38,7 @@ class EnergyMapNeighborMW : public EnergyMap {
       const Position * pbc) override;
   void revert(const Select& select) override;
   void finalize(const Select& select) override;
-  void final_en(const Select& select) override {}
+  void final_en(const Select& select) override;
   double total_energy() const override;
   void check() const override;
   void select_cluster(const NeighborCriteria& neighbor_criteria,
@@ -66,6 +66,7 @@ class EnergyMapNeighborMW : public EnergyMap {
       const int site2_index) override {}
 
   const std::vector<map4type>& const_map_() const;
+  const std::vector<map4type>& const_map_old_() const;
   const std::vector<std::pair<int, mn4type> >& const_map_new_() const;
 
   // serialization
@@ -191,6 +192,7 @@ class EnergyMapNeighborMW : public EnergyMap {
   // DEBUG util
   std::string map_new_str() const;
   std::string map_str() const;
+  std::string map_old_str() const;
   std::string map_str(const map3type& map3) const;
 
   void sort_map_new_();

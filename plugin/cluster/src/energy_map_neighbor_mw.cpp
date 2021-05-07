@@ -81,7 +81,10 @@ double EnergyMapNeighborMW::update(
 
 void EnergyMapNeighborMW::revert(const Select& select) {
   map_new_()->clear();
-//  map_() = map_old_();
+  INFO("here");
+  INFO("map: " << map_str());
+  INFO("map_old: " << map_old_str());
+  *map_() = *map_old_();
 }
 
 void EnergyMapNeighborMW::sort_map_new_() {
@@ -354,8 +357,11 @@ void EnergyMapNeighborMW::add_particle_to_map_() {
   }
 }
 
-void EnergyMapNeighborMW::finalize(const Select& select) {
-  if (!finalizable_) return;
+void EnergyMapNeighborMW::final_en(const Select& select) {
+  if (!finalizable_ || select.trial_state() == 0) {
+    INFO("skip");
+    return;
+  }
   DEBUG("map: " << map_str());
   DEBUG("new map: " << map_new_str());
   DEBUG("perturbed: " << select.str());
@@ -379,8 +385,13 @@ void EnergyMapNeighborMW::finalize(const Select& select) {
   } else {
     FATAL("unrecognized trial state: " << select.trial_state());
   }
+}
+
+void EnergyMapNeighborMW::finalize(const Select& select) {
   map_new_()->clear();
-  //map_old_() = map_();
+  INFO("map: " << map_str());
+  INFO("map_old: " << map_old_str());
+  *map_old_() = *map_();
 }
 
 void EnergyMapNeighborMW::select_cluster(
@@ -645,6 +656,21 @@ std::string EnergyMapNeighborMW::map_str() const {
   return ss.str();
 }
 
+std::string EnergyMapNeighborMW::map_old_str() const {
+  std::stringstream ss;
+  ss << std::endl;
+  for (int part1 = 0; part1 < static_cast<int>(const_map_old_().size()); ++part1) {
+    ss << "p1 " << part1 << ":|";
+    const map4type& map4 = const_map_old_()[part1];
+    for (int site1 = 0; site1 < static_cast<int>(map4.size()); ++site1) {
+      const map3type& map3 = map4[site1];
+      ss << "s1 " << site1 << ":[" << map_str(map3) << "],";
+    }
+    ss << "|," << std::endl;
+  }
+  return ss.str();
+}
+
 const std::vector<std::vector<std::vector<std::vector<std::vector<double> > > > >& EnergyMapNeighborMW::map() const { FATAL("not impl"); }
 
 typedef std::vector<std::pair<int, map3type> > mn4type;
@@ -658,6 +684,10 @@ std::vector<map4type> * EnergyMapNeighborMW::map_old_() {
 
 const std::vector<map4type>& EnergyMapNeighborMW::const_map_() const {
   return const_cast<const std::vector<map4type>&>(data_.get_const_vvvpvpv());
+}
+
+const std::vector<map4type>& EnergyMapNeighborMW::const_map_old_() const {
+  return const_cast<const std::vector<map4type>&>(data_.get_const_vvvpvpv2());
 }
 
 std::vector<std::pair<int, mn4type> > * EnergyMapNeighborMW::map_new_() {

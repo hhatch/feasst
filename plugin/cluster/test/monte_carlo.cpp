@@ -130,6 +130,7 @@ TEST(MonteCarlo, GCMCmap) {
       mc.attempt(1);
       const double en = mc.criteria().current_energy();
       const double en_map = mc.system().potential(0).visit_model().inner().energy_map().total_energy();
+      INFO("i " << i << " en " << en << " en_map " << en_map);
       if (std::abs(en - en_map) > 1e-8) {
         FATAL(MAX_PRECISION << "not the same: " << en << " " << en_map);
       }

@@ -19,11 +19,11 @@ bool Metropolis::is_accepted(const Acceptance& acceptance,
   if ( (!acceptance.reject()) &&
        (is_allowed(system, acceptance)) &&
        (random->uniform() < std::exp(acceptance.ln_metropolis_prob())) ) {
-    DEBUG("accepted");
+    INFO("accepted");
     set_current_energy(acceptance.energy_new());
     was_accepted_ = true;
   } else {
-    DEBUG("rejected");
+    INFO("rejected");
     was_accepted_ = false;
   }
   return was_accepted_;
