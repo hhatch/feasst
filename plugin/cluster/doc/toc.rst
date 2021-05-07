@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   EnergyMapNeighborMW
    EnergyMapAll
    EnergyMapNeighbor
    EnergyMapNeighborCriteria

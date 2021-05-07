@@ -72,6 +72,7 @@
 #include "system/include/bond_visitor.h"
 #include "system/include/bond_square_well.h"
 #include "system/include/neighbor_criteria.h"
+#include "cluster/include/energy_map_neighbor_mw.h"
 #include "cluster/include/energy_map_all.h"
 #include "cluster/include/energy_map_neighbor.h"
 #include "cluster/include/energy_map_neighbor_criteria.h"
@@ -358,6 +359,7 @@ using namespace std;
 %shared_ptr(feasst::BondVisitor);
 %shared_ptr(feasst::BondSquareWell);
 %shared_ptr(feasst::NeighborCriteria);
+%shared_ptr(feasst::EnergyMapNeighborMW);
 %shared_ptr(feasst::EnergyMapAll);
 %shared_ptr(feasst::EnergyMapNeighbor);
 %shared_ptr(feasst::EnergyMapNeighborCriteria);
@@ -620,6 +622,7 @@ using namespace std;
 %include system/include/bond_visitor.h
 %include system/include/bond_square_well.h
 %include system/include/neighbor_criteria.h
+%include cluster/include/energy_map_neighbor_mw.h
 %include cluster/include/energy_map_all.h
 %include cluster/include/energy_map_neighbor.h
 %include cluster/include/energy_map_neighbor_criteria.h

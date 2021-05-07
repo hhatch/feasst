@@ -21,6 +21,7 @@
 #include "steppers/include/log_and_movie.h"
 #include "cluster/include/energy_map_all.h"
 #include "cluster/include/energy_map_neighbor.h"
+#include "cluster/include/energy_map_neighbor_mw.h"
 #include "cluster/include/trial_avb2.h"
 #include "cluster/include/trial_avb4.h"
 #include "cluster/include/select_cluster.h"
@@ -96,8 +97,8 @@ TEST(MonteCarlo, cluster) {
 //    mc.add(MakeMetropolis({{"beta", "40"}, {"chemical_potential", "1."}}));
 
 TEST(MonteCarlo, GCMCmap) {
-  //for (std::string mapstr : {"neighbor"}) {
-  for (std::string mapstr : {"all", "neighbor"}) {
+  for (std::string mapstr : {"neighbor_mw"}) {
+  //for (std::string mapstr : {"all", "neighbor", "neighbor_mw"}) {
     INFO(mapstr);
     MonteCarlo mc;
     mc.set(MakeRandomMT19937({{"seed", "123"}}));
@@ -113,6 +114,8 @@ TEST(MonteCarlo, GCMCmap) {
       map = MakeEnergyMapAll();
     } else if (mapstr == "neighbor") {
       map = MakeEnergyMapNeighbor();
+    } else if (mapstr == "neighbor_mw") {
+      map = MakeEnergyMapNeighborMW();
     } else {
       FATAL("unrecognized mapstr");
     }
