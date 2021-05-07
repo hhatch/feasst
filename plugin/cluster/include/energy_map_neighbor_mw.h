@@ -94,6 +94,7 @@ class EnergyMapNeighborMW : public EnergyMap {
   ///                           .second[sneigh1].first-> site1
   ///                                           .second-> en, rsq, pbcs
   std::vector<map4type> * map_();
+  std::vector<map4type> * map_old_();
 
   /// map_[pneigh1].first -> part1
   ///              .second[sneigh1].first -> site1

@@ -652,6 +652,9 @@ typedef std::vector<map3type> map4type;
 std::vector<map4type> * EnergyMapNeighborMW::map_() {
   return data_.get_vvvpvpv();
 }
+std::vector<map4type> * EnergyMapNeighborMW::map_old_() {
+  return data_.get_vvvpvpv2();
+}
 
 const std::vector<map4type>& EnergyMapNeighborMW::const_map_() const {
   return const_cast<const std::vector<map4type>&>(data_.get_const_vvvpvpv());

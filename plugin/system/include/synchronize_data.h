@@ -64,9 +64,11 @@ class SynchronizeData {
 
   /// Return vvvpvpv data.
   const vvvpvpv& get_const_vvvpvpv() const { return vvvpvpv_; }
+  const vvvpvpv& get_const_vvvpvpv2() const { return vvvpvpv2_; }
 
   /// Get vvvpvpv data.
   vvvpvpv * get_vvvpvpv() { return &vvvpvpv_; }
+  vvvpvpv * get_vvvpvpv2() { return &vvvpvpv2_; }
 
   void serialize(std::ostream& ostr) const;
   explicit SynchronizeData(std::istream& istr);
@@ -79,6 +81,7 @@ class SynchronizeData {
   vec6 dble_6D_;
   vpvpvpvpv vpvpvpvpv_;
   vvvpvpv vvvpvpv_;
+  vvvpvpv vvvpvpv2_;
 };
 
 }  // namespace feasst
