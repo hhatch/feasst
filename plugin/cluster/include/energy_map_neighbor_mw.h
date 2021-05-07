@@ -38,6 +38,7 @@ class EnergyMapNeighborMW : public EnergyMap {
       const Position * pbc) override;
   void revert(const Select& select) override;
   void finalize(const Select& select) override;
+  void final_en(const Select& select) override {}
   double total_energy() const override;
   void check() const override;
   void select_cluster(const NeighborCriteria& neighbor_criteria,

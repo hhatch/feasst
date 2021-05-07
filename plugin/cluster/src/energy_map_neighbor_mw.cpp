@@ -81,6 +81,7 @@ double EnergyMapNeighborMW::update(
 
 void EnergyMapNeighborMW::revert(const Select& select) {
   map_new_()->clear();
+//  map_() = map_old_();
 }
 
 void EnergyMapNeighborMW::sort_map_new_() {
@@ -379,6 +380,7 @@ void EnergyMapNeighborMW::finalize(const Select& select) {
     FATAL("unrecognized trial state: " << select.trial_state());
   }
   map_new_()->clear();
+  //map_old_() = map_();
 }
 
 void EnergyMapNeighborMW::select_cluster(

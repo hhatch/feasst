@@ -39,7 +39,11 @@ class VisitModelInner {
       energy_map_->precompute(config);
     }
   }
-
+  void final_en(const Select& select) {
+    if (energy_map_) {
+      energy_map_->final_en(select);
+    }
+  }
   void set_energy(const double energy) { energy_ = energy; }
   void update_ixn(
       const double energy,

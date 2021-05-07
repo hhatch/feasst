@@ -94,6 +94,8 @@ class VisitModel {
   /// Set the energy.
   void set_energy(const double energy) { energy_ = energy; }
 
+  // HWH only used for EnergyMapNeighborMW
+  void final_en(const Select& select) { inner_->final_en(select); }
   void zero_energy() {
     energy_ = 0.;
     inner_->set_energy(0.);

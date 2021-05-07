@@ -69,6 +69,7 @@ class EnergyMap {
 
   /// Finalize any changes from perturbation of selection.
   virtual void finalize(const Select& select) {}
+  virtual void final_en(const Select& select) {}
 
   /// Return the total energy.
   virtual double total_energy() const;

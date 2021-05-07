@@ -94,6 +94,7 @@ double Potential::select_energy(const Select& select, Configuration * config) {
     }
     cache_.load(stored_energy_);
   }
+  visit_model_->final_en(select);
   return stored_energy_;
 }
 
