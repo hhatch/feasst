@@ -347,6 +347,4 @@ To Do List
 * EnergyMapNeighborCriteria should be able to take index of energy map stored by System
 * Optimize TrialRemove for new_only by not computing interactions with neighbors
 * Make a 'file extension' for fst data files (fstdata)
-* Tutorial uses Potential, not make Potential
-* Have log file output -1 if trial not attempted (as opposed to not accepted).
 * Reptate with non-unit bond lengths
