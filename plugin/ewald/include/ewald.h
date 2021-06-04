@@ -200,11 +200,13 @@ class Ewald : public VisitModel {
   // eventually, this should be put in synchrinization data
   // eik_[particle_index][site_index][eik_index]
   std::vector<std::vector<std::vector<double> > > eik_;
+  // temporary
   std::vector<std::vector<std::vector<double> > > eik_new_;
 
-  // temporary
+  // not temporary (for sizing)
   std::vector<double> struct_fact_real_new_;
   std::vector<double> struct_fact_imag_new_;
+  // temporary
   double stored_energy_new_ = 0.;
 
   // temporary

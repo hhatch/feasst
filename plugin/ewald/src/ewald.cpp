@@ -279,6 +279,7 @@ void Ewald::update_struct_fact_eik(const Select& selection,
         const int eikiz0_index = eikiy0_index + kymax_ + kzmax_ + 1;//num_ky_;
         TRACE(eikrx0_index << " " << eikry0_index << " " << eikrz0_index << " "
           << eikix0_index << " " << eikiy0_index << " " << eikiz0_index);
+        std::vector<double> * eik_new = &eik_new_[select_index][ss_index];
 
         // update the eik of the selection
         if (state != 0 && state != 2) {
@@ -288,7 +289,6 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           config->set_site_property(eikiy0_index, 0., part_index, site_index);
           config->set_site_property(eikrz0_index, 1., part_index, site_index);
           config->set_site_property(eikiz0_index, 0., part_index, site_index);
-          std::vector<double> * eik_new = &eik_new_[select_index][ss_index];
           (*eik_new)[eikrx0_index] = 1.;
           (*eik_new)[eikix0_index] = 0.;
           (*eik_new)[eikry0_index] = 1.;
@@ -364,11 +364,23 @@ void Ewald::update_struct_fact_eik(const Select& selection,
             const double eikr = eik[eikrz0_index + kz - 1]*eik[eikrz0_index + 1] -
               eik[eikiz0_index + kz - 1]*eik[eikiz0_index + 1];
             config->set_site_property(eikrz0_index + kz, eikr, part_index, site_index);
+
+            const double eikr2 = (*eik_new)[eikrz0_index + kz - 1]*(*eik_new)[eikrz0_index + 1] -
+              (*eik_new)[eikiz0_index + kz - 1]*(*eik_new)[eikiz0_index + 1];
+            (*eik_new)[eikrz0_index + kz] = eikr2;
+
             const double eiki = eik[eikrz0_index + kz - 1]*eik[eikiz0_index + 1] +
               eik[eikiz0_index + kz - 1]*eik[eikrz0_index + 1];
             config->set_site_property(eikiz0_index + kz, eiki, part_index, site_index);
+
+            const double eiki2 = (*eik_new)[eikrz0_index + kz - 1]*(*eik_new)[eikiz0_index + 1] +
+              (*eik_new)[eikiz0_index + kz - 1]*(*eik_new)[eikrz0_index + 1];
+            (*eik_new)[eikiz0_index + kz] = eiki2;
+
             config->set_site_property(eikrz0_index - kz, eikr, part_index, site_index);
             config->set_site_property(eikiz0_index - kz, -eiki, part_index, site_index);
+            (*eik_new)[eikrz0_index - kz] = eikr2;
+            (*eik_new)[eikiz0_index - kz] = -eiki2;
           }
         }
 
@@ -389,6 +401,12 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           const double eikiy = eik[eikiy0_index + ky];
           const double eikrz = eik[eikrz0_index + kz];
           const double eikiz = eik[eikiz0_index + kz];
+//          const double eikrx2 = (*eik_new)[eikrx0_index + kx];
+//          const double eikix2 = (*eik_new)[eikix0_index + kx];
+//          const double eikry2 = (*eik_new)[eikry0_index + ky];
+//          const double eikiy2 = (*eik_new)[eikiy0_index + ky];
+//          const double eikrz2 = (*eik_new)[eikrz0_index + kz];
+//          const double eikiz2 = (*eik_new)[eikiz0_index + kz];
           TRACE("eik[r,i]x " << eikrx << " " << eikix << " y " << eikry << " " << eikiy << " z " << eikrz << " " << eikiz << " sz " << eik.size());
           const double eikr = eikrx*eikry*eikrz
                      - eikix*eikiy*eikrz
@@ -439,6 +457,7 @@ void Ewald::serialize(std::ostream& ostr) const {
   feasst_serialize(wave_num_, ostr);
   //feasst_serialize(struct_fact_real_, ostr);
   //feasst_serialize(struct_fact_imag_, ostr);
+  feasst_serialize(eik_, ostr);
   feasst_serialize(struct_fact_real_new_, ostr);
   feasst_serialize(struct_fact_imag_new_, ostr);
   //feasst_serialize(stored_energy_, ostr);
@@ -506,6 +525,7 @@ Ewald::Ewald(std::istream& istr) : VisitModel(istr) {
   feasst_deserialize(&wave_num_, istr);
   //feasst_deserialize(&struct_fact_real_, istr);
   //feasst_deserialize(&struct_fact_imag_, istr);
+  feasst_deserialize(&eik_, istr);
   feasst_deserialize(&struct_fact_real_new_, istr);
   feasst_deserialize(&struct_fact_imag_new_, istr);
   //feasst_deserialize(&stored_energy_, istr);
