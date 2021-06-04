@@ -120,7 +120,7 @@ TEST(MonteCarlo, spce) {
   mc.add(MakeLogAndMovie({{"steps_per", str(5e2)}, {"file_name", "tmp/spce"}}));
   mc.add(MakeCheckEnergyAndTune({{"steps_per", str(5e2)}, {"tolerance", str(1e-6)}}));
   mc.attempt(1e3);
-  INFO(mc.configuration().num_particles());
+  EXPECT_GT(mc.configuration().num_particles(), 0);
 }
 
 TEST(MonteCarlo, spce_NVT_BENCHMARK_LONG) {

@@ -230,7 +230,7 @@ void Ewald::update_struct_fact_eik(const Select& selection,
   const int state = selection.trial_state();
 
   // resize eik
-  { 
+  {
     int num_p = config->particles().num();
     int extra = num_p - eik_.size();
     if (extra > 0) {
@@ -688,6 +688,19 @@ void Ewald::finalize(const Select& select, Configuration * config) {
     *struct_fact_imag_() = struct_fact_imag_new_;
     revertable_ = false;
     finalizable_ = false;
+
+    // update eik using eik_new
+    { for (int ipart = 0; ipart < select.num_particles(); ++ipart) {
+        const int part_index = select.particle_index(ipart);
+        for (int isite = 0; isite < select.num_sites(ipart); ++isite) {
+          const int site_index = select.site_index(ipart, isite);
+          const std::vector<double>& eik_new = eik_new_[ipart][isite];
+          for (int k = 0; k < static_cast<int>(eik_new.size()); ++k) {
+            eik_[part_index][site_index][k] = eik_new[k];
+          }
+        }
+      }
+    }
   }
 }
 
