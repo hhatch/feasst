@@ -132,6 +132,7 @@ std::vector<std::string> Ewald::eik_gen_() {
 
 void Ewald::init_wave_vector_storage(Configuration * config, const int group_index) {
   const Select& selection = config->group_selects()[group_index];
+  ASSERT(group_index == 0, "eik_ implementation assumes all particles have eiks");
   init_wave_vector_storage(config, selection);
   // also add eik properties to the particle types
   const std::vector<std::string> eiks = eik_gen_();
@@ -152,8 +153,11 @@ void Ewald::init_wave_vector_storage(Configuration * config, const Select& selec
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
+    //eik_[select_index].resize(selection.num_sites(select_index));
     const int part_index = selection.particle_index(select_index);
-    for (int site_index : selection.site_indices(select_index)) {
+    for (int selsite = 0; selsite < selection.num_sites(select_index); ++selsite) {
+      //eik_[select_index][selsite].resize(2*(num_kx_ + num_ky_ + num_kz_));
+      const int site_index = selection.site_index(select_index, selsite);
       for (const std::string& eik : eiks) {
         config->add_or_set_site_property(eik, 0., part_index, site_index);
       }
@@ -224,6 +228,36 @@ void Ewald::update_struct_fact_eik(const Select& selection,
                twopily = 2.*PI/ly,
                twopilz = 2.*PI/lz;
   const int state = selection.trial_state();
+
+  // resize eik
+  { 
+    int num_p = config->particles().num();
+    int extra = num_p - eik_.size();
+    if (extra > 0) {
+      eik_.resize(eik_.size() + extra);
+      for (int lastp = num_p - extra; lastp < num_p; ++lastp) {
+        const int num_sites = config->particles().particle(lastp).num_sites();
+        eik_[lastp].resize(num_sites);
+        for (int site = 0; site < num_sites; ++site) {
+          eik_[lastp][site].resize(2*(num_kx_ + num_ky_ + num_kz_));
+        }
+      }
+    }
+    num_p = selection.num_particles();
+    extra = num_p - eik_new_.size();
+    if (extra > 0) {
+      eik_new_.resize(eik_new_.size() + extra);
+      for (int lastp = num_p - extra; lastp < num_p; ++lastp) {
+        const int num_sites = selection.num_sites(lastp);
+        eik_new_[lastp].resize(num_sites);
+        for (int site = 0; site < num_sites; ++site) {
+          eik_new_[lastp][site].resize(2*(num_kx_ + num_ky_ + num_kz_));
+        }
+      }
+    }
+  }
+
+
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
@@ -254,6 +288,12 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           config->set_site_property(eikiy0_index, 0., part_index, site_index);
           config->set_site_property(eikrz0_index, 1., part_index, site_index);
           config->set_site_property(eikiz0_index, 0., part_index, site_index);
+          eik_new_[select_index][ss_index][eikrx0_index] = 1.;
+          eik_new_[select_index][ss_index][eikix0_index] = 0.;
+          eik_new_[select_index][ss_index][eikry0_index] = 1.;
+          eik_new_[select_index][ss_index][eikiy0_index] = 0.;
+          eik_new_[select_index][ss_index][eikrz0_index] = 1.;
+          eik_new_[select_index][ss_index][eikiz0_index] = 0.;
 
           // calculate eik of kx = +/-1 explicitly
           const std::vector<double>& pos = config->select_particle(part_index).site(site_index).position().coord();
@@ -263,6 +303,12 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           config->set_site_property(eikiy0_index + 1, sin(twopily*pos[1]), part_index, site_index);
           config->set_site_property(eikrz0_index + 1, cos(twopilz*pos[2]), part_index, site_index);
           config->set_site_property(eikiz0_index + 1, sin(twopilz*pos[2]), part_index, site_index);
+          eik_new_[select_index][ss_index][eikrx0_index + 1] = cos(twopilx*pos[0]);
+          eik_new_[select_index][ss_index][eikix0_index + 1] = sin(twopilx*pos[0]);
+          eik_new_[select_index][ss_index][eikry0_index + 1] = cos(twopily*pos[1]);
+          eik_new_[select_index][ss_index][eikiy0_index + 1] = sin(twopily*pos[1]);
+          eik_new_[select_index][ss_index][eikrz0_index + 1] = cos(twopilz*pos[2]);
+          eik_new_[select_index][ss_index][eikiz0_index + 1] = sin(twopilz*pos[2]);
           {
             const std::vector<double>& eik = config->select_particle(part_index).site(site_index).properties().values();
             TRACE("test " << eik[eikrx0_index + 1] << " " << cos(twopilx*pos[0]) << " " <<
