@@ -714,7 +714,9 @@ void Ewald::finalize(const Select& select, Configuration * config) {
     finalizable_ = false;
 
     // update eik using eik_new
-    { for (int ipart = 0; ipart < select.num_particles(); ++ipart) {
+    INFO(select.trial_state());
+    if (select.trial_state() != 2) {
+      for (int ipart = 0; ipart < select.num_particles(); ++ipart) {
         const int part_index = select.particle_index(ipart);
         for (int isite = 0; isite < select.num_sites(ipart); ++isite) {
           const int site_index = select.site_index(ipart, isite);
