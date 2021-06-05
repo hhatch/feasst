@@ -207,7 +207,7 @@ void Ewald::precompute(Configuration * config) {
   num_kx_ = kxmax_ + 1;
   num_ky_ = 2*kymax_ + 1;
   num_kz_ = 2*kzmax_ + 1;
-  config->add_excluded_property("eik");
+//  config->add_excluded_property("eik");
   update_wave_vectors(*config);
   init_wave_vector_storage(config);
 }
