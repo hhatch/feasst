@@ -256,19 +256,28 @@ void Ewald::update_struct_fact_eik(const Select& selection,
       }
     }
   }
-
+  INFO("eik_new size " << eik_new_.size());
+  if (eik_new_.size() > 0) {
+    INFO(eik_new_[0].size());
+    INFO(eik_new_[0][0].size());
+  }
 
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
+    INFO("select_index " << select_index);
     const int part_index = selection.particle_index(select_index);
+    INFO("part_index " << part_index);
     const double struct_sign = sign_(selection, select_index);
     for (int ss_index = 0; ss_index < selection.num_sites(select_index); ++ss_index) {
+      INFO("ss_index " << ss_index);
       const int site_index = selection.site_index(select_index, ss_index);
+      INFO("site_index " << site_index);
       // obtain the index for the property
       // this assumes all eik in site are contiguous and ordered
       const Site& site = config->select_particle(part_index).site(site_index);
       if (site.is_physical()) {
+        //WARN("with new eik_ implementation, eikrx0_index is always 0");
         const int eikrx0_index = find_eikrx0_(site);
         // calculate eik of kx = 0 explicitly
         //ASSERT(num_ky_ == num_kz_, "assumption");
@@ -279,10 +288,13 @@ void Ewald::update_struct_fact_eik(const Select& selection,
         const int eikiz0_index = eikiy0_index + kymax_ + kzmax_ + 1;//num_ky_;
         TRACE(eikrx0_index << " " << eikry0_index << " " << eikrz0_index << " "
           << eikix0_index << " " << eikiy0_index << " " << eikiz0_index);
-        std::vector<double> * eik_new = &eik_new_[select_index][ss_index];
+        std::vector<double> * eik_new;
 
         // update the eik of the selection
-        if (state != 0 && state != 2) {
+        if (state == 0 || state == 2) {
+          eik_new = &eik_[part_index][site_index];
+        } else {
+          eik_new = &eik_new_[select_index][ss_index];
           config->set_site_property(eikrx0_index, 1., part_index, site_index);
           config->set_site_property(eikix0_index, 0., part_index, site_index);
           config->set_site_property(eikry0_index, 1., part_index, site_index);
@@ -404,12 +416,21 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           const double eikiy = eik[eikiy0_index + ky];
           const double eikrz = eik[eikrz0_index + kz];
           const double eikiz = eik[eikiz0_index + kz];
-//          const double eikrx = (*eik_new)[eikrx0_index + kx];
-//          const double eikix = (*eik_new)[eikix0_index + kx];
-//          const double eikry = (*eik_new)[eikry0_index + ky];
-//          const double eikiy = (*eik_new)[eikiy0_index + ky];
-//          const double eikrz = (*eik_new)[eikrz0_index + kz];
-//          const double eikiz = (*eik_new)[eikiz0_index + kz];
+          const double eikrx2 = (*eik_new)[eikrx0_index + kx];
+          const double eikix2 = (*eik_new)[eikix0_index + kx];
+          const double eikry2 = (*eik_new)[eikry0_index + ky];
+          const double eikiy2 = (*eik_new)[eikiy0_index + ky];
+          const double eikrz2 = (*eik_new)[eikrz0_index + kz];
+          const double eikiz2 = (*eik_new)[eikiz0_index + kz];
+          //INFO(feasst_str(eik));
+          //INFO(feasst_str(*eik_new));
+          //INFO(feasst_str(eik_));
+          ASSERT(std::abs(eikrx - eikrx2) < NEAR_ZERO, eikrx << " " << eikrx2);
+          ASSERT(std::abs(eikix - eikix2) < NEAR_ZERO, eikix << " " << eikix2);
+          ASSERT(std::abs(eikry - eikry2) < NEAR_ZERO, eikry << " " << eikry2);
+          ASSERT(std::abs(eikiy - eikiy2) < NEAR_ZERO, eikiy << " " << eikiy2);
+          ASSERT(std::abs(eikrz - eikrz2) < NEAR_ZERO, eikrz << " " << eikrz2);
+          ASSERT(std::abs(eikiz - eikiz2) < NEAR_ZERO, eikiz << " " << eikiz2);
           TRACE("eik[r,i]x " << eikrx << " " << eikix << " y " << eikry << " " << eikiy << " z " << eikrz << " " << eikiz << " sz " << eik.size());
           const double eikr = eikrx*eikry*eikrz
                      - eikix*eikiy*eikrz
@@ -582,9 +603,9 @@ void Ewald::compute(
   ASSERT(group_index == 0, "group index cannot be varied because redundant." <<
     "otherwise implement filtering of selection based on group.");
   double enrg = 0.;
-  DEBUG("selection.trial_state() " << selection.trial_state());
+  INFO("selection.trial_state() " << selection.trial_state());
   const int state = selection.trial_state();
-  DEBUG("state " << state);
+  INFO("state " << state);
   ASSERT(state == 0 ||
          state == 1 ||
          state == 2 ||
@@ -717,11 +738,11 @@ void Ewald::check_eik(const Configuration& config) {
       for (int k = 0; k < 2*(num_kx_ + num_ky_ + num_kz_); ++k) {
         const double eik = site.properties().values()[eikrx0 + k];
         const double eik2 = eik_[ipart][isite][k];
-//        if (std::abs(eik - eik2) > NEAR_ZERO) {
-//          INFO(ipart << " " << isite << " " << k << " " << eik << " " << eik2);
-//          INFO(eikrx0 + k << " " << site.properties().values().size());
-//          FATAL("err");
-//        }
+        if (std::abs(eik - eik2) > NEAR_ZERO) {
+          INFO(ipart << " " << isite << " " << k << " " << eik << " " << eik2);
+          INFO(eikrx0 + k << " " << site.properties().values().size());
+          FATAL("err");
+        }
       }
     }
   }
