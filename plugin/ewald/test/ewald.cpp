@@ -23,10 +23,11 @@ TEST(Ewald, ewald) {
 
   ModelEmpty model;  // any place holder model is fine because its not used
   model.compute(&config, ewald.get());
-  ewald->finalize(Select(), &config);
+  ewald->finalize(config.selection_of_all(), &config);
   // ewald.update_eik(config.selection_of_all(), &config);
 
-  const std::vector<double> eik = config.particle(0).site(0).properties().values();
+  //const std::vector<double> eik = config.particle(0).site(0).properties().values();
+  const std::vector<double>& eik = ewald->eik()[0][0];
   EXPECT_NEAR(eik[0], 1, NEAR_ZERO);
   EXPECT_NEAR(eik[1], -0.069470287276879206, NEAR_ZERO);
   EXPECT_NEAR(eik[2], -0.99034775837133582, NEAR_ZERO);

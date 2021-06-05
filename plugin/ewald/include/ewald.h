@@ -216,11 +216,11 @@ class Ewald : public VisitModel {
   // HWH not sure this is the best way to store and revert eiks
   // HWH but a refactor would require argument SelectParticle * select
   // HWH to put eiks in selection and no longer exclude them from update.
-  std::vector<std::vector<Properties> > old_eiks_;
-  bool revertable_ = false;
+//  std::vector<std::vector<Properties> > old_eiks_;
+//  bool revertable_ = false;
   bool finalizable_ = false;
-  Configuration * old_config_;
-  const Select * old_select_;
+//  Configuration * old_config_;
+//  const Select * old_select_;
 
 //  void store_energy_struct_fact_() {
 //    stored_energy_old_ = stored_energy_;
@@ -264,9 +264,9 @@ class Ewald : public VisitModel {
   double sign_(const Select& select, const int pindex);
 
   // temporary
-  std::string eikrx0_str_ = "eikrx0";
-  int find_eikrx0_(const Site& site);
-  void check_eik(const Configuration& config);
+//  std::string eikrx0_str_ = "eikrx0";
+//  int find_eikrx0_(const Site& site);
+//  void check_eik(const Configuration& config);
 };
 
 inline std::shared_ptr<Ewald> MakeEwald(argtype args = argtype()) {
