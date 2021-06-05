@@ -356,6 +356,9 @@ void Ewald::update_struct_fact_eik(const Select& selection,
             const double eiki2 = (*eik_new)[eikry0_index + ky - 1]*(*eik_new)[eikiy0_index + 1] +
               (*eik_new)[eikiy0_index + ky - 1]*(*eik_new)[eikry0_index + 1];
             (*eik_new)[eikiy0_index + ky] = eiki2;
+
+            config->set_site_property(eikry0_index - ky,  eikr, part_index, site_index);
+            config->set_site_property(eikiy0_index - ky, -eiki, part_index, site_index);
             (*eik_new)[eikry0_index - ky] = eikr2;
             (*eik_new)[eikiy0_index - ky] = -eiki2;
           }
@@ -401,12 +404,12 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           const double eikiy = eik[eikiy0_index + ky];
           const double eikrz = eik[eikrz0_index + kz];
           const double eikiz = eik[eikiz0_index + kz];
-//          const double eikrx2 = (*eik_new)[eikrx0_index + kx];
-//          const double eikix2 = (*eik_new)[eikix0_index + kx];
-//          const double eikry2 = (*eik_new)[eikry0_index + ky];
-//          const double eikiy2 = (*eik_new)[eikiy0_index + ky];
-//          const double eikrz2 = (*eik_new)[eikrz0_index + kz];
-//          const double eikiz2 = (*eik_new)[eikiz0_index + kz];
+//          const double eikrx = (*eik_new)[eikrx0_index + kx];
+//          const double eikix = (*eik_new)[eikix0_index + kx];
+//          const double eikry = (*eik_new)[eikry0_index + ky];
+//          const double eikiy = (*eik_new)[eikiy0_index + ky];
+//          const double eikrz = (*eik_new)[eikrz0_index + kz];
+//          const double eikiz = (*eik_new)[eikiz0_index + kz];
           TRACE("eik[r,i]x " << eikrx << " " << eikix << " y " << eikry << " " << eikiy << " z " << eikrz << " " << eikiz << " sz " << eik.size());
           const double eikr = eikrx*eikry*eikrz
                      - eikix*eikiy*eikrz
@@ -681,7 +684,7 @@ void Ewald::revert(const Select& select) {
 void Ewald::finalize(const Select& select, Configuration * config) {
   VisitModel::finalize(select, config);
   if (finalizable_) {
-    DEBUG("finalizing");
+    INFO("finalizing");
     ASSERT(struct_fact_real_new_.size() > 0, "error");
     *stored_energy_() = stored_energy_new_;
     *struct_fact_real_() = struct_fact_real_new_;
@@ -699,6 +702,26 @@ void Ewald::finalize(const Select& select, Configuration * config) {
             eik_[part_index][site_index][k] = eik_new[k];
           }
         }
+      }
+    }
+    check_eik(*config);
+  }
+}
+
+void Ewald::check_eik(const Configuration& config) {
+  for (int ipart = 0; ipart < config.particles().num(); ++ipart) {
+    const Particle& part = config.particles().particle(ipart);
+    for (int isite = 0; isite < part.num_sites(); ++isite) {
+      const Site& site = part.site(isite);
+      const int eikrx0 = find_eikrx0_(site);
+      for (int k = 0; k < 2*(num_kx_ + num_ky_ + num_kz_); ++k) {
+        const double eik = site.properties().values()[eikrx0 + k];
+        const double eik2 = eik_[ipart][isite][k];
+//        if (std::abs(eik - eik2) > NEAR_ZERO) {
+//          INFO(ipart << " " << isite << " " << k << " " << eik << " " << eik2);
+//          INFO(eikrx0 + k << " " << site.properties().values().size());
+//          FATAL("err");
+//        }
       }
     }
   }

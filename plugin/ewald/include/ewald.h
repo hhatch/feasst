@@ -172,6 +172,9 @@ class Ewald : public VisitModel {
   /// Return the net charge of the configuration.
   double net_charge(const Configuration& config) const;
 
+  // Return the eik vectors directly.
+  const std::vector<std::vector<std::vector<double> > >& eik() const { return eik_; }
+
   std::shared_ptr<VisitModel> create(std::istream& istr) const override;
   Ewald(std::istream& istr);
   void serialize(std::ostream& ostr) const override;
@@ -263,6 +266,7 @@ class Ewald : public VisitModel {
   // temporary
   std::string eikrx0_str_ = "eikrx0";
   int find_eikrx0_(const Site& site);
+  void check_eik(const Configuration& config);
 };
 
 inline std::shared_ptr<Ewald> MakeEwald(argtype args = argtype()) {
