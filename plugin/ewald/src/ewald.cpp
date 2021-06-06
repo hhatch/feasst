@@ -195,14 +195,14 @@ void Ewald::update_struct_fact_eik(const Select& selection,
   // resize eik
   {
     int num_p = config->particles().num();
-    int extra = num_p - eik_.size();
+    int extra = num_p - eik_()->size();
     if (extra > 0) {
-      eik_.resize(eik_.size() + extra);
+      eik_()->resize(eik_()->size() + extra);
       for (int lastp = num_p - extra; lastp < num_p; ++lastp) {
         const int num_sites = config->particles().particle(lastp).num_sites();
-        eik_[lastp].resize(num_sites);
+        (*eik_())[lastp].resize(num_sites);
         for (int site = 0; site < num_sites; ++site) {
-          eik_[lastp][site].resize(2*(num_kx_ + num_ky_ + num_kz_));
+          (*eik_())[lastp][site].resize(2*(num_kx_ + num_ky_ + num_kz_));
         }
       }
     }
@@ -241,7 +241,7 @@ void Ewald::update_struct_fact_eik(const Select& selection,
 
         // update the eik of the selection
         if (state == 0 || state == 2) {
-          eik_new = &eik_[part_index][site_index];
+          eik_new = &(*eik_())[part_index][site_index];
         } else {
           eik_new = &eik_new_[select_index][ss_index];
           (*eik_new)[eikrx0_index] = 1.;
@@ -360,7 +360,7 @@ void Ewald::serialize(std::ostream& ostr) const {
   feasst_serialize(num_kz_, ostr);
   feasst_serialize(wave_prefactor_, ostr);
   feasst_serialize(wave_num_, ostr);
-  feasst_serialize(eik_, ostr);
+  //feasst_serialize(eik_, ostr);
   feasst_serialize(struct_fact_real_new_, ostr);
   feasst_serialize(struct_fact_imag_new_, ostr);
 }
@@ -425,7 +425,7 @@ Ewald::Ewald(std::istream& istr) : VisitModel(istr) {
   feasst_deserialize(&num_kz_, istr);
   feasst_deserialize(&wave_prefactor_, istr);
   feasst_deserialize(&wave_num_, istr);
-  feasst_deserialize(&eik_, istr);
+  //feasst_deserialize(&eik_, istr);
   feasst_deserialize(&struct_fact_real_new_, istr);
   feasst_deserialize(&struct_fact_imag_new_, istr);
 }
@@ -539,7 +539,7 @@ void Ewald::finalize(const Select& select, Configuration * config) {
           const int site_index = select.site_index(ipart, isite);
           const std::vector<double>& eik_new = eik_new_[ipart][isite];
           for (int k = 0; k < static_cast<int>(eik_new.size()); ++k) {
-            eik_[part_index][site_index][k] = eik_new[k];
+            (*eik_())[part_index][site_index][k] = eik_new[k];
           }
         }
       }
@@ -609,8 +609,27 @@ std::vector<double> * Ewald::struct_fact_imag_() {
   return &((*data_.get_dble_2D())[1]);
 }
 
+std::vector<std::vector<std::vector<double> > > * Ewald::eik_() {
+  return &(*manual_data_.get_dble_3D());
+}
+
 void Ewald::change_volume(const double delta_volume, const int dimension) {
   FATAL("not implemented");
+}
+
+void Ewald::synchronize_(const VisitModel& visit, const Select& select) {
+  VisitModel::synchronize_(visit, select);
+  for (int ipart = 0; ipart < select.num_particles(); ++ipart) {
+    const int part_index = select.particle_index(ipart);
+    for (int isite = 0; isite < select.num_sites(ipart); ++isite) {
+      const int site_index = select.site_index(ipart, isite);
+      const std::vector<double>& eik_new =
+        manual_data_.dble_3D()[part_index][site_index];
+      for (int k = 0; k < static_cast<int>(eik_new.size()); ++k) {
+        (*eik_())[part_index][site_index][k] = eik_new[k];
+      }
+    }
+  }
 }
 
 }  // namespace feasst

@@ -143,7 +143,10 @@ class Ewald : public VisitModel {
   double net_charge(const Configuration& config) const;
 
   // Return the eik vectors directly.
-  const std::vector<std::vector<std::vector<double> > >& eik() const { return eik_; }
+  const std::vector<std::vector<std::vector<double> > >& eik() {
+    return const_cast<std::vector<std::vector<std::vector<double> > >&>(*eik_()); }
+
+  void synchronize_(const VisitModel& visit, const Select& perturbed) override;
 
   std::shared_ptr<VisitModel> create(std::istream& istr) const override;
   Ewald(std::istream& istr);
@@ -172,7 +175,7 @@ class Ewald : public VisitModel {
   // new eik implementation, Ewald contains all eik information.
   // eventually, this should be put in synchrinization data
   // eik_[particle_index][site_index][eik_index]
-  std::vector<std::vector<std::vector<double> > > eik_;
+  std::vector<std::vector<std::vector<double> > > * eik_();
   // temporary
   std::vector<std::vector<std::vector<double> > > eik_new_;
 
