@@ -619,13 +619,15 @@ void Ewald::change_volume(const double delta_volume, const int dimension) {
 
 void Ewald::synchronize_(const VisitModel& visit, const Select& select) {
   VisitModel::synchronize_(visit, select);
+  DEBUG("select " << select.str());
   for (int ipart = 0; ipart < select.num_particles(); ++ipart) {
     const int part_index = select.particle_index(ipart);
     for (int isite = 0; isite < select.num_sites(ipart); ++isite) {
       const int site_index = select.site_index(ipart, isite);
       const std::vector<double>& eik_new =
-        manual_data_.dble_3D()[part_index][site_index];
+        visit.manual_data().dble_3D()[part_index][site_index];
       for (int k = 0; k < static_cast<int>(eik_new.size()); ++k) {
+//        INFO(part_index << " " << site_index << " " << k << " " << eik_new[k]);
         (*eik_())[part_index][site_index][k] = eik_new[k];
       }
     }
