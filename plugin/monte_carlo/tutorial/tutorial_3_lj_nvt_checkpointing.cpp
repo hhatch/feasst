@@ -46,6 +46,7 @@ int main(int argc, char ** argv) {
     .run(&mc);
   mc.add(feasst::MakeLogAndMovie(
     {{"steps_per", feasst::str(1e5)}, {"file_name", "lj"}}));
+  mc.add(feasst::MakeIncrementPhase({{"num_trials", args.get("--equilibration_trials")}}));
   mc.add(feasst::MakeEnergy(
     {{"steps_per_write", feasst::str(1e5)}, {"file_name", "en_lj.txt"}, {"start_after_phase", "0"}}));
   mc.attempt(num_trials);
