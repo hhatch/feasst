@@ -24,7 +24,8 @@ echo "Directory is \$PWD"
 echo "ID is \$SLURM_JOB_ID"
 
 cd \$PWD
-python tutorial.py --task \$SLURM_ARRAY_TASK_ID --num_hours $num_hours
+python tutorial_3_lj_nvt_checkpointing.py --task \$SLURM_ARRAY_TASK_ID --num_hours $num_hours
+#./tutorial_3_lj_nvt_checkpointing --task \$SLURM_ARRAY_TASK_ID --num_hours $num_hours
 
 if [ \$? == 0 ]; then
   echo "Job is done"
@@ -36,7 +37,13 @@ fi
 echo "Time is \$(date)"
 _EOF_
 
-sbatch --array=0-30%1 launch.cmd
+sbatch --array=0-40%1 launch.cmd
 }
+
+## If C++, compile the tutorial.
+#mkdir build
+#cd build
+#cmake ..
+#make
 
 launch_node

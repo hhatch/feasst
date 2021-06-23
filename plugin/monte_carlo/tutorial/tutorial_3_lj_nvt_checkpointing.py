@@ -60,5 +60,5 @@ mc.add(fst.MakeLogAndMovie(fst.args(
 mc.attempt(args.equilibration_trials)
 mc.add(fst.MakeIncrementPhase(fst.args({"num_trials": str(args.equilibration_trials)})))
 mc.add(fst.MakeEnergy(fst.args(
-    {"steps_per_write": steps_per, "file_name": "en_lj.txt", "start_after_phase", "0"})))
+    {"steps_per_write": steps_per, "file_name": "en_lj.txt", "start_after_phase": "0"})))
 mc.attempt(args.production_trials)
