@@ -4,11 +4,19 @@
 namespace feasst {
 
 MacrostateEnergy::MacrostateEnergy(const Histogram& histogram,
-    const argtype& args) : Macrostate(histogram, args) {
+    argtype * args) : Macrostate(histogram, args) {}
   //WARN("MacrostateEnergy has not been tested.");
   //num_ = ConstrainEnergy(
   //  {{"type", args_.key("particle_type").dflt("-1").str()}});
   //ASSERT(num_.type() >= -1, "particle_type: " << num_.type());
+MacrostateEnergy::MacrostateEnergy(const Histogram& histogram,
+    argtype args) : MacrostateEnergy(histogram, &args) {
+  check_all_used(args);
+}
+
+MacrostateEnergy::MacrostateEnergy(argtype args) :
+    MacrostateEnergy(Histogram(&args), &args) {
+  check_all_used(args);
 }
 
 double MacrostateEnergy::value(const System& system,

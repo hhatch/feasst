@@ -58,7 +58,7 @@ TEST(MonteCarlo, ideal_gas_fh_eos_LONG) {
   monte_carlo.add(MakePotential(MakeDontVisitModel()));
   monte_carlo.set(MakeThermoParams({{"beta", str(1./1.2)}, {"chemical_potential", "-3"}}));
   auto criteria = MakeFlatHistogram(
-      MakeMacrostateNumParticles(Histogram({{"width", "1"}, {"min", "0"}, {"max", "50"}})),
+      MakeMacrostateNumParticles({{"width", "1"}, {"min", "0"}, {"max", "50"}}),
       MakeTransitionMatrix({{"min_sweeps", "100"}}));
   monte_carlo.set(criteria);
   monte_carlo.add(MakeTrialTransfer({{"particle_type", "0"}}));

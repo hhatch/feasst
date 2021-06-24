@@ -13,12 +13,15 @@ namespace feasst {
  */
 class MacrostateEnergy : public Macrostate {
  public:
+  // HWH consider depreciating this interface?
   /**
    args:
    - particle_type: number of particles of type. If -1 (default), count all
      types.
   */
-  MacrostateEnergy(const Histogram& histogram, const argtype& args = argtype());
+  MacrostateEnergy(const Histogram& histogram, argtype args = argtype());
+  MacrostateEnergy(const Histogram& histogram, argtype * args);
+  explicit MacrostateEnergy(argtype args = argtype());
   double value(const System& system,
     const Criteria& criteria,
     const Acceptance& acceptance) const override;
@@ -32,8 +35,13 @@ class MacrostateEnergy : public Macrostate {
 };
 
 inline std::shared_ptr<MacrostateEnergy> MakeMacrostateEnergy(
-    const Histogram& histogram, const argtype& args = argtype()) {
+    const Histogram& histogram, argtype args = argtype()) {
   return std::make_shared<MacrostateEnergy>(histogram, args);
+}
+
+inline std::shared_ptr<MacrostateEnergy> MakeMacrostateEnergy(
+    argtype args = argtype()) {
+  return std::make_shared<MacrostateEnergy>(args);
 }
 
 }  // namespace feasst

@@ -18,6 +18,20 @@ FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,
   bias_->resize(macrostate_->histogram());
 }
 
+//FlatHistogram::FlatHistogram(argtype args) {
+//  const std::string macro_name = str("macrostate", &args)
+//  std::shared_ptr<Macrostate> macro;
+//  if (macrostate == "NumParticles") {
+//    macro = MakeMacrostateNumParticles(&args);
+//  if (macrostate == "Energy") {
+//    
+//  } else {
+//    FATAL("unrecognized macrostate: " << macrostate << ". Try using the "
+//      << "alternative FlatHistogram constructor.");
+//  }
+//  check_all_used(args);
+//}
+
 FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,
     std::shared_ptr<Bias> bias,
     std::shared_ptr<Constraint> constraint)

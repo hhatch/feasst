@@ -26,6 +26,11 @@ Macrostate::Macrostate(const Histogram& histogram, argtype * args) {
   DEBUG("edges " << feasst_str(histogram_.edges()));
 }
 
+Macrostate::Macrostate(argtype args) :
+    Macrostate(Histogram(&args), &args) {
+  check_all_used(args);
+}
+
 bool Macrostate::is_allowed(const System& system,
                             const Criteria& criteria,
                             const Acceptance& acceptance) const {
