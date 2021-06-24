@@ -25,12 +25,12 @@ int main(int argc, char ** argv) {
     {{"tunable_param", "2."}, {"tunable_target_acceptance", "0.2"}}));
   mc.add(feasst::MakeCheckEnergyAndTune(
    {{"steps_per", feasst::str(1e5)}, {"tolerance", "1e-8"}}));
+  mc.add(feasst::MakeLogAndMovie(
+   {{"steps_per", feasst::str(1e5)}, {"file_name", "lj"}}));
   feasst::SeekNumParticles(args.get_int("--num"))
     .with_thermo_params({{"beta", "0.1"}, {"chemical_potential", "10"}})
     .with_metropolis()
     .with_trial_add()
     .run(&mc);
-  mc.add(feasst::MakeLogAndMovie(
-   {{"steps_per", feasst::str(1e5)}, {"file_name", "lj"}}));
   mc.attempt(args.get_int("--trials"));
 }

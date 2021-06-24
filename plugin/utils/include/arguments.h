@@ -33,7 +33,7 @@ typedef std::map<std::string, argtype> arglist;
   for a working example of how to implement arguments in a class.
  */
 
-/// Return true if
+/// Return true if key is used in args.
 bool used(const std::string& key, const argtype& args);
 
 /**

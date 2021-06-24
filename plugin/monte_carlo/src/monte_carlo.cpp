@@ -19,6 +19,10 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
+MonteCarlo::MonteCarlo(arglist args) {
+  FATAL("not implemented");
+}
+
 void MonteCarlo::seed_random(const int seed) {
   random_->seed(seed);
 }

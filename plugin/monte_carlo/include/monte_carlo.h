@@ -31,8 +31,15 @@ class MonteCarlo {
   /// Construct with Random number generator.
   MonteCarlo(std::shared_ptr<Random> random);
 
-  /// Construct a MonteCarlo object with RandomMT19937.
+  /// Construct with RandomMT19937.
   MonteCarlo();
+
+  /**
+    arglist:
+    - Random: name of Random number generator (default: RandomMT19937).
+        - parse all arguments of Random.
+   */
+  explicit MonteCarlo(arglist args);
 
   /// Set the random number generator.
   void set(std::shared_ptr<Random> random) { random_ = random; }
