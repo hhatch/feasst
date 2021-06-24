@@ -26,7 +26,8 @@ class WLTM : public Bias {
       Also, increment the phase when this occurs.
     - min_sweeps: Number of sweeps required for completion.
    */
-  WLTM(argtype args = argtype());
+  explicit WLTM(argtype args = argtype());
+  explicit WLTM(argtype * args);
   void update_or_revert(
     const int macrostate_old,
     const int macrostate_new,

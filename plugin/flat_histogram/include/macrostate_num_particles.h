@@ -23,6 +23,8 @@ class MacrostateNumParticles : public Macrostate {
 
   /// flattened version of the above constructor that takes Histogram arguments.
   explicit MacrostateNumParticles(argtype args = argtype());
+  explicit MacrostateNumParticles(argtype * args) :
+    MacrostateNumParticles(Histogram(args), args) {}
 
   double value(const System& system,
     const Criteria& criteria,

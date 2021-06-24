@@ -57,9 +57,15 @@ TEST(MonteCarlo, ideal_gas_fh_eos_LONG) {
                                 {{"particle_type", install_dir() + "/forcefield/data.atom"}}));
   monte_carlo.add(MakePotential(MakeDontVisitModel()));
   monte_carlo.set(MakeThermoParams({{"beta", str(1./1.2)}, {"chemical_potential", "-3"}}));
-  auto criteria = MakeFlatHistogram(
-      MakeMacrostateNumParticles({{"width", "1"}, {"min", "0"}, {"max", "50"}}),
-      MakeTransitionMatrix({{"min_sweeps", "100"}}));
+//  auto criteria = MakeFlatHistogram(
+//      MakeMacrostateNumParticles(Histogram({{"width", "1"}, {"min", "0"}, {"max", "50"}})),
+//      MakeTransitionMatrix({{"min_sweeps", "100"}}));
+//  auto criteria = MakeFlatHistogram(
+//      MakeMacrostateNumParticles({{"width", "1"}, {"min", "0"}, {"max", "50"}}),
+//      MakeTransitionMatrix({{"min_sweeps", "100"}}));
+  auto criteria = MakeFlatHistogram({
+    {"macrostate", "NumParticles"}, {"width", "1"}, {"min", "0"}, {"max", "50"},
+    {"bias", "TransitionMatrix"}, {"min_sweeps", "100"}});
   monte_carlo.set(criteria);
   monte_carlo.add(MakeTrialTransfer({{"particle_type", "0"}}));
   monte_carlo.add(MakeCriteriaUpdater({{"steps_per", str(1e5)}}));

@@ -22,6 +22,8 @@ class MacrostateEnergy : public Macrostate {
   MacrostateEnergy(const Histogram& histogram, argtype args = argtype());
   MacrostateEnergy(const Histogram& histogram, argtype * args);
   explicit MacrostateEnergy(argtype args = argtype());
+  explicit MacrostateEnergy(argtype * args) :
+    MacrostateEnergy(Histogram(args), args) {}
   double value(const System& system,
     const Criteria& criteria,
     const Acceptance& acceptance) const override;

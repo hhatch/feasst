@@ -38,7 +38,7 @@ class FlatHistogram : public Criteria {
     - macrostate: MacrostateNumParticles, MacrostateEnergy, etc
     - bias: WangLandau, TransitionMatrix, WLTM, etc.
    */
-//  explicit FlatHistogram(argtype args);
+  explicit FlatHistogram(argtype args);
 
   /// Same as above, but with an added Constraint.
   FlatHistogram(std::shared_ptr<Macrostate> macrostate,
@@ -112,6 +112,9 @@ class FlatHistogram : public Criteria {
 
   // temporary
   Acceptance empty_;
+
+  void init_(std::shared_ptr<Macrostate> macrostate,
+    std::shared_ptr<Bias> bias);
 };
 
 inline std::shared_ptr<FlatHistogram> MakeFlatHistogram() {
@@ -124,9 +127,9 @@ inline std::shared_ptr<FlatHistogram> MakeFlatHistogram(
   return std::make_shared<FlatHistogram>(macrostate, bias);
 }
 
-//inline std::shared_ptr<FlatHistogram> MakeFlatHistogram(argtype args) {
-//  return std::make_shared<FlatHistogram>(args);
-//}
+inline std::shared_ptr<FlatHistogram> MakeFlatHistogram(argtype args) {
+  return std::make_shared<FlatHistogram>(args);
+}
 
 inline std::shared_ptr<FlatHistogram> MakeFlatHistogram(
     std::shared_ptr<Macrostate> macrostate,

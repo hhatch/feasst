@@ -13,7 +13,6 @@ MacrostateNumParticles::MacrostateNumParticles(const Histogram& histogram,
     argtype args) : MacrostateNumParticles(histogram, &args) {
   check_all_used(args);
 }
-
 MacrostateNumParticles::MacrostateNumParticles(argtype args) :
     MacrostateNumParticles(Histogram(&args), &args) {
   check_all_used(args);

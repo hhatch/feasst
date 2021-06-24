@@ -3,34 +3,55 @@
 #include "math/include/constants.h"
 #include "math/include/random.h"
 #include "flat_histogram/include/flat_histogram.h"
+#include "flat_histogram/include/macrostate_num_particles.h"
+#include "flat_histogram/include/macrostate_energy.h"
+#include "flat_histogram/include/wang_landau.h"
+#include "flat_histogram/include/transition_matrix.h"
+#include "flat_histogram/include/wltm.h"
 
 namespace feasst {
 
-FlatHistogram::FlatHistogram() : Criteria() {
-  class_name_ = "FlatHistogram";
-}
-
-FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,
-    std::shared_ptr<Bias> bias)
-  : FlatHistogram() {
+void FlatHistogram::init_(std::shared_ptr<Macrostate> macrostate,
+    std::shared_ptr<Bias> bias) {
   macrostate_ = macrostate;
   bias_ = bias;
   bias_->resize(macrostate_->histogram());
 }
 
-//FlatHistogram::FlatHistogram(argtype args) {
-//  const std::string macro_name = str("macrostate", &args)
-//  std::shared_ptr<Macrostate> macro;
-//  if (macrostate == "NumParticles") {
-//    macro = MakeMacrostateNumParticles(&args);
-//  if (macrostate == "Energy") {
-//    
-//  } else {
-//    FATAL("unrecognized macrostate: " << macrostate << ". Try using the "
-//      << "alternative FlatHistogram constructor.");
-//  }
-//  check_all_used(args);
-//}
+FlatHistogram::FlatHistogram() : Criteria() {
+  class_name_ = "FlatHistogram";
+}
+FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,
+    std::shared_ptr<Bias> bias)
+  : FlatHistogram() {
+  init_(macrostate, bias);
+}
+FlatHistogram::FlatHistogram(argtype args) {
+  const std::string macro_name = str("macrostate", &args);
+  std::shared_ptr<Macrostate> macro;
+  if (macro_name == "NumParticles") {
+    macro = std::make_shared<MacrostateNumParticles>(&args);
+  } else if (macro_name == "Energy") {
+    macro = std::make_shared<MacrostateEnergy>(&args);
+  } else {
+    FATAL("unrecognized macrostate: " << macro_name << ". Try using the "
+      << "alternative FlatHistogram constructor.");
+  }
+  const std::string bias_name = str("bias", &args);
+  std::shared_ptr<Bias> bias;
+  if (bias_name == "WangLandau") {
+    bias = std::make_shared<WangLandau>(&args);
+  } else if (bias_name == "TransitionMatrix") {
+    bias = std::make_shared<TransitionMatrix>(&args);
+  } else if (bias_name == "WLTM") {
+    bias = std::make_shared<WLTM>(&args);
+  } else {
+    FATAL("unrecognized bias: " << bias_name << ". Try using the "
+      << "alternative FlatHistogram constructor.");
+  }
+  init_(macro, bias);
+  check_all_used(args);
+}
 
 FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,
     std::shared_ptr<Bias> bias,
