@@ -47,6 +47,8 @@ class WLTM : public Bias {
   std::string write_per_bin_header() const override;
   void set_ln_prob(const LnProbability& ln_prob) override;
   std::shared_ptr<Bias> create(std::istream& istr) const override;
+  std::shared_ptr<Bias> create(argtype * args) const override {
+    return std::make_shared<WLTM>(args); }
   void serialize(std::ostream& ostr) const override;
   explicit WLTM(std::istream& istr);
   virtual ~WLTM() {}
