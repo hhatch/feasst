@@ -64,8 +64,8 @@ TEST(MonteCarlo, ideal_gas_fh_eos_LONG) {
 //      MakeMacrostateNumParticles({{"width", "1"}, {"min", "0"}, {"max", "50"}}),
 //      MakeTransitionMatrix({{"min_sweeps", "100"}}));
   auto criteria = MakeFlatHistogram({
-    {"macrostate", "MacrostateNumParticles"}, {"width", "1"}, {"min", "0"}, {"max", "50"},
-    {"bias", "TransitionMatrix"}, {"min_sweeps", "100"}});
+    {"Macrostate", "MacrostateNumParticles"}, {"width", "1"}, {"min", "0"}, {"max", "50"},
+    {"Bias", "TransitionMatrix"}, {"min_sweeps", "100"}});
   monte_carlo.set(criteria);
   monte_carlo.add(MakeTrialTransfer({{"particle_type", "0"}}));
   monte_carlo.add(MakeCriteriaUpdater({{"steps_per", str(1e5)}}));

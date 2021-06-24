@@ -147,7 +147,7 @@ TEST(MonteCarlo, NVT_cells_BENCHMARK_LONG) {
   mc.set(MakeRandomMT19937({{"seed", "default"}}));
   mc.add(Configuration(MakeDomain({{"cubic_box_length", "12"}}),
                        {{"particle_type", "../forcefield/data.lj"}}));
-  mc.add(MakePotential(MakeLennardJones()));
+  mc.add(MakePotential({{"model", "LennardJones"}}));
 //  mc.add_to_reference(MakePotential(MakeLennardJones(), MakeVisitModelCell({{"min_length", "1"}})));
   mc.set(MakeThermoParams({{"beta", "1.2"}}));
   mc.set(MakeMetropolis());

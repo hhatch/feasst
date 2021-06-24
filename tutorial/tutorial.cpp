@@ -15,11 +15,10 @@ int main(int argc, char ** argv) {
             << args.parse(argc, argv) << std::endl;
   feasst::MonteCarlo mc;
   mc.set(feasst::MakeRandomMT19937({{"seed", args.get("--seed")}}));
-  mc.add(feasst::Configuration(
-    feasst::MakeDomain({{"cubic_box_length", args.get("--length")}}),
-    {{"particle_type", args.get("--data")}}));
-  mc.add(feasst::MakePotential(feasst::MakeLennardJones()));
-  mc.add(feasst::MakePotential(feasst::MakeLongRangeCorrections()));
+  mc.add(feasst::Configuration({{"cubic_box_length", args.get("--length")},
+                                {"particle_type", args.get("--data")}}));
+  mc.add(feasst::MakePotential({{"Model", "LennardJones"}}));
+  mc.add(feasst::MakePotential({{"VisitModel", "LongRangeCorrections"}}));
   mc.set(feasst::MakeThermoParams({{"beta", args.get("--beta")}}));
   mc.set(feasst::MakeMetropolis());
   mc.add(feasst::MakeTrialTranslate(
