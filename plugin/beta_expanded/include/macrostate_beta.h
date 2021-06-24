@@ -15,11 +15,14 @@ class MacrostateBeta : public Macrostate {
   MacrostateBeta(const Histogram& histogram, argtype args = argtype());
   MacrostateBeta(const Histogram& histogram, argtype * args);
   explicit MacrostateBeta(argtype args = argtype());
+  explicit MacrostateBeta(argtype * args) :
+    MacrostateBeta(Histogram(args), args) {}
   double value(const System& system,
     const Criteria& criteria,
     const Acceptance& acceptance) const override {
     return system.thermo_params().beta(); }
   std::shared_ptr<Macrostate> create(std::istream& istr) const override;
+  std::shared_ptr<Macrostate> create(argtype * args) const override;
   void serialize(std::ostream& ostr) const override;
   MacrostateBeta(std::istream& istr);
   virtual ~MacrostateBeta() {}

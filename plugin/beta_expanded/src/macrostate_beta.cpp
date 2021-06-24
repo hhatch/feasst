@@ -29,6 +29,10 @@ std::shared_ptr<Macrostate> MacrostateBeta::create(std::istream& istr) const {
   return std::make_shared<MacrostateBeta>(istr);
 }
 
+std::shared_ptr<Macrostate> MacrostateBeta::create(argtype * args) const {
+  return std::make_shared<MacrostateBeta>(args);
+}
+
 MacrostateBeta::MacrostateBeta(std::istream& istr)
   : Macrostate(istr) {
   const int version = feasst_deserialize_version(istr);

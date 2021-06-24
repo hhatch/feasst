@@ -30,6 +30,7 @@ class MacrostateNumParticles : public Macrostate {
     const Criteria& criteria,
     const Acceptance& acceptance) const override;
   std::shared_ptr<Macrostate> create(std::istream& istr) const override;
+  std::shared_ptr<Macrostate> create(argtype * args) const override;
   void serialize(std::ostream& ostr) const override;
   MacrostateNumParticles(std::istream& istr);
   virtual ~MacrostateNumParticles() {}

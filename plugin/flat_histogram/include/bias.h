@@ -77,8 +77,10 @@ class Bias {
   std::string class_name() const { return class_name_; }
   virtual void serialize(std::ostream& ostr) const;
   virtual std::shared_ptr<Bias> create(std::istream& istr) const;
+  virtual std::shared_ptr<Bias> create(argtype * args) const;
   std::map<std::string, std::shared_ptr<Bias> >& deserialize_map();
   std::shared_ptr<Bias> deserialize(std::istream& istr);
+  std::shared_ptr<Bias> factory(const std::string name, argtype * args);
   virtual ~Bias() {}
 
  protected:

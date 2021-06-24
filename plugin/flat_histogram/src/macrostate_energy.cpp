@@ -42,6 +42,10 @@ std::shared_ptr<Macrostate> MacrostateEnergy::create(std::istream& istr) const {
   return std::make_shared<MacrostateEnergy>(istr);
 }
 
+std::shared_ptr<Macrostate> MacrostateEnergy::create(argtype * args) const {
+  return std::make_shared<MacrostateEnergy>(args);
+}
+
 MacrostateEnergy::MacrostateEnergy(std::istream& istr) : Macrostate(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 7045, "version mismatch: " << version);

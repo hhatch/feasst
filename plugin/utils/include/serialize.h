@@ -427,6 +427,21 @@ void feasst_serialize_endcap(const std::string name, std::ostream& ostr);
 /// Read end notification to aid debugging.
 void feasst_deserialize_endcap(const std::string name, std::istream& istr);
 
+/// A factory method to construct objects from argtype
+template <typename T>
+std::shared_ptr<T> template_factory(
+    std::map<std::string, std::shared_ptr<T> >& map,
+    std::string class_name,
+    argtype * args) {
+  DEBUG("deserializing: " << class_name);
+  if (map.count(class_name) == 0) {
+    FATAL("The class name \"" << class_name << "\" is not recognized.");
+  }
+  std::shared_ptr<T> obj = map[class_name]->create(args);
+  DEBUG("obj " << obj);
+  return obj;
+}
+
 }  // namespace feasst
 
 #endif  // FEASST_UTILS_SERIALIZE_H_
