@@ -8,14 +8,6 @@
 
 namespace feasst {
 
-bool used(const std::string& key, const argtype& args) {
-  const auto pair = args.find(key);
-  if (pair != args.end()) {
-    return true;
-  }
-  return false;
-}
-
 std::string str(const std::string& key, const argtype& args) {
   auto pair = args.find(key);
   if (pair != args.end()) {
@@ -29,6 +21,15 @@ std::string str(const std::string& key, argtype * args) {
   ASSERT(pair != args->end(), "key(" << key << ") is required for args but " <<
     "not found in " << str(*args));
   const std::string second = pair->second;
+  args->erase(pair);
+  return second;
+}
+
+argtype get(const std::string& key, arglist * args) {
+  auto pair = args->find(key);
+  ASSERT(pair != args->end(), "key(" << key << ") is required for args but " <<
+    "not found");// << str(*args));
+  const argtype second = pair->second;
   args->erase(pair);
   return second;
 }

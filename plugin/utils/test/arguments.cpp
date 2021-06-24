@@ -84,4 +84,15 @@ TEST(Arguments, boolean) {
   }
 }
 
+TEST(Arguments, arglist_get) {
+  arglist args = {{{"Random", {{"seed", "time"}}}}};
+  EXPECT_EQ(1, args.size());
+  argtype random_args = get("Random", &args);
+  EXPECT_EQ(0, args.size());
+  EXPECT_EQ(1, random_args.size());
+  EXPECT_EQ("time", str("seed", &random_args));
+  EXPECT_EQ(0, random_args.size());
+  
+}
+
 }  // namespace feasst

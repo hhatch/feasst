@@ -20,6 +20,11 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 MonteCarlo::MonteCarlo(arglist args) {
+  //if (used("Random", args)) {
+  //  set(
+  //} else {
+  //  set(MakeRandomMT19937());
+  //}
   FATAL("not implemented");
 }
 

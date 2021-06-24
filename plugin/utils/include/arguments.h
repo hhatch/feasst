@@ -33,8 +33,15 @@ typedef std::map<std::string, argtype> arglist;
   for a working example of how to implement arguments in a class.
  */
 
-/// Return true if key is used in args.
-bool used(const std::string& key, const argtype& args);
+/// Return true if key is used in args (templated for arglist or argtype).
+template <typename T>
+bool used(const std::string& key, const T& args) {
+  const auto pair = args.find(key);
+  if (pair != args.end()) {
+    return true;
+  }
+  return false;
+}
 
 /**
   Read an argument, but do not remove it.
@@ -44,6 +51,7 @@ std::string str(const std::string& key, const argtype& args);
 
 /// Read an argument and remove it
 std::string str(const std::string& key, argtype * args);
+argtype get(const std::string& key, arglist * args);
 
 /// Same as above, but with a default value should key not be in args.
 std::string str(const std::string& key, argtype * args,
