@@ -13,7 +13,6 @@ static feasst::ArgumentParse args("A canonical ensemble Metropolis Monte Carlo s
 int main(int argc, char ** argv) {
   std::cout << feasst::version() << std::endl
             << args.parse(argc, argv) << std::endl;
-  const int num_trials = args.get_int("--trials");
   feasst::MonteCarlo mc;
   mc.set(feasst::MakeRandomMT19937({{"seed", args.get("--seed")}}));
   mc.add(feasst::Configuration(
@@ -34,5 +33,5 @@ int main(int argc, char ** argv) {
     .run(&mc);
   mc.add(feasst::MakeLogAndMovie(
    {{"steps_per", feasst::str(1e5)}, {"file_name", "lj"}}));
-  mc.attempt(num_trials);
+  mc.attempt(args.get_int("--trials"));
 }

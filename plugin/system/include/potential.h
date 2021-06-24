@@ -44,8 +44,13 @@ class Potential {
   int cell_index() const;
 
   /// Construct with model and default visitor.
-  explicit Potential(std::shared_ptr<Model> model,
-                     argtype args = argtype());
+  Potential(std::shared_ptr<Model> model, argtype args = argtype());
+
+  /**
+    args:
+    - model: derived class Model name.
+   */
+//  explicit Potential(argtype args = argtype());
 
   /// Return the model.
   const Model& model() const { return const_cast<Model&>(*model_); }

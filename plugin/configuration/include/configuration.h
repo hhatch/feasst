@@ -62,6 +62,7 @@ class Configuration {
     - set_cutoff_min_to_sigma: if true and cutoff < sigma, cutoff = sigma
       (default: false). This is typically used for HardSphere models that
       didn't specify cutoff.
+    - Domain arguments may also be parsed here.
    */
   explicit Configuration(argtype args = argtype());
 

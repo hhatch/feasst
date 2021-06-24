@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include "arguments.h"
 
 namespace feasst {
 
@@ -88,11 +89,17 @@ class Model {
   // Derived class implementation of a serialization.
   virtual std::shared_ptr<Model> create(std::istream& istr) const;
 
+  // Derived class implementation of a serialization.
+  virtual std::shared_ptr<Model> create(argtype * args) const;
+
   // Returns a static mapping of class name to model.
   std::map<std::string, std::shared_ptr<Model> >& deserialize_map();
 
   /// Return a model given a serialization.
   std::shared_ptr<Model> deserialize(std::istream& istr);
+
+  /// Return a model given arguments.
+  std::shared_ptr<Model> factory(const std::string name, argtype * args);
 
   // Constructor reads class_name
   explicit Model(std::istream& istr);

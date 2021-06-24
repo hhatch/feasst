@@ -95,7 +95,7 @@ class Bias {
     const bool is_accepted);
 
   void serialize_bias_(std::ostream& ostr) const;
-  Bias(std::istream& istr);
+  explicit Bias(std::istream& istr);
 
  private:
   bool is_complete_ = false;
