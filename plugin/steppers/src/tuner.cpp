@@ -12,7 +12,8 @@ class MapTuner {
 
 static MapTuner mapper_ = MapTuner();
 
-Tuner::Tuner(argtype args) : ModifyUpdateOnly(&args) { check_all_used(args); }
+Tuner::Tuner(argtype * args) : ModifyUpdateOnly(args) {}
+Tuner::Tuner(argtype args) : Tuner(&args) { check_all_used(args); }
 
 void Tuner::serialize(std::ostream& ostr) const {
   Stepper::serialize(ostr);

@@ -12,6 +12,7 @@ namespace feasst {
 class Tuner : public ModifyUpdateOnly {
  public:
   explicit Tuner(argtype args = argtype());
+  explicit Tuner(argtype * args);
 
   void update(Criteria * criteria,
       System * system,
@@ -23,6 +24,8 @@ class Tuner : public ModifyUpdateOnly {
   void serialize(std::ostream& ostr) const override;
   std::shared_ptr<Modify> create(std::istream& istr) const override {
     return std::make_shared<Tuner>(istr); }
+  std::shared_ptr<Modify> create(argtype * args) const override {
+    return std::make_shared<Tuner>(args); }
   explicit Tuner(std::istream& istr);
 };
 
