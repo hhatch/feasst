@@ -348,8 +348,8 @@ TEST(MonteCarlo, arglist) {
   EXPECT_EQ(2, mc->configuration().num_particle_types());
   EXPECT_EQ(2, mc->system().unoptimized().num());
   EXPECT_EQ(2, mc->trials().num());
-  EXPECT_EQ("TrialTranslate", mc->trial(1).class_name());
-  EXPECT_EQ("TrialAdd", mc->trial(0).class_name());
+  EXPECT_EQ("TrialTranslate", mc->trial(0).class_name());
+  EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
 }
 
 }  // namespace feasst

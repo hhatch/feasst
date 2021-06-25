@@ -64,12 +64,14 @@ template <class T>
 std::shared_ptr<T> parse(T * obj, arglist * args) {
   std::shared_ptr<T> new_obj;
   const auto& map = obj->deserialize_map();
-  //for (auto& arg : args) {
-  for (const auto& mp : map) {
-    int find = -1;
-    if (find_in_list(mp.first, *args, &find)) {
-      new_obj = obj->factory((*args)[find].first, &(*args)[find].second);
-      args->erase(args->begin() + find);
+  //for (auto& arg : *args) {
+  //for (const auto& mp : map) {
+  for (int iarg = 0; iarg < static_cast<int>(args->size()); ++iarg) {
+//    int find = -1;
+    if (map.count((*args)[iarg].first) > 0) {
+    //if (find_in_map((*args)[iarg].first, map, &find)) {
+      new_obj = obj->factory((*args)[iarg].first, &(*args)[iarg].second);
+      args->erase(args->begin() + iarg);
     //auto pair = args->find(mp.first);//map.find(arg.first);
     //if (pair != args->end()) {
     //  new_obj = obj->factory(pair->first, &pair->second);
