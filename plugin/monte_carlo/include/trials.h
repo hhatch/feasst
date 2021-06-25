@@ -10,7 +10,7 @@
 namespace feasst {
 
 /// Attempt a rigid translation of a random particle.
-class TrialTranslate : public TrialMove2 {
+class TrialTranslate : public TrialMove {
  public:
   TrialTranslate(argtype args = argtype());
   TrialTranslate(argtype * args);

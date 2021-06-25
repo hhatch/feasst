@@ -24,15 +24,15 @@ inline std::shared_ptr<Trial> MakeTrialMove(
   return trial;
 }
 
-class TrialMove2 : public Trial {
+class TrialMove : public Trial {
  public:
-  TrialMove2(std::shared_ptr<TrialSelect> select,
+  TrialMove(std::shared_ptr<TrialSelect> select,
             std::shared_ptr<PerturbMove> perturb,
             argtype * args);
-  explicit TrialMove2(std::istream& istr);
-  virtual ~TrialMove2() {}
+  explicit TrialMove(std::istream& istr);
+  virtual ~TrialMove() {}
  protected:
-  void serialize_trial_move2_(std::ostream& ostr) const;
+  void serialize_trial_move_(std::ostream& ostr) const;
 };
 
 }  // namespace feasst
