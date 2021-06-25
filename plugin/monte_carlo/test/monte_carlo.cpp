@@ -321,4 +321,9 @@ TEST(MonteCarlo, ideal_gas_pressure_LONG) {
   EXPECT_NEAR(vol.average(), volume, 4*vol.block_stdev());
 }
 
+TEST(MonteCarlo, arglist) {
+  auto mc = MakeMonteCarlo({{{"RandomMT19937", {{"seed", "time"}}}}});
+  EXPECT_EQ(mc->random().class_name(), "RandomMT19937");
+}
+
 }  // namespace feasst

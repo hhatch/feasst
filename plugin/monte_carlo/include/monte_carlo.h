@@ -45,7 +45,7 @@ class MonteCarlo {
   void set(std::shared_ptr<Random> random) { random_ = random; }
 
   /// Return the random number generator.
-  //const Random& random() const { return const_cast<Random&>(*random_); }
+  const Random& random() const { return const_cast<Random&>(*random_); }
 
   /// Seed random number generator.
   void seed_random(const int seed);
@@ -277,6 +277,9 @@ class MonteCarlo {
 inline std::shared_ptr<MonteCarlo> MakeMonteCarlo() {
   return std::make_shared<MonteCarlo>();
 }
+
+inline std::shared_ptr<MonteCarlo> MakeMonteCarlo(arglist args) {
+  return std::make_shared<MonteCarlo>(args); }
 
 /// Construct MonteCarlo from file.
 std::shared_ptr<MonteCarlo> MakeMonteCarlo(const std::string file_name);

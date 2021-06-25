@@ -19,13 +19,17 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
-MonteCarlo::MonteCarlo(arglist args) {
-  //if (used("Random", args)) {
-  //  set(
-  //} else {
-  //  set(MakeRandomMT19937());
-  //}
-  FATAL("not implemented");
+MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
+  while (args.size() > 0) {
+    const auto& rmap = RandomMT19937().deserialize_map();
+    INFO(args.begin()->first);
+    auto pair = rmap.find(args.begin()->first);
+    if (pair != rmap.end()) {
+      set(RandomMT19937().factory(args.begin()->first,
+       &args.begin()->second));
+      args.erase(args.begin());
+    }
+  }
 }
 
 void MonteCarlo::seed_random(const int seed) {
