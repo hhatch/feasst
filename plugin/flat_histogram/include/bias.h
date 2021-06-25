@@ -2,7 +2,9 @@
 #ifndef FEASST_FLAT_HISTOGRAM_BIAS_H_
 #define FEASST_FLAT_HISTOGRAM_BIAS_H_
 
-#include <vector>
+#include <memory>
+#include <string>
+#include "utils/include/arguments.h"
 #include "math/include/histogram.h"
 #include "flat_histogram/include/ln_probability.h"
 

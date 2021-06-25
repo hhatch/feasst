@@ -23,6 +23,8 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 void MonteCarlo::parse_(arglist * args) {
+  INFO("first " << args->begin()->first);
+
   // parse all derived classes of Random
   std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
   if (ran) {

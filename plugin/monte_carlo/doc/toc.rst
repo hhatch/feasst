@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   Action
    Tunable
    Stepper
    Rosenbluth
@@ -25,12 +26,12 @@
    ModifyFactory
    MonteCarlo
    SeekNumParticles
-   trials
    TrialComputeVolume
    TrialComputeRemove
    TrialComputeAdd
    TrialComputeMove
-   trial_move
+   TrialMove
+   TrialTranslate
    Metropolis
    Constraint
    ConstrainNumParticles

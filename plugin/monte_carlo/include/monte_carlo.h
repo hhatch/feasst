@@ -35,9 +35,32 @@ class MonteCarlo {
   MonteCarlo();
 
   /*
-    args:
-    Include the following (derived-)class names and their arguments.
+    Objects will be set or added in the following order by providing their
+    (derived-)names and arguments.
     - Random (default: RandomMT19937).
+    - Configuration (multiple)
+    - Potential (multiple)
+    - ThermoParams
+    - Criteria
+    - Trial (multiple)
+    - Analyze (multiple)
+    - Modify (multiple)
+    Those not labeled multiple will override any previous object of same type,
+    while those labeled multiple will not override but rather add more.
+
+    For example, in C++:
+
+    auto mc = MakeMonteCarlo({{
+      {"RandomMT19937", {{"seed", "123"}}},
+      ...
+    }});
+
+    Or in Python:
+
+    mc = fst.MakeMonteCarlo(fst.arglist([[
+      "RandomMT19937", {"seed": "123"},
+      ...
+    ]]));
    */
   explicit MonteCarlo(arglist args);
 

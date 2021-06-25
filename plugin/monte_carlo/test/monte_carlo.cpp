@@ -336,16 +336,20 @@ TEST(MonteCarlo, arglist) {
                        {"particle_type1", "../forcefield/data.atom"}}},
     {"Potential", {{"Model", "LennardJones"}}},
     {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
-    {"ThermoParams", {{"beta", "1.2"}}},
+    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "10"}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"tunable_param", "2"},
                         {"tunable_target_acceptance", "0.2"}}},
+    {"TrialAdd", {{"particle_type", "0"}}},
     {"Log", {{"steps_per", str(1e5)}, {"file_name", "lj.txt"}}},
     {"CheckEnergy", {{"steps_per", str(1e5)}, {"tolerance", str(1e-8)}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());
   EXPECT_EQ(2, mc->system().unoptimized().num());
+  EXPECT_EQ(2, mc->trials().num());
+  EXPECT_EQ("TrialTranslate", mc->trial(1).class_name());
+  EXPECT_EQ("TrialAdd", mc->trial(0).class_name());
 }
 
 }  // namespace feasst

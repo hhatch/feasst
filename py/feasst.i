@@ -24,6 +24,7 @@
 #include "configuration/include/properties.h"
 #include "configuration/include/typed_entity.h"
 #include "configuration/include/bond.h"
+#include "monte_carlo/include/action.h"
 #include "monte_carlo/include/tunable.h"
 #include "system/include/model.h"
 #include "system/include/synchronize_data.h"
@@ -175,7 +176,6 @@
 #include "steppers/include/check_properties.h"
 #include "steppers/include/criteria_updater.h"
 #include "monte_carlo/include/seek_num_particles.h"
-#include "monte_carlo/include/trials.h"
 #include "cluster/include/trial_avb2.h"
 #include "cluster/include/trial_rigid_cluster.h"
 #include "cluster/include/trial_transfer_avb_divalent.h"
@@ -189,15 +189,16 @@
 #include "monte_carlo/include/trial_compute_volume.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_add.h"
-#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_move.h"
 #include "monte_carlo/include/trial_move.h"
+#include "monte_carlo/include/trials.h"
 #include "beta_expanded/include/compute_beta.h"
 #include "cluster/include/compute_move_cluster.h"
 #include "cluster/include/compute_add_avb.h"
 #include "cluster/include/compute_remove_avb.h"
 #include "cluster/include/compute_gca.h"
 #include "cluster/include/compute_add_avb_divalent.h"
+#include "morph/include/compute_morph.h"
 #include "cluster/include/compute_remove_avb_divalent.h"
 #include "cluster/include/compute_avb2.h"
 #include "cluster/include/compute_avb4.h"
@@ -314,6 +315,7 @@ using namespace std;
 %shared_ptr(feasst::Angle);
 %shared_ptr(feasst::Dihedral);
 %shared_ptr(feasst::Improper);
+%shared_ptr(feasst::Action);
 %shared_ptr(feasst::Tunable);
 %shared_ptr(feasst::Model);
 %shared_ptr(feasst::SynchronizeData);
@@ -487,14 +489,16 @@ using namespace std;
 %shared_ptr(feasst::TrialComputeVolume);
 %shared_ptr(feasst::TrialComputeRemove);
 %shared_ptr(feasst::TrialComputeAdd);
-%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::TrialComputeMove);
+%shared_ptr(feasst::TrialMove);
+%shared_ptr(feasst::TrialTranslate);
 %shared_ptr(feasst::ComputeBeta);
 %shared_ptr(feasst::ComputeMoveCluster);
 %shared_ptr(feasst::ComputeAddAVB);
 %shared_ptr(feasst::ComputeRemoveAVB);
 %shared_ptr(feasst::ComputeGCA);
 %shared_ptr(feasst::ComputeAddAVBDivalent);
+%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::ComputeRemoveAVBDivalent);
 %shared_ptr(feasst::ComputeAVB2);
 %shared_ptr(feasst::ComputeAVB4);
@@ -582,6 +586,7 @@ using namespace std;
 %include configuration/include/properties.h
 %include configuration/include/typed_entity.h
 %include configuration/include/bond.h
+%include monte_carlo/include/action.h
 %include monte_carlo/include/tunable.h
 %include system/include/model.h
 %include system/include/synchronize_data.h
@@ -733,7 +738,6 @@ using namespace std;
 %include steppers/include/check_properties.h
 %include steppers/include/criteria_updater.h
 %include monte_carlo/include/seek_num_particles.h
-%include monte_carlo/include/trials.h
 %include cluster/include/trial_avb2.h
 %include cluster/include/trial_rigid_cluster.h
 %include cluster/include/trial_transfer_avb_divalent.h
@@ -747,15 +751,16 @@ using namespace std;
 %include monte_carlo/include/trial_compute_volume.h
 %include monte_carlo/include/trial_compute_remove.h
 %include monte_carlo/include/trial_compute_add.h
-%include morph/include/compute_morph.h
 %include monte_carlo/include/trial_compute_move.h
 %include monte_carlo/include/trial_move.h
+%include monte_carlo/include/trials.h
 %include beta_expanded/include/compute_beta.h
 %include cluster/include/compute_move_cluster.h
 %include cluster/include/compute_add_avb.h
 %include cluster/include/compute_remove_avb.h
 %include cluster/include/compute_gca.h
 %include cluster/include/compute_add_avb_divalent.h
+%include morph/include/compute_morph.h
 %include cluster/include/compute_remove_avb_divalent.h
 %include cluster/include/compute_avb2.h
 %include cluster/include/compute_avb4.h
