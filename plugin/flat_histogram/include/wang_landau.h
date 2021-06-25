@@ -50,11 +50,12 @@ class WangLandau : public Bias {
   std::string write_per_bin_header() const override;
   void set_ln_prob(const LnProbability& ln_prob) override;
   const int num_flatness() const { return num_flatness_; }
-  std::shared_ptr<Bias> create(std::istream& istr) const override;
+  std::shared_ptr<Bias> create(std::istream& istr) const override {
+    return std::make_shared<WangLandau>(istr); }
   std::shared_ptr<Bias> create(argtype * args) const override {
     return std::make_shared<WangLandau>(args); }
   void serialize(std::ostream& ostr) const override;
-  WangLandau(std::istream& istr);
+  explicit WangLandau(std::istream& istr);
   virtual ~WangLandau() {}
 
  private:

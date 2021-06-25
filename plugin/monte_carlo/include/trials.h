@@ -5,11 +5,26 @@
 #include "utils/include/arguments.h"
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/trial_factory.h"
+#include "monte_carlo/include/trial_move.h"
 
 namespace feasst {
 
 /// Attempt a rigid translation of a random particle.
-std::shared_ptr<Trial> MakeTrialTranslate(argtype args = argtype());
+class TrialTranslate : public TrialMove2 {
+ public:
+  TrialTranslate(argtype args = argtype());
+  TrialTranslate(argtype * args);
+  std::shared_ptr<Trial> create(std::istream& istr) const override {
+    return std::make_shared<TrialTranslate>(istr); }
+  std::shared_ptr<Trial> create(argtype * args) const override {
+    return std::make_shared<TrialTranslate>(args); }
+  void serialize(std::ostream& ostr) const override;
+  explicit TrialTranslate(std::istream& istr);
+  virtual ~TrialTranslate() {}
+};
+
+inline std::shared_ptr<Trial> MakeTrialTranslate(argtype args = argtype()) {
+  return std::make_shared<TrialTranslate>(args); }
 
 /// Attempt a rigid rotation of a random particle.
 std::shared_ptr<Trial> MakeTrialRotate(argtype args = argtype());

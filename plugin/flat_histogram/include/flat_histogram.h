@@ -39,6 +39,7 @@ class FlatHistogram : public Criteria {
     - bias: WangLandau, TransitionMatrix, WLTM, etc.
    */
   explicit FlatHistogram(argtype args);
+  explicit FlatHistogram(argtype * args);
 
   /// Same as above, but with an added Constraint.
   FlatHistogram(std::shared_ptr<Macrostate> macrostate,
@@ -97,6 +98,8 @@ class FlatHistogram : public Criteria {
 
   std::shared_ptr<Criteria> create(std::istream& istr) const override {
     return std::make_shared<FlatHistogram>(istr); }
+  std::shared_ptr<Criteria> create(argtype * args) const override {
+    return std::make_shared<FlatHistogram>(args); }
   void serialize(std::ostream& ostr) const override;
   FlatHistogram(std::istream& istr);
   FlatHistogram(const Criteria& criteria);

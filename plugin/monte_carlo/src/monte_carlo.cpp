@@ -2,9 +2,12 @@
 #include <fstream>
 #include "utils/include/serialize.h"
 #include "utils/include/checkpoint.h"
-#include "math/include/random_mt19937.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trials.h"
+
+// for parsing factories
+#include "math/include/random_mt19937.h"
+#include "monte_carlo/include/metropolis.h"
 
 namespace feasst {
 
@@ -44,6 +47,31 @@ void MonteCarlo::parse_(arglist * args) {
     args->erase(args->begin() + find);
     return;
   }
+
+  // parse ThermoParams
+  if (find_in_list(std::string("ThermoParams"), *args, &find)) {
+    INFO("parsing ThermoParams");
+    set(MakeThermoParams((*args)[find].second));
+    args->erase(args->begin() + find);
+    return;
+  }
+
+  // parse all derived classes of Criteria
+  std::shared_ptr<Criteria> crit = parse(dynamic_cast<Criteria*>(MakeMetropolis().get()), args);
+  if (crit) {
+    INFO("parsing Criteria");
+    set(crit);
+    return;
+  }
+
+  // parse all derived classes of Trial
+  std::shared_ptr<Trial> trial = parse(dynamic_cast<Trial*>(MakeTrial().get()), args);
+  if (trial) {
+    INFO("parsing Trial");
+    add(trial);
+    return;
+  }
+
 }
 
 MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {

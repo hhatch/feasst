@@ -1,4 +1,5 @@
 #include "utils/include/debug.h"
+#include "utils/include/serialize.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/trial_move.h"
 #include "monte_carlo/include/perturb_translate.h"
@@ -13,14 +14,36 @@
 
 namespace feasst {
 
-std::shared_ptr<Trial> MakeTrialTranslate(argtype args) {
-  auto trial = MakeTrialMove(
-    std::make_shared<TrialSelectParticle>(&args),
-    std::make_shared<PerturbTranslate>(&args),
-    "TrialTranslate",
-    &args);
+class MapTrialTranslate {
+ public:
+  MapTrialTranslate() {
+    auto obj = MakeTrialTranslate();
+    obj->deserialize_map()["TrialTranslate"] = obj;
+  }
+};
+
+static MapTrialTranslate mapper_ = MapTrialTranslate();
+
+TrialTranslate::TrialTranslate(argtype * args) :
+  TrialMove2(std::make_shared<TrialSelectParticle>(args),
+            std::make_shared<PerturbTranslate>(args),
+            args) {
+  class_name_ = "TrialTranslate";
+}
+TrialTranslate::TrialTranslate(argtype args) : TrialTranslate(&args) {
   check_all_used(args);
-  return trial;
+}
+
+TrialTranslate::TrialTranslate(std::istream& istr) : TrialMove2(istr) {
+  const int version = feasst_deserialize_version(istr);
+  ASSERT(version == 3056, "mismatch version: " << version);
+}
+
+void TrialTranslate::serialize(std::ostream& ostr) const {
+  INFO("here");
+  ostr << class_name_ << " ";
+  serialize_trial_move2_(ostr);
+  feasst_serialize_version(3056, ostr);
 }
 
 std::shared_ptr<Trial> MakeTrialRotate(argtype args) {

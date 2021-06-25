@@ -336,6 +336,11 @@ TEST(MonteCarlo, arglist) {
                        {"particle_type1", "../forcefield/data.atom"}}},
     {"Potential", {{"Model", "LennardJones"}}},
     {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
+    {"ThermoParams", {{"beta", "1.2"}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {{"tunable_param", "2"},
+                        {"tunable_target_acceptance", "0.2"}}},
+//    {"CheckEnergyAndTune", {{"
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());

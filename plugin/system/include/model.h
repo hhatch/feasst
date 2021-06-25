@@ -5,10 +5,10 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "arguments.h"
 
 namespace feasst {
 
+typedef std::map<std::string, std::string> argtype;
 class ModelParams;
 class Select;
 class Configuration;
