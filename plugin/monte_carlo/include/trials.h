@@ -23,7 +23,7 @@ class TrialTranslate : public TrialMove2 {
   virtual ~TrialTranslate() {}
 };
 
-inline std::shared_ptr<Trial> MakeTrialTranslate(argtype args = argtype()) {
+inline std::shared_ptr<TrialTranslate> MakeTrialTranslate(argtype args = argtype()) {
   return std::make_shared<TrialTranslate>(args); }
 
 /// Attempt a rigid rotation of a random particle.

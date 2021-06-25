@@ -40,7 +40,6 @@ TrialTranslate::TrialTranslate(std::istream& istr) : TrialMove2(istr) {
 }
 
 void TrialTranslate::serialize(std::ostream& ostr) const {
-  INFO("here");
   ostr << class_name_ << " ";
   serialize_trial_move2_(ostr);
   feasst_serialize_version(3056, ostr);
