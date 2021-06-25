@@ -56,19 +56,19 @@ std::string str(const std::string& key, argtype * args);
 // Depreciate
 argtype get(const std::string& key, arglist * args);
 
-///// If arglist contains base class T, return factory pointer then remove.
-//template <class T>
-//std::shared_ptr<T> parse(const T& obj, arglist * args) {
-//  const auto& map = obj.deserialize_map();
-//  INFO(args->begin()->first);
-//  auto pair = map.find(args->begin()->first);
-//  std::shared_ptr<T> new_obj;
-//  if (pair != map.end()) {
-//    new_obj = obj.factory(args->begin()->first, &args.begin()->second);
-//    args.erase(args.begin());
-//  }
-//  return new_obj;
-//}
+/// If args contains derived class of T, return factory pointer and remove from
+/// args.
+template <class T>
+std::shared_ptr<T> parse(T * obj, arglist * args) {
+  const auto& map = obj->deserialize_map();
+  auto pair = map.find(args->begin()->first);
+  std::shared_ptr<T> new_obj;
+  if (pair != map.end()) {
+    new_obj = obj->factory(args->begin()->first, &args->begin()->second);
+    args->erase(args->begin());
+  }
+  return new_obj;
+}
 
 /// Same as above, but with a default value should key not be in args.
 std::string str(const std::string& key, argtype * args,

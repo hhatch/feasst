@@ -322,8 +322,12 @@ TEST(MonteCarlo, ideal_gas_pressure_LONG) {
 }
 
 TEST(MonteCarlo, arglist) {
-  auto mc = MakeMonteCarlo({{{"RandomMT19937", {{"seed", "time"}}}}});
-  EXPECT_EQ(mc->random().class_name(), "RandomMT19937");
+  TRY(
+    MakeMonteCarlo({{{"Banana", {{}}}}});
+    CATCH_PHRASE("Unrecognized argument: Banana");
+  );
+  auto mc = MakeMonteCarlo({{{"RandomModulo", {{"seed", "123"}}}}});
+  EXPECT_EQ(mc->random().class_name(), "RandomModulo");
 }
 
 }  // namespace feasst

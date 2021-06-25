@@ -20,15 +20,19 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
-  while (args.size() > 0) {
-    const auto& rmap = RandomMT19937().deserialize_map();
-    INFO(args.begin()->first);
-    auto pair = rmap.find(args.begin()->first);
-    if (pair != rmap.end()) {
-      set(RandomMT19937().factory(args.begin()->first,
-       &args.begin()->second));
-      args.erase(args.begin());
-    }
+  int size = static_cast<int>(args.size());
+  int previous_size = size;
+  while (size > 0) {
+    previous_size = size;
+
+    // parse
+    std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), &args);
+    if (ran) set(ran);
+
+    // check size
+    size = static_cast<int>(args.size());
+    ASSERT(previous_size - 1 == size,
+      "Unrecognized argument: " << args.begin()->first);
   }
 }
 
