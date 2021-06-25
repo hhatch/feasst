@@ -29,26 +29,21 @@ void MonteCarlo::parse_(arglist * args) {
   }
 
   // parse Configuration
-  auto conf = args->find("Configuration");
-  if (conf != args->end()) {
+  int find = -1;
+  if (find_in_list(std::string("Configuration"), *args, &find)) {
     INFO("parsing Configuration");
-    add(MakeConfiguration(conf->second));
-    args->erase(conf);
+    add(MakeConfiguration((*args)[find].second));
+    args->erase(args->begin() + find);
     return;
   }
 
   // parse Potential
-  auto pot = args->find("Potential");
-  if (pot != args->end()) {
+  if (find_in_list(std::string("Potential"), *args, &find)) {
     INFO("parsing Potential");
-    add(MakePotential(pot->second));
-    args->erase(pot);
+    add(MakePotential((*args)[find].second));
+    args->erase(args->begin() + find);
     return;
   }
-
-//  // parse Potential
-//  std::shared_ptr<Potential> pot = parse(MakePotential().get(), &args) {
-//  if (pot) add(pot);
 }
 
 MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {

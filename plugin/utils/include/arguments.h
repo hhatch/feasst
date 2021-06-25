@@ -7,12 +7,14 @@
 #include <string>
 #include <memory>
 #include "utils/include/io.h"
+#include "utils/include/utils.h"
 
 namespace feasst {
 
 /// Use a map of string pairs as a dictionary for arguments.
 typedef std::map<std::string, std::string> argtype;
 typedef std::map<std::string, argtype> arglist;
+//typedef std::vector<std::pair<std::string, argtype> > arglist;
 
 /**
   Classes should take argtype as input for (optional) arguments that may or may
@@ -64,10 +66,15 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
   const auto& map = obj->deserialize_map();
   //for (auto& arg : args) {
   for (const auto& mp : map) {
+    //int find = -1;
+    //if (find_in_list(mp.first, *args, &find)) {
+    //  new_obj = obj->factory((*args)[find].first, &(*args)[find].second);
+    //  args->erase(args->begin() + find);
     auto pair = args->find(mp.first);//map.find(arg.first);
     if (pair != args->end()) {
       new_obj = obj->factory(pair->first, &pair->second);
       args->erase(pair);
+
       return new_obj;
     }
   }

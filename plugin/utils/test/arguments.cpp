@@ -68,14 +68,14 @@ TEST(Arguments, dble) {
   EXPECT_NEAR(3.1415, dble("key1", &args), NEAR_ZERO);
 }
 
-TEST(Arguments, arglist) {
-  arglist argls = {{ {"set1", {{"key1", "val1"}} },
-                             {"set2", {{"key2", "val2"}} } }};
-  auto set = argls.find("set2");
-  auto pair = set->second.find("key2");
-  EXPECT_NE(set->second.end(), pair);
-  EXPECT_TRUE(pair->second == "val2");
-}
+//TEST(Arguments, arglist) {
+//  arglist argls = {{ {"set1", {{"key1", "val1"}} },
+//                             {"set2", {{"key2", "val2"}} } }};
+//  auto set = argls.find("set2");
+//  auto pair = set->second.find("key2");
+//  EXPECT_NE(set->second.end(), pair);
+//  EXPECT_TRUE(pair->second == "val2");
+//}
 
 TEST(Arguments, boolean) {
   for (const std::string arg : {"1", "true", "True"}) {
@@ -92,7 +92,6 @@ TEST(Arguments, boolean) {
 //  EXPECT_EQ(1, random_args.size());
 //  EXPECT_EQ("time", str("seed", &random_args));
 //  EXPECT_EQ(0, random_args.size());
-//  
 //}
 
 }  // namespace feasst

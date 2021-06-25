@@ -162,7 +162,9 @@ using namespace std;\n\
 %include \"std_map.i\"\n\
 %template(args) std::map<std::string, std::string>;\n\
 %template(ArgsVector) std::vector<std::map<std::string, std::string> >;\n\
+%template(arglist) std::map<std::string, std::map<std::string, std::string> >;\n\
 ")
+#%template(arglist) std::vector<std::pair<std::string, std::map<std::string, std::string> > >;\n\
 
     if 'system' in include_plugin:
         swig_file.write("%template(ModelTwoBodyVector) std::vector<std::shared_ptr<ModelTwoBody> >;\n")
