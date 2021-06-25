@@ -25,14 +25,14 @@ std::string str(const std::string& key, argtype * args) {
   return second;
 }
 
-argtype get(const std::string& key, arglist * args) {
-  auto pair = args->find(key);
-  ASSERT(pair != args->end(), "key(" << key << ") is required for args but " <<
-    "not found");// << str(*args));
-  const argtype second = pair->second;
-  args->erase(pair);
-  return second;
-}
+//argtype get(const std::string& key, arglist * args) {
+//  auto pair = args->find(key);
+//  ASSERT(pair != args->end(), "key(" << key << ") is required for args but " <<
+//    "not found");// << str(*args));
+//  const argtype second = pair->second;
+//  args->erase(pair);
+//  return second;
+//}
 
 std::string str(const std::string& key, argtype * args,
     const std::string dflt) {

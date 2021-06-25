@@ -34,10 +34,10 @@ class MonteCarlo {
   /// Construct with RandomMT19937.
   MonteCarlo();
 
-  /**
-    arglist:
-    - Random: name of Random number generator (default: RandomMT19937).
-        - parse all arguments of Random.
+  /*
+    args:
+    Include the following (derived-)class names and their arguments.
+    - Random (default: RandomMT19937).
    */
   explicit MonteCarlo(arglist args);
 
@@ -51,6 +51,9 @@ class MonteCarlo {
   void seed_random(const int seed);
 
   /// The first action with a Monte Carlo object is to set the Configuration.
+  void add(std::shared_ptr<Configuration> config);
+
+  // HWH depreciated interface. WARN.
   void add(const Configuration& config);
 
   /// The configuration may be accessed read-only.
@@ -272,6 +275,7 @@ class MonteCarlo {
   bool criteria_set_ = false;
 
   bool duplicate_stepper_file_name_(const std::string file_name);
+  void parse_(arglist * args);
 };
 
 inline std::shared_ptr<MonteCarlo> MakeMonteCarlo() {

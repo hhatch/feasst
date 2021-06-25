@@ -562,6 +562,7 @@ inline std::shared_ptr<Configuration> MakeConfiguration(
     argtype args = argtype()) {
   return std::make_shared<Configuration>(args);
 }
+
 inline std::shared_ptr<Configuration> MakeConfiguration(
     std::shared_ptr<Domain> domain, argtype args = argtype()) {
   return std::make_shared<Configuration>(domain, args);

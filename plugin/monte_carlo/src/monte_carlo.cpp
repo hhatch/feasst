@@ -19,17 +19,45 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
+void MonteCarlo::parse_(arglist * args) {
+  // parse all derived classes of Random
+  std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
+  if (ran) {
+    INFO("parsing Random");
+    set(ran);
+    return;
+  }
+
+  // parse Configuration
+  auto conf = args->find("Configuration");
+  if (conf != args->end()) {
+    INFO("parsing Configuration");
+    add(MakeConfiguration(conf->second));
+    args->erase(conf);
+    return;
+  }
+
+  // parse Potential
+  auto pot = args->find("Potential");
+  if (pot != args->end()) {
+    INFO("parsing Potential");
+    add(MakePotential(pot->second));
+    args->erase(pot);
+    return;
+  }
+
+//  // parse Potential
+//  std::shared_ptr<Potential> pot = parse(MakePotential().get(), &args) {
+//  if (pot) add(pot);
+}
+
 MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
   int size = static_cast<int>(args.size());
   int previous_size = size;
   while (size > 0) {
     previous_size = size;
-
-    // parse
-    std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), &args);
-    if (ran) set(ran);
-
-    // check size
+    INFO("size " << size);
+    parse_(&args);
     size = static_cast<int>(args.size());
     ASSERT(previous_size - 1 == size,
       "Unrecognized argument: " << args.begin()->first);
@@ -40,7 +68,15 @@ void MonteCarlo::seed_random(const int seed) {
   random_->seed(seed);
 }
 
+void MonteCarlo::add(std::shared_ptr<Configuration> config) {
+  system_.add(*config);
+  config_set_ = true;
+  if (potential_set_) system_set_ = true;
+  ASSERT(!criteria_set_, "add config before criteria");
+}
+
 void MonteCarlo::add(const Configuration& config) {
+  WARN("Use MakeConfiguration instead of Configuration");
   system_.add(config);
   config_set_ = true;
   if (potential_set_) system_set_ = true;

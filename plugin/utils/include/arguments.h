@@ -53,19 +53,23 @@ std::string str(const std::string& key, const argtype& args);
 /// Read an argument and remove it
 std::string str(const std::string& key, argtype * args);
 
-// Depreciate
-argtype get(const std::string& key, arglist * args);
+//// Depreciate
+//argtype get(const std::string& key, arglist * args);
 
 /// If args contains derived class of T, return factory pointer and remove from
 /// args.
 template <class T>
 std::shared_ptr<T> parse(T * obj, arglist * args) {
-  const auto& map = obj->deserialize_map();
-  auto pair = map.find(args->begin()->first);
   std::shared_ptr<T> new_obj;
-  if (pair != map.end()) {
-    new_obj = obj->factory(args->begin()->first, &args->begin()->second);
-    args->erase(args->begin());
+  const auto& map = obj->deserialize_map();
+  //for (auto& arg : args) {
+  for (const auto& mp : map) {
+    auto pair = args->find(mp.first);//map.find(arg.first);
+    if (pair != args->end()) {
+      new_obj = obj->factory(pair->first, &pair->second);
+      args->erase(pair);
+      return new_obj;
+    }
   }
   return new_obj;
 }

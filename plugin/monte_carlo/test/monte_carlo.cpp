@@ -321,13 +321,25 @@ TEST(MonteCarlo, ideal_gas_pressure_LONG) {
   EXPECT_NEAR(vol.average(), volume, 4*vol.block_stdev());
 }
 
-TEST(MonteCarlo, arglist) {
+TEST(MonteCarlo, arglist_unrecognized) {
   TRY(
     MakeMonteCarlo({{{"Banana", {{}}}}});
     CATCH_PHRASE("Unrecognized argument: Banana");
   );
-  auto mc = MakeMonteCarlo({{{"RandomModulo", {{"seed", "123"}}}}});
+}
+
+TEST(MonteCarlo, arglist) {
+  auto mc = MakeMonteCarlo({{
+    {"RandomModulo", {{"seed", "123"}}},
+    {"Configuration", {{"cubic_box_length", "8"},
+                       {"particle_type0", "../forcefield/data.lj"},
+                       {"particle_type1", "../forcefield/data.atom"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
+  }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
+  EXPECT_EQ(2, mc->configuration().num_particle_types());
+  EXPECT_EQ(2, mc->system().unoptimized().num());
 }
 
 }  // namespace feasst
