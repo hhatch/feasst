@@ -23,7 +23,7 @@
 #include "monte_carlo/test/monte_carlo_benchmark.h"
 #include "steppers/include/num_particles.h"
 #include "steppers/include/movie.h"
-#include "steppers/include/tuner.h"
+#include "steppers/include/tune.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/check_energy_and_tune.h"
 #include "steppers/include/log_and_movie.h"
@@ -45,7 +45,7 @@ namespace feasst {
 //  mc.add(feasst::MakeTrialTranslate(
 //    {{"tunable_param", "2."}, {"tunable_target_acceptance", "0.2"}}));
 //  const int steps_per = 1e3;
-//  mc.add(feasst::MakeTuner({{"steps_per", feasst::str(steps_per)}}));
+//  mc.add(feasst::MakeTune({{"steps_per", feasst::str(steps_per)}}));
 //  mc.seek_num_particles(50);
 //  mc.add(feasst::MakeLog({{"steps_per", feasst::str(steps_per)}}));
 //  mc.add(feasst::MakeMovie(
@@ -70,7 +70,7 @@ TEST(MonteCarlo, serialize) {
   EXPECT_EQ(mc2.analyze(0).analyze(1).class_name(), "Movie");
   EXPECT_EQ(mc2.modify(0).class_name(), "ModifyFactory");
   EXPECT_EQ(mc2.modify(0).modify(0).class_name(), "CheckEnergy");
-  EXPECT_EQ(mc2.modify(0).modify(1).class_name(), "Tuner");
+  EXPECT_EQ(mc2.modify(0).modify(1).class_name(), "Tune");
 }
 
 TEST(MonteCarlo, NVT_NO_FEASST_BENCHMARK_LONG) {
@@ -286,7 +286,7 @@ TEST(MonteCarlo, GCMC_binary_tune) {
   mc.add(MakeTrialTransfer({{"weight", "4."}, {"particle_type", "1"}}));
   const std::string steps_per = str(int(1e2));
   mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/lj"}}));
-  mc.add(MakeTuner({{"steps_per", steps_per}}));
+  mc.add(MakeTune({{"steps_per", steps_per}}));
   mc.attempt(1e4);
   EXPECT_GT(mc.trial(0).stage(0).perturb().tunable().value(), 2.5);
   EXPECT_GT(mc.trial(1).stage(0).perturb().tunable().value(), 2.5);
@@ -312,7 +312,7 @@ TEST(MonteCarlo, ideal_gas_pressure_LONG) {
   mc.add(MakeTrialVolume({{"tunable_param", "0.5"}}));
   const std::string steps_per = str(int(1e2));
   mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/ideal_gas"}}));
-  mc.add(MakeTuner({{"steps_per", steps_per}}));
+  mc.add(MakeTune({{"steps_per", steps_per}}));
   mc.attempt(1e3);
   mc.add(MakeVolume({{"steps_per_write", steps_per},
                      {"file_name", "tmp/ideal_gas_volume"}}));
@@ -345,18 +345,22 @@ TEST(MonteCarlo, arglist) {
     {"TrialTranslate", {{"tunable_param", "2"},
                         {"tunable_target_acceptance", "0.2"}}},
     {"TrialAdd", {{"particle_type", "0"}}},
-    {"Log", {{"steps_per", str(1e5)}, {"file_name", "lj.txt"}}},
+    {"Log", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.txt"}}},
+    {"Movie", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.xyz"}}},
     {"CheckEnergy", {{"steps_per", str(1e5)}, {"tolerance", str(1e-8)}}},
-    {"Run", {{"num_attempts", "100"}}},
+    {"Tune", {{"steps_per", str(1e5)}}},
+    {"Run", {{"until_num_particles", "50"}}},
+    {"RemoveTrial", {{"index", "1"}}},
+    {"Run", {{"num_attempts", str(1e3)}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());
   EXPECT_EQ(2, mc->system().unoptimized().num());
-  EXPECT_EQ(2, mc->trials().num());
+  EXPECT_EQ(1, mc->trials().num());
   EXPECT_EQ("TrialTranslate", mc->trial(0).class_name());
-  EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
-  EXPECT_EQ(100, mc->trials().num_attempts());
-  EXPECT_GT(mc->configuration().num_particles(), 0);
+  //EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
+  EXPECT_LT(100, mc->trials().num_attempts());
+  EXPECT_EQ(50, mc->configuration().num_particles());
 }
 
 }  // namespace feasst

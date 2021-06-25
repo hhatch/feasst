@@ -334,7 +334,6 @@ To Do List
 * Add a FAQ for common compile errors: "no known conversion from brace-enclosed initializer list to argtype" often means that a parameter was not converted to a string.
 * Make a CachedRandom and CachedPotential for prefetch and avoid if statements that could slow down serial simulations.
 * remove tutorial/fh.py
-* Tuner->Tune
 * Analyze/ModifyFactory optimization: use steps_per in factory to limit number of checks
 * implement timer for profiles (with hierarchies by class... tried this, but its too slow. Time only infrequently?)
 * implement a timer to auto-balance trial weights based on cpu time.

@@ -14,12 +14,12 @@
 #include "steppers/include/energy.h"
 #include "steppers/include/criteria_writer.h"
 #include "steppers/include/criteria_updater.h"
+#include "steppers/include/tune.h"
 #include "steppers/include/cpu_time.h"
 #include "steppers/include/check_properties.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/check_physicality.h"
 #include "steppers/include/check_energy_and_tune.h"
-#include "steppers/include/tuner.h"
 #include "steppers/include/log_and_movie.h"
 #include "ewald/include/ewald.h"
 #include "ewald/include/charge_screened.h"
@@ -101,7 +101,7 @@ TEST(MonteCarlo, hard_sphere_LONG) {
   const std::string steps_per = "100";
   mc.add(MakeCheckEnergy({{"steps_per", steps_per}, {"tolerance", "0.0001"}}));
   mc.add(MakeCheckPhysicality({{"steps_per", "1"}}));
-  mc.add(MakeTuner({{"steps_per", steps_per}, {"stop_after_phase", "0"}}));
+  mc.add(MakeTune({{"steps_per", steps_per}, {"stop_after_phase", "0"}}));
   mc.add(MakeLogAndMovie({{"steps_per", steps_per},
                           {"file_name", "hs_fh"},
                           {"file_name_append_phase", "True"}}));

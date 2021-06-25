@@ -151,6 +151,9 @@ class MonteCarlo {
   /// with weight of 2 and TrialRemove with weight of 2.
   void add(std::shared_ptr<Trial> trial);
 
+  /// Remove a trial by index.
+  void remove_trial(const int index) { trial_factory_.remove(index); }
+
   /// Access the trials on a read-only basis.
   const TrialFactory& trials() const { return trial_factory_; }
 
