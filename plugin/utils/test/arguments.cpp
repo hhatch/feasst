@@ -94,4 +94,11 @@ TEST(Arguments, boolean) {
 //  EXPECT_EQ(0, random_args.size());
 //}
 
+TEST(Arguments, str) {
+  argtype arg = {{"hi", "you"}};
+  EXPECT_EQ("{{\"hi\",\"you\"},}", str(arg));
+  arglist args = {{{"major_key1", {{"minor_key1", "value1"}}}}};
+  EXPECT_EQ("{{{\"major_key1\",{{\"minor_key1\",\"value1\"},}},}}", str(args));
+}
+
 }  // namespace feasst

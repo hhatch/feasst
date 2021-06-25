@@ -58,6 +58,12 @@ std::string str(const std::string& key, argtype * args);
 //// Depreciate
 //argtype get(const std::string& key, arglist * args);
 
+/// Return a human-readable string representing argtype
+std::string str(const argtype& args);
+
+/// Return a human-readable string representing arglist
+std::string str(const arglist& args);
+
 /// If args contains derived class of T, return factory pointer and remove from
 /// args.
 template <class T>
@@ -66,20 +72,24 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
   const auto& map = obj->deserialize_map();
   //for (auto& arg : *args) {
   //for (const auto& mp : map) {
-  for (int iarg = 0; iarg < static_cast<int>(args->size()); ++iarg) {
+  //for (int iarg = 0; iarg < static_cast<int>(args->size()); ++iarg) {
 //    int find = -1;
-    if (map.count((*args)[iarg].first) > 0) {
-    //if (find_in_map((*args)[iarg].first, map, &find)) {
-      new_obj = obj->factory((*args)[iarg].first, &(*args)[iarg].second);
-      args->erase(args->begin() + iarg);
-    //auto pair = args->find(mp.first);//map.find(arg.first);
-    //if (pair != args->end()) {
-    //  new_obj = obj->factory(pair->first, &pair->second);
-    //  args->erase(pair);
+//  int iarg = 0;
+  if (map.count(args->begin()->first) > 0) {
+  //if (map.count((*args)[iarg].first) > 0) {
+  //if (find_in_map((*args)[iarg].first, map, &find)) {
+    new_obj = obj->factory(args->begin()->first, &args->begin()->second);
+    //new_obj = obj->factory((*args)[iarg].first, &(*args)[iarg].second);
+    args->erase(args->begin());
+    //args->erase(args->begin() + iarg);
+  //auto pair = args->find(mp.first);//map.find(arg.first);
+  //if (pair != args->end()) {
+  //  new_obj = obj->factory(pair->first, &pair->second);
+  //  args->erase(pair);
 
-      return new_obj;
-    }
+    return new_obj;
   }
+  //}
   return new_obj;
 }
 

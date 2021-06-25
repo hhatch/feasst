@@ -8,6 +8,8 @@
 
 namespace feasst {
 
+class MonteCarlo;
+
 /**
   An Action is for use with the MonteCarlo(arglist) constructor.
   Actions are performed immediately when they reach the top of the arglist.
@@ -15,7 +17,9 @@ namespace feasst {
  */
 class Action {
  public:
-  Action() {}
+  explicit Action(argtype args = argtype());
+  explicit Action(argtype * args);
+  virtual void perform(MonteCarlo * mc);
   std::string class_name() const { return class_name_; }
   virtual void serialize(std::ostream& ostr) const;
   virtual std::shared_ptr<Action> create(std::istream& istr) const;

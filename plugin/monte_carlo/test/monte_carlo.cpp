@@ -326,6 +326,10 @@ TEST(MonteCarlo, arglist_unrecognized) {
     MakeMonteCarlo({{{"Banana", {{}}}}});
     CATCH_PHRASE("Unrecognized argument: Banana");
   );
+  TRY(
+    MakeMonteCarlo({{{"Metropolis", {{}}}}});
+    CATCH_PHRASE("set System before Criteria");
+  );
 }
 
 TEST(MonteCarlo, arglist) {
@@ -343,6 +347,7 @@ TEST(MonteCarlo, arglist) {
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Log", {{"steps_per", str(1e5)}, {"file_name", "lj.txt"}}},
     {"CheckEnergy", {{"steps_per", str(1e5)}, {"tolerance", str(1e-8)}}},
+    {"Run", {{"num_attempts", "100"}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());
@@ -350,6 +355,8 @@ TEST(MonteCarlo, arglist) {
   EXPECT_EQ(2, mc->trials().num());
   EXPECT_EQ("TrialTranslate", mc->trial(0).class_name());
   EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
+  EXPECT_EQ(100, mc->trials().num_attempts());
+  EXPECT_GT(mc->configuration().num_particles(), 0);
 }
 
 }  // namespace feasst

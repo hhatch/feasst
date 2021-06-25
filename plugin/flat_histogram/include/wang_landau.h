@@ -80,8 +80,7 @@ class WangLandau : public Bias {
   void flatness_update_();
 };
 
-inline std::shared_ptr<WangLandau> MakeWangLandau(
-    argtype args = argtype()) {
+inline std::shared_ptr<WangLandau> MakeWangLandau(argtype args = argtype()) {
   return std::make_shared<WangLandau>(args);
 }
 

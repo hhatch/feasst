@@ -4,6 +4,7 @@
 #include "utils/include/checkpoint.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/action.h"
 
 // for parsing factories
 #include "math/include/random_mt19937.h"
@@ -90,19 +91,35 @@ void MonteCarlo::parse_(arglist * args) {
     return;
   }
 
+  // parse all derived classes of Action
+  std::shared_ptr<Action> act = parse(dynamic_cast<Action*>(std::make_shared<Action>().get()), args);
+  if (act) {
+    INFO("parsing Action");
+    perform(act);
+    return;
+  }
+
 }
 
 MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
-  int size = static_cast<int>(args.size());
+  args_ = args;
+  int size = static_cast<int>(args_.size());
   int previous_size = size;
   while (size > 0) {
     previous_size = size;
     INFO("size " << size);
-    parse_(&args);
-    size = static_cast<int>(args.size());
+    parse_(&args_);
+    size = static_cast<int>(args_.size());
     ASSERT(previous_size - 1 == size,
-      "Unrecognized argument: " << args.begin()->first);
+      "Unrecognized argument: " << args_.begin()->first);
   }
+}
+
+void MonteCarlo::perform(std::shared_ptr<Action> action) {
+  action_ = action;
+  action_->perform(this);
+//  action_->perform(&system_, criteria_, &trial_factory_, &analyze_factory_,
+//               &modify_factory_, checkpoint_, random_);
 }
 
 void MonteCarlo::seed_random(const int seed) {
@@ -348,6 +365,8 @@ void MonteCarlo::serialize(std::ostream& ostr) const {
   feasst_serialize_fstobj(modify_factory_, ostr);
   feasst_serialize(checkpoint_, ostr);
   feasst_serialize_fstdr(random_, ostr);
+  feasst_serialize_fstdr(action_, ostr);
+  feasst_serialize(args_, ostr);
   feasst_serialize(config_set_, ostr);
   feasst_serialize(potential_set_, ostr);
   feasst_serialize(thermo_params_set_, ostr);
@@ -387,6 +406,15 @@ MonteCarlo::MonteCarlo(std::istream& istr) {
       random_ = random_->deserialize(istr);
     }
   }
+  // HWH for unknown reasons, this function template does not work.
+  //feasst_deserialize_fstdr(action_, istr);
+  { int existing;
+    istr >> existing;
+    if (existing != 0) {
+      action_ = action_->deserialize(istr);
+    }
+  }
+  feasst_deserialize(&args_, istr);
   feasst_deserialize(&config_set_, istr);
   feasst_deserialize(&potential_set_, istr);
   feasst_deserialize(&thermo_params_set_, istr);

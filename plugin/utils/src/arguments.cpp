@@ -108,4 +108,15 @@ void check_all_used(const argtype& args) {
   ASSERT(args.size() == 0, "unused: " << str(args));
 }
 
+std::string str(const arglist& args) {
+  std::stringstream out;
+  out << "{{";
+  for (const auto& arg : args) {
+    out << "{\"" << arg.first << "\",";
+    out << str(arg.second) << "},";
+  }
+  out << "}}";
+  return out.str();
+}
+
 }  // namespace feasst

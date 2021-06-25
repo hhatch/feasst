@@ -17,6 +17,7 @@ namespace feasst {
 
 class Checkpoint;
 class Random;
+class Action;
 
 // HWH consider a constructor-based initialization of MonteCarlo..
 // HWH something where order doesn't need to be enforced?
@@ -35,8 +36,7 @@ class MonteCarlo {
   MonteCarlo();
 
   /*
-    Objects will be set or added in the following order by providing their
-    (derived-)names and arguments.
+    Objects are processed with the following (derived-)names and arguments.
     - Random (default: RandomMT19937).
     - Configuration (multiple)
     - Potential (multiple)
@@ -45,6 +45,7 @@ class MonteCarlo {
     - Trial (multiple)
     - Analyze (multiple)
     - Modify (multiple)
+    - Action
     Those not labeled multiple will override any previous object of same type,
     while those labeled multiple will not override but rather add more.
 
@@ -61,6 +62,7 @@ class MonteCarlo {
       "RandomMT19937", {"seed": "123"},
       ...
     ]]));
+
    */
   explicit MonteCarlo(arglist args);
 
@@ -203,6 +205,9 @@ class MonteCarlo {
   /// Attempt one trial, with subsequent analysers and modifiers.
   // void attempt() { attempt_(1, &trial_factory_, random_.get()); }
 
+  /// Perform an Action
+  void perform(std::shared_ptr<Action> action);
+
   /// Attempt a number of Monte Carlo trials.
   void attempt(const int num_trials = 1) {
     attempt_(num_trials, &trial_factory_, random_.get()); }
@@ -286,6 +291,8 @@ class MonteCarlo {
   ModifyFactory modify_factory_;
   std::shared_ptr<Checkpoint> checkpoint_;
   std::shared_ptr<Random> random_;
+  std::shared_ptr<Action> action_;
+  arglist args_;
 
 //  Timer timer_;
 //  int timer_other_, timer_trial_, timer_analyze_, timer_modify_;

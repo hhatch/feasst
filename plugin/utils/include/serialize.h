@@ -71,20 +71,20 @@ void feasst_serialize_version(const int version, std::ostream& ostr);
 /// Deserialize object version
 int feasst_deserialize_version(std::istream& istr);
 
-/// Serialize pair of int and vector.
-template <typename T>
-void feasst_serialize(const std::pair<int, std::vector<T> >& container,
+/// Serialize pair of T1 and T2 vector.
+template <typename T1, typename T2>
+void feasst_serialize(const std::pair<T1, std::vector<T2> >& container,
   std::ostream& ostr) {
   feasst_serialize(container.first, ostr);
   ostr << container.second.size() << " ";
-  for (const T& element : container.second) {
+  for (const T2& element : container.second) {
     feasst_serialize(element, ostr);
   }
 }
 
-/// deserialize pair of int and vector.
-template <typename T>
-void feasst_deserialize(std::pair<int, std::vector<T> > * container,
+/// deserialize pair of T1 and T2 vector.
+template <typename T1, typename T2>
+void feasst_deserialize(std::pair<T1, std::vector<T2> > * container,
   std::istream& istr) {
   feasst_deserialize(&container->first, istr);
   int num;
@@ -93,6 +93,22 @@ void feasst_deserialize(std::pair<int, std::vector<T> > * container,
   for (int index = 0; index < num; ++index) {
     feasst_deserialize(&(container->second)[index], istr);
   }
+}
+
+/// Serialize pair of T1 and T2.
+template <typename T1, typename T2>
+void feasst_serialize(const std::pair<T1, T2>& container,
+  std::ostream& ostr) {
+  feasst_serialize(container.first, ostr);
+  feasst_serialize(container.second, ostr);
+}
+
+/// deserialize pair of T1 and T2.
+template <typename T1, typename T2>
+void feasst_deserialize(std::pair<T1, T2> * container,
+  std::istream& istr) {
+  feasst_deserialize(&container->first, istr);
+  feasst_deserialize(&container->second, istr);
 }
 
 /// Serialize the 1D vector.

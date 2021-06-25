@@ -4,6 +4,9 @@
 
 namespace feasst {
 
+Action::Action(argtype * args) {}
+Action::Action(argtype args) : Action(&args) { check_all_used(args); }
+
 std::map<std::string, std::shared_ptr<Action> >& Action::deserialize_map() {
   static std::map<std::string, std::shared_ptr<Action> >* ans =
      new std::map<std::string, std::shared_ptr<Action> >();
@@ -40,5 +43,7 @@ Action::Action(std::istream& istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(6937 == version, "mismatch version: " << version);
 }
+
+void Action::perform(MonteCarlo * mc) { FATAL("not implemented"); }
 
 }  // namespace feasst
