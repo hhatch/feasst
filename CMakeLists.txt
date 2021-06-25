@@ -415,11 +415,11 @@ if (USE_GTEST)
 endif(USE_GTEST)
 
 # build feasst library
-add_library (feasst INTERFACE)
+add_library (feasstlib INTERFACE)
 foreach (PLUGIN ${FEASST_PLUGINS})
-  target_link_libraries(feasst INTERFACE feasst${PLUGIN})
+  target_link_libraries(feasstlib INTERFACE feasst${PLUGIN})
 endforeach (PLUGIN)
-target_link_libraries(feasst INTERFACE ${EXTRA_LIBS})
+target_link_libraries(feasstlib INTERFACE ${EXTRA_LIBS})
 
 # install library inside the binary "build" directory
 file (WRITE ${CMAKE_BINARY_DIR}/feasst.h "")
@@ -443,7 +443,7 @@ foreach (PLUGIN ${FEASST_PLUGINS})
       LIBRARY DESTINATION lib
       RUNTIME DESTINATION bin)
 endforeach (PLUGIN)
-install(TARGETS feasst
+install(TARGETS feasstlib
     EXPORT feasst-targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
@@ -456,6 +456,12 @@ install(FILES ${CMAKE_BINARY_DIR}/feasst.h
 
 # SWIG
 if (USE_SWIG)
+  if(POLICY CMP0078)
+    cmake_policy(SET CMP0078 NEW)
+  endif()
+  if(POLICY CMP0086)
+    cmake_policy(SET CMP0086 NEW)
+  endif()
   if (SET_PYTHON_PATH)
   else (SET_PYTHON_PATH)
     FIND_PACKAGE(PythonLibs 3)
@@ -487,11 +493,11 @@ if (USE_SWIG)
       SWIG_ADD_LIBRARY(feasst LANGUAGE python SOURCES "${CMAKE_SOURCE_DIR}/py/feasst.i")
     endif ()
     SWIG_LINK_LIBRARIES(feasst ${EXTRA_LIBS})
-    SWIG_LINK_LIBRARIES(feasst feasst)
+    SWIG_LINK_LIBRARIES(feasst feasstlib)
     if (APPLE)
-      set_target_properties(_feasst PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+      set_target_properties(feasst PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
     endif (APPLE)
-    add_dependencies(_feasst build-time-make-directory)
+    add_dependencies(feasst build-time-make-directory)
 
     # put pyfeasst into build
     configure_file(${CMAKE_SOURCE_DIR}/py/pyfeasst.py ${CMAKE_SOURCE_DIR}/build/pyfeasst.py @ONLY)

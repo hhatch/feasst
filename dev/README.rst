@@ -355,3 +355,4 @@ To Do List
 * Add more documentation for Trials (TrialStage: Perturb/Select, TrialCompute. When finialize? reference?)
 * Early tutorials are in ipynb, but transition out of that into .py, include .py on the website
 * Rename Accumulator::num_block to block_size.
+* When swig4 finally works, can use multimap for dictionaries with more than one of same first key

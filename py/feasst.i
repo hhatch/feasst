@@ -50,7 +50,7 @@ using namespace std;
 %include "std_map.i"
 %template(args) std::map<std::string, std::string>;
 %template(ArgsVector) std::vector<std::map<std::string, std::string> >;
-%template(arglist) std::map<std::string, std::map<std::string, std::string> >;
+%template(arglist) std::vector<std::pair<std::string, std::map<std::string, std::string> > >;
 %shared_ptr(feasst::Timer);
 %shared_ptr(feasst::ArgumentParse);
 %shared_ptr(feasst::CustomException);
