@@ -19,7 +19,7 @@ set(FEASST_PLUGINS "utils")
 #set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;prefetch;ewald;flat_histogram;cluster;beta_expanded")
 #set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;prefetch;ewald;flat_histogram;cluster;beta_expanded;chain")
 #set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;prefetch;ewald;flat_histogram;cluster;beta_expanded;chain;morph")
-#set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;models;patch;mayer;example;shape;confinement;chain;flat_histogram;ewald;morph;cluster;prefetch;egce;beta_expanded")
+set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;models;patch;mayer;example;shape;confinement;chain;flat_histogram;ewald;morph;cluster;prefetch;egce;beta_expanded")
 #set(FEASST_PLUGINS "utils;math;configuration;system;opt_lj;steppers;monte_carlo;threads;models;patch;mayer;example;shape;confinement;chain;flat_histogram;ewald;morph;cluster;prefetch;egce;beta_expanded;xtc")
 # Note, if you change the plugin list and want to use the python interface,
 # you also need to run "../py/run.sh ../dev/tools/depend.py -s ../"
