@@ -1,6 +1,6 @@
 
-#ifndef FEASST_FLAT_HISTOGRAM_WANG_LANDAU_H_
-#define FEASST_FLAT_HISTOGRAM_WANG_LANDAU_H_
+#ifndef FEASST_MONTE_CARLO_RUN_H_
+#define FEASST_MONTE_CARLO_RUN_H_
 
 #include <vector>
 #include <memory>
@@ -70,4 +70,4 @@ inline std::shared_ptr<RemoveTrial> MakeRemoveTrial(argtype args = argtype()) {
 
 }  // namespace feasst
 
-#endif  // FEASST_FLAT_HISTOGRAM_WANG_LANDAU_H_
+#endif  // FEASST_MONTE_CARLO_RUN_H_

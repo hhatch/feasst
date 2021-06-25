@@ -33,4 +33,6 @@ endif()
 
 include_directories("${CMAKE_PREFIX_PATH}/include")
 add_executable (tutorial tutorial.cpp)
-target_link_libraries (tutorial LINK_PUBLIC feasst)
+target_link_libraries (tutorial LINK_PUBLIC feasstlib)
+add_executable (tutorial_future tutorial_future.cpp)
+target_link_libraries (tutorial_future LINK_PUBLIC feasstlib)
