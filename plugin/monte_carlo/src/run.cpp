@@ -77,6 +77,7 @@ RemoveTrial::RemoveTrial(std::istream& istr) : Action(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 3854, "mismatch version: " << version);
   feasst_deserialize(&index_, istr);
+  feasst_deserialize(&name_, istr);
 }
 
 void RemoveTrial::serialize(std::ostream& ostr) const {
@@ -84,6 +85,7 @@ void RemoveTrial::serialize(std::ostream& ostr) const {
   serialize_action_(ostr);
   feasst_serialize_version(3854, ostr);
   feasst_serialize(index_, ostr);
+  feasst_serialize(name_, ostr);
 }
 
 void RemoveTrial::perform(MonteCarlo * mc) {
@@ -125,6 +127,7 @@ RemoveModify::RemoveModify(std::istream& istr) : Action(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 2045, "mismatch version: " << version);
   feasst_deserialize(&index_, istr);
+  feasst_deserialize(&name_, istr);
 }
 
 void RemoveModify::serialize(std::ostream& ostr) const {
@@ -132,6 +135,7 @@ void RemoveModify::serialize(std::ostream& ostr) const {
   serialize_action_(ostr);
   feasst_serialize_version(2045, ostr);
   feasst_serialize(index_, ostr);
+  feasst_serialize(name_, ostr);
 }
 
 void RemoveModify::perform(MonteCarlo * mc) {
@@ -153,6 +157,38 @@ void RemoveModify::perform(MonteCarlo * mc) {
     DEBUG("removing " << index_);
     mc->remove_modify(index_);
   }
+}
+
+WriteCheckpoint::WriteCheckpoint(argtype * args) {
+  class_name_ = "WriteCheckpoint";
+}
+WriteCheckpoint::WriteCheckpoint(argtype args) : WriteCheckpoint(&args) {
+  check_all_used(args);
+}
+
+class MapWriteCheckpoint {
+ public:
+  MapWriteCheckpoint() {
+    auto obj = MakeWriteCheckpoint();
+    obj->deserialize_map()["WriteCheckpoint"] = obj;
+  }
+};
+
+static MapWriteCheckpoint mapper_WriteCheckpoint = MapWriteCheckpoint();
+
+WriteCheckpoint::WriteCheckpoint(std::istream& istr) : Action(istr) {
+  const int version = feasst_deserialize_version(istr);
+  ASSERT(version == 5694, "mismatch version: " << version);
+}
+
+void WriteCheckpoint::serialize(std::ostream& ostr) const {
+  ostr << class_name_ << " ";
+  serialize_action_(ostr);
+  feasst_serialize_version(5694, ostr);
+}
+
+void WriteCheckpoint::perform(MonteCarlo * mc) {
+  mc->write_checkpoint();
 }
 
 }  // namespace feasst

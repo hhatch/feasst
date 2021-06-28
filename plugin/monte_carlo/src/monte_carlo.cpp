@@ -37,6 +37,14 @@ void MonteCarlo::parse_(arglist * args) {
     return;
   }
 
+  // parse Checkpoint
+  if (args->begin()->first == "Checkpoint") {
+    DEBUG("parsing Checkpoint");
+    set(MakeCheckpoint(args->begin()->second));
+    args->erase(args->begin());
+    return;
+  }
+
   // parse Configuration
   if (args->begin()->first == "Configuration") {
     DEBUG("parsing Configuration");

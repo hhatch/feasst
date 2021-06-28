@@ -11,6 +11,8 @@ parser.add_argument("--data", type=str, help="LMP forcefield data file",
     default=fst.install_dir() + "/forcefield/data.lj")
 parser.add_argument("--beta", type=float, help="inverse temperature",
     default=1.2)
+parser.add_argument("--steps_per", type=str, help="number of trials per analysis or check",
+    default=str(int(1e5)))
 parser.add_argument("--equilibration", type=int, help="number of equilibration trials",
     default=int(1e6))
 parser.add_argument("--production", type=int, help="number of production trials",
@@ -31,10 +33,10 @@ mc = fst.MakeMonteCarlo(fst.arglist([
     ["Run", {"until_num_particles": str(args.num)}],
     ["ThermoParams", {"beta": str(args.beta)}],
     ["RemoveTrial", {"name": "TrialAdd"}],
-    ["Tune", {"steps_per": str(1e5)}],
-    ["CheckEnergy", {"steps_per": str(1e5), "tolerance": str(1e-8)}],
+    ["Tune", {"steps_per": args.steps_per}],
+    ["CheckEnergy", {"steps_per": args.steps_per, "tolerance": str(1e-8)}],
     ["Run", {"num_attempts": str(args.equilibration)}],
-    ["Log", {"steps_per": str(1e5), "file_name": "lj.txt"}],
-    ["Movie", {"steps_per": str(1e5), "file_name": "lj.xyz"}],
+    ["Log", {"steps_per": args.steps_per, "file_name": "lj.txt"}],
+    ["Movie", {"steps_per": args.steps_per, "file_name": "lj.xyz"}],
     ["Run", {"num_attempts": str(args.production)}],
 ]))

@@ -8,6 +8,7 @@ static feasst::ArgumentParse args("A canonical ensemble Metropolis Monte Carlo s
   {"--data", "LMP forcefield data file",
     feasst::install_dir() + "/forcefield/data.lj"},
   {"--beta", "inverse temperature", "1.2"},
+  {"--steps_per", "number of trials per analysis or check", feasst::str(1e5)},
   {"--equilibrate", "number of trials for equilibration", feasst::str(1e6)},
   {"--production", "number of trials for production", feasst::str(1e6)}
 });
@@ -29,11 +30,11 @@ int main(int argc, char ** argv) {
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Run", {{"until_num_particles", "50"}}},
     {"RemoveTrial", {{"name", "TrialAdd"}}},
-    {"Tune", {{"steps_per", feasst::str(1e5)}}},
-    {"CheckEnergy", {{"steps_per", feasst::str(1e5)}, {"tolerance", "1e-8"}}},
+    {"Tune", {{"steps_per", args.get("--steps_per")}}},
+    {"CheckEnergy", {{"steps_per", args.get("--steps_per")}, {"tolerance", "1e-8"}}},
     {"Run", {{"num_attempts", args.get("--equilibrate")}}},
-    {"Log", {{"steps_per", feasst::str(1e5)}, {"file_name", "lj.txt"}}},
-    {"Movie", {{"steps_per", feasst::str(1e5)}, {"file_name", "lj.xyz"}}},
+    {"Log", {{"steps_per", args.get("--steps_per")}, {"file_name", "lj.txt"}}},
+    {"Movie", {{"steps_per", args.get("--steps_per")}, {"file_name", "lj.xyz"}}},
     {"Run", {{"num_attempts", args.get("--production")}}},
   }});
 }

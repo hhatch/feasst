@@ -347,6 +347,7 @@ TEST(MonteCarlo, argslist_order) {
 
 TEST(MonteCarlo, arglist) {
   auto mc = MakeMonteCarlo({{
+    {"Checkpoint", {{"file_name", "tmp/lj.fst"}}},
     {"RandomModulo", {{"seed", "123"}}},
     {"Configuration", {{"cubic_box_length", "8"},
                        {"particle_type0", "../forcefield/data.lj"},
@@ -368,6 +369,7 @@ TEST(MonteCarlo, arglist) {
     {"Run", {{"num_attempts", str(1e3)}}},
     {"RemoveModify", {{"name", "Tune"}}},
     {"Run", {{"num_attempts", str(1e3)}}},
+    {"WriteCheckpoint", {{}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());

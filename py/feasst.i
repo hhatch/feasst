@@ -331,6 +331,8 @@ using namespace std;
 %shared_ptr(feasst::Action);
 %shared_ptr(feasst::Run);
 %shared_ptr(feasst::RemoveTrial);
+%shared_ptr(feasst::RemoveModify);
+%shared_ptr(feasst::WriteCheckpoint);
 %shared_ptr(feasst::PhysicalConstants);
 %shared_ptr(feasst::CODATA2018);
 %shared_ptr(feasst::CODATA2014);

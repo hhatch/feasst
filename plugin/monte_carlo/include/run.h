@@ -103,6 +103,30 @@ inline std::shared_ptr<RemoveModify> MakeRemoveModify(argtype args = argtype()) 
   return std::make_shared<RemoveModify>(args);
 }
 
+/**
+  Write a Checkpoint.
+ */
+class WriteCheckpoint : public Action {
+ public:
+  /**
+    args:
+   */
+  explicit WriteCheckpoint(argtype args = argtype());
+  explicit WriteCheckpoint(argtype * args);
+  void perform(MonteCarlo * mc);
+  std::shared_ptr<Action> create(std::istream& istr) const override {
+    return std::make_shared<WriteCheckpoint>(istr); }
+  std::shared_ptr<Action> create(argtype * args) const override {
+    return std::make_shared<WriteCheckpoint>(args); }
+  void serialize(std::ostream& ostr) const override;
+  explicit WriteCheckpoint(std::istream& istr);
+  virtual ~WriteCheckpoint() {}
+};
+
+inline std::shared_ptr<WriteCheckpoint> MakeWriteCheckpoint(argtype args = argtype()) {
+  return std::make_shared<WriteCheckpoint>(args);
+}
+
 }  // namespace feasst
 
 #endif  // FEASST_MONTE_CARLO_RUN_H_
