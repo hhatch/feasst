@@ -1,5 +1,6 @@
-# usage: /path/to/feasst/build/bin/feasst < tutorial.txt
+# usage: /path/to/feasst/build/bin/fst < tutorial.txt
 
+# high temperature gcmc to generate initial configuration
 RandomMT19937 seed time
 Configuration cubic_box_length 8 particle_type ../forcefield/data.lj
 Potential Model LennardJones
@@ -9,10 +10,16 @@ Metropolis
 TrialTranslate tunable_param 2. tunable_target_acceptance 0.2
 TrialAdd particle_type 0
 Run until_num_particles 50
+
+# nvt equilibration
 RemoveTrial index 1
+ThermoParams beta 1.2
 Tune steps_per 100000
 CheckEnergy steps_per 100000 tolerance 0.00000001
 Run num_attempts 1000000
+
+# nvt production
 Log steps_per 100000 file_name lj.txt
 Movie steps_per 100000 file_name lj.xyz
+Energy steps_per_write 100000 file_name en.txt
 Run num_attempts 1000000
