@@ -458,6 +458,10 @@ install(EXPORT feasst-targets
 install(FILES ${CMAKE_BINARY_DIR}/feasst.h
     DESTINATION include)
 
+# make feasst text interpreter
+add_executable (feasst ${CMAKE_SOURCE_DIR}/plugin/feasst/src/feasst.cpp)
+target_link_libraries (feasst LINK_PUBLIC feasstlib)
+
 # SWIG
 if (USE_SWIG)
   if(POLICY CMP0078)
