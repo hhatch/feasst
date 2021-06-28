@@ -1,10 +1,10 @@
-TrialTranslate
+Run
 =====================================================
 
-.. doxygenclass:: feasst::TrialTranslate
+.. doxygenclass:: feasst::Run
    :project: FEASST
    :members:
 
-.. doxygenclass:: feasst::TrialAdd
+.. doxygenclass:: feasst::RemoveTrial
    :project: FEASST
    :members:

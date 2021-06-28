@@ -1,20 +1,21 @@
 
 .. toctree::
 
-   Action
    Tunable
+   Action
+   Run
    Stepper
    Rosenbluth
    Acceptance
    TrialSelect
+   TrialSelectParticle
    TrialSelectBond
    TrialSelectAngle
    Perturb
    PerturbVolume
    PerturbMove
-   PerturbTranslate
    PerturbDistance
-   TrialSelectParticle
+   PerturbTranslate
    Criteria
    TrialStage
    TrialCompute

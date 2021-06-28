@@ -1,6 +1,6 @@
-Tuner
+Tune
 =====================================================
 
-.. doxygenclass:: feasst::Tuner
+.. doxygenclass:: feasst::Tune
    :project: FEASST
    :members:

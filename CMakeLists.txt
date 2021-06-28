@@ -422,7 +422,7 @@ endforeach (PLUGIN)
 target_link_libraries(feasstlib INTERFACE ${EXTRA_LIBS})
 
 # install library inside the binary "build" directory
-file (WRITE ${CMAKE_BINARY_DIR}/feasst.h "")
+#file (WRITE ${CMAKE_BINARY_DIR}/feasst.h "")
 foreach (PLUGIN ${FEASST_PLUGINS})
   target_include_directories(feasst${PLUGIN} INTERFACE
       $<BUILD_INTERFACE:${FEASST_PLUGIN_DIR}/${PLUGIN}/include>
@@ -431,10 +431,14 @@ foreach (PLUGIN ${FEASST_PLUGINS})
   install(FILES ${feasst_headers} DESTINATION include/${PLUGIN}/include)
   file(GLOB feasst_headers RELATIVE "${FEASST_PLUGIN_DIR}" "${FEASST_PLUGIN_DIR}/${PLUGIN}/include/*.h")
   # generate header feasst.h
-  foreach (HEADER ${feasst_headers})
-    file (APPEND ${CMAKE_BINARY_DIR}/feasst.h "#include \"${HEADER}\"\n")
-  endforeach (HEADER)
+#  foreach (HEADER ${feasst_headers})
+#    file (APPEND ${CMAKE_BINARY_DIR}/feasst.h "#include \"${HEADER}\"\n")
+#  endforeach (HEADER)
 endforeach (PLUGIN)
+#message(${CMAKE_SOURCE_DIR}/plugin/feasst/include/feasst.h)
+#message(${CMAKE_CURRENT_BINARY_DIR}/feasst.h)
+configure_file(
+  ${CMAKE_SOURCE_DIR}/plugin/feasst/include/feasst.h ${CMAKE_CURRENT_BINARY_DIR}/feasst.h COPYONLY)
 foreach (PLUGIN ${FEASST_PLUGINS})
   message(feasst${PLUGIN})
   install(TARGETS feasst${PLUGIN}

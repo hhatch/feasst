@@ -24,20 +24,22 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 void MonteCarlo::parse_(arglist * args) {
-  INFO("first " << args->begin()->first);
-  INFO("args " << str(*args));
+  DEBUG("first " << args->begin()->first);
+  std::cout << "{" << args->begin()->first << ","
+            << str(args->begin()->second) << "}," << std::endl;
 
   // parse all derived classes of Random
-  std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
+  std::shared_ptr<Random> ran =
+    parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
   if (ran) {
-    INFO("parsing Random");
+    DEBUG("parsing Random");
     set(ran);
     return;
   }
 
   // parse Configuration
   if (args->begin()->first == "Configuration") {
-    INFO("parsing Configuration");
+    DEBUG("parsing Configuration");
     add(MakeConfiguration(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -45,7 +47,7 @@ void MonteCarlo::parse_(arglist * args) {
 
   // parse Potential
   if (args->begin()->first == "Potential") {
-    INFO("parsing Potential");
+    DEBUG("parsing Potential");
     add(MakePotential(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -53,48 +55,53 @@ void MonteCarlo::parse_(arglist * args) {
 
   // parse ThermoParams
   if (args->begin()->first == "ThermoParams") {
-    INFO("parsing ThermoParams");
+    DEBUG("parsing ThermoParams");
     set(MakeThermoParams(args->begin()->second));
     args->erase(args->begin());
     return;
   }
 
   // parse all derived classes of Criteria
-  std::shared_ptr<Criteria> crit = parse(dynamic_cast<Criteria*>(MakeMetropolis().get()), args);
+  std::shared_ptr<Criteria> crit =
+    parse(dynamic_cast<Criteria*>(MakeMetropolis().get()), args);
   if (crit) {
-    INFO("parsing Criteria");
+    DEBUG("parsing Criteria");
     set(crit);
     return;
   }
 
   // parse all derived classes of Trial
-  std::shared_ptr<Trial> trial = parse(dynamic_cast<Trial*>(MakeTrial().get()), args);
+  std::shared_ptr<Trial> trial =
+    parse(dynamic_cast<Trial*>(MakeTrial().get()), args);
   if (trial) {
-    INFO("parsing Trial");
+    DEBUG("parsing Trial");
     add(trial);
     return;
   }
 
   // parse all derived classes of Analyze
-  std::shared_ptr<Analyze> an = parse(dynamic_cast<Analyze*>(std::make_shared<Analyze>().get()), args);
+  std::shared_ptr<Analyze> an =
+    parse(dynamic_cast<Analyze*>(std::make_shared<Analyze>().get()), args);
   if (an) {
-    INFO("parsing Analyze");
+    DEBUG("parsing Analyze");
     add(an);
     return;
   }
 
   // parse all derived classes of Modify
-  std::shared_ptr<Modify> mod = parse(dynamic_cast<Modify*>(std::make_shared<Modify>().get()), args);
+  std::shared_ptr<Modify> mod =
+    parse(dynamic_cast<Modify*>(std::make_shared<Modify>().get()), args);
   if (mod) {
-    INFO("parsing Modify");
+    DEBUG("parsing Modify");
     add(mod);
     return;
   }
 
   // parse all derived classes of Action
-  std::shared_ptr<Action> act = parse(dynamic_cast<Action*>(std::make_shared<Action>().get()), args);
+  std::shared_ptr<Action> act =
+    parse(dynamic_cast<Action*>(std::make_shared<Action>().get()), args);
   if (act) {
-    INFO("parsing Action");
+    DEBUG("parsing Action");
     perform(act);
     return;
   }
@@ -107,7 +114,7 @@ MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
   int previous_size = size;
   while (size > 0) {
     previous_size = size;
-    INFO("size " << size);
+    DEBUG("size " << size);
     parse_(&args_);
     size = static_cast<int>(args_.size());
     ASSERT(previous_size - 1 == size,
