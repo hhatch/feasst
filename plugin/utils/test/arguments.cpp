@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "utils/include/utils.h"
 #include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "math/include/constants.h"
@@ -99,6 +100,16 @@ TEST(Arguments, str) {
   EXPECT_EQ("{{\"hi\",\"you\"},}", str(arg));
   arglist args = {{{"major_key1", {{"minor_key1", "value1"}}}}};
   EXPECT_EQ("{{{\"major_key1\",{{\"minor_key1\",\"value1\"},}},}}", str(args));
+}
+
+TEST(Utils, find_in_list) {
+  arglist args = {{
+    {"major_key", {{"minor_key", "value1"}}},
+    {"major_key", {{"minor_key", "value1"}}}
+  }};
+  int find;
+  find_in_list(std::string("major_key"), args, &find);
+  EXPECT_EQ(0, find);
 }
 
 }  // namespace feasst

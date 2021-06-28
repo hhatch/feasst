@@ -25,6 +25,7 @@ MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 void MonteCarlo::parse_(arglist * args) {
   INFO("first " << args->begin()->first);
+  INFO("args " << str(*args));
 
   // parse all derived classes of Random
   std::shared_ptr<Random> ran = parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
@@ -35,27 +36,26 @@ void MonteCarlo::parse_(arglist * args) {
   }
 
   // parse Configuration
-  int find = -1;
-  if (find_in_list(std::string("Configuration"), *args, &find)) {
+  if (args->begin()->first == "Configuration") {
     INFO("parsing Configuration");
-    add(MakeConfiguration((*args)[find].second));
-    args->erase(args->begin() + find);
+    add(MakeConfiguration(args->begin()->second));
+    args->erase(args->begin());
     return;
   }
 
   // parse Potential
-  if (find_in_list(std::string("Potential"), *args, &find)) {
+  if (args->begin()->first == "Potential") {
     INFO("parsing Potential");
-    add(MakePotential((*args)[find].second));
-    args->erase(args->begin() + find);
+    add(MakePotential(args->begin()->second));
+    args->erase(args->begin());
     return;
   }
 
   // parse ThermoParams
-  if (find_in_list(std::string("ThermoParams"), *args, &find)) {
+  if (args->begin()->first == "ThermoParams") {
     INFO("parsing ThermoParams");
-    set(MakeThermoParams((*args)[find].second));
-    args->erase(args->begin() + find);
+    set(MakeThermoParams(args->begin()->second));
+    args->erase(args->begin());
     return;
   }
 

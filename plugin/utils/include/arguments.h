@@ -75,6 +75,8 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
   //for (int iarg = 0; iarg < static_cast<int>(args->size()); ++iarg) {
 //    int find = -1;
 //  int iarg = 0;
+  //INFO("parsing " << args->begin()->first);
+  //for (const auto& mp : map) INFO(mp.first);
   if (map.count(args->begin()->first) > 0) {
   //if (map.count((*args)[iarg].first) > 0) {
   //if (find_in_map((*args)[iarg].first, map, &find)) {

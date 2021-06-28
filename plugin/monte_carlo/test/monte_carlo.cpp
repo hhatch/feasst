@@ -332,6 +332,19 @@ TEST(MonteCarlo, arglist_unrecognized) {
   );
 }
 
+TEST(MonteCarlo, argslist_order) {
+  auto mc = MakeMonteCarlo({{
+    {"RandomModulo", {{"seed", "123"}}},
+    {"Configuration", {{"cubic_box_length", "8"},
+                       {"particle_type0", "../forcefield/data.lj"},
+                       {"particle_type1", "../forcefield/data.atom"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"ThermoParams", {{"beta", "0.1"}}},
+    {"ThermoParams", {{"beta", "1.2"}}},
+  }});
+  EXPECT_EQ(1.2, mc->thermo_params().beta());
+}
+
 TEST(MonteCarlo, arglist) {
   auto mc = MakeMonteCarlo({{
     {"RandomModulo", {{"seed", "123"}}},
@@ -340,7 +353,7 @@ TEST(MonteCarlo, arglist) {
                        {"particle_type1", "../forcefield/data.atom"}}},
     {"Potential", {{"Model", "LennardJones"}}},
     {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
-    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "10"}}},
+    {"ThermoParams", {{"beta", "0.1"}, {"chemical_potential", "10"}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"tunable_param", "2"},
                         {"tunable_target_acceptance", "0.2"}}},
@@ -350,12 +363,14 @@ TEST(MonteCarlo, arglist) {
     {"CheckEnergy", {{"steps_per", str(1e5)}, {"tolerance", str(1e-8)}}},
     {"Tune", {{"steps_per", str(1e5)}}},
     {"Run", {{"until_num_particles", "50"}}},
+    {"ThermoParams", {{"beta", "1.2"}}},
     {"RemoveTrial", {{"index", "1"}}},
     {"Run", {{"num_attempts", str(1e3)}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
   EXPECT_EQ(2, mc->configuration().num_particle_types());
   EXPECT_EQ(2, mc->system().unoptimized().num());
+  EXPECT_EQ(1.2, mc->thermo_params().beta());
   EXPECT_EQ(1, mc->trials().num());
   EXPECT_EQ("TrialTranslate", mc->trial(0).class_name());
   //EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
