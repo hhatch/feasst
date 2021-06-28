@@ -355,16 +355,18 @@ TEST(MonteCarlo, arglist) {
     {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
     {"ThermoParams", {{"beta", "0.1"}, {"chemical_potential", "10"}}},
     {"Metropolis", {{}}},
-    {"TrialTranslate", {{"tunable_param", "2"},
+    {"TrialTranslate", {{"tunable_param", "0.2"},
                         {"tunable_target_acceptance", "0.2"}}},
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Log", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.xyz"}}},
-    {"CheckEnergy", {{"steps_per", str(1e5)}, {"tolerance", str(1e-8)}}},
-    {"Tune", {{"steps_per", str(1e5)}}},
+    {"CheckEnergy", {{"steps_per", str(1e2)}, {"tolerance", str(1e-8)}}},
+    {"Tune", {{"steps_per", str(1e2)}}},
     {"Run", {{"until_num_particles", "50"}}},
     {"ThermoParams", {{"beta", "1.2"}}},
-    {"RemoveTrial", {{"index", "1"}}},
+    {"RemoveTrial", {{"name", "TrialAdd"}}},
+    {"Run", {{"num_attempts", str(1e3)}}},
+    {"RemoveModify", {{"name", "Tune"}}},
     {"Run", {{"num_attempts", str(1e3)}}},
   }});
   EXPECT_EQ(mc->random().class_name(), "RandomModulo");
@@ -374,6 +376,8 @@ TEST(MonteCarlo, arglist) {
   EXPECT_EQ(1, mc->trials().num());
   EXPECT_EQ("TrialTranslate", mc->trial(0).class_name());
   //EXPECT_EQ("TrialAdd", mc->trial(1).class_name());
+  EXPECT_EQ(1, mc->num_modifiers());
+  EXPECT_EQ("CheckEnergy", mc->modify(0).class_name());
   EXPECT_LT(100, mc->trials().num_attempts());
   EXPECT_EQ(50, mc->configuration().num_particles());
 }

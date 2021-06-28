@@ -191,6 +191,9 @@ class MonteCarlo {
   /// change the System, Criteria and Trials.
   void add(const std::shared_ptr<Modify> modify);
 
+  /// Remove a modify by index.
+  void remove_modify(const int index) { modify_factory_.remove(index); }
+
   /// Return an Modify by index.
   const Modify& modify(const int index) const {
     return modify_factory_.modify(index); }

@@ -28,7 +28,7 @@ int main(int argc, char ** argv) {
                         {"tunable_target_acceptance", "0.2"}}},
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Run", {{"until_num_particles", "50"}}},
-    {"RemoveTrial", {{"index", "1"}}},
+    {"RemoveTrial", {{"name", "TrialAdd"}}},
     {"Tune", {{"steps_per", feasst::str(1e5)}}},
     {"CheckEnergy", {{"steps_per", feasst::str(1e5)}, {"tolerance", "1e-8"}}},
     {"Run", {{"num_attempts", args.get("--equilibrate")}}},

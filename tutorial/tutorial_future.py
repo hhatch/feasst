@@ -21,7 +21,7 @@ print("args:", args)
 mc = fst.MakeMonteCarlo(fst.arglist([
     ["RandomMT19937", {"seed": args.seed}],
     ["Configuration", {"cubic_box_length": str(args.length),
-                      "particle_type": args.data}],
+                       "particle_type": args.data}],
     ["Potential", {"Model": "LennardJones"}],
     ["Potential", {"VisitModel": "LongRangeCorrections"}],
     ["ThermoParams", {"beta": "0.1", "chemical_potential": "10"}],
@@ -30,7 +30,7 @@ mc = fst.MakeMonteCarlo(fst.arglist([
     ["TrialAdd", {"particle_type": "0"}],
     ["Run", {"until_num_particles": str(args.num)}],
     ["ThermoParams", {"beta": str(args.beta)}],
-    ["RemoveTrial", {"index": "1"}],
+    ["RemoveTrial", {"name": "TrialAdd"}],
     ["Tune", {"steps_per": str(1e5)}],
     ["CheckEnergy", {"steps_per": str(1e5), "tolerance": str(1e-8)}],
     ["Run", {"num_attempts": str(args.equilibration)}],
