@@ -361,7 +361,7 @@ TEST(MonteCarlo, arglist) {
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Log", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.xyz"}}},
-    {"CheckEnergy", {{"steps_per", str(1e2)}, {"tolerance", str(1e-8)}}},
+    {"CheckEnergy", {{"steps_per", str(1e2)}, {"tolerance", "1e-8"}}},
     {"Tune", {{"steps_per", str(1e2)}}},
     {"Run", {{"until_num_particles", "50"}}},
     {"ThermoParams", {{"beta", "1.2"}}},

@@ -16,7 +16,7 @@ RemoveTrial name TrialAdd
 ThermoParams beta 1.2
 set_variable steps_per 100000
 Tune steps_per steps_per
-CheckEnergy steps_per steps_per tolerance 0.00000001
+CheckEnergy steps_per steps_per tolerance 1e-8
 Run num_attempts 1000000
 
 # nvt production
