@@ -101,10 +101,10 @@ bool str_to_bool(const std::string& str) {
 }
 
 double str_to_double(const std::string& str) {
+  std::stringstream ss(str);
   double double_value = -1;
-  try {
-    double_value = stod(str);
-  } catch (...) {
+  ss >> double_value;
+  if (ss.fail()) {
     FATAL("given(" << str <<
           ") but was expected to be a double precision number.");
   }

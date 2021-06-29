@@ -14,13 +14,14 @@ Run until_num_particles 50
 # nvt equilibration
 RemoveTrial name TrialAdd
 ThermoParams beta 1.2
-Tune steps_per 100000
-CheckEnergy steps_per 100000 tolerance 0.00000001
+set_variable steps_per 100000
+Tune steps_per steps_per
+CheckEnergy steps_per steps_per tolerance 0.00000001
 Run num_attempts 1000000
 
 # nvt production
 RemoveModify name Tune
-Log steps_per 100000 file_name lj.txt
-Movie steps_per 100000 file_name lj.xyz
-Energy steps_per_write 100000 file_name en.txt
+Log steps_per steps_per file_name lj.txt
+Movie steps_per steps_per file_name lj.xyz
+Energy steps_per_write steps_per file_name en.txt
 Run num_attempts 1000000

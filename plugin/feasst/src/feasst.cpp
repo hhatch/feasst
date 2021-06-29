@@ -1,25 +1,38 @@
 #include <stdio.h>
 #include "feasst/include/feasst.h"
 
-using namespace feasst;
-
 int main() {
   std::cout << "version: " << feasst::version() << std::endl;
   std::string line;
-  arglist list;
+  feasst::arglist list;
+  feasst::argtype variables;
   while (std::getline(std::cin, line)) {
     if (!line.empty() && line[0] != '#') {
       std::stringstream ss(line);
-      std::string major;
+      std::string major, minor, value;
       ss >> major;
-      argtype args;
+      feasst::argtype args;
+      bool assign_to_list = true;
       while(!ss.eof()) {
-        std::string minor, value;
         ss >> minor >> value;
-        args[minor] = value;
+        DEBUG("major " << major << " minor " << minor << " value " << value);
+        if (major == "set_variable") {
+          DEBUG("setting variable");
+          variables[minor] = value;
+          assign_to_list = false;
+        } else if (variables.count(value) > 0) {
+          DEBUG("using variable");
+          args[minor] = variables[value];
+        } else {
+          DEBUG("no variable");
+          args[minor] = value;
+        }
       }
-      list.push_back(std::pair<std::string, argtype>(major, args));
+      if (assign_to_list) {
+        list.push_back(std::pair<std::string, feasst::argtype>(major, args));
+      }
     }
   }
-  auto mc = feasst::MakeMonteCarlo(list);
+  auto mc = std::make_shared<feasst::MonteCarlo>(list);
+  return 0;
 }
