@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "feasst/include/feasst.h"
 
+/**
+  Expected usage: MAJOR MINOR_0 VALUE_0 ... MINOR_N VALUE_N
+
+  "set_variable name value" will replace any use of name in subsequent values.
+
+  Any value beginning with "/feasst" will have that beginning replaced with
+  feasst::install_dir().
+ */
 int main() {
   std::cout << "version: " << feasst::version() << std::endl;
   std::string line;
@@ -24,7 +32,14 @@ int main() {
           DEBUG("using variable");
           args[minor] = variables[value];
         } else {
-          DEBUG("no variable");
+          DEBUG("no variable: " << value << " sz " << value.size());
+          if (value.size() > 7) {
+            DEBUG(value.substr(0, 7));
+            if (value.substr(0, 7) == "/feasst") {
+              DEBUG("replaced: " << value);
+              value.replace(0, 7, feasst::install_dir());
+            }
+          }
           args[minor] = value;
         }
       }
