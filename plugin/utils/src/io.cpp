@@ -72,6 +72,13 @@ int str_to_int(const std::string& str) {
   std::stringstream errmsg;
   int intVal = -1;
   errmsg << str << " was " << "expected to be an integer.";
+  if (str.find('e') != std::string::npos) {
+    const double dble = str_to_double(str);
+    const int intt = static_cast<int>(dble);
+    ASSERT(std::abs(dble - static_cast<double>(intt)) < 1e-14,
+      errmsg.str());
+    return intt;
+  }
   try {
     intVal = stoi(str);
   } catch (...) {
