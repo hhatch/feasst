@@ -217,6 +217,17 @@ void Ewald::update_struct_fact_eik(const Select& selection,
           eik_new_[lastp][site].resize(2*(num_kx_ + num_ky_ + num_kz_));
         }
       }
+      // check size of sites in each particle
+      for (int p = 0; p < static_cast<int>(eik_new_.size()); ++p) {
+        int num_sites = selection.num_sites(p);
+        int extra_s = num_sites - static_cast<int>(eik_new_[p].size());
+        if (extra_s > 0) {
+          eik_new_[p].resize(num_sites);
+          for (int lasts = num_sites - extra_s; lasts < num_sites; ++lasts) {
+            eik_new_[p][lasts].resize(2*(num_kx_ + num_ky_ + num_kz_));
+          }
+        }
+      }
     }
   }
 
@@ -243,7 +254,13 @@ void Ewald::update_struct_fact_eik(const Select& selection,
         if (state == 0 || state == 2) {
           eik_new = &(*eik_())[part_index][site_index];
         } else {
+//          ASSERT(static_cast<int>(eik_new_.size()) > select_index,
+//            select_index << " > " << eik_new_.size());
+//          ASSERT(static_cast<int>(eik_new_[select_index].size()) > ss_index,
+//            ss_index << " > " << eik_new_[select_index].size());
           eik_new = &eik_new_[select_index][ss_index];
+//          ASSERT(eikrx0_index < static_cast<int>(eik_new->size()),
+//            "eikrx0_index: " << eikrx0_index << " >= " << eik_new->size());
           (*eik_new)[eikrx0_index] = 1.;
           (*eik_new)[eikix0_index] = 0.;
           (*eik_new)[eikry0_index] = 1.;
