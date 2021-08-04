@@ -70,7 +70,9 @@ System spce(argtype args) {
                            {{"table_size", str("table_size", &args, str(1e6))}}));
   system.add(MakePotential(MakeChargeScreenedIntra(), MakeVisitModelBond()));
   system.add(MakePotential(MakeChargeSelf()));
-  system.add(MakePotential(MakeLongRangeCorrections()));
+  if (boolean("lrc", &args, true)) {
+    system.add(MakePotential(MakeLongRangeCorrections()));
+  }
 //  system.add(MakePotential(MakeSlabCorrection({{"dimension", "0"}})));
   if (std::abs(dual_cut + 1) > NEAR_ZERO) {
     std::shared_ptr<Potential> ref;

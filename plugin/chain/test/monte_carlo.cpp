@@ -224,9 +224,8 @@ MonteCarlo test_avb(const bool avb2, const bool avb4 = true) {
   MonteCarlo mc;
   mc.set(MakeRandomMT19937({{"seed", "time"}}));
   //mc.set(MakeRandomMT19937({{"seed", "123"}}));
-  Configuration config(MakeDomain({{"side_length0", "6"}, {"side_length1", "6"}}),
-    {{"particle_type", "../plugin/chain/forcefield/data.heterotrimer2d"}});
-  mc.add(config);
+  mc.add(MakeConfiguration(MakeDomain({{"side_length0", "6"}, {"side_length1", "6"}}),
+    {{"particle_type", "../plugin/chain/forcefield/data.heterotrimer2d"}}));
   EXPECT_EQ(2, mc.configuration().dimension());
   mc.add(MakePotential(MakeLennardJones(),
     MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))));
