@@ -62,6 +62,7 @@ void PerturbAdd::revert(System * system) {
 //    DEBUG(revert_select()->mobile().str());
 //    DEBUG("nump " << system->configuration().num_particles());
 //    system->revert(revert_select()->mobile());
+    anywhere_.revert(system);
     if (!delay_add_) {
       system->get_configuration()->remove_particles(revert_select()->mobile());
     }
