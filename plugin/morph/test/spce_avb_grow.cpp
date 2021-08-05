@@ -1,4 +1,8 @@
 #include "utils/test/utils.h"
+#include "math/include/random_mt19937.h"
+#include "system/include/lennard_jones.h"
+#include "system/include/model_two_body_factory.h"
+#include "system/include/dont_visit_model.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/seek_num_particles.h"
@@ -13,11 +17,9 @@
 #include "flat_histogram/include/flat_histogram.h"
 #include "ewald/include/utils.h"
 #include "ewald/include/charge_screened.h"
-#include "system/include/lennard_jones.h"
-#include "system/include/model_two_body_factory.h"
 #include "cluster/include/energy_map_all.h"
-#include "system/include/dont_visit_model.h"
 #include "chain/include/trial_grow.h"
+#include "chain/include/check_rigid_bonds.h"
 
 namespace feasst {
 
@@ -35,10 +37,13 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
   const bool avb = true;
   INFO(bias->class_name());
   MonteCarlo mc;
+  // mc.set(MakeRandomMT19937({{"seed", "123"}}));
   argtype spce_args = {{"physical_constants", "CODATA2010"},
                        {"cubic_box_length", "20"},
                        {"alphaL", "5.6"},
-                       {"kmax_squared", "38"}};
+                       {"kmax_squared", "38"},
+                       //{"table_size", "0"},
+                      };
   int ref = -1;
   if (num_steps > 1) {
     //spce_args.insert({"dual_cut", str(10)});
@@ -49,8 +54,9 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
   if (avb) {
     auto pot = MakePotential(
       MakeModelTwoBodyFactory({MakeLennardJones(), MakeChargeScreened({{"table_size", "0"}})}),
-      MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll())),
-      {{"table_size", "1e6"}});
+      MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))//,
+      //{{"table_size", "1e6"}}
+    );
     //mc.set(1, pot);
     mc.add_to_reference(MakePotential(MakeDontVisitModel()));
   }
@@ -85,6 +91,7 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
   SeekNumParticles(min).with_thermo_params({{"beta", "1"}, {"chemical_potential", "1"}}).with_metropolis().run(&mc);
   mc.add(MakeLogAndMovie({{"steps_per", str(steps_per)}, {"file_name", "tmp/spce_fh"}}));
   mc.add(MakeCheckEnergyAndTune({{"steps_per", str(steps_per)}, {"tolerance", str(1e-6)}}));
+  mc.add(MakeCheckRigidBonds({{"steps_per", str(steps_per)}}));
   mc.add(MakeCriteriaUpdater({{"steps_per", str(steps_per)}}));
   mc.add(MakeCriteriaWriter({
     {"steps_per", str(steps_per)},
