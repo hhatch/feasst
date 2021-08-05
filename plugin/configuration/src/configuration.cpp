@@ -286,9 +286,13 @@ bool Configuration::are_all_sites_physical() const {
 
 void Configuration::update_positions(
     const std::vector<std::vector<double> > coords) {
-  ASSERT(static_cast<int>(coords.size()) == num_sites(), "size error");
+  ASSERT(static_cast<int>(coords.size()) == num_sites(), "the number of " <<
+    "coordinates provided: " << coords.size() << " does not match the number "
+    << " of sites: " << num_sites());
   DEBUG("dimension: " << dimension());
-  ASSERT(static_cast<int>(coords[0].size()) == dimension(), "size error");
+  ASSERT(static_cast<int>(coords[0].size()) == dimension(), "the dimensions: " <<
+    coords[0].size() << " of the coordinates do not match the dimensions: " <<
+    dimension() << " of the configuration.");
   Position position;
   int iter_site = 0;
   for (int part_index : group_selects_[0].particle_indices()) {
