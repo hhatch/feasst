@@ -74,7 +74,7 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
   mc.add(MakeTrialTranslate({{"weight", "1."}, {"tunable_param", "0.275"}}));
   mc.add(MakeTrialRotate({{"weight", "1."}, {"tunable_param", "50."}}));
   if (avb) {
-    mc.add(MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}}));
+    mc.add(MakeNeighborCriteria({{"maximum_distance", "5"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}}));
     //mc.add(MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "0"}, {"reference_potential", "0"}}));
     mc.add(MakeTrialGrow(
       {
