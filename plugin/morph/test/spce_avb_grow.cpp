@@ -18,6 +18,7 @@
 #include "ewald/include/utils.h"
 #include "ewald/include/charge_screened.h"
 #include "cluster/include/energy_map_all.h"
+#include "cluster/include/energy_map_all_criteria.h"
 #include "chain/include/trial_grow.h"
 #include "chain/include/check_rigid_bonds.h"
 
@@ -29,12 +30,14 @@ double energy_av44(const int macro, const MonteCarlo& mc) {
 
 // HWH add num steps to spce fh test for DCCB diagnosis
 MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
+    const std::string avb_type,
     const int num_steps = 1,
     bool test = true,
-    const int min = 0,
+    const int min = 1,
     const int max = 5,
     const int steps_per = 1e3) {
-  const bool avb = true;
+  bool avb = true;
+  if (avb_type == "none") avb = false;
   INFO(bias->class_name());
   MonteCarlo mc;
   // mc.set(MakeRandomMT19937({{"seed", "123"}}));
@@ -51,11 +54,15 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
     ref = 0;
   }
   mc.set(spce(spce_args));
+  mc.get_system()->get_configuration()->add_particle_of_type(0);
   if (avb) {
+    auto ncrit = MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}});
+    mc.add(ncrit);
     auto pot = MakePotential(
       MakeLennardJones(),
       //MakeModelTwoBodyFactory({MakeLennardJones(), MakeChargeScreened({{"table_size", "0"}})}),
       MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))//,
+      //MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAllCriteria(ncrit)))//,
       //{{"table_size", "1e6"}}
     );
     mc.set(1, pot);
@@ -74,18 +81,17 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
   mc.add(MakeTrialTranslate({{"weight", "1."}, {"tunable_param", "0.275"}}));
   mc.add(MakeTrialRotate({{"weight", "1."}, {"tunable_param", "50."}}));
   if (avb) {
-    mc.add(MakeNeighborCriteria({{"maximum_distance", "5"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}}));
-    //mc.add(MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "0"}, {"reference_potential", "0"}}));
     mc.add(MakeTrialGrow(
       {
         //{{"transfer", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}},
-        {{"regrow_avb2", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
+        {{avb_type, "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
         {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
         {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
       },
       {{"num_steps", "1"}, {"reference_index", "0"}}
     ));
-  }// else {
+  }
+  //if (avb_type != "transfer_avb") {
     mc.add(MakeTrialTransfer({
       {"particle_type", "0"},
       {"weight", "4"},
@@ -115,14 +121,19 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
 
   // known values of lnpi and energy
   const std::vector<std::vector<double> > lnpi_srsw = {
-    {-2.7207, 0.015},
-    {-1.8523, 0.015},
-    {-1.54708, 0.016},
-    {-1.51786, 0.015},
-    {-1.6479, 0.015},
-    {-1.8786, 0.03}};
+    {-1.78421656875553, 0.015},
+    {-1.47899656875553, 0.015},
+    {-1.44977656875553, 0.015},
+    {-1.57981656875553, 0.015},
+    {-1.81051656875553, 0.015}};
+//    {-2.7207, 0.015},
+//    {-1.8523, 0.015},
+//    {-1.54708, 0.016},
+//    {-1.51786, 0.015},
+//    {-1.6479, 0.015},
+//    {-1.8786, 0.03}};
   const std::vector<std::vector<double> >  en_srsw = {
-    {0, 1e-13},
+//    {0, 1e-13},
     {-0.0879115, 1.1293158298007674394e-05},
     {-2.326, 0.12},
     {-6.806, 0.24},
@@ -145,7 +156,15 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
 }
 
 TEST(MonteCarlo, spce_fh2_LONG) {
-  test_spce_avb_grow_fh(MakeTransitionMatrix({{"min_sweeps", "25"}}));
+  //for (std::string avb_type : {"regrow_avb4"}) {
+  //for (std::string avb_type : {"regrow_avb2"}) {
+  for (std::string avb_type : {"transfer_avb"}) {
+  //for (std::string avb_type : {"none"}) {
+  //for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
+  //for (std::string avb_type : {"transfer_avb", "regrow_avb2", "regrow_avb4"}) {
+    INFO(avb_type);
+    test_spce_avb_grow_fh(MakeTransitionMatrix({{"min_sweeps", "25"}}), avb_type);
+  }
 }
 
 }  // namespace feasst
