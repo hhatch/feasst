@@ -402,8 +402,9 @@ bool Select::has_positions() const {
 }
 
 int Select::particle_index(const int index) const {
-  ASSERT(index < particle_indices_.size(), "selection particle index: " << index
-    << " >= size of particle indices: " << particle_indices_.size());
+  ASSERT(index < static_cast<int>(particle_indices_.size()),
+    "selection particle index: " << index << " >= size of particle indices: "
+    << particle_indices_.size());
   return particle_indices_[index];
 }
 

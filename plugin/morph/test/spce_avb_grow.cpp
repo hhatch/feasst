@@ -19,6 +19,7 @@
 #include "ewald/include/charge_screened.h"
 #include "cluster/include/energy_map_all.h"
 #include "cluster/include/energy_map_all_criteria.h"
+#include "cluster/include/energy_map_neighbor_criteria.h"
 #include "chain/include/trial_grow.h"
 #include "chain/include/check_rigid_bonds.h"
 
@@ -61,7 +62,8 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
     auto pot = MakePotential(
       MakeLennardJones(),
       //MakeModelTwoBodyFactory({MakeLennardJones(), MakeChargeScreened({{"table_size", "0"}})}),
-      MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))//,
+      //MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))//,
+      MakeVisitModel(MakeVisitModelInner(MakeEnergyMapNeighborCriteria(ncrit)))//,
       //MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAllCriteria(ncrit)))//,
       //{{"table_size", "1e6"}}
     );
@@ -158,10 +160,10 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
 TEST(MonteCarlo, spce_fh2_LONG) {
   //for (std::string avb_type : {"regrow_avb4"}) {
   //for (std::string avb_type : {"regrow_avb2"}) {
-  for (std::string avb_type : {"transfer_avb"}) {
+  //for (std::string avb_type : {"transfer_avb"}) {
   //for (std::string avb_type : {"none"}) {
-  //for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
   //for (std::string avb_type : {"transfer_avb", "regrow_avb2", "regrow_avb4"}) {
+  for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
     INFO(avb_type);
     test_spce_avb_grow_fh(MakeTransitionMatrix({{"min_sweeps", "25"}}), avb_type);
   }

@@ -23,8 +23,11 @@ def mc(thread, mn, mx):
         spce_args["dual_cut"] = "3.16555789"
     mc.set(fst.spce(fst.args(spce_args)))
     if mx < args.avb_end:
+        neigh_crit = fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "3", "site_type0": "0", "site_type1": "0", "potential_index": "1"}))
+        mc.add(neigh_crit)
         mc.set(1, fst.MakePotential(fst.MakeLennardJones(),
-            fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapAll()))))
+            fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapNeighborCriteria(neigh_crit)))))
+            #fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapAll()))))
         mc.add(fst.MakePotential(fst.MakeChargeScreened(fst.args({"table_size": "0"}))))
         mc.add_to_reference(fst.MakePotential(fst.MakeDontVisitModel()))
     if mn == 1: mc.get_system().get_configuration().add_particle_of_type(0)
@@ -54,9 +57,8 @@ def mc(thread, mn, mx):
         mc.add(fst.MakeCheckRigidBonds(fst.args({"steps_per": str(steps_per)})))
     else:
         mc.add(fst.MakeTrialRotate(fst.args({"weight": "1.", "tunable_param": "1."})))
-        mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))
+        #mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))
     if mx < args.avb_end and mx <= args.dccb_begin:
-        mc.add(fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "3", "site_type0": "0", "site_type1": "0", "potential_index": "1"})))
         avb_012 = [{"transfer_avb": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
         avb_021 = [{"transfer_avb": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
         regrow_avb2_012 = [{"regrow_avb2": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
@@ -64,7 +66,7 @@ def mc(thread, mn, mx):
         regrow_avb4_012 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
         regrow_avb4_021 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
         for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021, regrow_avb4_012, regrow_avb4_021]:
-            grow[0]["weight"] = "10"
+            grow[0]["weight"] = "0.5"
             grow[0]["particle_type"] = "0"
             mc.add(fst.MakeTrialGrow(fst.ArgsVector(grow),
                                      fst.args({"num_steps": "1", "reference_index": "0"})))
