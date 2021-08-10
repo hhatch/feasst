@@ -80,8 +80,8 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
       Histogram({{"width", "1"}, {"max", str(max)}, {"min", str(min)}})),
     bias);
   mc.set(criteria);
-  mc.add(MakeTrialTranslate({{"weight", "1."}, {"tunable_param", "0.275"}}));
-  mc.add(MakeTrialRotate({{"weight", "1."}, {"tunable_param", "50."}}));
+//  mc.add(MakeTrialTranslate({{"weight", "1."}, {"tunable_param", "0.275"}}));
+//  mc.add(MakeTrialRotate({{"weight", "1."}, {"tunable_param", "50."}}));
   if (avb) {
     mc.add(MakeTrialGrow(
       {
@@ -93,13 +93,13 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
       {{"num_steps", "1"}, {"reference_index", "0"}}
     ));
   }
-  //if (avb_type != "transfer_avb") {
+  if (avb_type != "transfer_avb") {
     mc.add(MakeTrialTransfer({
       {"particle_type", "0"},
       {"weight", "4"},
       {"reference_index", str(ref)},
       {"num_steps", str(num_steps)}}));
-  //}
+  }
   SeekNumParticles(min).with_thermo_params({{"beta", "1"}, {"chemical_potential", "1"}}).with_metropolis().run(&mc);
   mc.add(MakeLogAndMovie({{"steps_per", str(steps_per)}, {"file_name", "tmp/spce_fh"}}));
   mc.add(MakeCheckEnergyAndTune({{"steps_per", str(steps_per)}, {"tolerance", str(1e-6)}}));
@@ -161,9 +161,9 @@ TEST(MonteCarlo, spce_fh2_LONG) {
   //for (std::string avb_type : {"regrow_avb4"}) {
   //for (std::string avb_type : {"regrow_avb2"}) {
   //for (std::string avb_type : {"transfer_avb"}) {
-  //for (std::string avb_type : {"none"}) {
+  for (std::string avb_type : {"none"}) {
   //for (std::string avb_type : {"transfer_avb", "regrow_avb2", "regrow_avb4"}) {
-  for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
+  //for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
     INFO(avb_type);
     test_spce_avb_grow_fh(MakeTransitionMatrix({{"min_sweeps", "25"}}), avb_type);
   }
