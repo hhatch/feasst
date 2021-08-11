@@ -23,11 +23,10 @@ def mc(thread, mn, mx):
         spce_args["dual_cut"] = "3.16555789"
     mc.set(fst.spce(fst.args(spce_args)))
     if mx < args.avb_end:
-        neigh_crit = fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "3.2", "site_type0": "0", "site_type1": "0", "potential_index": "1"}))
+        neigh_crit = fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "2.5", "site_type0": "0", "site_type1": "0", "potential_index": "1"}))
         mc.add(neigh_crit)
         mc.set(1, fst.MakePotential(fst.MakeLennardJones(),
             fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapNeighborCriteria(neigh_crit)))))
-            #fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapAll()))))
         mc.add(fst.MakePotential(fst.MakeChargeScreened(fst.args({"table_size": "0"}))))
         mc.add_to_reference(fst.MakePotential(fst.MakeDontVisitModel()))
     if mn == 1: mc.get_system().get_configuration().add_particle_of_type(0)
@@ -37,7 +36,7 @@ def mc(thread, mn, mx):
     mc.set(fst.MakeFlatHistogram(
         fst.MakeMacrostateNumParticles(
             fst.Histogram(fst.args({"width": "1", "max": str(mx), "min": str(mn)}))),
-        fst.MakeTransitionMatrix(fst.args({"min_sweeps": "10"}))))
+        fst.MakeTransitionMatrix(fst.args({"min_sweeps": "100"}))))
     mc.add(fst.MakeTrialTranslate(fst.args({"weight": "1.", "tunable_param": "1.",})))
     regrow1 = [{"angle": "true", "mobile_site": "1", "anchor_site": "0", "anchor_site2": "2"}]
     regrow2 = [{"angle": "true", "mobile_site": "2", "anchor_site": "0", "anchor_site2": "1"}]
@@ -54,22 +53,24 @@ def mc(thread, mn, mx):
             grow[0]["particle_type"] = "0"
             mc.add(fst.MakeTrialGrow(fst.ArgsVector(grow),
                                      fst.args({"reference_index": "0", "num_steps": "4"})))
-        mc.add(fst.MakeCheckRigidBonds(fst.args({"steps_per": str(steps_per)})))
     else:
         mc.add(fst.MakeTrialRotate(fst.args({"weight": "1.", "tunable_param": "1."})))
-        #mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))
     if mx < args.avb_end and mx <= args.dccb_begin:
         avb_012 = [{"transfer_avb": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
         avb_021 = [{"transfer_avb": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
         regrow_avb2_012 = [{"regrow_avb2": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
         regrow_avb2_021 = [{"regrow_avb2": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
-        regrow_avb4_012 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
-        regrow_avb4_021 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
-        for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021, regrow_avb4_012, regrow_avb4_021]:
+        #note: there currently appears to be something wrong with avb4
+        #regrow_avb4_012 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
+        #regrow_avb4_021 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
+        for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021]:
+        #for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021, regrow_avb4_012, regrow_avb4_021]:
             grow[0]["weight"] = "0.5"
             grow[0]["particle_type"] = "0"
             mc.add(fst.MakeTrialGrow(fst.ArgsVector(grow),
                                      fst.args({"num_steps": "1", "reference_index": "0"})))
+    else:
+        mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))
     mc.add(fst.MakeCheckEnergyAndTune(fst.args({"steps_per": str(steps_per), "tolerance": "0.0001"})))
     mc.add(fst.MakeCheckRigidBonds(fst.args({"steps_per": str(steps_per)})))
     mc.add(fst.MakeLogAndMovie(fst.args({"steps_per": str(steps_per), "file_name": "clones" + str(thread)})))
