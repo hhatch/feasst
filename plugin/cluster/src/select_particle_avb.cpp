@@ -106,7 +106,7 @@ bool SelectParticleAVB::select(const Select& perturbed,
     if (num_neighbors <= 0) return false;
     mobile_.set_particle(0,
       random->const_element(neighbors_.particle_indices()));
-    //INFO(mobile_.str());
+    //DEBUG(mobile_.str());
     if (!grand_canonical_) {
       DEBUG("loading positions");
       mobile_.load_positions(config.particles());
@@ -148,8 +148,12 @@ bool SelectParticleAVB::select(const Select& perturbed,
   if (is_ghost() && grand_canonical_ && inside_ && !is_second_target_) {
     select_mobile_.ghost_particle(
       system->get_configuration(), &empty_, &mobile_);
+    DEBUG("num_neighbors " << num_neighbors);
     set_probability_(volume_av/static_cast<double>(num_neighbors + 1));
+    DEBUG("target_mobile_same_type_ " << target_mobile_same_type_);
     if (target_mobile_same_type_) {
+      DEBUG("prob before: " << probability());
+      DEBUG("num " << num);
       // ghost will be added during perturb. Not yet added, so n/(n+1) factor.
       set_probability_(probability()
         *static_cast<double>(num)/static_cast<double>(num + 1));
@@ -165,7 +169,7 @@ bool SelectParticleAVB::select(const Select& perturbed,
 
   // AVB2 in->out
   } else if (!is_ghost() && !grand_canonical_ && inside_ && !is_second_target_) {
-    //INFO("AVB2 in->out");
+    //DEBUG("AVB2 in->out");
     // compute num_out
     ASSERT(num_out == 0, "num_out from above should be zero");
     int num_tot_tmp;
