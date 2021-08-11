@@ -43,6 +43,16 @@ Configuration::Configuration(argtype args) {
     }
   }
 
+  DEBUG("parse adding particles of type");
+  for (int type = 0; type < num_particle_types(); ++type) {
+    std::stringstream key;
+    key << "add_particles_of_type" << type;
+    const int num = integer(key.str(), &args, 0);
+    for (int i = 0; i < num; ++i) { 
+      add_particle_of_type(type);
+    }
+  }
+
   if (boolean("set_cutoff_min_to_sigma", &args, false)) {
     unique_types_.set_cutoff_min_to_sigma();
   }
