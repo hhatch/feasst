@@ -23,7 +23,7 @@ def mc(thread, mn, mx):
         spce_args["dual_cut"] = "3.16555789"
     mc.set(fst.spce(fst.args(spce_args)))
     if mx < args.avb_end:
-        neigh_crit = fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "3", "site_type0": "0", "site_type1": "0", "potential_index": "1"}))
+        neigh_crit = fst.MakeNeighborCriteria(fst.args({"maximum_distance": "10", "minimum_distance": "3.2", "site_type0": "0", "site_type1": "0", "potential_index": "1"}))
         mc.add(neigh_crit)
         mc.set(1, fst.MakePotential(fst.MakeLennardJones(),
             fst.MakeVisitModel(fst.MakeVisitModelInner(fst.MakeEnergyMapNeighborCriteria(neigh_crit)))))
