@@ -12,11 +12,11 @@ namespace feasst {
 NeighborCriteria::NeighborCriteria(argtype args) {
   reference_potential_ = integer("reference_potential", &args, -1);
   potential_index_ = integer("potential_index", &args, 0);
-  energy_maximum_ = dble("energy_maximum", &args, -NEAR_ZERO);
+  energy_maximum_ = dble("energy_maximum", &args, std::numeric_limits<double>::max());
   DEBUG("energy_maximum " << energy_maximum_);
-  ASSERT(energy_maximum_ < 0.,
-    "energy_maximum:" << energy_maximum_ << " must be less than zero. " <<
-    "Otherwise, self interactions and particles outside of cutoff will be added");
+//  ASSERT(energy_maximum_ < 0.,
+//    "energy_maximum:" << energy_maximum_ << " must be less than zero. " <<
+//    "Otherwise, self interactions and particles outside of cutoff will be added");
   minimum_distance_sq_ = std::pow(dble("minimum_distance", &args, 0), 2);
   maximum_distance_sq_ = std::pow(
     dble("maximum_distance", &args, std::sqrt(NEAR_INFINITY)), 2);

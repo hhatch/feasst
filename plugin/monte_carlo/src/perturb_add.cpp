@@ -26,6 +26,11 @@ std::shared_ptr<Perturb> PerturbAdd::create(std::istream& istr) const {
   return std::make_shared<PerturbAdd>(istr);
 }
 
+void PerturbAdd::before_select() {
+  Perturb::before_select();
+  anywhere_.before_select();
+}
+
 void PerturbAdd::add(
     System * system,
     TrialSelect * select,
