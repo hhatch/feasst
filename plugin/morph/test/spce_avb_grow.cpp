@@ -41,7 +41,7 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
     const int steps_per = 1e3) {
   bool avb = true;
   if (avb_type == "none") avb = false;
-  INFO(bias->class_name());
+  DEBUG(bias->class_name());
   MonteCarlo mc;
   // mc.set(MakeRandomMT19937({{"seed", "123"}}));
   argtype spce_args = {{"physical_constants", "CODATA2010"},
@@ -162,29 +162,30 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
 TEST(MonteCarlo, spce_fh2_LONG) {
   //for (std::string avb_type : {"regrow_avb4"}) {
   //for (std::string avb_type : {"regrow_avb2"}) {
-  for (std::string avb_type : {"transfer_avb"}) {
+  //for (std::string avb_type : {"transfer_avb"}) {
   //for (std::string avb_type : {"none"}) {
   //for (std::string avb_type : {"transfer_avb", "regrow_avb2", "regrow_avb4"}) {
-  //for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
-    INFO(avb_type);
+  for (std::string avb_type : {"none", "transfer_avb", "regrow_avb2", "regrow_avb4"}) {
+    DEBUG(avb_type);
     test_spce_avb_grow_fh(MakeTransitionMatrix({{"min_sweeps", "100"}}), avb_type);
   }
 }
 
 // Seems there is an issue with TrialGrow transfer_avb spce
 TEST(TrialGrow, transfer_avb_spce) {
-  System system;
-  {
-    Configuration config(MakeDomain({{"cubic_box_length", "20"}}), {
-      {"particle_type", "../forcefield/data.spce"}});
-    config.add_particle_of_type(0);
-    system.add(config);
-  }
-  const Configuration& config = system.configuration();
-  auto ncrit = MakeNeighborCriteria({{"maximum_distance", "4"}, {"minimum_distance", "3.2"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "0"}});
-  system.add(MakePotential(MakeLennardJones(),
-    MakeVisitModel(MakeVisitModelInner(MakeEnergyMapNeighborCriteria(ncrit)))));
+  System system = spce({{"physical_constants", "CODATA2010"},
+                        {"cubic_box_length", "20"},
+                        {"alphaL", "5.6"},
+                        {"kmax_squared", "38"}});
+  system.get_configuration()->add_particle_of_type(0);
+  auto ncrit = MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3.2"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}});
+  system.add(ncrit);
+  auto pot = MakePotential(MakeLennardJones(),
+    MakeVisitModel(MakeVisitModelInner(MakeEnergyMapNeighborCriteria(ncrit))));
+  system.set_unoptimized(1, pot);
+  system.add(MakePotential(MakeChargeScreened({{"table_size", "0"}})));
   system.add_to_reference(MakePotential(MakeDontVisitModel()));
+  const Configuration& config = system.configuration();
   system.energy();
   system.finalize();
   auto ran = MakeRandomMT19937();
@@ -198,7 +199,7 @@ TEST(TrialGrow, transfer_avb_spce) {
   system.add(ncrit);
   const double vol_av = system.neighbor_criteria(0).volume(config.dimension());
 
-  INFO("vol_av: " << vol_av);
+  DEBUG("vol_av: " << vol_av);
   auto grow = MakeTrialGrow(
     {
       {{"transfer_avb", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
@@ -212,20 +213,20 @@ TEST(TrialGrow, transfer_avb_spce) {
   bool accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
   EXPECT_EQ(grow->num(), 2);
   config.check();
-  INFO(config.num_particles());
+  DEBUG(config.num_particles());
   if (config.num_particles() != 2) return;
   ASSERT(accepted, "er");
   EXPECT_EQ(config.particle(0).type(), 0);
   EXPECT_EQ(config.particle(1).type(), 0);
-  INFO(config.particle(0).site(0).position().str());
-  INFO(config.particle(0).site(1).position().str());
-  INFO(config.particle(0).site(2).position().str());
-  INFO(config.particle(1).site(0).position().str());
-  INFO(config.particle(1).site(1).position().str());
-  INFO(config.particle(1).site(2).position().str());
+  DEBUG(config.particle(0).site(0).position().str());
+  DEBUG(config.particle(0).site(1).position().str());
+  DEBUG(config.particle(0).site(2).position().str());
+  DEBUG(config.particle(1).site(0).position().str());
+  DEBUG(config.particle(1).site(1).position().str());
+  DEBUG(config.particle(1).site(2).position().str());
   double delta = grow->trial(0).accept().energy_new() - en_old;
-  INFO("deltaU " << delta);
-  INFO(grow->trial(0).accept().ln_metropolis_prob());
+  DEBUG("deltaU " << delta);
+  DEBUG(grow->trial(0).accept().ln_metropolis_prob());
   EXPECT_NEAR(grow->trial(0).accept().ln_metropolis_prob(),
     std::log(vol_av/2.)
     -system.thermo_params().beta()*delta
@@ -234,16 +235,16 @@ TEST(TrialGrow, transfer_avb_spce) {
 
 //  system.energy();
 //  system.finalize();
-  INFO("en: " << system.stored_energy());
-  INFO("en: " << metropolis->current_energy());
+  DEBUG("en: " << system.stored_energy());
+  DEBUG("en: " << metropolis->current_energy());
   en_old = metropolis->current_energy();
 
-  INFO("**begin remove test**");
+  DEBUG("**begin remove test**");
 
   accepted = grow->attempt(metropolis.get(), &system, 1, ran.get());
   //ASSERT(accepted, "er");
   delta = - grow->trial(1).accept().energy_old();
-  INFO("deltaU: " << delta);
+  DEBUG("deltaU: " << delta);
   EXPECT_NEAR(grow->trial(1).accept().ln_metropolis_prob(),
     -std::log(vol_av/2.)
     -system.thermo_params().beta()*delta
@@ -253,12 +254,12 @@ TEST(TrialGrow, transfer_avb_spce) {
   en_old = metropolis->current_energy();
   if (accepted) return;
 
-  INFO("**add a third**");
+  DEBUG("**add a third**");
   accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
-  INFO("old en " << en_old);
-  INFO("new en " << grow->trial(0).accept().energy_new());
+  DEBUG("old en " << en_old);
+  DEBUG("new en " << grow->trial(0).accept().energy_new());
   delta = grow->trial(0).accept().energy_new() - en_old;
-  INFO("deltaU: " << delta);
+  DEBUG("deltaU: " << delta);
   EXPECT_DOUBLE_EQ(grow->trial(0).accept().ln_metropolis_prob(),
     std::log((2./3.)*vol_av/2.)
     -system.thermo_params().beta()*delta

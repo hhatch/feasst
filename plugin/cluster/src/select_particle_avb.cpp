@@ -64,19 +64,19 @@ bool SelectParticleAVB::select(const Select& perturbed,
   const Configuration& config = system->configuration();
   if ( (is_ghost() && (config.num_particles() < 1)) ||
        (!is_ghost() && (config.num_particles() < 2)) ) {
-    INFO("avb not possible if n=" << config.num_particles() <<
+    DEBUG("avb not possible if n=" << config.num_particles() <<
       " and ghost:" << is_ghost());
     return false;
   }
-  INFO("target sel type: " << select_target_.particle_type());
+  DEBUG("target sel type: " << select_target_.particle_type());
   const int num = select_target_.random_particle(config, &target_, random);
-  INFO("num " << num);
+  DEBUG("num " << num);
   if (num <= 0) {
-    INFO("avb not possible");
+    DEBUG("avb not possible");
     return false;
   }
-  INFO("target: " << target_.str());
-  INFO("target type: " << config.select_particle(target_.particle_index(0)).type());
+  DEBUG("target: " << target_.str());
+  DEBUG("target type: " << config.select_particle(target_.particle_index(0)).type());
 
   // set anchor
   if (is_second_target_) {
@@ -97,29 +97,29 @@ bool SelectParticleAVB::select(const Select& perturbed,
     site_index_,
     &neighbors_);
   const int num_neighbors = static_cast<int>(neighbors_.num_sites());
-  INFO("neighbors: " << neighbors_.str());
+  DEBUG("neighbors: " << neighbors_.str());
 
   // Initialize mobile
   int num_out = 0.;
   if (!is_ghost() && inside_) {
-    INFO("inside. num_neighbors: " << num_neighbors);
+    DEBUG("inside. num_neighbors: " << num_neighbors);
     if (num_neighbors <= 0) return false;
     mobile_.set_particle(0,
       random->const_element(neighbors_.particle_indices()));
-    //INFO(mobile_.str());
+    //DEBUG(mobile_.str());
     if (!grand_canonical_) {
-      INFO("loading positions");
+      DEBUG("loading positions");
       mobile_.load_positions(config.particles());
     }
   } else if (!inside_) {
     // only select that is outside: AVB2 out->in
-    INFO("outside");
+    DEBUG("outside");
     neighbors_.add(target_); // add target to neighbors to exclude.
     num_out = select_mobile_.random_particle(config,
       &neighbors_,
       &mobile_,
       random);
-    INFO("num_out: " << num_out);
+    DEBUG("num_out: " << num_out);
     if (num_out == 0) return false;
     mobile_.load_positions(config.particles());
   }
@@ -148,12 +148,12 @@ bool SelectParticleAVB::select(const Select& perturbed,
   if (is_ghost() && grand_canonical_ && inside_ && !is_second_target_) {
     select_mobile_.ghost_particle(
       system->get_configuration(), &empty_, &mobile_);
-    INFO("num_neighbors " << num_neighbors);
+    DEBUG("num_neighbors " << num_neighbors);
     set_probability_(volume_av/static_cast<double>(num_neighbors + 1));
-    INFO("target_mobile_same_type_ " << target_mobile_same_type_);
+    DEBUG("target_mobile_same_type_ " << target_mobile_same_type_);
     if (target_mobile_same_type_) {
-      INFO("prob before: " << probability());
-      INFO("num " << num);
+      DEBUG("prob before: " << probability());
+      DEBUG("num " << num);
       // ghost will be added during perturb. Not yet added, so n/(n+1) factor.
       set_probability_(probability()
         *static_cast<double>(num)/static_cast<double>(num + 1));
@@ -169,7 +169,7 @@ bool SelectParticleAVB::select(const Select& perturbed,
 
   // AVB2 in->out
   } else if (!is_ghost() && !grand_canonical_ && inside_ && !is_second_target_) {
-    //INFO("AVB2 in->out");
+    //DEBUG("AVB2 in->out");
     // compute num_out
     ASSERT(num_out == 0, "num_out from above should be zero");
     int num_tot_tmp;
@@ -223,8 +223,8 @@ bool SelectParticleAVB::select(const Select& perturbed,
   ASSERT(mobile_.particle_index(0) != target_.particle_index(0),
     "mobile particle: " << mobile_.particle_index(0) <<
     " should not be equal to target: " << target_.particle_index(0));
-  INFO("probability: " << probability());
-  INFO("mobile: " << mobile_.str());
+  DEBUG("probability: " << probability());
+  DEBUG("mobile: " << mobile_.str());
 //  printable_["cluster_size"].accumulate(mobile_.num_particles());
   remove_unphysical_sites(config);
   mobile_original_ = mobile_;
