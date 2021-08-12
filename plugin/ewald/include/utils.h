@@ -21,9 +21,9 @@ double kelvin2kJpermol(const double kelvin, const Configuration& config);
   Return a system for a typical SPC/E simulation.
 
   args:
-  - cubic_box_length: default 20
+  - Configuration args (defaults; cubic_box_length: 20,
+    particle_type: /path/to/feasst/forcefield/data.spce)
   - lrc: use long range corrections (default: true)
-  - particle: default forcefield/data.spce
   - alphaL: Ewald alpha parameter (default: 5.6)
   - kmax_squared: maximum squared wave vector (default: 38)
   - physical_constants: as described in Configuration (default: CODATA2018)

@@ -67,6 +67,7 @@ class Configuration {
     - Domain arguments may also be parsed here.
    */
   explicit Configuration(argtype args = argtype());
+  explicit Configuration(argtype * args);
 
   /// Same as above, but also set the domain.
   explicit Configuration(std::shared_ptr<Domain> domain,
