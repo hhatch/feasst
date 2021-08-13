@@ -176,8 +176,9 @@ TEST(TrialGrow, transfer_avb_spce) {
   System system = spce({{"physical_constants", "CODATA2010"},
                         {"cubic_box_length", "20"},
                         {"alphaL", "5.6"},
-                        {"kmax_squared", "38"}});
-  system.get_configuration()->add_particle_of_type(0);
+                        {"kmax_squared", "38"},
+                        {"add_particles_of_type0", "1"}});
+  //system.get_configuration()->add_particle_of_type(0);
   auto ncrit = MakeNeighborCriteria({{"maximum_distance", "10"}, {"minimum_distance", "3.2"}, {"site_type0", "0"}, {"site_type1", "0"}, {"potential_index", "1"}});
   system.add(ncrit);
   auto pot = MakePotential(MakeLennardJones(),
@@ -192,6 +193,7 @@ TEST(TrialGrow, transfer_avb_spce) {
   //ran = MakeRandomMT19937({{"seed", "123"}});
   //ran = MakeRandomMT19937({{"seed", "1591972002"}});
   //ran = MakeRandomMT19937({{"seed", "1628624844"}});
+  ran = MakeRandomMT19937({{"seed", "1628878165"}});
   auto metropolis = MakeMetropolis();
   system.set(MakeThermoParams({
     {"beta", "0.1"},
@@ -212,7 +214,8 @@ TEST(TrialGrow, transfer_avb_spce) {
   double en_old = metropolis->current_energy();
   bool accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
   EXPECT_EQ(grow->num(), 2);
-  config.check();
+  system.check();
+  EXPECT_GT(config.num_particles(), 0);
   DEBUG(config.num_particles());
   if (config.num_particles() != 2) return;
   ASSERT(accepted, "er");
@@ -264,6 +267,29 @@ TEST(TrialGrow, transfer_avb_spce) {
     std::log((2./3.)*vol_av/2.)
     -system.thermo_params().beta()*delta
     +system.thermo_params().beta_mu(0));
+
+  INFO("** attempt avb4 **");
+  if (config.num_particles() != 3) return;
+  auto avb4 = MakeTrialGrow(
+    {
+      {{"regrow_avb4", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
+      {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+      {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
+    },
+    {{"num_steps", "1"}, {"reference_index", "0"}}
+  );
+  avb4->precompute(metropolis.get(), &system);
+  en_old = metropolis->current_energy();
+  accepted = avb4->attempt(metropolis.get(), &system, 0, ran.get());
+  INFO("accepted? " << accepted);
+  INFO("new energy " << avb4->trial(0).accept().energy_new());
+  delta = avb4->trial(0).accept().energy_new() - en_old;
+//  EXPECT_NEAR(avb4->trial(0).accept().ln_metropolis_prob(),
+//    std::log(vol_av/2.)
+//    -system.thermo_params().beta()*delta
+//    +system.thermo_params().beta_mu(0),
+//    1e-14);
+  system.check();
 }
 
 }  // namespace feasst

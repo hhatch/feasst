@@ -81,9 +81,10 @@ bool SelectParticleAVB::select(const Select& perturbed,
   // set anchor
   if (is_second_target_) {
     const int num2 = select_target_.random_particle(
-      config, &second_target_, random);
+      config, &target_, &second_target_, random);
     if (num2 <= 0) return false;
     anchor_.set_particle(0, second_target_.particle_index(0));
+    DEBUG("second_target " << second_target_.str());
   } else {
     anchor_.set_particle(0, target_.particle_index(0));
   }
@@ -106,7 +107,12 @@ bool SelectParticleAVB::select(const Select& perturbed,
     if (num_neighbors <= 0) return false;
     mobile_.set_particle(0,
       random->const_element(neighbors_.particle_indices()));
-    //DEBUG(mobile_.str());
+    DEBUG("mobile " << mobile_.str());
+    if (is_second_target_) {
+      if (mobile_.particle_index(0) == second_target_.particle_index(0)) {
+        return false;
+      }
+    }
     if (!grand_canonical_) {
       DEBUG("loading positions");
       mobile_.load_positions(config.particles());
@@ -204,11 +210,18 @@ bool SelectParticleAVB::select(const Select& perturbed,
       second_target_.site_index(0, 0),
       site_index_,
       &neighbors_);
+    DEBUG("avb4 neighbors: " << neighbors_.str());
+    DEBUG("avb4 neighbors in second target: " << neighbors_.num_particles());
     int mobile_not_in_both_targets_ = 1;
+    DEBUG("mobile part ind " << mobile_.particle_index(0));
+    DEBUG("mobile k neighs: " << neighbors_.str());
+    DEBUG("mobile: " << mobile_.str());
+    DEBUG("second_target: " << second_target_.str());
     if (find_in_list(mobile_.particle_index(0),
                      neighbors_.particle_indices())) {
       mobile_not_in_both_targets_ = 0;
     }
+    DEBUG("mobile_not_in_both_targets_ " << mobile_not_in_both_targets_);
     set_probability_(static_cast<double>(num_neighbors)
       /static_cast<double>(neighbors_.num_particles() +
                            mobile_not_in_both_targets_));

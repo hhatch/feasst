@@ -60,10 +60,9 @@ def mc(thread, mn, mx):
         avb_021 = [{"transfer_avb": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
         regrow_avb2_012 = [{"regrow_avb2": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
         regrow_avb2_021 = [{"regrow_avb2": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
-        #note: there currently appears to be something wrong with avb4
-        #regrow_avb4_012 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
-        #regrow_avb4_021 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
-        for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021]:
+        regrow_avb4_012 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow12)
+        regrow_avb4_021 = [{"regrow_avb4": "true", "site": "0", "neighbor_index": "0", "target_particle_type": "0", "target_site": "0"}] + copy.deepcopy(regrow21)
+        for grow in [avb_012, avb_021, regrow_avb4_012, regrow_avb4_021]:
         #for grow in [avb_012, avb_021, regrow_avb2_012, regrow_avb2_021, regrow_avb4_012, regrow_avb4_021]:
             grow[0]["weight"] = "0.5"
             grow[0]["particle_type"] = "0"
