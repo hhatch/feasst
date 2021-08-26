@@ -185,8 +185,7 @@ class Particle : public PropertiedEntity,
     const double value) { angles_[angle].add_property(name, value); }
 
   /// Find the angle between given sites 1-2-3, with 2 as the vertex.
-  const Angle& angle(const int site_index1,
-                     const int site_index2,
+  const Angle& angle(const int site_index1, const int site_index2,
                      const int site_index3) const;
 
   //@}
@@ -199,19 +198,21 @@ class Particle : public PropertiedEntity,
   int num_dihedrals() const { return static_cast<int>(dihedrals_.size()); }
 
   /// Return the dihedral by index.
-  const Dihedral& dihedral(const int index) const {
-    return dihedrals_[index]; }
+  const Dihedral& dihedral(const int index) const { return dihedrals_[index]; }
 
   /// Return the dihedrals.
   const std::vector<Dihedral> dihedrals() const { return dihedrals_; }
 
   /// Add a dihedral.
-  void add_dihedral(const Dihedral& dihedral) {
-    dihedrals_.push_back(dihedral); }
+  void add_dihedral(const Dihedral& dihedral);
 
   /// Add a property to a bond.
   void add_dihedral_property(const int dihedral, const std::string name,
     const double value) { dihedrals_[dihedral].add_property(name, value); }
+
+  /// Find the dihedral between given sites 1-2-3-4.
+  const Dihedral& dihedral(const int site_index1, const int site_index2,
+                           const int site_index3, const int site_index4) const;
 
 //  //@}
 //  /** @name Impropers
@@ -244,6 +245,8 @@ class Particle : public PropertiedEntity,
     return bond_neighbor_; }
   const std::vector<std::vector<int> >& angle_list() const {
     return angle_list_; }
+  const std::vector<std::vector<int> >& dihedral_list() const {
+    return dihedral_list_; }
 
   // This interface is for optimization and not for typical use
   Site * get_site(const int index) { return &sites_[index]; }
@@ -265,7 +268,7 @@ class Particle : public PropertiedEntity,
   std::vector<std::vector<int> > bond_neighbor_;
   // angle index
   std::vector<std::vector<int> > angle_list_;
-  // angle index
+  // dihedral index
   std::vector<std::vector<int> > dihedral_list_;
 
   void resize_list_(std::vector<std::vector<int> > * list);

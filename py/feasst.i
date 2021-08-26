@@ -130,6 +130,7 @@
 #include "monte_carlo/include/trial_select_bond.h"
 #include "monte_carlo/include/trial_select_angle.h"
 #include "chain/include/select_branch.h"
+#include "monte_carlo/include/trial_select_dihedral.h"
 #include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/perturb_volume.h"
 #include "beta_expanded/include/perturb_beta.h"
@@ -434,6 +435,7 @@ using namespace std;
 %shared_ptr(feasst::TrialSelectBond);
 %shared_ptr(feasst::TrialSelectAngle);
 %shared_ptr(feasst::SelectBranch);
+%shared_ptr(feasst::TrialSelectDihedral);
 %shared_ptr(feasst::Perturb);
 %shared_ptr(feasst::PerturbVolume);
 %shared_ptr(feasst::PerturbBeta);
@@ -700,6 +702,7 @@ using namespace std;
 %include monte_carlo/include/trial_select_bond.h
 %include monte_carlo/include/trial_select_angle.h
 %include chain/include/select_branch.h
+%include monte_carlo/include/trial_select_dihedral.h
 %include monte_carlo/include/perturb.h
 %include monte_carlo/include/perturb_volume.h
 %include beta_expanded/include/perturb_beta.h

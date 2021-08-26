@@ -152,6 +152,12 @@ void Particle::add_angle(const Angle& angle) {
   add_bond_(angle, angle_index, &angle_list_);
 }
 
+void Particle::add_dihedral(const Dihedral& dihedral) {
+  const int dihedral_index = static_cast<int>(dihedrals_.size());
+  dihedrals_.push_back(dihedral);
+  add_bond_(dihedral, dihedral_index, &dihedral_list_);
+}
+
 const Bond& Particle::bond(const int site_index1, const int site_index2) const {
   DEBUG("sites " << site_index1 << " " << site_index2);
   for (const int bond_index : bond_list_[site_index1]) {
@@ -181,6 +187,27 @@ const Angle& Particle::angle(const int site_index1,
   }
   FATAL("angle between " << site_index1 << " - " << site_index2 << " - " <<
     site_index3 << " not found.");
+}
+
+const Dihedral& Particle::dihedral(const int site_index1, const int site_index2,
+    const int site_index3, const int site_index4) const {
+  DEBUG("sites " << site_index1 << " " << site_index2 << " "
+                 << site_index3 << " " << site_index4);
+  for (const int dihedral_index : dihedral_list_[site_index1]) {
+    const Dihedral& dihedral = Particle::dihedral(dihedral_index);
+    if ( ( (site_index1 == dihedral.site(0)) &&
+           (site_index2 == dihedral.site(1)) &&
+           (site_index3 == dihedral.site(2)) &&
+           (site_index4 == dihedral.site(3)) ) ||
+         ( (site_index1 == dihedral.site(3)) &&
+           (site_index2 == dihedral.site(2)) &&
+           (site_index3 == dihedral.site(1)) &&
+           (site_index4 == dihedral.site(0)) ) ) {
+      return dihedral;
+    }
+  }
+  FATAL("dihedral between " << site_index1 << " - " << site_index2 << " - " <<
+    site_index3 << " - " << site_index4 << " not found.");
 }
 
 void Particle::erase_bonds() {

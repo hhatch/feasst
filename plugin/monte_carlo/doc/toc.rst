@@ -11,6 +11,7 @@
    TrialSelectParticle
    TrialSelectBond
    TrialSelectAngle
+   TrialSelectDihedral
    Perturb
    PerturbVolume
    PerturbMove

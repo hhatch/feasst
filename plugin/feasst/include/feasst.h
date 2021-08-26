@@ -107,6 +107,7 @@
 #include "monte_carlo/include/trial_select_bond.h"
 #include "monte_carlo/include/trial_select_angle.h"
 #include "chain/include/select_branch.h"
+#include "monte_carlo/include/trial_select_dihedral.h"
 #include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/perturb_volume.h"
 #include "beta_expanded/include/perturb_beta.h"
