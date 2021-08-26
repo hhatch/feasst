@@ -44,6 +44,7 @@ double AngleSquareWell::energy(
   const double delta = degrees_to_radians(angle.property("delta"));
   const double theta = std::acos(relative01.cosine(relative21));
   TRACE("theta " << theta);
+  ASSERT(!std::isnan(theta), "theta is nan");
   if (std::abs(theta - theta0) > 0.5*delta) {
     return NEAR_INFINITY;
   }

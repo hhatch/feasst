@@ -100,7 +100,11 @@ void Position::set_to_origin(const int dimension) {
 }
 
 double Position::cosine(const Position& position) const {
-  return dot_product(position)/distance()/position.distance();
+  double cos = dot_product(position)/distance()/position.distance();
+  ASSERT(std::abs(cos) < 1 + NEAR_ZERO, "|cos: " << cos << "| > 1");
+  if (cos < -1) cos = -1.;
+  if (cos > 1) cos = 1.;
+  return cos;
 }
 
 void Position::divide(const double denominator) {
