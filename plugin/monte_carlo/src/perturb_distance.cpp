@@ -119,7 +119,7 @@ double PerturbDistance::random_distance(Random * random,
   if (std::abs(spring_constant_ + 1) < NEAR_ZERO) {
     return distance_;
   }
-  double spring = spring_constant_/beta;
+  double spring = beta*spring_constant_;
   if (std::abs(spring_constant_) < NEAR_ZERO) spring = 0.;
   double max_length = maximum_length_;
   if (std::abs(max_length + 1) < NEAR_ZERO) {

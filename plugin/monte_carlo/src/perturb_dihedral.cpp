@@ -2,68 +2,55 @@
 #include "math/include/constants.h"  // PI
 #include "math/include/random.h"
 #include "math/include/utils_math.h"  // round
-#include "monte_carlo/include/perturb_distance_angle.h"
+#include "monte_carlo/include/perturb_dihedral.h"
 
 namespace feasst {
 
-PerturbDistanceAngle::PerturbDistanceAngle(argtype args)
-  : PerturbDistanceAngle(&args) {
+PerturbDihedral::PerturbDihedral(argtype args)
+  : PerturbDihedral(&args) {
   check_all_used(args);
 }
-PerturbDistanceAngle::PerturbDistanceAngle(argtype * args)
-  : PerturbDistance(args) {
-  class_name_ = "PerturbDistanceAngle";
+PerturbDihedral::PerturbDihedral(argtype * args)
+  : PerturbDistanceAngle(args) {
+  class_name_ = "PerturbDihedral";
 }
 
-class MapPerturbDistanceAngle {
+class MapPerturbDihedral {
  public:
-  MapPerturbDistanceAngle() {
-    auto obj = MakePerturbDistanceAngle();
-    obj->deserialize_map()["PerturbDistanceAngle"] = obj;
+  MapPerturbDihedral() {
+    auto obj = MakePerturbDihedral();
+    obj->deserialize_map()["PerturbDihedral"] = obj;
   }
 };
 
-static MapPerturbDistanceAngle mapper_ = MapPerturbDistanceAngle();
+static MapPerturbDihedral mapper_ = MapPerturbDihedral();
 
-std::shared_ptr<Perturb> PerturbDistanceAngle::create(std::istream& istr) const {
-  return std::make_shared<PerturbDistanceAngle>(istr);
+std::shared_ptr<Perturb> PerturbDihedral::create(std::istream& istr) const {
+  return std::make_shared<PerturbDihedral>(istr);
 }
 
-void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
-  PerturbDistance::precompute(select, system);
-  const int angle_type = feasst::round(select->property("angle_type"));
-  const Angle& angle = system->configuration().unique_type(
-    select->particle_type()).angle(angle_type);
-  angle_ = degrees_to_radians(angle.property("theta0"));
-  DEBUG("angle_ " << angle_);
-  if (system->configuration().dimension() == 2) {
-    DEBUG("hi");
-    ASSERT(select->anchor().site_index(0, 0) == angle.site(1), "err");
-    if (select->mobile().site_index(0, 0) == angle.site(0) &&
-        select->anchor().site_index(0, 1) == angle.site(2)) {
-      angle_ = 2*PI - angle_;
-      DEBUG("angle_ " << angle_);
-    } else {
-      ASSERT(select->mobile().site_index(0, 0) == angle.site(2) &&
-             select->anchor().site_index(0, 1) == angle.site(0), "err");
-    }
-  }
-  if (angle.has_property("spring_constant")) {
-    spring_constant_ = angle.property("spring_constant");
+void PerturbDihedral::precompute(TrialSelect * select, System * system) {
+  PerturbDistanceAngle::precompute(select, system);
+  const int dihedral_type = feasst::round(select->property("dihedral_type"));
+  const Dihedral& dihedral = system->configuration().unique_type(
+    select->particle_type()).dihedral(dihedral_type);
+  dihedral_ = degrees_to_radians(dihedral.property("theta0"));
+  DEBUG("dihedral_ " << dihedral_);
+  const int dimen = system->configuration().dimension();
+  ASSERT(dimen == 3, "not implemented for dimen " << dimen);
+  if (dihedral.has_property("spring_constant")) {
+    spring_constant_ = dihedral.property("spring_constant");
   }
 }
 
-double PerturbDistanceAngle::random_angle(Random * random,
+double PerturbDihedral::random_dihedral(Random * random,
     const double beta,
     const int dimension) const {
-  if (is_rigid()) return angle_;
-  if (is_freely_jointed()) {
-    return random->bond_angle(0., 0., 2, dimension, angle_);
-  }
-  return random->bond_angle(angle_, beta*spring_constant_, 2, dimension);
+  if (is_rigid()) return dihedral_;
+  return random->bond_angle(dihedral_, beta*spring_constant_, 2, dimension);
 }
 
-void PerturbDistanceAngle::move(System * system,
+void PerturbDihedral::move(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
@@ -76,7 +63,7 @@ void PerturbDistanceAngle::move(System * system,
   place_in_circle(distance, angle, system, select, random);
 }
 
-void PerturbDistanceAngle::place_in_circle(const double distance,
+void PerturbDihedral::place_in_circle(const double distance,
   const double angle,
   System * system,
   TrialSelect * select,
@@ -137,35 +124,30 @@ void PerturbDistanceAngle::place_in_circle(const double distance,
   system->get_configuration()->update_positions(select->mobile());
 }
 
-PerturbDistanceAngle::PerturbDistanceAngle(std::istream& istr)
-  : PerturbDistance(istr) {
-  ASSERT(class_name_ == "PerturbDistanceAngle", "name: " << class_name_);
+PerturbDihedral::PerturbDihedral(std::istream& istr)
+  : PerturbDistanceAngle(istr) {
+  ASSERT(class_name_ == "PerturbDihedral", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
-  ASSERT(788 == version, "mismatch version: " << version);
-  feasst_deserialize(&angle_, istr);
+  ASSERT(7579 == version, "mismatch version: " << version);
+  feasst_deserialize(&dihedral_, istr);
   feasst_deserialize(&spring_constant_, istr);
 }
 
-void PerturbDistanceAngle::serialize(std::ostream& ostr) const {
-  serialize_perturb_distance_angle_(ostr);
+void PerturbDihedral::serialize(std::ostream& ostr) const {
+  serialize_perturb_dihedral_(ostr);
 }
 
-void PerturbDistanceAngle::serialize_perturb_distance_angle_(
+void PerturbDihedral::serialize_perturb_dihedral_(
     std::ostream& ostr) const {
   ostr << class_name_ << " ";
   serialize_perturb_distance_(ostr);
-  feasst_serialize_version(788, ostr);
-  feasst_serialize(angle_, ostr);
+  feasst_serialize_version(7579, ostr);
+  feasst_serialize(dihedral_, ostr);
   feasst_serialize(spring_constant_, ostr);
 }
 
-bool PerturbDistanceAngle::is_rigid() const {
+bool PerturbDihedral::is_rigid() const {
   if (std::abs(spring_constant_ + 1) < NEAR_ZERO) return true;
-  return false;
-}
-
-bool PerturbDistanceAngle::is_freely_jointed() const {
-  if (std::abs(spring_constant_) < NEAR_ZERO) return true;
   return false;
 }
 

@@ -9,7 +9,9 @@ namespace feasst {
 // HWH: could enable tuning and position w.r.t. previous bond placement
 //      for higher acceptance probability
 /**
-  Put first site in selection in a sphere about the first site in anchor.
+  Put first site in selection in a spherical shell about the first site in
+  anchor.
+  For rigid bonds, the spherical shell has infinitesimal thickness (a sphere).
   The following Bond Properties (e.g., /feasst/forcefield/README.rst):
   length, maximum_length and spring_constant and exponent are as described
   in Random::bond_length.

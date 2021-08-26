@@ -8,12 +8,14 @@
 namespace feasst {
 
 /**
- * Put first site in selection, i, in a sphere about the first site in anchor,
- * j, and at an angle i,j,k (vertex: j) about the second site in anchor, j.
- * For angle potentials, the equilibrium angle and spring constant are as
- * described in Random::bond_angle
- * Currently implemented for harmonic bonds (exponent: 2), but could add an
- * optional exponent model parameter to generalize this.
+  Put first site in selection, i, in a truncated conical shell that is formed
+  by the intersection of a spherical shell about the first site in the anchor,
+  and a conical shell with axis of symmetry along the vector connecting the
+  first anchor site to the second anchor site.
+  For angle potentials, the equilibrium angle and spring constant are as
+  described in Random::bond_angle
+  Currently implemented for harmonic bonds (exponent: 2), but could add an
+  optional exponent model parameter to generalize this in the future.
  */
 class PerturbDistanceAngle : public PerturbDistance {
  public:
@@ -39,7 +41,7 @@ class PerturbDistanceAngle : public PerturbDistance {
   bool is_freely_jointed() const;
 
   /// Return the randomly selected angle from the potential.
-  /// If the spring constant is -1 (rigid), simplly return the angle.
+  /// If the spring constant is -1 (rigid), simply return the angle.
   /// IF the spring constant is 0 (freely-jointed), use angle() for minimum.
   double random_angle(Random * random,
     const double beta,  /// inverse temperature

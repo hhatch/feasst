@@ -243,11 +243,11 @@ double Random::standard_normal() {
 }
 
 double Random::harmonic_bond_length(const double equilibrium_length,
-    const double spring_constant,
+    const double beta_spring_constant,
     const int dimension) {
   ASSERT(dimension == 3,
     "dimen: " << dimension << " but only implemented in 3D.");
-  const double sigma = std::sqrt(1./2./spring_constant);
+  const double sigma = std::sqrt(1./2./beta_spring_constant);
   const double max_length_sq = std::pow(equilibrium_length + 3.*sigma, 2);
   int attempt = 0;
   while (attempt < 1e6) {
@@ -260,7 +260,7 @@ double Random::harmonic_bond_length(const double equilibrium_length,
 
 double Random::bond_length(const double equilibrium_length,
     const double maximum_length,
-    const double spring_constant,
+    const double beta_spring_constant,
     const int exponent,
     const int dimension) {
   ASSERT(dimension == 3,
@@ -270,7 +270,7 @@ double Random::bond_length(const double equilibrium_length,
   int attempt = 0;
   while (attempt < 1e6) {
     const double length = maximum_length*uniform();
-    const double exp_neg_delta_U = std::exp(-spring_constant*
+    const double exp_neg_delta_U = std::exp(-beta_spring_constant*
       std::pow(length - equilibrium_length, exponent));
     if (uniform() < length*length/max_length_sq*exp_neg_delta_U) return length;
     ++attempt;
@@ -278,8 +278,8 @@ double Random::bond_length(const double equilibrium_length,
   FATAL("max attempts reached");
 }
 
-double Random::bond_angle(const double equilibrium_angle,
-    const double spring_constant,
+double Random::bond_angle(const double theta0,
+    const double beta_spring_constant,
     const int exponent,
     const int dimension,
     const double minimum_angle) {
@@ -291,9 +291,9 @@ double Random::bond_angle(const double equilibrium_angle,
   int attempt = 0;
   while (attempt < 1e6) {
     const double theta = minimum_angle + (PI - minimum_angle)*uniform();
-    const double dtheta = radians_to_degrees(theta - equilibrium_angle);
-    const double delta_U = spring_constant*pow(dtheta, exponent);
-    if (uniform() < std::sin(theta)*std::exp(-delta_U)) return theta;
+    const double dtheta = radians_to_degrees(theta - theta0);
+    const double beta_delta_U = beta_spring_constant*pow(dtheta, exponent);
+    if (uniform() < std::sin(theta)*std::exp(-beta_delta_U)) return theta;
     ++attempt;
   }
   FATAL("max attempts reached");
