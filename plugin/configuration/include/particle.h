@@ -189,30 +189,30 @@ class Particle : public PropertiedEntity,
                      const int site_index2,
                      const int site_index3) const;
 
-//  //@}
-//  /** @name Dihedrals
-//    Dihedrals between four sites in the particle
-//   */
-//  //@{
-//
-//  /// Return the number of dihedrals.
-//  int num_dihedrals() const { return static_cast<int>(dihedrals_.size()); }
-//
-//  /// Return the dihedral by index.
-//  const Dihedral& dihedral(const int index) const {
-//    return dihedrals_[index]; }
-//
-//  /// Return the dihedrals.
-//  const std::vector<Dihedral> dihedrals() const { return dihedrals_; }
-//
-//  /// Add a dihedral.
-//  void add_dihedral(const Dihedral& dihedral) {
-//    dihedrals_.push_back(dihedral); }
-//
-//  /// Set a dihedral.
-//  void set_dihedral(const int index, const Dihedral& dihedral) {
-//    dihedrals_[index] = dihedral; }
-//
+  //@}
+  /** @name Dihedrals
+    Dihedrals between four sites in the particle
+   */
+  //@{
+
+  /// Return the number of dihedrals.
+  int num_dihedrals() const { return static_cast<int>(dihedrals_.size()); }
+
+  /// Return the dihedral by index.
+  const Dihedral& dihedral(const int index) const {
+    return dihedrals_[index]; }
+
+  /// Return the dihedrals.
+  const std::vector<Dihedral> dihedrals() const { return dihedrals_; }
+
+  /// Add a dihedral.
+  void add_dihedral(const Dihedral& dihedral) {
+    dihedrals_.push_back(dihedral); }
+
+  /// Add a property to a bond.
+  void add_dihedral_property(const int dihedral, const std::string name,
+    const double value) { dihedrals_[dihedral].add_property(name, value); }
+
 //  //@}
 //  /** @name Impropers
 //    Impropers between four sites in the particle
@@ -255,7 +255,7 @@ class Particle : public PropertiedEntity,
   std::vector<Site> sites_;
   std::vector<Bond> bonds_;
   std::vector<Angle> angles_;
-//  std::vector<Dihedral> dihedrals_;
+  std::vector<Dihedral> dihedrals_;
 //  std::vector<Improper> impropers_;
 
   // the first dimension is the site index, the second is:
@@ -265,6 +265,8 @@ class Particle : public PropertiedEntity,
   std::vector<std::vector<int> > bond_neighbor_;
   // angle index
   std::vector<std::vector<int> > angle_list_;
+  // angle index
+  std::vector<std::vector<int> > dihedral_list_;
 
   void resize_list_(std::vector<std::vector<int> > * list);
   void add_bond_(const Bond& bond, const int index,

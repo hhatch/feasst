@@ -40,9 +40,21 @@ void FileLMP::read_num_and_types_(const std::string file_name) {
     file >> read_num >> descript;
     if (descript.compare("angles") == 0) {
       num_angles_ = read_num;
-      file >> num_site_types_ >> descript;
-      ASSERT(descript.compare("site") == 0,
-        "unrecognized lammps DATA format for file " << file_name);
+      
+      // read next line, if it is number of dihedrals, then record.
+      // Else, it is number of site types
+      file >> read_num >> descript;
+      if (descript.compare("dihedrals") == 0) {
+        num_dihedrals_ = read_num;
+      
+        file >> num_site_types_ >> descript;
+        ASSERT(descript.compare("site") == 0,
+          "unrecognized lammps DATA format for file " << file_name);
+      } else if (descript == "site") {
+        num_site_types_ = read_num;
+      } else {
+        ASSERT(0, "unrecognized lammps DATA format for file " << file_name);
+      }
     } else if (descript.compare("site") == 0) {
       num_site_types_ = read_num;
     } else {
@@ -72,10 +84,11 @@ void FileLMP::read_num_and_types_(const std::string file_name) {
   if (num_angles_ != 0) {
     file >> num_angle_types_ >> descript >> descript;
   }
+  if (num_dihedrals_ != 0) {
+    file >> num_dihedral_types_ >> descript >> descript;
+  }
 
-  // HWH implement reading impropers and dihedrals
-  num_dihedrals_ = 0;
-  num_dihedral_types_ = 0;
+  // HWH implement reading impropers
   num_impropers_ = 0;
   num_improper_types_ = 0;
 }
@@ -141,22 +154,22 @@ Particle FileLMP::read(const std::string file_name) {
     }
   }
 
-//  // read Dihedrals section
-//  if (num_dihedrals_ > 0) {
-//    find_or_fail("Dihedrals", file);
-//    int idihedral, a1, a2, a3, a4;
-//    for (int dihedral_index = 0; dihedral_index < num_dihedrals_; ++dihedral_index) {
-//      file >> idihedral >> itype >> a1 >> a2 >> a3 >> a4;
-//      feasst::Dihedral dihedral;
-//      dihedral.add_site_index(a1);
-//      dihedral.add_site_index(a2);
-//      dihedral.add_site_index(a3);
-//      dihedral.add_site_index(a4);
-//      dihedral.set_type(itype);
-//      particle.add_dihedral(dihedral);
-//    }
-//  }
-//
+  // read Dihedrals section
+  if (num_dihedrals_ > 0) {
+    find_or_fail("Dihedrals", file);
+    int idihedral, a1, a2, a3, a4;
+    for (int dihedral_index = 0; dihedral_index < num_dihedrals_; ++dihedral_index) {
+      file >> idihedral >> itype >> a1 >> a2 >> a3 >> a4;
+      feasst::Dihedral dihedral;
+      dihedral.add_site_index(a1);
+      dihedral.add_site_index(a2);
+      dihedral.add_site_index(a3);
+      dihedral.add_site_index(a4);
+      dihedral.set_type(itype);
+      particle.add_dihedral(dihedral);
+    }
+  }
+
 //  // read Impropers section
 //  if (num_impropers_ > 0) {
 //    find_or_fail("Impropers", file);
@@ -213,7 +226,7 @@ void FileLMP::read_properties_(const std::string property_type,
     const int type = stoi(properties[0]);
     DEBUG("type: " << type);
     ASSERT(type < num_types, "type: " << type << " is too large for the number "
-      << "of types: " << num_types << " of property: " << property_type 
+      << "of types: " << num_types << " of property: " << property_type
       << " . Properties are listed from indices of 0 to n-1, not 1 to n. "
       << "See /path/to/feasst/forcefield/README.rst for more details.");
     for (int index = 0; index < num_properties; ++index) {
@@ -230,9 +243,9 @@ void FileLMP::read_properties_(const std::string property_type,
       } else if (property_type == "angle") {
         DEBUG("adding angle coeff of type " << type << " name " << name << " value " << value);
         particle->add_angle_property(type, name, value);
-//      } else if (property_type == "dihedral") {
-//        DEBUG("adding dihedral coeff of type " << type << " name " << name << " value " << value);
-//        particle->add_dihedral_property(type, name, value);
+      } else if (property_type == "dihedral") {
+        DEBUG("adding dihedral coeff of type " << type << " name " << name << " value " << value);
+        particle->add_dihedral_property(type, name, value);
 //      } else if (property_type == "improper") {
 //        DEBUG("adding improper coeff of type " << type << " name " << name << " value " << value);
 //        particle->add_improper_property(type, name, value);

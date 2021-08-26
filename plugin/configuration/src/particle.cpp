@@ -20,13 +20,17 @@ void Particle::check() {
 }
 
 void Particle::remove_non_unique_types() {
-  std::vector<std::string> names = {"site", "bond"};
+  std::vector<std::string> names = {"site", "bond", "angle", "dihedral"};
   for (std::string name : names) {
     int num = -1;
     if (name == "site") {
       num = num_sites();
     } else if (name == "bond") {
       num = num_bonds();
+    } else if (name == "angle") {
+      num = num_angles();
+    } else if (name == "dihedral") {
+      num = num_dihedrals();
     } else {
       ERROR("unrecognized");
     }
@@ -38,6 +42,10 @@ void Particle::remove_non_unique_types() {
         type = sites_[index].type();
       } else if (name == "bond") {
         type = bonds_[index].type();
+      } else if (name == "angle") {
+        type = angles_[index].type();
+      } else if (name == "dihedral") {
+        type = dihedrals_[index].type();
       } else {
         ERROR("unrecognized");
       }
@@ -53,6 +61,10 @@ void Particle::remove_non_unique_types() {
           sites_.erase(sites_.begin()  + index);
         } else if (name == "bond") {
           bonds_.erase(bonds_.begin()  + index);
+        } else if (name == "angle") {
+          angles_.erase(angles_.begin()  + index);
+        } else if (name == "dihedral") {
+          dihedrals_.erase(dihedrals_.begin()  + index);
         }
       }
     }
@@ -177,6 +189,7 @@ void Particle::erase_bonds() {
   bond_neighbor_.clear();
   angles_.clear();
   angle_list_.clear();
+  dihedrals_.clear();
 }
 
 int Particle::num_sites_of_type(const int type) const {

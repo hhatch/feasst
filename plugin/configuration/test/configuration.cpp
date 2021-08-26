@@ -298,4 +298,18 @@ TEST(Configuration, add_particles_of_type) {
   EXPECT_EQ(1, config->particle(1).type());
 }
 
+TEST(Configuration, dihedrals) {
+  auto config = MakeConfiguration({{"particle_type", "../forcefield/data.n-decane"}, {"add_particles_of_type0", "1"}});
+  EXPECT_EQ(1, config->num_particles());
+  EXPECT_EQ(7, config->particle_type(0).num_dihedrals());
+  EXPECT_EQ(1, config->unique_type(0).num_dihedrals());
+  EXPECT_EQ(0, config->particle(0).num_dihedrals());
+  EXPECT_EQ(8, config->particle_type(0).num_angles());
+  EXPECT_EQ(1, config->unique_type(0).num_angles());
+  EXPECT_EQ(0, config->particle(0).num_angles());
+  EXPECT_EQ(9, config->particle_type(0).num_bonds());
+  EXPECT_EQ(1, config->unique_type(0).num_bonds());
+  EXPECT_EQ(0, config->particle(0).num_bonds());
+}
+
 }  // namespace feasst
