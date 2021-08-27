@@ -47,6 +47,7 @@ double PerturbDihedral::random_dihedral(Random * random,
     const double beta,
     const int dimension) const {
   if (is_rigid()) return dihedral_;
+  FATAL("for trappe, different functional form to select based on U");
   return random->bond_angle(dihedral_, beta*spring_constant_, 2, dimension);
 }
 
@@ -54,72 +55,61 @@ void PerturbDihedral::move(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
-  const double distance = random_distance(random,
-    system->thermo_params().beta(),
-    system->dimension());
-  const double angle = random_angle(random, system->thermo_params().beta(),
-    system->dimension());
-  DEBUG("angle: " << angle);
-  place_in_circle(distance, angle, system, select, random);
+  const double beta = system->thermo_params().beta();
+  const double distance = random_distance(random, beta, system->dimension());
+  const double angle = random_angle(random, beta, system->dimension());
+  const double dihedral = random_dihedral(random, beta, system->dimension());
+  place_dihedral(distance, angle, dihedral, system, select);
 }
 
-void PerturbDihedral::place_in_circle(const double distance,
+void PerturbDihedral::place_dihedral(const double distance,
   const double angle,
+  const double dihedral,
   System * system,
-  TrialSelect * select,
-  Random * random) {
-  const int dimension = system->configuration().dimension();
-  if (origin_.dimension() == 0) origin_.set_to_origin(dimension);
-  if (orthogonal_jk_.dimension() == 0) orthogonal_jk_.set_to_origin(dimension);
+  TrialSelect * select) {
+  const int dimen = system->configuration().dimension();
+  ASSERT(dimen == 3, "not implemented for dimen: " << dimen);
+  if (origin_.dimension() == 0) origin_.set_to_origin(dimen);
   Select * mobile = select->get_mobile();
   Position * site = mobile->get_site_position(0, 0);
   DEBUG("mobile " << mobile->str());
   DEBUG("old pos " << site->str());
 
   /*
-    For given sites j, k (anchors), place site, i, according to bond angle and
-    length
+    For given sites j, k (anchors), place site, i, according to bond angle,
+    length and dihedral.
 
-    k - j
-         \
-   angle  i
+    l
+     \
+      k - j
+           \
+            i
 
-    r_jk = r_j - r_k points from k to j
-    - set the bond length by normalizing r_jk and multiplying by bond length
-    - set the bond angle by rotating r_jk by 180-angle about axis orthogonal
-      to r_jk.
+    r_ij = r_i - r_j points from j to i
+    - initialize r_ij as r_jk, normalized and multiplied by bond length
+    - define the normal n_2 = r_kj cross r_lk = r_jk cross r_kl
+    - rotate r_ij by (180 - angle) about n_2
+    - rotate r_ij by (180 - dihedral) about r_jk
    */
-  // set site to the vector r_jk = r_j - r_k and store this vector
   const Position& rj = select->anchor_position(0, 0, *system);
-  DEBUG("rj: " << rj.str());
   const Position& rk = select->anchor_position(0, 1, *system);
-  DEBUG("rk: " << rk.str());
+  const Position& rl = select->anchor_position(0, 1, *system);
+  DEBUG("rj: " << rj.str() << " rk: " << rk.str() << " rl: " << rl.str());
   rjk_ = rj;
   rjk_.subtract(rk);
   *site = rjk_;
-  DEBUG("rjk: " << rjk_.str());
 
   // normalize site position, centered at rj, and multiply by bond length.
   site->normalize();
   site->multiply(distance);
-  DEBUG("rjk norm*L: " << rjk_.str());
-
-  // rotate site by (PI-bond_angle). If 3D, about vector orthogonal to r_jk.
-  if (dimension == 3) orthogonal_jk_.orthogonal(*site);
-  DEBUG("ortho " << orthogonal_jk_.str());
-  rot_mat_.axis_angle(orthogonal_jk_, radians_to_degrees(PI - angle));
-  DEBUG("site == rjk: " << site->str());
+  rkl_ = rk;
+  rkl_.subtract(rl);
+  const Position n2 = rjk_.cross_product(rkl_);
+  rot_mat_.axis_angle(n2, radians_to_degrees(PI - angle));
   rot_mat_.rotate(origin_, site);
-  DEBUG("site rotated to angle: " << site->str());
-
-  // If 3D, randomly spin site about rjk.
-  if (dimension == 3) {
-    rot_mat_.axis_angle(rjk_, 360.*random->uniform());
-    rot_mat_.rotate(origin_, site);
-  }
-
+  rot_mat_.axis_angle(rjk_, radians_to_degrees(PI - dihedral));
+  rot_mat_.rotate(origin_, site);
   site->add(rj);  // return to frame of reference
-
   DEBUG("new pos " << site->str());
   system->get_configuration()->update_positions(select->mobile());
 }

@@ -8,6 +8,7 @@
 #include "configuration/include/bond.h"
 #include "system/include/bond_two_body.h"
 #include "system/include/bond_three_body.h"
+#include "system/include/bond_four_body.h"
 
 namespace feasst {
 
@@ -35,6 +36,14 @@ class BondVisitor {
       const int group_index = 0);
   void compute(
       const BondThreeBody& model,
+      const Select& selection,
+      const Configuration& config);
+  void compute(
+      const BondFourBody& model,
+      const Configuration& config,
+      const int group_index = 0);
+  void compute(
+      const BondFourBody& model,
       const Select& selection,
       const Configuration& config);
   void set_energy(const double energy) { energy_ = energy; }

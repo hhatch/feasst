@@ -129,6 +129,35 @@ void BondVisitor::compute(
 }
 
 void BondVisitor::compute(
+    const BondFourBody& model,
+    const Select& selection,
+    const Configuration& config) {
+  double en = 0.;
+  for (int select_index = 0;
+       select_index < selection.num_particles();
+       ++select_index) {
+    const int part_index = selection.particle_index(select_index);
+    const Particle& part = config.select_particle(part_index);
+    const int part_type = part.type();
+    for (const Dihedral& dihedral : config.particle_type(part_type).dihedrals()) {
+      const Position& ri = part.site(dihedral.site(0)).position();
+      const Position& rj = part.site(dihedral.site(1)).position();
+      const Position& rk = part.site(dihedral.site(2)).position();
+      const Position& rl = part.site(dihedral.site(3)).position();
+      const Dihedral& dihedral_type =
+        config.unique_type(part_type).dihedral(dihedral.type());
+      en += model.energy(ri, rj, rk, rl, dihedral_type);
+      if (verbose_) {
+        if (std::abs(en) > NEAR_ZERO) {
+          FATAL("not impl");
+        }
+      }
+    }
+  }
+  set_energy(en);
+}
+
+void BondVisitor::compute(
     const BondTwoBody& model,
     const Configuration& config,
     const int group_index) {
@@ -138,6 +167,14 @@ void BondVisitor::compute(
 
 void BondVisitor::compute(
     const BondThreeBody& model,
+    const Configuration& config,
+    const int group_index) {
+  const Select& selection = config.group_selects()[group_index];
+  compute(model, selection, config);
+}
+
+void BondVisitor::compute(
+    const BondFourBody& model,
     const Configuration& config,
     const int group_index) {
   const Select& selection = config.group_selects()[group_index];

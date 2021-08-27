@@ -39,11 +39,11 @@ class PerturbDihedral : public PerturbDistanceAngle {
     const double beta,  /// inverse temperature
     const int dimension) const;
 
-  /// Place mobile site randomly in the circle about the anchors.
-  void place_in_circle(const double distance, const double angle,
+  /// Place mobile site with given bond distance, angle and dihedral.
+  void place_dihedral(const double distance, const double angle,
+    const double dihedral,
     System * system,
-    TrialSelect * select,
-    Random * random);
+    TrialSelect * select);
 
   void move(System * system,
     TrialSelect * select,
@@ -64,7 +64,7 @@ class PerturbDihedral : public PerturbDistanceAngle {
 
   // temporary
   Position rjk_;
-  Position orthogonal_jk_;
+  Position rkl_;
   Position origin_;
   RotationMatrix rot_mat_;
 };

@@ -11,8 +11,9 @@
 namespace feasst {
 
 /**
-  angle 0 - 1 - 2
-  r01 = r0 - r1, r21 = r2 - r1
+  A three body bond is defined by three sites, 0 - 1 - 2.
+  The relative vector r01 = r0 - r1 points from r1 to r0.
+  The relative vector r21 = r2 - r1 points from r1 to r2.
  */
 class BondThreeBody {
  public:
