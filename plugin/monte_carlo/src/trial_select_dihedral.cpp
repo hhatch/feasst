@@ -15,7 +15,7 @@ class MapTrialSelectDihedral {
  public:
   MapTrialSelectDihedral() {
     auto obj = MakeTrialSelectDihedral({{"mobile_site", "0"},
-      {"anchor_site1", "1"}, {"anchor_site2", "2"}, {"anchor_site3", "3"}});
+      {"anchor_site", "1"}, {"anchor_site2", "2"}, {"anchor_site3", "3"}});
     obj->deserialize_map()["TrialSelectDihedral"] = obj;
   }
 };

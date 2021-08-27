@@ -15,7 +15,7 @@ namespace feasst {
   The mobile site is directly bonded to the first anchor site, the second anchor
   site is bonded to first anchor, and the third anchor is bonded to the second.
 
-  mobile("i") - anchor1("j") - anchor2("k") - anchor3("l")
+  mobile("i") - anchor("j") - anchor2("k") - anchor3("l")
 
   Dihedral angles are defined as follows, as shown in
   https://en.wikipedia.org/wiki/Dihedral_angle and the first convention in
