@@ -353,18 +353,20 @@ void add_cg4_potential(MonteCarlo * mc, double eps_fc, double eps_fab) {
     pot->set(params);
     mc->add(pot);
   }
-  // reference is HardSphere on center with diameter 10
-  ModelParams params = mc->configuration().model_params();
-  for (const std::string parm : {"cutoff", "sigma"}) {
-    for (const int center : {0, 4}) params.set(parm, center, 10.);
-    for (const int branch : {1, 2, 3, 5, 6, 7}) params.set(parm, branch, 0.);
-  }
-  INFO(params.epsilon().str());
-  INFO(params.sigma().str());
-  INFO(params.cutoff().str());
-  auto ref = MakePotential(MakeHardSphere());
-  ref->set(params);
-  mc->add_to_reference(ref);
+  // reference is HardSphere on all sites.
+  mc->add_to_reference(MakePotential(MakeHardSphere()));
+//  // reference is HardSphere on center with diameter 10
+//  ModelParams params = mc->configuration().model_params();
+//  for (const std::string parm : {"cutoff", "sigma"}) {
+//    for (const int center : {0, 4}) params.set(parm, center, 10.);
+//    for (const int branch : {1, 2, 3, 5, 6, 7}) params.set(parm, branch, 0.);
+//  }
+//  INFO(params.epsilon().str());
+//  INFO(params.sigma().str());
+//  INFO(params.cutoff().str());
+//  auto ref = MakePotential(MakeHardSphere());
+//  ref->set(params);
+//  mc->add_to_reference(ref);
 }
 
 TEST(MonteCarlo, cg4_flexible_LONG) {
@@ -430,8 +432,8 @@ TEST(MayerSampling, b2_cg4_flexible_LONG) {
   EXPECT_EQ(2, mc.configuration().num_particles());
   EXPECT_EQ(1, mc.configuration().num_particles_of_type(0));
   add_cg4_potential(&mc, 1, 1);
-  const double temperature = 0.4688;
-  //const double temperature = 0.5309;
+  //const double temperature = 0.4688;
+  const double temperature = 0.5309;
   //const double temperature = 0.7092;
   //add_cg4_potential(&mc, 1, 0);
   //const double temperature = 0.2097;
@@ -467,6 +469,8 @@ TEST(MayerSampling, b2_cg4_flexible_LONG) {
   mc.attempt(1e7);
   INFO("mayer: " << mayer->mayer().str());
   INFO("mayer_ref: " << mayer->mayer_ref().str());
+  INFO("b22 " << mayer->second_virial_ratio()
+    << " +/- " << mayer->second_virial_ratio_block_stdev());
   EXPECT_NEAR(100, mayer->second_virial_ratio(), 0.15);
 //  INFO(bonds->bond_hist(0).str());
 }
@@ -523,10 +527,11 @@ TEST(MayerSampling, trimer_grow_LONG) {
   mc.add(MakeCheckRigidBonds({{"steps_per", steps_per}}));
   mc.attempt(1e6);
   double b2hs = 2./3.*PI*std::pow(mc.configuration().model_params().sigma().value(0), 3); // A^3
-  INFO(mayer->second_virial_ratio());
   INFO(b2hs*mayer->second_virial_ratio());
   INFO("mayer: " << mayer->mayer().str());
   INFO("mayer_ref: " << mayer->mayer_ref().str());
+  INFO("b22 " << mayer->second_virial_ratio()
+    << " +/- " << mayer->second_virial_ratio_block_stdev());
   EXPECT_NEAR(0, mayer->mayer().average(), 4*mayer->mayer().block_stdev());
 }
 
