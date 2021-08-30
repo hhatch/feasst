@@ -9,9 +9,10 @@
    BondThreeBody
    AngleSquareWell
    BondTwoBody
-   BondVisitor
    BondSquareWell
    NeighborCriteria
+   BondFourBody
+   BondVisitor
    VisitModel
    ModelTwoBody
    LennardJones
@@ -19,13 +20,13 @@
    HardSphere
    IdealGas
    DontVisitModel
+   ModelThreeBody
    ModelOneBody
    ModelEmpty
-   ModelThreeBody
+   LongRangeCorrections
    VisitModelIntraMap
    VisitModelIntra
    VisitModelBond
-   LongRangeCorrections
    ModelTwoBodyTable
    Cells
    VisitModelCell

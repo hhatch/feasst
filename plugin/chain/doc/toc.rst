@@ -6,8 +6,8 @@
    SelectSegment
    SelectEndSegment
    SelectReptate
-   SelectBranch
    PerturbReptate
+   SelectBranch
    CheckRigidBonds
    AnalyzeBonds
    trials

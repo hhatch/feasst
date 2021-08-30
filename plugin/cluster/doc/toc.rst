@@ -6,8 +6,8 @@
    EnergyMapNeighborCriteria
    EnergyMapAllCriteria
    SelectParticleAVB
-   SelectParticleAVBDivalent
    SelectCluster
+   SelectParticleAVBDivalent
    PerturbPointReflect
    trial_avb2
    trial_rigid_cluster

@@ -9,14 +9,14 @@
    Acceptance
    TrialSelect
    TrialSelectParticle
-   TrialSelectBond
-   TrialSelectAngle
-   TrialSelectDihedral
    Perturb
    PerturbVolume
    PerturbMove
    PerturbDistance
    PerturbTranslate
+   TrialSelectBond
+   TrialSelectAngle
+   TrialSelectDihedral
    Criteria
    TrialStage
    TrialCompute
@@ -42,3 +42,4 @@
    PerturbAdd
    PerturbRemove
    PerturbDistanceAngle
+   PerturbDihedral

@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   DihedralTRAPPE
    Yukawa
    SquareWell
    LennardJonesAlpha

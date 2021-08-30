@@ -71,13 +71,15 @@
 #include "system/include/bond_three_body.h"
 #include "system/include/angle_square_well.h"
 #include "system/include/bond_two_body.h"
-#include "system/include/bond_visitor.h"
 #include "system/include/bond_square_well.h"
 #include "system/include/neighbor_criteria.h"
 #include "cluster/include/energy_map_all.h"
 #include "cluster/include/energy_map_neighbor.h"
 #include "cluster/include/energy_map_neighbor_criteria.h"
 #include "cluster/include/energy_map_all_criteria.h"
+#include "system/include/bond_four_body.h"
+#include "models/include/dihedral_trappe.h"
+#include "system/include/bond_visitor.h"
 #include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
 #include "system/include/lennard_jones.h"
@@ -88,13 +90,13 @@
 #include "system/include/hard_sphere.h"
 #include "system/include/ideal_gas.h"
 #include "system/include/dont_visit_model.h"
+#include "system/include/model_three_body.h"
 #include "system/include/model_one_body.h"
 #include "system/include/model_empty.h"
-#include "system/include/model_three_body.h"
+#include "system/include/long_range_corrections.h"
 #include "system/include/visit_model_intra_map.h"
 #include "system/include/visit_model_intra.h"
 #include "system/include/visit_model_bond.h"
-#include "system/include/long_range_corrections.h"
 #include "configuration/include/site.h"
 #include "configuration/include/particle.h"
 #include "configuration/include/model_params.h"
@@ -125,21 +127,21 @@
 #include "chain/include/select_end_segment.h"
 #include "chain/include/select_reptate.h"
 #include "cluster/include/select_particle_avb.h"
-#include "cluster/include/select_particle_avb_divalent.h"
 #include "cluster/include/select_cluster.h"
-#include "monte_carlo/include/trial_select_bond.h"
-#include "monte_carlo/include/trial_select_angle.h"
-#include "chain/include/select_branch.h"
-#include "monte_carlo/include/trial_select_dihedral.h"
+#include "cluster/include/select_particle_avb_divalent.h"
 #include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/perturb_volume.h"
 #include "beta_expanded/include/perturb_beta.h"
 #include "monte_carlo/include/perturb_move.h"
+#include "cluster/include/perturb_point_reflect.h"
 #include "monte_carlo/include/perturb_distance.h"
 #include "chain/include/perturb_reptate.h"
 #include "monte_carlo/include/perturb_translate.h"
-#include "cluster/include/perturb_point_reflect.h"
 #include "morph/include/perturb_particle_type.h"
+#include "monte_carlo/include/trial_select_bond.h"
+#include "monte_carlo/include/trial_select_angle.h"
+#include "chain/include/select_branch.h"
+#include "monte_carlo/include/trial_select_dihedral.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_compute.h"
@@ -236,6 +238,7 @@
 #include "monte_carlo/include/perturb_remove.h"
 #include "monte_carlo/include/perturb_distance_angle.h"
 #include "chain/include/perturb_branch.h"
+#include "monte_carlo/include/perturb_dihedral.h"
 #include "math/include/random_mt19937.h"
 #include "math/include/solver.h"
 #include "math/include/solver_newton_raphson.h"
@@ -367,15 +370,19 @@ using namespace std;
 %shared_ptr(feasst::FiniteCylinder);
 %shared_ptr(feasst::Slab);
 %shared_ptr(feasst::BondThreeBody);
+%shared_ptr(feasst::AngleModel);
 %shared_ptr(feasst::AngleSquareWell);
 %shared_ptr(feasst::BondTwoBody);
-%shared_ptr(feasst::BondVisitor);
+%shared_ptr(feasst::BondLength);
 %shared_ptr(feasst::BondSquareWell);
 %shared_ptr(feasst::NeighborCriteria);
 %shared_ptr(feasst::EnergyMapAll);
 %shared_ptr(feasst::EnergyMapNeighbor);
 %shared_ptr(feasst::EnergyMapNeighborCriteria);
 %shared_ptr(feasst::EnergyMapAllCriteria);
+%shared_ptr(feasst::BondFourBody);
+%shared_ptr(feasst::DihedralTRAPPE);
+%shared_ptr(feasst::BondVisitor);
 %shared_ptr(feasst::VisitModel);
 %shared_ptr(feasst::ModelTwoBody);
 %shared_ptr(feasst::LennardJones);
@@ -386,13 +393,13 @@ using namespace std;
 %shared_ptr(feasst::HardSphere);
 %shared_ptr(feasst::IdealGas);
 %shared_ptr(feasst::DontVisitModel);
+%shared_ptr(feasst::ModelThreeBody);
 %shared_ptr(feasst::ModelOneBody);
 %shared_ptr(feasst::ModelEmpty);
-%shared_ptr(feasst::ModelThreeBody);
+%shared_ptr(feasst::LongRangeCorrections);
 %shared_ptr(feasst::VisitModelIntraMap);
 %shared_ptr(feasst::VisitModelIntra);
 %shared_ptr(feasst::VisitModelBond);
-%shared_ptr(feasst::LongRangeCorrections);
 %shared_ptr(feasst::Site);
 %shared_ptr(feasst::Particle);
 %shared_ptr(feasst::ModelParam);
@@ -430,21 +437,21 @@ using namespace std;
 %shared_ptr(feasst::SelectEndSegment);
 %shared_ptr(feasst::SelectReptate);
 %shared_ptr(feasst::SelectParticleAVB);
-%shared_ptr(feasst::SelectParticleAVBDivalent);
 %shared_ptr(feasst::SelectCluster);
-%shared_ptr(feasst::TrialSelectBond);
-%shared_ptr(feasst::TrialSelectAngle);
-%shared_ptr(feasst::SelectBranch);
-%shared_ptr(feasst::TrialSelectDihedral);
+%shared_ptr(feasst::SelectParticleAVBDivalent);
 %shared_ptr(feasst::Perturb);
 %shared_ptr(feasst::PerturbVolume);
 %shared_ptr(feasst::PerturbBeta);
 %shared_ptr(feasst::PerturbMove);
+%shared_ptr(feasst::PerturbPointReflect);
 %shared_ptr(feasst::PerturbDistance);
 %shared_ptr(feasst::PerturbReptate);
 %shared_ptr(feasst::PerturbTranslate);
-%shared_ptr(feasst::PerturbPointReflect);
 %shared_ptr(feasst::PerturbParticleType);
+%shared_ptr(feasst::TrialSelectBond);
+%shared_ptr(feasst::TrialSelectAngle);
+%shared_ptr(feasst::SelectBranch);
+%shared_ptr(feasst::TrialSelectDihedral);
 %shared_ptr(feasst::Criteria);
 %shared_ptr(feasst::TrialStage);
 %shared_ptr(feasst::TrialCompute);
@@ -543,6 +550,7 @@ using namespace std;
 %shared_ptr(feasst::PerturbRemove);
 %shared_ptr(feasst::PerturbDistanceAngle);
 %shared_ptr(feasst::PerturbBranch);
+%shared_ptr(feasst::PerturbDihedral);
 %shared_ptr(feasst::RandomMT19937);
 %shared_ptr(feasst::Solver);
 %shared_ptr(feasst::SolverNewtonRaphson);
@@ -643,13 +651,15 @@ using namespace std;
 %include system/include/bond_three_body.h
 %include system/include/angle_square_well.h
 %include system/include/bond_two_body.h
-%include system/include/bond_visitor.h
 %include system/include/bond_square_well.h
 %include system/include/neighbor_criteria.h
 %include cluster/include/energy_map_all.h
 %include cluster/include/energy_map_neighbor.h
 %include cluster/include/energy_map_neighbor_criteria.h
 %include cluster/include/energy_map_all_criteria.h
+%include system/include/bond_four_body.h
+%include models/include/dihedral_trappe.h
+%include system/include/bond_visitor.h
 %include system/include/visit_model.h
 %include system/include/model_two_body.h
 %include system/include/lennard_jones.h
@@ -660,13 +670,13 @@ using namespace std;
 %include system/include/hard_sphere.h
 %include system/include/ideal_gas.h
 %include system/include/dont_visit_model.h
+%include system/include/model_three_body.h
 %include system/include/model_one_body.h
 %include system/include/model_empty.h
-%include system/include/model_three_body.h
+%include system/include/long_range_corrections.h
 %include system/include/visit_model_intra_map.h
 %include system/include/visit_model_intra.h
 %include system/include/visit_model_bond.h
-%include system/include/long_range_corrections.h
 %include configuration/include/site.h
 %include configuration/include/particle.h
 %include configuration/include/model_params.h
@@ -697,21 +707,21 @@ using namespace std;
 %include chain/include/select_end_segment.h
 %include chain/include/select_reptate.h
 %include cluster/include/select_particle_avb.h
-%include cluster/include/select_particle_avb_divalent.h
 %include cluster/include/select_cluster.h
-%include monte_carlo/include/trial_select_bond.h
-%include monte_carlo/include/trial_select_angle.h
-%include chain/include/select_branch.h
-%include monte_carlo/include/trial_select_dihedral.h
+%include cluster/include/select_particle_avb_divalent.h
 %include monte_carlo/include/perturb.h
 %include monte_carlo/include/perturb_volume.h
 %include beta_expanded/include/perturb_beta.h
 %include monte_carlo/include/perturb_move.h
+%include cluster/include/perturb_point_reflect.h
 %include monte_carlo/include/perturb_distance.h
 %include chain/include/perturb_reptate.h
 %include monte_carlo/include/perturb_translate.h
-%include cluster/include/perturb_point_reflect.h
 %include morph/include/perturb_particle_type.h
+%include monte_carlo/include/trial_select_bond.h
+%include monte_carlo/include/trial_select_angle.h
+%include chain/include/select_branch.h
+%include monte_carlo/include/trial_select_dihedral.h
 %include monte_carlo/include/criteria.h
 %include monte_carlo/include/trial_stage.h
 %include monte_carlo/include/trial_compute.h
@@ -808,6 +818,7 @@ using namespace std;
 %include monte_carlo/include/perturb_remove.h
 %include monte_carlo/include/perturb_distance_angle.h
 %include chain/include/perturb_branch.h
+%include monte_carlo/include/perturb_dihedral.h
 %include math/include/random_mt19937.h
 %include math/include/solver.h
 %include math/include/solver_newton_raphson.h
