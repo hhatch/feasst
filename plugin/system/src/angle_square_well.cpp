@@ -20,7 +20,7 @@ std::shared_ptr<BondThreeBody> AngleSquareWell::create(std::istream& istr) const
   return std::make_shared<AngleSquareWell>(istr);
 }
 
-AngleSquareWell::AngleSquareWell(std::istream& istr) : BondThreeBody(istr) {
+AngleSquareWell::AngleSquareWell(std::istream& istr) : AngleModel(istr) {
   // ASSERT(class_name_ == "AngleSquareWell", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(846 == version, "mismatch version: " << version);
@@ -36,13 +36,9 @@ void AngleSquareWell::serialize(std::ostream& ostr) const {
   serialize_angle_square_well_(ostr);
 }
 
-double AngleSquareWell::energy(
-    const Position& relative01,
-    const Position& relative21,
-    const Angle& angle) const {
+double AngleSquareWell::energy(const double theta, const Bond& angle) const {
   const double theta0 = degrees_to_radians(angle.property("theta0"));
   const double delta = degrees_to_radians(angle.property("delta"));
-  const double theta = std::acos(relative01.cosine(relative21));
   TRACE("theta " << theta);
   ASSERT(!std::isnan(theta), "theta is nan");
   if (std::abs(theta - theta0) > 0.5*delta) {

@@ -18,10 +18,8 @@ namespace feasst {
 class BondThreeBody {
  public:
   BondThreeBody() {}
-  virtual double energy(
-      const Position& relative01,
-      const Position& relative21,
-      const Angle& angle) const = 0;
+  virtual double energy(const Position& relative01, const Position& relative21,
+    const Bond& angle) const = 0;
 
   // serialize
   std::string class_name() const { return class_name_; }
@@ -36,6 +34,16 @@ class BondThreeBody {
 
   void serialize_bond_three_body_(std::ostream& ostr) const;
   explicit BondThreeBody(std::istream& istr);
+};
+
+class AngleModel : public BondThreeBody {
+ public:
+  AngleModel() {}
+  double energy(const Position& relative01, const Position& relative21,
+    const Bond& angle) const override;
+  virtual double energy(const double theta, const Bond& angle) const = 0;
+  explicit AngleModel(std::istream& istr) : BondThreeBody(istr) {}
+  virtual ~AngleModel() {}
 };
 
 }  // namespace feasst

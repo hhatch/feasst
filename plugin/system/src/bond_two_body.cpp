@@ -34,4 +34,8 @@ BondTwoBody::BondTwoBody(std::istream& istr) {
   ASSERT(264 == version, "mismatch version: " << version);
 }
 
+double BondLength::energy(const Position& relative, const Bond& bond) const {
+  return energy(relative.distance(), bond);
+}
+
 }  // namespace feasst

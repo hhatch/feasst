@@ -34,4 +34,11 @@ BondThreeBody::BondThreeBody(std::istream& istr) {
   ASSERT(943 == version, "mismatch version: " << version);
 }
 
+double AngleModel::energy(const Position& relative01,
+    const Position& relative21,
+    const Bond& angle) const {
+  const double theta = std::acos(relative01.cosine(relative21));
+  return energy(theta, angle);
+}
+
 }  // namespace feasst

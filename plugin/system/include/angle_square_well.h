@@ -11,13 +11,10 @@ namespace feasst {
   U(theta) = 0 when |theta-theta0| < delta/2, otherwise infinity.
   where theta is in degrees
  */
-class AngleSquareWell : public BondThreeBody {
+class AngleSquareWell : public AngleModel {
  public:
   explicit AngleSquareWell(const argtype& args = argtype()) {}
-  double energy(
-      const Position& relative01,
-      const Position& relative21,
-      const Angle& angle) const override;
+  double energy(const double theta, const Bond& angle) const override;
   std::shared_ptr<BondThreeBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit AngleSquareWell(std::istream& istr);

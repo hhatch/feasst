@@ -13,9 +13,7 @@ namespace feasst {
 class BondTwoBody {
  public:
   BondTwoBody() {}
-  virtual double energy(
-      const Position& relative,
-      const Bond& bond) const = 0;
+  virtual double energy(const Position& relative, const Bond& bond) const = 0;
 
   // serialize
   std::string class_name() const { return class_name_; }
@@ -30,6 +28,15 @@ class BondTwoBody {
 
   void serialize_bond_two_body_(std::ostream& ostr) const;
   explicit BondTwoBody(std::istream& istr);
+};
+
+class BondLength : public BondTwoBody {
+ public:
+  BondLength() {}
+  double energy(const Position& relative, const Bond& bond) const override;
+  virtual double energy(const double distance, const Bond& bond) const = 0;
+  explicit BondLength(std::istream& istr) : BondTwoBody(istr) {}
+  virtual ~BondLength() {}
 };
 
 }  // namespace feasst

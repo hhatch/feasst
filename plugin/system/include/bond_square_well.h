@@ -10,12 +10,10 @@ namespace feasst {
 /**
   U(r) = 0 when |l-l0| < delta/2, otherwise infinity.
  */
-class BondSquareWell : public BondTwoBody {
+class BondSquareWell : public BondLength {
  public:
   explicit BondSquareWell(const argtype& args = argtype()) {}
-  double energy(
-      const Position& relative,
-      const Bond& bond) const override;
+  double energy(const double distance, const Bond& bond) const override;
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit BondSquareWell(std::istream& istr);

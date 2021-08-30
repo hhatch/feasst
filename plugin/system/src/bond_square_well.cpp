@@ -19,7 +19,7 @@ std::shared_ptr<BondTwoBody> BondSquareWell::create(std::istream& istr) const {
   return std::make_shared<BondSquareWell>(istr);
 }
 
-BondSquareWell::BondSquareWell(std::istream& istr) : BondTwoBody(istr) {
+BondSquareWell::BondSquareWell(std::istream& istr) : BondLength(istr) {
   // ASSERT(class_name_ == "BondSquareWell", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(344 == version, "mismatch version: " << version);
@@ -35,12 +35,10 @@ void BondSquareWell::serialize(std::ostream& ostr) const {
   serialize_bond_square_well_(ostr);
 }
 
-double BondSquareWell::energy(
-    const Position& relative,
-    const Bond& bond) const {
+double BondSquareWell::energy(const double distance, const Bond& bond) const {
   const double length = bond.property("length");
   const double delta = bond.property("delta");
-  if (std::abs(relative.distance() - length) > 0.5*delta) {
+  if (std::abs(distance - length) > 0.5*delta) {
     return NEAR_INFINITY;
   }
   return 0.;
