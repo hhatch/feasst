@@ -8,6 +8,7 @@
 #include "system/include/hard_sphere.h"
 #include "system/include/utils.h"
 #include "system/include/visit_model_intra_map.h"
+#include "system/include/dont_visit_model.h"
 #include "models/include/square_well.h"
 #include "models/include/lennard_jones_force_shift.h"
 #include "monte_carlo/include/trial.h"
@@ -528,35 +529,44 @@ TEST(MayerSampling, trimer_grow_LONG) {
   EXPECT_NEAR(0, mayer->mayer().average(), 4*mayer->mayer().block_stdev());
 }
 
-TEST(MonteCarlo, BondHarmonic) {
-  MonteCarlo mc;
-  mc.add(MakeConfiguration({
-    {"particle_type0", "../forcefield/data.dimer_harmonic"},
-    {"add_particles_of_type0", "1"},
-    {"cubic_box_length", "10"}}));
-  //mc.add(MakePotential(MakeLennardJones()));
-  mc.add(MakePotential(MakeBondVisitor()));
-  mc.set(MakeThermoParams({{"beta", "1"}}));
-  mc.set(MakeMetropolis());
-  mc.add(MakeTrialGrow({
-    {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "1"}}
-    //{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "4"}}
-  }));
-//  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
-  auto en = MakeEnergy({{"steps_per_write", "1e5"}});
-  mc.add(en);
-  auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
-  // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
-  mc.add(bonds);
-  mc.attempt(3e5);
-  INFO(bonds->bond_hist(0).str());
-  INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
-  EXPECT_NEAR(1.00167, bonds->bond(0).average(), 5*bonds->bond(0).block_stdev());
-  INFO(en->accumulator().str());
+TEST(MonteCarlo, BondHarmonic_LONG) {
+  for (const std::string num_steps : {"1", "4"}) {
+    for (const std::string ref : {"0", "-1"}) {
+      INFO("num_steps " << num_steps << " ref " << ref);
+      MonteCarlo mc;
+      mc.add(MakeConfiguration({
+        {"particle_type0", "../forcefield/data.dimer_harmonic"},
+        {"add_particles_of_type0", "1"},
+        {"cubic_box_length", "10"}}));
+      //mc.add(MakePotential(MakeLennardJones()));
+      FATAL("add BondVisitor in every potential factory");
+      mc.add(MakePotential(MakeBondVisitor()));
+      mc.add_to_reference(MakePotential(MakeDontVisitModel()));
+      mc.add_to_reference(MakePotential(MakeBondVisitor()));
+      mc.set(MakeThermoParams({{"beta", "1"}}));
+      mc.set(MakeMetropolis());
+      mc.add(MakeTrialGrow({
+        //{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "1"}}
+        {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"},
+         {"num_steps", num_steps}, {"reference_index", ref}}
+      }));
+    //  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+      auto en = MakeEnergy({{"steps_per_write", "1e5"}});
+      mc.add(en);
+      auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
+      // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
+      mc.add(bonds);
+      mc.attempt(3e5);
+      //INFO(bonds->bond_hist(0).str());
+      DEBUG(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+      EXPECT_NEAR(1.00167, bonds->bond(0).average(), 8*bonds->bond(0).block_stdev());
+      DEBUG(en->accumulator().str());
 
-  // equipartition theorem expects the vibrational DOF to add 1/2kT
-  EXPECT_NEAR(0.5, en->accumulator().average(), 5*en->accumulator().block_stdev());
-  EXPECT_GT(en->accumulator().average(), 0);
+      // equipartition theorem expects the vibrational DOF to add 1/2kT
+      EXPECT_NEAR(0.5, en->accumulator().average(), 8*en->accumulator().block_stdev());
+      EXPECT_GT(en->accumulator().average(), 0);
+    }
+  }
 }
 
 }  // namespace feasst
