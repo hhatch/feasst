@@ -31,7 +31,6 @@
 #include "cluster/include/energy_map_all.h"
 #include "cluster/include/trial_avb2.h"
 #include "cluster/include/energy_map_neighbor.h"
-#include "chain/include/check_rigid_bonds.h"
 #include "chain/include/trials.h"
 #include "chain/include/trial_grow.h"
 #include "chain/include/trial_grow_linear.h"
@@ -88,7 +87,6 @@ TEST(MonteCarlo, chain) {
     {"steps_per", str(steps_per)},
     {"tolerance", "1e-10"}}));
   mc.add(MakeTune({{"steps_per", str(steps_per)}}));
-  mc.add(MakeCheckRigidBonds({{"steps_per", str(steps_per)}}));
   mc.attempt(3e2);
 
   MonteCarlo mc2 = test_serialize(mc);
@@ -134,7 +132,6 @@ TEST(MonteCarlo, TrialGrow) {
     EXPECT_EQ(5, mc.trial(0).stage(1).rosenbluth().num());
     mc.add(MakeLogAndMovie({{"steps_per", str(1e0)}, {"file_name", "tmp/lj"}}));
     mc.add(MakeCheckEnergyAndTune({{"steps_per", str(1e0)}, {"tolerance", str(1e-9)}}));
-    mc.add(MakeCheckRigidBonds({{"steps_per", str(1e0)}}));
     EXPECT_EQ(3, mc.trials().num());
     EXPECT_TRUE(mc.trial(0).stage(0).trial_select().is_ghost());   // add
     EXPECT_FALSE(mc.trial(1).stage(0).trial_select().is_ghost());  // remove
@@ -192,9 +189,6 @@ MonteCarlo cg7mab2(const std::string& data, const int num, const int steps_per =
   }
   mc.add(MakeLogAndMovie({{"steps_per", str(steps_per)}, {"file_name", "tmp/" + data}}));
   mc.add(MakeCheckEnergyAndTune({{"steps_per", str(steps_per)}, {"tolerance", str(1e-9)}}));
-  if (!is_found_in(data, "flex")) {
-    mc.add(MakeCheckRigidBonds({{"steps_per", str(steps_per)}}));
-  }
   return mc;
 }
 
@@ -524,7 +518,6 @@ TEST(MayerSampling, trimer_grow_LONG) {
   const std::string steps_per = "1e4";
   mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/trib"}}));
   mc.add(MakeCheckEnergy({{"steps_per", steps_per}}));
-  mc.add(MakeCheckRigidBonds({{"steps_per", steps_per}}));
   mc.attempt(1e6);
   double b2hs = 2./3.*PI*std::pow(mc.configuration().model_params().sigma().value(0), 3); // A^3
   INFO(b2hs*mayer->second_virial_ratio());

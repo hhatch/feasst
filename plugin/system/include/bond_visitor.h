@@ -9,6 +9,9 @@
 #include "system/include/bond_two_body.h"
 #include "system/include/bond_three_body.h"
 #include "system/include/bond_four_body.h"
+#include "system/include/bond_square_well.h"
+#include "system/include/angle_square_well.h"
+#include "system/include/dihedral_square_well.h"
 
 namespace feasst {
 
@@ -22,31 +25,14 @@ class BondVisitor {
    - verbose: print non-zero energies (default: false).
    */
   explicit BondVisitor(argtype args = argtype());
-  void compute(
-      const BondTwoBody& model,
-      const Configuration& config,
-      const int group_index = 0);
-  void compute(
-      const BondTwoBody& model,
-      const Select& selection,
-      const Configuration& config);
-  void compute(
-      const BondThreeBody& model,
-      const Configuration& config,
-      const int group_index = 0);
-  void compute(
-      const BondThreeBody& model,
-      const Select& selection,
-      const Configuration& config);
-  void compute(
-      const BondFourBody& model,
-      const Configuration& config,
-      const int group_index = 0);
-  void compute(
-      const BondFourBody& model,
-      const Select& selection,
-      const Configuration& config);
-  void set_energy(const double energy) { energy_ = energy; }
+  void compute_all(const Configuration& config, const int group_index = 0);
+  void compute_all(const Select& selection, const Configuration& config);
+  void compute_two(const Configuration& config, const int group_index = 0);
+  void compute_two(const Select& selection, const Configuration& config);
+  void compute_three(const Configuration& config, const int group_index = 0);
+  void compute_three(const Select& selection, const Configuration& config);
+  void compute_four(const Configuration& config, const int group_index = 0);
+  void compute_four(const Select& selection, const Configuration& config);
   double energy() const { return energy_; }
 
   // serialize
@@ -65,7 +51,15 @@ class BondVisitor {
 
  private:
   double energy_;
+  double energy_two_body_;
+  double energy_three_body_;
+  double energy_four_body_;
   bool verbose_;
+
+  // temporary
+  BondSquareWell bond_;
+  AngleSquareWell angle_;
+  DihedralSquareWell dihedral_;
 };
 
 inline std::shared_ptr<BondVisitor> MakeBondVisitor(

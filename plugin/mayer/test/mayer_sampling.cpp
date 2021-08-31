@@ -18,7 +18,6 @@
 #include "ewald/include/coulomb.h"
 #include "ewald/include/utils.h"
 #include "models/include/lennard_jones_force_shift.h"
-#include "chain/include/check_rigid_bonds.h"
 
 namespace feasst {
 
@@ -223,7 +222,6 @@ TEST(MayerSampling, trimer_LONG) {
     {"tunable_param", "40"}}));
   const std::string steps_per = "1e4";
   mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/trib"}}));
-  mc.add(MakeCheckRigidBonds({{"steps_per", steps_per}}));
   mc.attempt(1e6);
   double b2hs = 2./3.*PI*std::pow(mc.configuration().model_params().sigma().value(0), 3); // A^3
   INFO(mayer->second_virial_ratio());

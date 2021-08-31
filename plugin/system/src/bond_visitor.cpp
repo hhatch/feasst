@@ -59,9 +59,7 @@ BondVisitor::BondVisitor(std::istream& istr) {
   feasst_deserialize(&verbose_, istr);
 }
 
-void BondVisitor::compute(
-    const BondTwoBody& model,
-    const Select& selection,
+void BondVisitor::compute_two(const Select& selection,
     const Configuration& config) {
   double en = 0.;
   for (int select_index = 0;
@@ -76,7 +74,10 @@ void BondVisitor::compute(
       Position relative = position0;
       relative.subtract(position1);
       const Bond& bond_type = config.unique_type(part_type).bond(bond.type());
-      en += model.energy(relative, bond_type);
+      ASSERT(bond_.deserialize_map().count(bond_type.model()) == 1,
+        "bond model " << bond_type.model() << " not recognized.");
+      en += bond_.deserialize_map()[bond_type.model()]->energy(
+        relative, bond_type);
       if (verbose_) {
         if (std::abs(en) > NEAR_ZERO) {
           INFO("bond ij " << part_index << " " << bond.site(0) << " "
@@ -85,11 +86,10 @@ void BondVisitor::compute(
       }
     }
   }
-  set_energy(en);
+  energy_two_body_ = en;
 }
 
-void BondVisitor::compute(
-    const BondThreeBody& model,
+void BondVisitor::compute_three(
     const Select& selection,
     const Configuration& config) {
   double en = 0.;
@@ -109,7 +109,10 @@ void BondVisitor::compute(
       relative21.subtract(position1);
       const Angle& angle_type =
         config.unique_type(part_type).angle(angle.type());
-      en += model.energy(relative01, relative21, angle_type);
+      ASSERT(angle_.deserialize_map().count(angle_type.model()) == 1,
+        "angle model " << angle_type.model() << " not recognized.");
+      en += angle_.deserialize_map()[angle_type.model()]->energy(
+        relative01, relative21, angle_type);
       if (verbose_) {
         if (std::abs(en) > NEAR_ZERO) {
           const double ang = std::acos(relative01.cosine(relative21));
@@ -125,11 +128,10 @@ void BondVisitor::compute(
       }
     }
   }
-  set_energy(en);
+  energy_three_body_ = en;
 }
 
-void BondVisitor::compute(
-    const BondFourBody& model,
+void BondVisitor::compute_four(
     const Select& selection,
     const Configuration& config) {
   double en = 0.;
@@ -146,7 +148,10 @@ void BondVisitor::compute(
       const Position& rl = part.site(dihedral.site(3)).position();
       const Dihedral& dihedral_type =
         config.unique_type(part_type).dihedral(dihedral.type());
-      en += model.energy(ri, rj, rk, rl, dihedral_type);
+      ASSERT(dihedral_.deserialize_map().count(dihedral_type.model()) == 1,
+        "dihedral model " << dihedral_type.model() << " not recognized.");
+      en += dihedral_.deserialize_map()[dihedral_type.model()]->energy(
+        ri, rj, rk, rl, dihedral_type);
       if (verbose_) {
         if (std::abs(en) > NEAR_ZERO) {
           FATAL("not impl");
@@ -154,31 +159,42 @@ void BondVisitor::compute(
       }
     }
   }
-  set_energy(en);
+  energy_four_body_ = en;
 }
 
-void BondVisitor::compute(
-    const BondTwoBody& model,
+void BondVisitor::compute_all(const Select& selection,
+    const Configuration& config) {
+  compute_two(selection, config);
+  compute_three(selection, config);
+  compute_four(selection, config);
+  energy_ = energy_two_body_ + energy_three_body_ + energy_four_body_;
+}
+
+void BondVisitor::compute_all(const Configuration& config,
+    const int group_index) {
+  const Select& selection = config.group_selects()[group_index];
+  compute_all(selection, config);
+}
+
+void BondVisitor::compute_two(
     const Configuration& config,
     const int group_index) {
   const Select& selection = config.group_selects()[group_index];
-  compute(model, selection, config);
+  compute_two(selection, config);
 }
 
-void BondVisitor::compute(
-    const BondThreeBody& model,
+void BondVisitor::compute_three(
     const Configuration& config,
     const int group_index) {
   const Select& selection = config.group_selects()[group_index];
-  compute(model, selection, config);
+  compute_three(selection, config);
 }
 
-void BondVisitor::compute(
-    const BondFourBody& model,
+void BondVisitor::compute_four(
     const Configuration& config,
     const int group_index) {
   const Select& selection = config.group_selects()[group_index];
-  compute(model, selection, config);
+  compute_four(selection, config);
 }
 
 }  // namespace feasst
