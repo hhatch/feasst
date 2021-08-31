@@ -156,6 +156,10 @@ class Particle : public PropertiedEntity,
   void add_bond_property(const int bond, const std::string name,
     const double value) { bonds_[bond].add_property(name, value); }
 
+  /// Add bond model.
+  void add_bond_model(const int bond, const std::string model) {
+    bonds_[bond].set_model(model); }
+
   /// Erase all bonds from particle.
   void erase_bonds();
 

@@ -219,17 +219,22 @@ void FileLMP::read_properties_(const std::string property_type,
     DEBUG("read properties i " << i << ": " << line);
     std::vector<std::string> properties = split(line);
     ASSERT(properties.size() >= 3, "size error");
-    ASSERT(properties.size() % 2 == 1, "size error");
-    const int num_properties = (properties.size() - 1)/2;
     const int type = stoi(properties[0]);
+    int shift = 0;
+    if (property_type == "bond") {
+      shift = 1;
+      particle->add_bond_model(type, properties[1]);
+    }
+    ASSERT((properties.size() - shift) % 2 == 1, "size error");
+    const int num_properties = (properties.size() - 1 - shift)/2;
     DEBUG("type: " << type);
     ASSERT(type < num_types, "type: " << type << " is too large for the number "
       << "of types: " << num_types << " of property: " << property_type
       << " . Properties are listed from indices of 0 to n-1, not 1 to n. "
       << "See /path/to/feasst/forcefield/README.rst for more details.");
     for (int index = 0; index < num_properties; ++index) {
-      const std::string name = properties[2*index + 1];
-      const double value = stod(properties[2*index + 2]);
+      const std::string name = properties[2*index + 1 + shift];
+      const double value = stod(properties[2*index + 2 + shift]);
       if (property_type == "site") {
         Site site = particle->site(type);
         DEBUG("adding " << name << " "  << value);
