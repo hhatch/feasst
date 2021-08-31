@@ -14,7 +14,8 @@
    RigidBond
    NeighborCriteria
    BondFourBody
-   RigidDihredral
+   RigidDihedral
+   BondVisitor
    VisitModel
    ModelTwoBody
    LennardJones
@@ -36,4 +37,3 @@
    PotentialFactory
    System
    utils
-   BondVisitor

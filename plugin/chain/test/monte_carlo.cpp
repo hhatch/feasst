@@ -528,4 +528,23 @@ TEST(MayerSampling, trimer_grow_LONG) {
   EXPECT_NEAR(0, mayer->mayer().average(), 4*mayer->mayer().block_stdev());
 }
 
+TEST(MonteCarlo, BondHarmonic) {
+  MonteCarlo mc;
+  mc.add(MakeConfiguration({
+    {"particle_type0", "../forcefield/data.dimer_harmonic"},
+    {"add_particles_of_type0", "1"},
+    {"cubic_box_length", "10"}}));
+  mc.add(MakePotential(MakeLennardJones()));
+  mc.set(MakeThermoParams({{"beta", "1"}}));
+  mc.set(MakeMetropolis());
+  mc.add(MakeTrialGrow({{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}}}));
+  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+  auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
+  mc.add(bonds);
+  mc.attempt(1e6);
+  INFO(bonds->bond_hist(0).str());
+  INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+  EXPECT_NEAR(1., bonds->bond(0).average(), 3*bonds->bond(0).block_stdev());
+}
+
 }  // namespace feasst

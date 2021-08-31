@@ -73,6 +73,7 @@
 #include "system/include/angle_square_well.h"
 #include "system/include/rigid_angle.h"
 #include "system/include/bond_two_body.h"
+#include "models/include/bond_harmonic.h"
 #include "system/include/bond_square_well.h"
 #include "system/include/rigid_bond.h"
 #include "system/include/neighbor_criteria.h"
@@ -83,6 +84,7 @@
 #include "system/include/bond_four_body.h"
 #include "models/include/dihedral_trappe.h"
 #include "system/include/rigid_dihedral.h"
+#include "system/include/bond_visitor.h"
 #include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
 #include "system/include/lennard_jones.h"
@@ -204,8 +206,8 @@
 #include "cluster/include/compute_gca.h"
 #include "cluster/include/compute_add_avb_divalent.h"
 #include "morph/include/compute_morph.h"
-#include "monte_carlo/include/trial_compute_volume.h"
 #include "cluster/include/compute_remove_avb_divalent.h"
+#include "monte_carlo/include/trial_compute_volume.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_move.h"
@@ -290,7 +292,6 @@
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
 #include "flat_histogram/include/macrostate_energy.h"
-#include "system/include/bond_visitor.h"
 using namespace feasst;
 %}
 %include "std_string.i"
@@ -378,6 +379,7 @@ using namespace std;
 %shared_ptr(feasst::RigidAngle);
 %shared_ptr(feasst::BondTwoBody);
 %shared_ptr(feasst::BondLength);
+%shared_ptr(feasst::BondHarmonic);
 %shared_ptr(feasst::BondSquareWell);
 %shared_ptr(feasst::RigidBond);
 %shared_ptr(feasst::NeighborCriteria);
@@ -387,7 +389,8 @@ using namespace std;
 %shared_ptr(feasst::EnergyMapAllCriteria);
 %shared_ptr(feasst::BondFourBody);
 %shared_ptr(feasst::DihedralTRAPPE);
-%shared_ptr(feasst::RigidDihredral);
+%shared_ptr(feasst::RigidDihedral);
+%shared_ptr(feasst::BondVisitor);
 %shared_ptr(feasst::VisitModel);
 %shared_ptr(feasst::ModelTwoBody);
 %shared_ptr(feasst::LennardJones);
@@ -517,8 +520,8 @@ using namespace std;
 %shared_ptr(feasst::ComputeGCA);
 %shared_ptr(feasst::ComputeAddAVBDivalent);
 %shared_ptr(feasst::ComputeMorph);
-%shared_ptr(feasst::TrialComputeVolume);
 %shared_ptr(feasst::ComputeRemoveAVBDivalent);
+%shared_ptr(feasst::TrialComputeVolume);
 %shared_ptr(feasst::TrialComputeRemove);
 %shared_ptr(feasst::TrialComputeAdd);
 %shared_ptr(feasst::TrialComputeMove);
@@ -605,7 +608,6 @@ using namespace std;
 %shared_ptr(feasst::FlatHistogram);
 %shared_ptr(feasst::Clones);
 %shared_ptr(feasst::MacrostateEnergy);
-%shared_ptr(feasst::BondVisitor);
 %include configuration/include/properties.h
 %include configuration/include/typed_entity.h
 %include configuration/include/bond.h
@@ -658,6 +660,7 @@ using namespace std;
 %include system/include/angle_square_well.h
 %include system/include/rigid_angle.h
 %include system/include/bond_two_body.h
+%include models/include/bond_harmonic.h
 %include system/include/bond_square_well.h
 %include system/include/rigid_bond.h
 %include system/include/neighbor_criteria.h
@@ -668,6 +671,7 @@ using namespace std;
 %include system/include/bond_four_body.h
 %include models/include/dihedral_trappe.h
 %include system/include/rigid_dihedral.h
+%include system/include/bond_visitor.h
 %include system/include/visit_model.h
 %include system/include/model_two_body.h
 %include system/include/lennard_jones.h
@@ -789,8 +793,8 @@ using namespace std;
 %include cluster/include/compute_gca.h
 %include cluster/include/compute_add_avb_divalent.h
 %include morph/include/compute_morph.h
-%include monte_carlo/include/trial_compute_volume.h
 %include cluster/include/compute_remove_avb_divalent.h
+%include monte_carlo/include/trial_compute_volume.h
 %include monte_carlo/include/trial_compute_remove.h
 %include monte_carlo/include/trial_compute_add.h
 %include monte_carlo/include/trial_compute_move.h
@@ -875,4 +879,3 @@ using namespace std;
 %include flat_histogram/include/flat_histogram.h
 %include flat_histogram/include/clones.h
 %include flat_histogram/include/macrostate_energy.h
-%include system/include/bond_visitor.h

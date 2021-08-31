@@ -10,8 +10,6 @@ namespace feasst {
 /**
   U(angle) = k_energy_per_radian_sq*(angle - equilibrium_degrees)^2
   with parameters given in Angle Properties
-
-  Note that the optimized Gaussian implementation may assume 3D.
  */
 class AngleHarmonic : public BondThreeBody {
  public:

@@ -50,6 +50,7 @@
 #include "system/include/angle_square_well.h"
 #include "system/include/rigid_angle.h"
 #include "system/include/bond_two_body.h"
+#include "models/include/bond_harmonic.h"
 #include "system/include/bond_square_well.h"
 #include "system/include/rigid_bond.h"
 #include "system/include/neighbor_criteria.h"
@@ -60,6 +61,7 @@
 #include "system/include/bond_four_body.h"
 #include "models/include/dihedral_trappe.h"
 #include "system/include/rigid_dihedral.h"
+#include "system/include/bond_visitor.h"
 #include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
 #include "system/include/lennard_jones.h"
@@ -181,8 +183,8 @@
 #include "cluster/include/compute_gca.h"
 #include "cluster/include/compute_add_avb_divalent.h"
 #include "morph/include/compute_morph.h"
-#include "monte_carlo/include/trial_compute_volume.h"
 #include "cluster/include/compute_remove_avb_divalent.h"
+#include "monte_carlo/include/trial_compute_volume.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_move.h"
@@ -267,6 +269,5 @@
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
 #include "flat_histogram/include/macrostate_energy.h"
-#include "system/include/bond_visitor.h"
 std::shared_ptr<feasst::ComputeBeta> __feasst__ComputeBeta = std::make_shared<feasst::ComputeBeta>();
 std::shared_ptr<feasst::Tune> __feasst__Tune = std::make_shared<feasst::Tune>();
