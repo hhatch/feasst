@@ -47,6 +47,7 @@ void TrialCompute::compute_rosenbluth(
       energy = stage->rosenbluth().energy(0);
       acceptance->add_to_energy_old(energy);
       ln_rosenbluth -= stage->rosenbluth().ln_total_rosenbluth();
+      //ln_rosenbluth -= system->thermo_params().beta()*stage->select().exclude_energy();
       DEBUG("adding to old energy " << energy);
     } else {
       energy = stage->rosenbluth().chosen_energy();
@@ -55,6 +56,7 @@ void TrialCompute::compute_rosenbluth(
       acceptance->add_to_energy_new(energy);
       DEBUG("energy new updated " << acceptance->energy_new());
       ln_rosenbluth += stage->rosenbluth().ln_total_rosenbluth();
+      //ln_rosenbluth += system->thermo_params().beta()*stage->select().exclude_energy();
       DEBUG("adding to new energy " << energy);
     }
     energy_change += energy;

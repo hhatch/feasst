@@ -42,6 +42,10 @@ class PerturbDistance : public PerturbMove {
   double random_distance(const System& system,
     const TrialSelect* select,
     Random * random);
+  double random_distance(const System& system,
+    const TrialSelect* select,
+    Random * random,
+    double * bond_energy);
 
   void move(System * system,
       TrialSelect * select,

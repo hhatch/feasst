@@ -538,7 +538,10 @@ TEST(MonteCarlo, BondHarmonic) {
   mc.add(MakePotential(MakeBondVisitor()));
   mc.set(MakeThermoParams({{"beta", "1"}}));
   mc.set(MakeMetropolis());
-  mc.add(MakeTrialGrow({{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}}}));
+  mc.add(MakeTrialGrow({
+    {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "1"}}
+    //{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "4"}}
+  }));
 //  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
   auto en = MakeEnergy({{"steps_per_write", "1e5"}});
   mc.add(en);
@@ -548,8 +551,11 @@ TEST(MonteCarlo, BondHarmonic) {
   mc.attempt(3e5);
   INFO(bonds->bond_hist(0).str());
   INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
-  EXPECT_NEAR(1.00167, bonds->bond(0).average(), 3*bonds->bond(0).block_stdev());
+  EXPECT_NEAR(1.00167, bonds->bond(0).average(), 5*bonds->bond(0).block_stdev());
   INFO(en->accumulator().str());
+
+  // equipartition theorem expects the vibrational DOF to add 1/2kT
+  EXPECT_NEAR(0.5, en->accumulator().average(), 5*en->accumulator().block_stdev());
   EXPECT_GT(en->accumulator().average(), 0);
 }
 

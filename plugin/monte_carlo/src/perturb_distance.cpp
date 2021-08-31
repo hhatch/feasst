@@ -64,7 +64,9 @@ void PerturbDistance::move_once_(System * system,
   DEBUG("mobile " << select->mobile().str());
   DEBUG("old pos " << site->str());
   random->unit_sphere_surface(site);
-  site->multiply(random_distance(*system, select, random));
+  double bond_energy;
+  site->multiply(random_distance(*system, select, random, &bond_energy));
+  select->add_exclude_energy(bond_energy);
   site->add(select->anchor_position(0, 0, *system));
   DEBUG("new pos " << site->str());
   system->get_configuration()->update_positions(select->mobile());
@@ -95,13 +97,21 @@ void PerturbDistance::serialize(std::ostream& ostr) const {
 double PerturbDistance::random_distance(const System& system,
     const TrialSelect* select,
     Random * random) {
+  FATAL("not implemented");
+}
+double PerturbDistance::random_distance(const System& system,
+    const TrialSelect* select,
+    Random * random,
+    double * bond_energy) {
   const Bond& bond = system.configuration().unique_types().particle(
     select->particle_type()).bond(bond_type_);
   const double beta = system.thermo_params().beta();
   ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
     bond.model() << " not found");
-  return bond_.deserialize_map()[bond.model()]->random_distance(
-    bond, beta, system.dimension(), random);
+  const BondTwoBody * model = bond_.deserialize_map()[bond.model()].get();
+  const double dist = model->random_distance(bond, beta, system.dimension(), random);
+  *bond_energy = model->energy(dist, bond);
+  return dist;
 }
 
 }  // namespace feasst
