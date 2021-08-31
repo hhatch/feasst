@@ -82,9 +82,9 @@ Angle Properties
 0 RigidAngle degrees 0.0 delta 0.0001
 1 RigidAngle degrees 0.0 delta 0.0001
 2 RigidAngle degrees 0.0 delta 0.0001
-3 AngleSquareWell degrees 98.770311717551300000 spring_constant 0.0 delta 0.0001
-4 AngleSquareWell degrees 84.330508349490500000 spring_constant 0.0 delta 0.0001
-5 AngleSquareWell degrees 70.457290162886000000 spring_constant 0.0 delta 0.0001
+3 AngleSquareWell minimum 98.770311717551300000 maximum 180.0
+4 AngleSquareWell minimum 84.330508349490500000 maximum 180.0
+5 AngleSquareWell minimum 70.457290162886000000 maximum 180.0
 
 Angles
 

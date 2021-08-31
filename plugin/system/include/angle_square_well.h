@@ -8,8 +8,8 @@
 namespace feasst {
 
 /**
-  U(theta) = 0 when |theta-theta0| < delta/2, otherwise infinity.
-  where theta is in degrees
+  U(r) = 0 when the angle is between the minimum and maximum specified in
+  AngleProperties, otherwise infinity.
  */
 class AngleSquareWell : public AngleModel {
  public:

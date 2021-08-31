@@ -37,11 +37,11 @@ void AngleSquareWell::serialize(std::ostream& ostr) const {
 }
 
 double AngleSquareWell::energy(const double theta, const Bond& angle) const {
-  const double theta0 = degrees_to_radians(angle.property("theta0"));
-  const double delta = degrees_to_radians(angle.property("delta"));
+  const double minimum = degrees_to_radians(angle.property("minimum"));
+  const double maximum = degrees_to_radians(angle.property("maximum"));
   TRACE("theta " << theta);
   ASSERT(!std::isnan(theta), "theta is nan");
-  if (std::abs(theta - theta0) > 0.5*delta) {
+  if (theta < minimum || theta > maximum) {
     return NEAR_INFINITY;
   }
   return 0.;
