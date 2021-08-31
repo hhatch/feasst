@@ -16,7 +16,7 @@ class RigidAngle : public BondThreeBody {
  public:
   RigidAngle() {}
   double energy(const double radians, const Bond& angle) const override;
-  double random_angle(const Angle& angle, const double beta,
+  double random_angle_radians(const Angle& angle, const double beta,
     Random * random) const override;
   void random_branch(
     const Angle& a2a1m1,

@@ -33,7 +33,7 @@ class PerturbDistanceAngle : public PerturbDistance {
   double angle_type() const { return angle_type_; }
 
   /// Return the randomly selected angle from the potential.
-  double random_angle(const System& system,
+  double random_angle_radians(const System& system,
     const TrialSelect * select,
     Random * random);
 

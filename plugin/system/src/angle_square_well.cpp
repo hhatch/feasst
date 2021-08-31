@@ -48,10 +48,10 @@ double AngleSquareWell::energy(const double radians, const Bond& angle) const {
   return 0.;
 }
 
-double AngleSquareWell::random_angle(const Angle& angle, const double beta,
+double AngleSquareWell::random_angle_radians(const Angle& angle, const double beta,
     Random * random) const {
-  return random->uniform_real(angle.property("minimum"),
-                              angle.property("maximum"));
+  return degrees_to_radians(random->uniform_real(angle.property("minimum"),
+                                                 angle.property("maximum")));
 }
 
 }  // namespace feasst

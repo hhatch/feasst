@@ -40,7 +40,8 @@ double BondFourBody::energy(const Position& ri, const Position& rj,
   return 0.;
 }
 
-double BondFourBody::random_dihedral(const Angle& dihedral, const double beta,
+double BondFourBody::random_dihedral_radians(const Angle& dihedral,
+    const double beta,
     Random * random) const {
   FATAL("not implemented");
   return 0.;

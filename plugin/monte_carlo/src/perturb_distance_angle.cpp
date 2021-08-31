@@ -35,13 +35,13 @@ void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
   DEBUG("angle_type_ " << angle_type_);
 }
 
-double PerturbDistanceAngle::random_angle(const System& system,
+double PerturbDistanceAngle::random_angle_radians(const System& system,
     const TrialSelect* select,
     Random * random) {
   const Angle& angle = system.configuration().unique_type(
     select->particle_type()).angle(angle_type_);
   const double beta = system.thermo_params().beta();
-  return angle_.deserialize_map()[angle.model()]->random_angle(angle, beta, random);
+  return angle_.deserialize_map()[angle.model()]->random_angle_radians(angle, beta, random);
 }
 
 void PerturbDistanceAngle::move(System * system,
@@ -49,7 +49,7 @@ void PerturbDistanceAngle::move(System * system,
     Random * random) {
   DEBUG(class_name());
   const double distance = random_distance(*system, select, random);
-  const double angle = random_angle(*system, select, random);
+  const double angle = random_angle_radians(*system, select, random);
   DEBUG("angle: " << angle);
   place_in_circle(distance, angle, system, select, random);
 }

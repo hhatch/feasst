@@ -46,7 +46,7 @@ double RigidAngle::energy(const double radians, const Bond& angle) const {
   return 0.;
 }
 
-double RigidAngle::random_angle(const Angle& angle, const double beta,
+double RigidAngle::random_angle_radians(const Angle& angle, const double beta,
     Random * random) const {
   return degrees_to_radians(angle.property("degrees"));
 }
@@ -63,9 +63,9 @@ void RigidAngle::random_branch(
   ASSERT(a2a1m1.model() == "RigidAngle" &&
          a2a1m2.model() == "RigidAngle" &&
          m1a1m2.model() == "RigidAngle", "Branch model mismatch");
-  *radians_a2a1m1 = random_angle(a2a1m1, beta, random);
-  *radians_a2a1m2 = random_angle(a2a1m2, beta, random);
-  *radians_m1a1m2 = random_angle(m1a1m2, beta, random);
+  *radians_a2a1m1 = random_angle_radians(a2a1m1, beta, random);
+  *radians_a2a1m2 = random_angle_radians(a2a1m2, beta, random);
+  *radians_m1a1m2 = random_angle_radians(m1a1m2, beta, random);
 }
 
 }  // namespace feasst

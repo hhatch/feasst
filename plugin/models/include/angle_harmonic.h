@@ -10,12 +10,14 @@ namespace feasst {
 /**
   U(angle) = k_energy_per_radian_sq*(angle - equilibrium_degrees)^2
   with parameters given in Angle Properties
+
+  Note that the optimized Gaussian implementation may assume 3D.
  */
 class AngleHarmonic : public BondThreeBody {
  public:
   AngleHarmonic() {}
   double energy(const double radians, const Bond& angle) const override;
-  double random_angle(const Angle& angle, const double beta,
+  double random_angle_radians(const Angle& angle, const double beta,
     Random * random) const override;
   std::shared_ptr<BondThreeBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;

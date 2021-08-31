@@ -23,9 +23,9 @@ class BondThreeBody {
   virtual double energy(const Position& relative01, const Position& relative21,
     const Bond& angle) const;
   virtual double energy(const double radians, const Bond& angle) const = 0;
-  virtual double random_angle(const Angle& angle, const double beta,
+  virtual double random_angle_radians(const Angle& angle, const double beta,
     Random * random) const = 0;
-  
+
   /**
     Return three random angles for forming a branch.
 
