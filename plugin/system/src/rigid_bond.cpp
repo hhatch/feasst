@@ -19,7 +19,7 @@ std::shared_ptr<BondTwoBody> RigidBond::create(std::istream& istr) const {
   return std::make_shared<RigidBond>(istr);
 }
 
-RigidBond::RigidBond(std::istream& istr) : BondLength(istr) {
+RigidBond::RigidBond(std::istream& istr) : BondTwoBody(istr) {
   // ASSERT(class_name_ == "RigidBond", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(7690 == version, "mismatch version: " << version);
@@ -45,7 +45,7 @@ double RigidBond::energy(const double distance, const Bond& bond) const {
 }
 
 double RigidBond::random_distance(const Bond& bond, const double beta,
-    Random * random) const {
+    const int dimen, Random * random) const {
   return bond.property("length");
 }
 

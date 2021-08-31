@@ -538,13 +538,17 @@ TEST(MonteCarlo, BondHarmonic) {
   mc.set(MakeThermoParams({{"beta", "1"}}));
   mc.set(MakeMetropolis());
   mc.add(MakeTrialGrow({{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}}}));
-  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+//  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+//  auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
+  auto en = MakeEnergy();
+  mc.add(en);
   auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
   mc.add(bonds);
-  mc.attempt(1e6);
-  INFO(bonds->bond_hist(0).str());
-  INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
-  EXPECT_NEAR(1., bonds->bond(0).average(), 3*bonds->bond(0).block_stdev());
+  mc.attempt(3e5);
+  // INFO(bonds->bond_hist(0).str());
+  // INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+  EXPECT_NEAR(1.00167, bonds->bond(0).average(), 3*bonds->bond(0).block_stdev());
+  INFO(en->accumulator().str());
 }
 
 }  // namespace feasst

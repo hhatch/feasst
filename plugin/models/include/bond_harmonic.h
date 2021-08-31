@@ -9,15 +9,18 @@ namespace feasst {
 
 /**
   U(r) = k_energy_per_length_sq*(r - equilibrium_length)^2
-  with parameters given in Bond Properties
-
-  Note that the optimized Gaussian implementation may assume 3D.
+  with parameters given in Bond Properties.
  */
-class BondHarmonic : public BondLength {
+class BondHarmonic : public BondTwoBody {
  public:
   BondHarmonic() {}
   double energy(const double distance, const Bond& bond) const override;
-  double random_distance(const Bond& bond, const double beta,
+
+  /// Return a randomly selected bond length with harmonic potential as described
+  /// in Frenkel and Smit, Alg 43, page 578 and Allen and Tildesley, Section G.3.
+  /// The maximal length is 3 sigma beyond the mean.
+  /// If 2D, use the accept-reject method
+  double random_distance(const Bond& bond, const double beta, const int dimen,
     Random * random) const override;
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;

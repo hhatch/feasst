@@ -240,6 +240,15 @@ double Random::standard_normal() {
   const double u = uniform();
   const double v = uniform();
   return std::sqrt(-2.*std::log(u))*std::cos(2.*PI*v);
+
+// Frenkel and Smit a la Numerical Recipes
+//  double v1, v2, r = 2.;
+//  while (r >= 1.) {
+//    v1 = 2.*uniform() - 1.;
+//    v2 = 2.*uniform() - 1.;
+//    r=v1*v1 + v2*v2;
+//  }
+//  return v1*std::sqrt(-2*std::log(r)/r);
 }
 
 //double Random::harmonic_bond_length(const double equilibrium_length,

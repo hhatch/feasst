@@ -20,7 +20,7 @@ std::shared_ptr<BondTwoBody> BondSquareWell::create(std::istream& istr) const {
   return std::make_shared<BondSquareWell>(istr);
 }
 
-BondSquareWell::BondSquareWell(std::istream& istr) : BondLength(istr) {
+BondSquareWell::BondSquareWell(std::istream& istr) : BondTwoBody(istr) {
   // ASSERT(class_name_ == "BondSquareWell", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(344 == version, "mismatch version: " << version);
@@ -46,7 +46,7 @@ double BondSquareWell::energy(const double distance, const Bond& bond) const {
 }
 
 double BondSquareWell::random_distance(const Bond& bond, const double beta,
-    Random * random) const {
+    const int dimen, Random * random) const {
   return random->uniform_real(bond.property("minimum"),
                               bond.property("maximum"));
 }

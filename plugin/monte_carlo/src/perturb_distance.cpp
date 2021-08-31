@@ -100,7 +100,8 @@ double PerturbDistance::random_distance(const System& system,
   const double beta = system.thermo_params().beta();
   ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
     bond.model() << " not found");
-  return bond_.deserialize_map()[bond.model()]->random_distance(bond, beta, random);
+  return bond_.deserialize_map()[bond.model()]->random_distance(
+    bond, beta, system.dimension(), random);
 }
 
 }  // namespace feasst

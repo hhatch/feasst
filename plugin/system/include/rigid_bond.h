@@ -12,11 +12,11 @@ namespace feasst {
   and the length parameter is less than delta.
   Otherwise, U(r) = NEAR_INFINITY.
  */
-class RigidBond : public BondLength {
+class RigidBond : public BondTwoBody {
  public:
   RigidBond() {}
   double energy(const double distance, const Bond& bond) const override;
-  double random_distance(const Bond& bond, const double beta,
+  double random_distance(const Bond& bond, const double beta, const int dimen,
     Random * random) const override;
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;

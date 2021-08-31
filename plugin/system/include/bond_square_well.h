@@ -11,11 +11,11 @@ namespace feasst {
   U(r) = 0 when distance is between the minimum and maximum specified in
   BondProperties, otherwise infinity.
  */
-class BondSquareWell : public BondLength {
+class BondSquareWell : public BondTwoBody {
  public:
   BondSquareWell() {}
   double energy(const double distance, const Bond& bond) const override;
-  double random_distance(const Bond& bond, const double beta,
+  double random_distance(const Bond& bond, const double beta, const int dimen,
     Random * random) const override;
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
