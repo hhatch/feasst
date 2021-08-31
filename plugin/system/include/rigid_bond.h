@@ -16,6 +16,8 @@ class RigidBond : public BondLength {
  public:
   explicit RigidBond(const argtype& args = argtype()) {}
   double energy(const double distance, const Bond& bond) const override;
+  double random_distance(const Bond& bond, const double beta,
+    Random * random) const override;
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit RigidBond(std::istream& istr);

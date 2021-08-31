@@ -90,7 +90,7 @@ TEST(MonteCarlo, chain) {
   mc.attempt(3e2);
 
   MonteCarlo mc2 = test_serialize(mc);
-  EXPECT_EQ(mc2.analyzers().size(), 3);
+  EXPECT_EQ(mc2.analyzers().size(), 2);
 }
 
 // HWH this test is known to fail infrequently

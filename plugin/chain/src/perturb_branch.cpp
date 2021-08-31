@@ -231,8 +231,8 @@ void PerturbBranch::move(System * system,
       << "m1a1m2 " << m1a1m2_.is_rigid());
   }
   const double dimen = system->configuration().dimension();
-  const double la1m1 = a2a1m1_.random_distance(random, beta, dimen);
-  const double la1m2 = a2a1m2_.random_distance(random, beta, dimen);
+  const double la1m1 = a2a1m1_.random_distance(*system, select, random);
+  const double la1m2 = a2a1m2_.random_distance(*system, select, random);
   a2a1m1_.place_in_circle(la1m1, theta_a2a1m1, system, select, random);
   place_in_branch(la1m2, theta_a2a1m2, theta_m1a1m2, system, select, random);
 }

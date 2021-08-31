@@ -67,9 +67,7 @@ void PerturbDistanceAngle::move(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
-  const double distance = random_distance(random,
-    system->thermo_params().beta(),
-    system->dimension());
+  const double distance = random_distance(*system, select, random);
   const double angle = random_angle(random, system->thermo_params().beta(),
     system->dimension());
   DEBUG("angle: " << angle);

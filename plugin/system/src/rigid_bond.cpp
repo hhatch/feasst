@@ -44,4 +44,9 @@ double RigidBond::energy(const double distance, const Bond& bond) const {
   return 0.;
 }
 
+double RigidBond::random_distance(const Bond& bond, const double beta,
+    Random * random) const {
+  return bond.property("length");
+}
+
 }  // namespace feasst

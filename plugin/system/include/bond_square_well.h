@@ -14,6 +14,8 @@ class BondSquareWell : public BondLength {
  public:
   explicit BondSquareWell(const argtype& args = argtype()) {}
   double energy(const double distance, const Bond& bond) const override;
+  double random_distance(const Bond& bond, const double beta,
+    Random * random) const override { return 0.; }
   std::shared_ptr<BondTwoBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit BondSquareWell(std::istream& istr);

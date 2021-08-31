@@ -32,21 +32,7 @@ std::shared_ptr<Perturb> PerturbDistance::create(std::istream& istr) const {
 
 void PerturbDistance::precompute(TrialSelect * select, System * system) {
   ASSERT(select->has_property("bond_type"), "cannot obtain bond properties");
-  const int bond_type = feasst::round(select->property("bond_type"));
-  const Bond& bond = system->configuration().unique_types().particle(
-    select->particle_type()).bond(bond_type);
-  if (bond.has_property("length")) {
-    distance_ = bond.property("length");
-  }
-  if (bond.has_property("spring_constant")) {
-    spring_constant_ = bond.property("spring_constant");
-  }
-  if (bond.has_property("maximum_length")) {
-    maximum_length_ = bond.property("maximum_length");
-  }
-  if (bond.has_property("exponent")) {
-    exponent_ = bond.property("exponent");
-  }
+  bond_type_ = feasst::round(select->property("bond_type"));
 }
 
 void PerturbDistance::move(System * system,
@@ -78,9 +64,7 @@ void PerturbDistance::move_once_(System * system,
   DEBUG("mobile " << select->mobile().str());
   DEBUG("old pos " << site->str());
   random->unit_sphere_surface(site);
-  site->multiply(random_distance(random,
-    system->thermo_params().beta(),
-    system->dimension()));
+  site->multiply(random_distance(*system, select, random));
   site->add(select->anchor_position(0, 0, *system));
   DEBUG("new pos " << site->str());
   system->get_configuration()->update_positions(select->mobile());
@@ -92,20 +76,14 @@ PerturbDistance::PerturbDistance(std::istream& istr)
   // ASSERT(class_name_ == "PerturbDistance", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(228 == version, "mismatch version: " << version);
-  feasst_deserialize(&distance_, istr);
-  feasst_deserialize(&spring_constant_, istr);
-  feasst_deserialize(&maximum_length_, istr);
-  feasst_deserialize(&exponent_, istr);
+  feasst_deserialize(&bond_type_, istr);
   feasst_deserialize(&potential_acceptance_, istr);
 }
 
 void PerturbDistance::serialize_perturb_distance_(std::ostream& ostr) const {
   serialize_perturb_(ostr);
   feasst_serialize_version(228, ostr);
-  feasst_serialize(distance_, ostr);
-  feasst_serialize(spring_constant_, ostr);
-  feasst_serialize(maximum_length_, ostr);
-  feasst_serialize(exponent_, ostr);
+  feasst_serialize(bond_type_, ostr);
   feasst_serialize(potential_acceptance_, ostr);
 }
 
@@ -114,23 +92,13 @@ void PerturbDistance::serialize(std::ostream& ostr) const {
   serialize_perturb_distance_(ostr);
 }
 
-double PerturbDistance::random_distance(Random * random,
-    const double beta,
-    const int dimension) const {
-  if (std::abs(spring_constant_ + 1) < NEAR_ZERO) {
-    return distance_;
-  }
-  double spring = beta*spring_constant_;
-  if (std::abs(spring_constant_) < NEAR_ZERO) spring = 0.;
-  double max_length = maximum_length_;
-  if (std::abs(max_length + 1) < NEAR_ZERO) {
-    max_length = 2*distance_;
-  }
-  double expo = exponent_;
-  if (std::abs(expo + 1) < NEAR_ZERO) {
-    expo = 2;
-  }
-  return random->bond_length(distance_, max_length, spring, expo, dimension);
+double PerturbDistance::random_distance(const System& system,
+    const TrialSelect* select,
+    Random * random) {
+  const Bond& bond = system.configuration().unique_types().particle(
+    select->particle_type()).bond(bond_type_);
+  const double beta = system.thermo_params().beta();
+  return bond_.deserialize_map()[bond.model()]->random_distance(bond, beta, random);
 }
 
 }  // namespace feasst
