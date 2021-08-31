@@ -534,21 +534,23 @@ TEST(MonteCarlo, BondHarmonic) {
     {"particle_type0", "../forcefield/data.dimer_harmonic"},
     {"add_particles_of_type0", "1"},
     {"cubic_box_length", "10"}}));
-  mc.add(MakePotential(MakeLennardJones()));
+  //mc.add(MakePotential(MakeLennardJones()));
+  mc.add(MakePotential(MakeBondVisitor()));
   mc.set(MakeThermoParams({{"beta", "1"}}));
   mc.set(MakeMetropolis());
   mc.add(MakeTrialGrow({{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}}}));
 //  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
-//  auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
-  auto en = MakeEnergy();
+  auto en = MakeEnergy({{"steps_per_write", "1e5"}});
   mc.add(en);
   auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
+  // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
   mc.add(bonds);
   mc.attempt(3e5);
-  // INFO(bonds->bond_hist(0).str());
-  // INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+  INFO(bonds->bond_hist(0).str());
+  INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
   EXPECT_NEAR(1.00167, bonds->bond(0).average(), 3*bonds->bond(0).block_stdev());
   INFO(en->accumulator().str());
+  EXPECT_GT(en->accumulator().average(), 0);
 }
 
 }  // namespace feasst

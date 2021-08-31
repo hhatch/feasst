@@ -62,6 +62,7 @@ BondVisitor::BondVisitor(std::istream& istr) {
 void BondVisitor::compute_two(const Select& selection,
     const Configuration& config) {
   double en = 0.;
+  //INFO(selection.str());
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
@@ -172,6 +173,7 @@ void BondVisitor::compute_all(const Select& selection,
 
 void BondVisitor::compute_all(const Configuration& config,
     const int group_index) {
+  //INFO("group_index " << group_index);
   const Select& selection = config.group_selects()[group_index];
   compute_all(selection, config);
 }

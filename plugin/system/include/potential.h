@@ -10,6 +10,7 @@
 #include "configuration/include/configuration.h"
 #include "system/include/visit_model.h"
 #include "system/include/model.h"
+#include "system/include/bond_visitor.h"
 
 namespace feasst {
 
@@ -70,6 +71,10 @@ class Potential {
 
   /// Set the model parameters. If not set, use the one from configuration.
   void set(const ModelParams& model_params);
+
+  /// Construct with bond visitor.
+  Potential(std::shared_ptr<BondVisitor> bond_visitor,
+            argtype args = argtype());
 
   bool are_model_params_overridden() const { return model_params_override_; }
 
@@ -139,6 +144,7 @@ class Potential {
   int group_index_;
   std::shared_ptr<VisitModel> visit_model_;
   std::shared_ptr<Model> model_;
+  std::shared_ptr<BondVisitor> bond_visitor_;
   double stored_energy_ = 0.;
   bool model_params_override_ = false;
   ModelParams model_params_;
@@ -168,6 +174,11 @@ inline std::shared_ptr<Potential> MakePotential(
     std::shared_ptr<VisitModel> visit_model,
     argtype args = argtype()) {
   return std::make_shared<Potential>(model, visit_model, args);
+}
+
+inline std::shared_ptr<Potential> MakePotential(
+    std::shared_ptr<BondVisitor> bond_visitor) {
+  return std::make_shared<Potential>(bond_visitor);
 }
 
 }  // namespace feasst
