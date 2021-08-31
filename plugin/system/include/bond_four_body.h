@@ -10,18 +10,19 @@
 
 namespace feasst {
 
+class Random;
+
 /**
   A four body bond is defined by four sites, i - j - k - l.
  */
 class BondFourBody {
  public:
   BondFourBody() {}
-  virtual double energy(
-      const Position& ri,
-      const Position& rj,
-      const Position& rk,
-      const Position& rl,
-      const Dihedral& dihedral) const = 0;
+  virtual double energy(const Position& ri, const Position& rj,
+      const Position& rk, const Position& rl, const Dihedral& dihedral) const;
+  virtual double energy(const double radians, const Bond& dihedral) const = 0;
+  virtual double random_dihedral(const Angle& dihedral, const double beta,
+    Random * random) const;
 
   // serialize
   std::string class_name() const { return class_name_; }

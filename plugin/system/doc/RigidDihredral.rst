@@ -1,6 +1,6 @@
-BondThreeBody
+RigidDihredral
 =====================================================
 
-.. doxygenclass:: feasst::BondThreeBody
+.. doxygenclass:: feasst::RigidDihredral
    :project: FEASST
    :members:

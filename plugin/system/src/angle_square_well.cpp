@@ -37,12 +37,12 @@ void AngleSquareWell::serialize(std::ostream& ostr) const {
   serialize_angle_square_well_(ostr);
 }
 
-double AngleSquareWell::energy(const double theta, const Bond& angle) const {
+double AngleSquareWell::energy(const double radians, const Bond& angle) const {
   const double minimum = degrees_to_radians(angle.property("minimum"));
   const double maximum = degrees_to_radians(angle.property("maximum"));
-  TRACE("theta " << theta);
-  ASSERT(!std::isnan(theta), "theta is nan");
-  if (theta < minimum || theta > maximum) {
+  TRACE("radians " << radians);
+  ASSERT(!std::isnan(radians), "radians is nan");
+  if (radians < minimum || radians > maximum) {
     return NEAR_INFINITY;
   }
   return 0.;
@@ -51,7 +51,7 @@ double AngleSquareWell::energy(const double theta, const Bond& angle) const {
 double AngleSquareWell::random_angle(const Angle& angle, const double beta,
     Random * random) const {
   return random->uniform_real(angle.property("minimum"),
-                              angle.property("maximum")); 
+                              angle.property("maximum"));
 }
 
 }  // namespace feasst

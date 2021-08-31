@@ -48,7 +48,7 @@ double BondSquareWell::energy(const double distance, const Bond& bond) const {
 double BondSquareWell::random_distance(const Bond& bond, const double beta,
     Random * random) const {
   return random->uniform_real(bond.property("minimum"),
-                              bond.property("maximum")); 
+                              bond.property("maximum"));
 }
 
 }  // namespace feasst

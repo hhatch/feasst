@@ -34,4 +34,16 @@ BondFourBody::BondFourBody(std::istream& istr) {
   ASSERT(7509 == version, "mismatch version: " << version);
 }
 
+double BondFourBody::energy(const Position& ri, const Position& rj,
+    const Position& rk, const Position& rl, const Dihedral& dihedral) const {
+  FATAL("not implemented");
+  return 0.;
+}
+
+double BondFourBody::random_dihedral(const Angle& dihedral, const double beta,
+    Random * random) const {
+  FATAL("not implemented");
+  return 0.;
+}
+
 }  // namespace feasst

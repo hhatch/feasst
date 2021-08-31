@@ -1,6 +1,6 @@
-BondThreeBody
+AngleHarmonic
 =====================================================
 
-.. doxygenclass:: feasst::BondThreeBody
+.. doxygenclass:: feasst::AngleHarmonic
    :project: FEASST
    :members:

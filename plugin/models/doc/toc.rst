@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   AngleHarmonic
    DihedralTRAPPE
    Yukawa
    SquareWell

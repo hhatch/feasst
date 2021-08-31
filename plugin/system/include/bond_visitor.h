@@ -9,9 +9,9 @@
 #include "system/include/bond_two_body.h"
 #include "system/include/bond_three_body.h"
 #include "system/include/bond_four_body.h"
-#include "system/include/bond_square_well.h"
-#include "system/include/angle_square_well.h"
-#include "system/include/dihedral_square_well.h"
+#include "system/include/rigid_bond.h"
+#include "system/include/rigid_angle.h"
+#include "system/include/rigid_dihedral.h"
 
 namespace feasst {
 
@@ -57,9 +57,9 @@ class BondVisitor {
   bool verbose_;
 
   // temporary
-  BondSquareWell bond_;
-  AngleSquareWell angle_;
-  DihedralSquareWell dihedral_;
+  RigidBond bond_;
+  RigidAngle angle_;
+  RigidDihedral dihedral_;
 };
 
 inline std::shared_ptr<BondVisitor> MakeBondVisitor(

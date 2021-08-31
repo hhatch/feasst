@@ -48,7 +48,7 @@ Bonds
 
 Angle Properties
 
-0 RigidAngle degrees 114 delta 0.001
+0 AngleHarmonic equilibrium_degrees 114 k_energy_per_radian_sq 0
 
 Angles
 

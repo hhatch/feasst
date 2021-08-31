@@ -8,16 +8,19 @@
    Rosenbluth
    Acceptance
    TrialSelect
-   TrialSelectParticle
    Perturb
    PerturbVolume
    PerturbMove
-   PerturbDistance
    PerturbTranslate
+   PerturbDistance
+   TrialSelectParticle
    TrialSelectBond
    TrialSelectAngle
    TrialSelectDihedral
    Criteria
+   Metropolis
+   Constraint
+   ConstrainNumParticles
    TrialStage
    TrialCompute
    Trial
@@ -34,12 +37,9 @@
    TrialComputeMove
    TrialMove
    TrialTranslate
-   Metropolis
-   Constraint
-   ConstrainNumParticles
+   PerturbDistanceAngle
+   PerturbDihedral
    PerturbRotate
    PerturbAnywhere
    PerturbAdd
    PerturbRemove
-   PerturbDistanceAngle
-   PerturbDihedral

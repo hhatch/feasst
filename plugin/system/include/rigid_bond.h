@@ -14,7 +14,7 @@ namespace feasst {
  */
 class RigidBond : public BondLength {
  public:
-  explicit RigidBond(const argtype& args = argtype()) {}
+  RigidBond() {}
   double energy(const double distance, const Bond& bond) const override;
   double random_distance(const Bond& bond, const double beta,
     Random * random) const override;
@@ -27,9 +27,8 @@ class RigidBond : public BondLength {
   void serialize_rigid_bond_(std::ostream& ostr) const;
 };
 
-inline std::shared_ptr<RigidBond> MakeRigidBond(
-    const argtype &args = argtype()) {
-  return std::make_shared<RigidBond>(args);
+inline std::shared_ptr<RigidBond> MakeRigidBond() {
+  return std::make_shared<RigidBond>();
 }
 
 }  // namespace feasst

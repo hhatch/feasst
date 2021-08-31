@@ -14,7 +14,7 @@ namespace feasst {
  */
 class RigidAngle : public BondThreeBody {
  public:
-  explicit RigidAngle(const argtype& args = argtype()) {}
+  RigidAngle() {}
   double energy(const double radians, const Bond& angle) const override;
   double random_angle(const Angle& angle, const double beta,
     Random * random) const override;
@@ -36,9 +36,8 @@ class RigidAngle : public BondThreeBody {
   void serialize_rigid_angle_(std::ostream& ostr) const;
 };
 
-inline std::shared_ptr<RigidAngle> MakeRigidAngle(
-    const argtype &args = argtype()) {
-  return std::make_shared<RigidAngle>(args);
+inline std::shared_ptr<RigidAngle> MakeRigidAngle() {
+  return std::make_shared<RigidAngle>();
 }
 
 }  // namespace feasst

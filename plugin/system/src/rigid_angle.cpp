@@ -36,11 +36,11 @@ void RigidAngle::serialize(std::ostream& ostr) const {
   serialize_rigid_angle_(ostr);
 }
 
-double RigidAngle::energy(const double theta, const Bond& angle) const {
-  const double radians = degrees_to_radians(angle.property("degrees"));
+double RigidAngle::energy(const double radians, const Bond& angle) const {
+  const double theta = degrees_to_radians(angle.property("degrees"));
   const double delta = degrees_to_radians(angle.property("delta"));
   ASSERT(!std::isnan(radians), "radians is nan");
-  if (std::abs(theta - radians) > delta) {
+  if (std::abs(radians - theta) > delta) {
     return NEAR_INFINITY;
   }
   return 0.;
@@ -56,16 +56,16 @@ void RigidAngle::random_branch(
     const Angle& a2a1m2,
     const Angle& m1a1m2,
     const double beta,
-    double * theta_a2a1m1,
-    double * theta_a2a1m2,
-    double * theta_m1a1m2,
+    double * radians_a2a1m1,
+    double * radians_a2a1m2,
+    double * radians_m1a1m2,
     Random * random) const {
   ASSERT(a2a1m1.model() == "RigidAngle" &&
          a2a1m2.model() == "RigidAngle" &&
          m1a1m2.model() == "RigidAngle", "Branch model mismatch");
-  *theta_a2a1m1 = random_angle(a2a1m1, beta, random);
-  *theta_a2a1m2 = random_angle(a2a1m2, beta, random);
-  *theta_m1a1m2 = random_angle(m1a1m2, beta, random);
+  *radians_a2a1m1 = random_angle(a2a1m1, beta, random);
+  *radians_a2a1m2 = random_angle(a2a1m2, beta, random);
+  *radians_m1a1m2 = random_angle(m1a1m2, beta, random);
 }
 
 }  // namespace feasst

@@ -15,12 +15,7 @@ namespace feasst {
 class DihedralTRAPPE : public BondFourBody {
  public:
   explicit DihedralTRAPPE(const argtype& args = argtype()) {}
-  double energy(
-      const Position& ri,
-      const Position& rj,
-      const Position& rk,
-      const Position& rl,
-      const Dihedral& dihedral) const override;
+  double energy(const double radians, const Bond& dihedral) const override;
   std::shared_ptr<BondFourBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit DihedralTRAPPE(std::istream& istr);

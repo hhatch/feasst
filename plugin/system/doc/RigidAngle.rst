@@ -1,6 +1,6 @@
-BondThreeBody
+RigidAngle
 =====================================================
 
-.. doxygenclass:: feasst::BondThreeBody
+.. doxygenclass:: feasst::RigidAngle
    :project: FEASST
    :members:

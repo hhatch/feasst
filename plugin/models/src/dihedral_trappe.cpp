@@ -36,12 +36,8 @@ void DihedralTRAPPE::serialize(std::ostream& ostr) const {
   serialize_dihedral_trappe_(ostr);
 }
 
-double DihedralTRAPPE::energy(
-    const Position& ri,
-    const Position& rj,
-    const Position& rk,
-    const Position& rl,
-    const Dihedral& dihedral) const {
+double DihedralTRAPPE::energy(const double radians, const Bond& dihedral) const {
+  FATAL("not implemented");
   return 0.;
 }
 

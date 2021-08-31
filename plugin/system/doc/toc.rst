@@ -8,11 +8,13 @@
    ThermoParams
    BondThreeBody
    AngleSquareWell
+   RigidAngle
    BondTwoBody
    BondSquareWell
+   RigidBond
    NeighborCriteria
    BondFourBody
-   BondVisitor
+   RigidDihredral
    VisitModel
    ModelTwoBody
    LennardJones
@@ -23,10 +25,10 @@
    ModelThreeBody
    ModelOneBody
    ModelEmpty
-   LongRangeCorrections
    VisitModelIntraMap
    VisitModelIntra
    VisitModelBond
+   LongRangeCorrections
    ModelTwoBodyTable
    Cells
    VisitModelCell
@@ -34,3 +36,4 @@
    PotentialFactory
    System
    utils
+   BondVisitor

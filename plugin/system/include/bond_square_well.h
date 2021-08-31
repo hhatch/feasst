@@ -13,7 +13,7 @@ namespace feasst {
  */
 class BondSquareWell : public BondLength {
  public:
-  explicit BondSquareWell(const argtype& args = argtype()) {}
+  BondSquareWell() {}
   double energy(const double distance, const Bond& bond) const override;
   double random_distance(const Bond& bond, const double beta,
     Random * random) const override;
@@ -26,9 +26,8 @@ class BondSquareWell : public BondLength {
   void serialize_bond_square_well_(std::ostream& ostr) const;
 };
 
-inline std::shared_ptr<BondSquareWell> MakeBondSquareWell(
-    const argtype &args = argtype()) {
-  return std::make_shared<BondSquareWell>(args);
+inline std::shared_ptr<BondSquareWell> MakeBondSquareWell() {
+  return std::make_shared<BondSquareWell>();
 }
 
 }  // namespace feasst

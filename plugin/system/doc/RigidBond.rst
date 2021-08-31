@@ -1,6 +1,6 @@
-BondThreeBody
+RigidBond
 =====================================================
 
-.. doxygenclass:: feasst::BondThreeBody
+.. doxygenclass:: feasst::RigidBond
    :project: FEASST
    :members:

@@ -8,13 +8,13 @@
 namespace feasst {
 
 /**
-  U(r) = 0 when the angle is between the minimum and maximum specified in
+  U(angle) = 0 when the angle is between the minimum and maximum specified in
   AngleProperties, otherwise infinity.
  */
 class AngleSquareWell : public BondThreeBody {
  public:
-  explicit AngleSquareWell(const argtype& args = argtype()) {}
-  double energy(const double theta, const Bond& angle) const override;
+  AngleSquareWell() {}
+  double energy(const double radians, const Bond& angle) const override;
   double random_angle(const Angle& angle, const double beta,
     Random * random) const override;
   std::shared_ptr<BondThreeBody> create(std::istream& istr) const override;
@@ -26,9 +26,8 @@ class AngleSquareWell : public BondThreeBody {
   void serialize_angle_square_well_(std::ostream& ostr) const;
 };
 
-inline std::shared_ptr<AngleSquareWell> MakeAngleSquareWell(
-    const argtype &args = argtype()) {
-  return std::make_shared<AngleSquareWell>(args);
+inline std::shared_ptr<AngleSquareWell> MakeAngleSquareWell() {
+  return std::make_shared<AngleSquareWell>();
 }
 
 }  // namespace feasst
