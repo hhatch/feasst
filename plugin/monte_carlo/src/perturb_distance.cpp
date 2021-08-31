@@ -98,6 +98,8 @@ double PerturbDistance::random_distance(const System& system,
   const Bond& bond = system.configuration().unique_types().particle(
     select->particle_type()).bond(bond_type_);
   const double beta = system.thermo_params().beta();
+  ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
+    bond.model() << " not found");
   return bond_.deserialize_map()[bond.model()]->random_distance(bond, beta, random);
 }
 

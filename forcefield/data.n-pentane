@@ -48,7 +48,7 @@ Bonds
 
 Angle Properties
 
-0 theta0 114
+0 RigidAngle degrees 114 delta 0.001
 
 Angles
 
@@ -58,7 +58,7 @@ Angles
 
 Dihedral Properties
 
-0 theta0 114 spring_constant 0.07914781717671505
+0 RigidDihedral degrees 114 delta 0.001
 
 Dihedrals
 

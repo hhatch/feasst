@@ -42,7 +42,7 @@ Bonds
 
 Angle Properties
 
-0 theta0 180.0 delta 0.0001
+0 RigidAngle degrees 180.0 delta 0.0001
 
 Angles
 
