@@ -60,7 +60,9 @@ void PerturbDistance::move(System * system,
   const double beta = system->thermo_params().beta();
   for (int attempt = 0; attempt < max_attempt; ++attempt) {
     move_once_(system, select, random);
-    const double energy = system->get_potential(potential_acceptance_)->select_energy(select->mobile(), system->get_configuration());
+    Potential * poten = system->get_potential(potential_acceptance_);
+    const double energy = poten->select_energy(select->mobile(),
+                                               system->get_configuration());
     if (random->uniform() < std::exp(-beta*energy)) {
       return;
     }
@@ -72,9 +74,8 @@ void PerturbDistance::move_once_(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
-  Select * mobile = select->get_mobile();
-  Position * site = mobile->get_site_position(0, 0);
-  DEBUG("mobile " << mobile->str());
+  Position * site = select->get_mobile()->get_site_position(0, 0);
+  DEBUG("mobile " << select->mobile().str());
   DEBUG("old pos " << site->str());
   random->unit_sphere_surface(site);
   site->multiply(random_distance(random,

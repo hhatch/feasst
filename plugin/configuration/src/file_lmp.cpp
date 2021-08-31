@@ -40,13 +40,11 @@ void FileLMP::read_num_and_types_(const std::string file_name) {
     file >> read_num >> descript;
     if (descript.compare("angles") == 0) {
       num_angles_ = read_num;
-      
       // read next line, if it is number of dihedrals, then record.
       // Else, it is number of site types
       file >> read_num >> descript;
       if (descript.compare("dihedrals") == 0) {
         num_dihedrals_ = read_num;
-      
         file >> num_site_types_ >> descript;
         ASSERT(descript.compare("site") == 0,
           "unrecognized lammps DATA format for file " << file_name);
