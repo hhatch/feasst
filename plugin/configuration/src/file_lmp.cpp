@@ -224,6 +224,12 @@ void FileLMP::read_properties_(const std::string property_type,
     if (property_type == "bond") {
       shift = 1;
       particle->add_bond_model(type, properties[1]);
+    } else if (property_type == "angle") {
+      shift = 1;
+      particle->add_angle_model(type, properties[1]);
+    } else if (property_type == "dihedral") {
+      shift = 1;
+      particle->add_dihedral_model(type, properties[1]);
     }
     ASSERT((properties.size() - shift) % 2 == 1, "size error");
     const int num_properties = (properties.size() - 1 - shift)/2;

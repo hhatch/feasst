@@ -1,6 +1,6 @@
 
-#ifndef FEASST_CONFIGURATION_BOND_SQUARE_WELL_H_
-#define FEASST_CONFIGURATION_BOND_SQUARE_WELL_H_
+#ifndef FEASST_SYSTEM_BOND_SQUARE_WELL_H_
+#define FEASST_SYSTEM_BOND_SQUARE_WELL_H_
 
 #include <memory>
 #include "system/include/bond_two_body.h"
@@ -30,4 +30,4 @@ inline std::shared_ptr<BondSquareWell> MakeBondSquareWell(
 
 }  // namespace feasst
 
-#endif  // FEASST_CONFIGURATION_BOND_SQUARE_WELL_H_
+#endif  // FEASST_SYSTEM_BOND_SQUARE_WELL_H_

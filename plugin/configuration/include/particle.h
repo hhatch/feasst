@@ -188,6 +188,10 @@ class Particle : public PropertiedEntity,
   void add_angle_property(const int angle, const std::string name,
     const double value) { angles_[angle].add_property(name, value); }
 
+  /// Add angle model.
+  void add_angle_model(const int angle, const std::string model) {
+    angles_[angle].set_model(model); }
+
   /// Find the angle between given sites 1-2-3, with 2 as the vertex.
   const Angle& angle(const int site_index1, const int site_index2,
                      const int site_index3) const;
@@ -213,6 +217,10 @@ class Particle : public PropertiedEntity,
   /// Add a property to a bond.
   void add_dihedral_property(const int dihedral, const std::string name,
     const double value) { dihedrals_[dihedral].add_property(name, value); }
+
+  /// Add dihedral model.
+  void add_dihedral_model(const int dihedral, const std::string model) {
+    dihedrals_[dihedral].set_model(model); }
 
   /// Find the dihedral between given sites 1-2-3-4.
   const Dihedral& dihedral(const int site_index1, const int site_index2,
