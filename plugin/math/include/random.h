@@ -146,58 +146,58 @@ class Random {
   double normal(const double mean, const double stdev) {
     return mean + stdev*standard_normal(); }
 
-  /**
-    Return a randomly selected bond length with harmonic potential as described
-    in Frenkel and Smit, Alg 43, page 578 and Allen and Tildesley, Section G.3.
-
-    \f$U=\f$ spring_constant(length - equilibrium_length)\f$^2
-
-    \f$P(l)dl \propto l**2\exp[-\beta U(length)]dlf$
-
-    Note that the spring_constant has units of energy/length^2.
-    The usual 1/2 factor is not included, but can be incorporated into
-    the spring constant manually by the user input to the forcefield file.
-
-    The maximal length is 3 sigma beyond the mean.
-    Only currently implemented for 3 dimensions.
-   */
-  double harmonic_bond_length(const double equilibrium_length,
-    const double beta_spring_constant, /// units of 1/length^2
-    const int dimension);
-
-  /**
-    Same as above, but generalized for arbitrary exponential powers.
-
-    \f$U =\f$ spring_constant(length - equilibrium_length)\f$^exponent
-
-    If exponent == 2, use harmonic_bond_length.
-   */
-  double bond_length(
-    const double equilibrium_length,
-    const double maximum_length,
-    const double beta_spring_constant, // units of 1/length^exponent
-    const int exponent,
-    const int dimension);
-
-  /**
-    Return bond angle selected from probability distribution associated with
-    bending energy as described in Frenkel and Smit, page 343,
-    below Equation 13.3.6.
-
-    \f$U(\theta)=\f$spring_constant\f$(\theta-\theta_0)^{exponent}\f$
-
-    \f$P(b)db \propto \exp[-\beta U(\theta)]d\cos\theta d\phi\f$
-
-    Note that the spring_constant has units of energy/degree^exponent.
-    The usual 1/2 factor is not included, but can be incorporated into
-    the spring constant manually by the user input to the forcefield file.
-  */
-  double bond_angle(const double theta0, /// units of radians
-    const double beta_spring_constant,  /// units of 1/degree^exponent
-    const int exponent,
-    const int dimension,
-    /// Optionally, disallow angles < minimum_angle. The max angle is PI.
-    const double minimum_angle = 0.);
+//  /**
+//    Return a randomly selected bond length with harmonic potential as described
+//    in Frenkel and Smit, Alg 43, page 578 and Allen and Tildesley, Section G.3.
+//
+//    \f$U=\f$ spring_constant(length - equilibrium_length)\f$^2
+//
+//    \f$P(l)dl \propto l**2\exp[-\beta U(length)]dlf$
+//
+//    Note that the spring_constant has units of energy/length^2.
+//    The usual 1/2 factor is not included, but can be incorporated into
+//    the spring constant manually by the user input to the forcefield file.
+//
+//    The maximal length is 3 sigma beyond the mean.
+//    Only currently implemented for 3 dimensions.
+//   */
+//  double harmonic_bond_length(const double equilibrium_length,
+//    const double beta_spring_constant, /// units of 1/length^2
+//    const int dimension);
+//
+//  /**
+//    Same as above, but generalized for arbitrary exponential powers.
+//
+//    \f$U =\f$ spring_constant(length - equilibrium_length)\f$^exponent
+//
+//    If exponent == 2, use harmonic_bond_length.
+//   */
+//  double bond_length(
+//    const double equilibrium_length,
+//    const double maximum_length,
+//    const double beta_spring_constant, // units of 1/length^exponent
+//    const int exponent,
+//    const int dimension);
+//
+//  /**
+//    Return bond angle selected from probability distribution associated with
+//    bending energy as described in Frenkel and Smit, page 343,
+//    below Equation 13.3.6.
+//
+//    \f$U(\theta)=\f$spring_constant\f$(\theta-\theta_0)^{exponent}\f$
+//
+//    \f$P(b)db \propto \exp[-\beta U(\theta)]d\cos\theta d\phi\f$
+//
+//    Note that the spring_constant has units of energy/degree^exponent.
+//    The usual 1/2 factor is not included, but can be incorporated into
+//    the spring constant manually by the user input to the forcefield file.
+//  */
+//  double bond_angle(const double theta0, /// units of radians
+//    const double beta_spring_constant,  /// units of 1/degree^exponent
+//    const int exponent,
+//    const int dimension,
+//    /// Optionally, disallow angles < minimum_angle. The max angle is PI.
+//    const double minimum_angle = 0.);
 
   /// Return the cache.
   const Cache& cache() const { return cache_; }

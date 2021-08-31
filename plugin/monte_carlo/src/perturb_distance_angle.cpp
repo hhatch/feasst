@@ -33,18 +33,6 @@ void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
   PerturbDistance::precompute(select, system);
   angle_type_ = feasst::round(select->property("angle_type"));
   DEBUG("angle_type_ " << angle_type_);
-  if (system->configuration().dimension() == 2) {
-    FATAL("not implemented");
-//    ASSERT(select->anchor().site_index(0, 0) == angle.site(1), "err");
-//    if (select->mobile().site_index(0, 0) == angle.site(0) &&
-//        select->anchor().site_index(0, 1) == angle.site(2)) {
-//      angle_ = 2*PI - angle_;
-//      DEBUG("angle_ " << angle_);
-//    } else {
-//      ASSERT(select->mobile().site_index(0, 0) == angle.site(2) &&
-//             select->anchor().site_index(0, 1) == angle.site(0), "err");
-//    }
-  }
 }
 
 double PerturbDistanceAngle::random_angle(const System& system,
@@ -108,9 +96,13 @@ void PerturbDistanceAngle::place_in_circle(const double distance,
   DEBUG("rjk norm*L: " << rjk_.str());
 
   // rotate site by (PI-bond_angle). If 3D, about vector orthogonal to r_jk.
-  if (dimension == 3) orthogonal_jk_.orthogonal(*site);
-  DEBUG("ortho " << orthogonal_jk_.str());
-  rot_mat_.axis_angle(orthogonal_jk_, radians_to_degrees(PI - angle));
+  if (dimension == 3) {
+    orthogonal_jk_.orthogonal(*site);
+    DEBUG("ortho " << orthogonal_jk_.str());
+    rot_mat_.axis_angle(orthogonal_jk_, radians_to_degrees(PI - angle));
+  } else {
+    rot_mat_.axis_angle(orthogonal_jk_, radians_to_degrees(PI + angle));
+  }
   DEBUG("site == rjk: " << site->str());
   rot_mat_.rotate(origin_, site);
   DEBUG("site rotated to angle: " << site->str());

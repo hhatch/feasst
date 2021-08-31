@@ -48,7 +48,8 @@ double PerturbDihedral::random_dihedral(Random * random,
     const int dimension) const {
   if (is_rigid()) return dihedral_;
   FATAL("for trappe, different functional form to select based on U");
-  return random->bond_angle(dihedral_, beta*spring_constant_, 2, dimension);
+  return 0.;
+  //return random->bond_angle(dihedral_, beta*spring_constant_, 2, dimension);
 }
 
 void PerturbDihedral::move(System * system,
