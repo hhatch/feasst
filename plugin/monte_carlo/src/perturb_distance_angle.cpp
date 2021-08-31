@@ -31,36 +31,29 @@ std::shared_ptr<Perturb> PerturbDistanceAngle::create(std::istream& istr) const 
 
 void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
   PerturbDistance::precompute(select, system);
-  const int angle_type = feasst::round(select->property("angle_type"));
-  const Angle& angle = system->configuration().unique_type(
-    select->particle_type()).angle(angle_type);
-  angle_ = degrees_to_radians(angle.property("theta0"));
-  DEBUG("angle_ " << angle_);
+  angle_type_ = feasst::round(select->property("angle_type"));
+  DEBUG("angle_type_ " << angle_type_);
   if (system->configuration().dimension() == 2) {
-    DEBUG("hi");
-    ASSERT(select->anchor().site_index(0, 0) == angle.site(1), "err");
-    if (select->mobile().site_index(0, 0) == angle.site(0) &&
-        select->anchor().site_index(0, 1) == angle.site(2)) {
-      angle_ = 2*PI - angle_;
-      DEBUG("angle_ " << angle_);
-    } else {
-      ASSERT(select->mobile().site_index(0, 0) == angle.site(2) &&
-             select->anchor().site_index(0, 1) == angle.site(0), "err");
-    }
-  }
-  if (angle.has_property("spring_constant")) {
-    spring_constant_ = angle.property("spring_constant");
+    FATAL("not implemented");
+//    ASSERT(select->anchor().site_index(0, 0) == angle.site(1), "err");
+//    if (select->mobile().site_index(0, 0) == angle.site(0) &&
+//        select->anchor().site_index(0, 1) == angle.site(2)) {
+//      angle_ = 2*PI - angle_;
+//      DEBUG("angle_ " << angle_);
+//    } else {
+//      ASSERT(select->mobile().site_index(0, 0) == angle.site(2) &&
+//             select->anchor().site_index(0, 1) == angle.site(0), "err");
+//    }
   }
 }
 
-double PerturbDistanceAngle::random_angle(Random * random,
-    const double beta,
-    const int dimension) const {
-  if (is_rigid()) return angle_;
-  if (is_freely_jointed()) {
-    return random->bond_angle(0., 0., 2, dimension, angle_);
-  }
-  return random->bond_angle(angle_, beta*spring_constant_, 2, dimension);
+double PerturbDistanceAngle::random_angle(const System& system,
+    const TrialSelect* select,
+    Random * random) {
+  const Angle& angle = system.configuration().unique_type(
+    select->particle_type()).angle(angle_type_);
+  const double beta = system.thermo_params().beta();
+  return angle_.deserialize_map()[angle.model()]->random_angle(angle, beta, random);
 }
 
 void PerturbDistanceAngle::move(System * system,
@@ -68,8 +61,7 @@ void PerturbDistanceAngle::move(System * system,
     Random * random) {
   DEBUG(class_name());
   const double distance = random_distance(*system, select, random);
-  const double angle = random_angle(random, system->thermo_params().beta(),
-    system->dimension());
+  const double angle = random_angle(*system, select, random);
   DEBUG("angle: " << angle);
   place_in_circle(distance, angle, system, select, random);
 }
@@ -140,8 +132,7 @@ PerturbDistanceAngle::PerturbDistanceAngle(std::istream& istr)
   ASSERT(class_name_ == "PerturbDistanceAngle", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(788 == version, "mismatch version: " << version);
-  feasst_deserialize(&angle_, istr);
-  feasst_deserialize(&spring_constant_, istr);
+  feasst_deserialize(&angle_type_, istr);
 }
 
 void PerturbDistanceAngle::serialize(std::ostream& ostr) const {
@@ -153,18 +144,7 @@ void PerturbDistanceAngle::serialize_perturb_distance_angle_(
   ostr << class_name_ << " ";
   serialize_perturb_distance_(ostr);
   feasst_serialize_version(788, ostr);
-  feasst_serialize(angle_, ostr);
-  feasst_serialize(spring_constant_, ostr);
-}
-
-bool PerturbDistanceAngle::is_rigid() const {
-  if (std::abs(spring_constant_ + 1) < NEAR_ZERO) return true;
-  return false;
-}
-
-bool PerturbDistanceAngle::is_freely_jointed() const {
-  if (std::abs(spring_constant_) < NEAR_ZERO) return true;
-  return false;
+  feasst_serialize(angle_type_, ostr);
 }
 
 }  // namespace feasst

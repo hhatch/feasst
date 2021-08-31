@@ -57,7 +57,7 @@ void PerturbDihedral::move(System * system,
   DEBUG(class_name());
   const double beta = system->thermo_params().beta();
   const double distance = random_distance(*system, select, random);
-  const double angle = random_angle(random, beta, system->dimension());
+  const double angle = random_angle(*system, select, random);
   const double dihedral = random_dihedral(random, beta, system->dimension());
   place_dihedral(distance, angle, dihedral, system, select);
 }

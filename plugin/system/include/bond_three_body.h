@@ -10,6 +10,8 @@
 
 namespace feasst {
 
+class Random;
+
 /**
   A three body bond is defined by three sites, 0 - 1 - 2.
   The relative vector r01 = r0 - r1 points from r1 to r0.
@@ -19,7 +21,30 @@ class BondThreeBody {
  public:
   BondThreeBody() {}
   virtual double energy(const Position& relative01, const Position& relative21,
-    const Bond& angle) const = 0;
+    const Bond& angle) const;
+  virtual double energy(const double radians, const Bond& angle) const = 0;
+  virtual double random_angle(const Angle& angle, const double beta,
+    Random * random) const = 0;
+  
+  /**
+    Return three random angles for forming a branch.
+
+    anchor2 -> 1         1(a2)
+    mobile1 -> 2         |
+    mobile2 -> 3         4(a1)  t143(angle)
+    anchor1 -> 4       /   \L34(distance)
+                  2(m1)     3(m2, the site to be placed in this function)
+                       t243(branch_angle)
+   */
+  virtual void random_branch(
+    const Angle& a2a1m1,
+    const Angle& a2a1m2,
+    const Angle& m1a1m2,
+    const double beta,
+    double * radians_a2a1m1,
+    double * radians_a2a1m2,
+    double * radians_m1a1m2,
+    Random * random) const;
 
   // serialize
   std::string class_name() const { return class_name_; }
@@ -34,16 +59,6 @@ class BondThreeBody {
 
   void serialize_bond_three_body_(std::ostream& ostr) const;
   explicit BondThreeBody(std::istream& istr);
-};
-
-class AngleModel : public BondThreeBody {
- public:
-  AngleModel() {}
-  double energy(const Position& relative01, const Position& relative21,
-    const Bond& angle) const override;
-  virtual double energy(const double theta, const Bond& angle) const = 0;
-  explicit AngleModel(std::istream& istr) : BondThreeBody(istr) {}
-  virtual ~AngleModel() {}
 };
 
 }  // namespace feasst

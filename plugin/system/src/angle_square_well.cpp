@@ -2,6 +2,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
+#include "math/include/random.h"
 #include "system/include/angle_square_well.h"
 
 namespace feasst {
@@ -20,7 +21,7 @@ std::shared_ptr<BondThreeBody> AngleSquareWell::create(std::istream& istr) const
   return std::make_shared<AngleSquareWell>(istr);
 }
 
-AngleSquareWell::AngleSquareWell(std::istream& istr) : AngleModel(istr) {
+AngleSquareWell::AngleSquareWell(std::istream& istr) : BondThreeBody(istr) {
   // ASSERT(class_name_ == "AngleSquareWell", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(846 == version, "mismatch version: " << version);
@@ -46,4 +47,11 @@ double AngleSquareWell::energy(const double theta, const Bond& angle) const {
   }
   return 0.;
 }
+
+double AngleSquareWell::random_angle(const Angle& angle, const double beta,
+    Random * random) const {
+  return random->uniform_real(angle.property("minimum"),
+                              angle.property("maximum")); 
+}
+
 }  // namespace feasst

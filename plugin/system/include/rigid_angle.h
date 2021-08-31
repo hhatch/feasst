@@ -12,10 +12,21 @@ namespace feasst {
   and the degrees parameter is less than delta.
   Otherwise, U(r) = NEAR_INFINITY.
  */
-class RigidAngle : public AngleModel {
+class RigidAngle : public BondThreeBody {
  public:
   explicit RigidAngle(const argtype& args = argtype()) {}
-  double energy(const double theta, const Bond& angle) const override;
+  double energy(const double radians, const Bond& angle) const override;
+  double random_angle(const Angle& angle, const double beta,
+    Random * random) const override;
+  void random_branch(
+    const Angle& a2a1m1,
+    const Angle& a2a1m2,
+    const Angle& m1a1m2,
+    const double beta,
+    double * radians_a2a1m1,
+    double * radians_a2a1m2,
+    double * radians_m1a1m2,
+    Random * random) const override;
   std::shared_ptr<BondThreeBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit RigidAngle(std::istream& istr);

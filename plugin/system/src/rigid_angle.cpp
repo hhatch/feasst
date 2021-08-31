@@ -20,7 +20,7 @@ std::shared_ptr<BondThreeBody> RigidAngle::create(std::istream& istr) const {
   return std::make_shared<RigidAngle>(istr);
 }
 
-RigidAngle::RigidAngle(std::istream& istr) : AngleModel(istr) {
+RigidAngle::RigidAngle(std::istream& istr) : BondThreeBody(istr) {
   // ASSERT(class_name_ == "RigidAngle", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(5968 == version, "mismatch version: " << version);
@@ -44,6 +44,28 @@ double RigidAngle::energy(const double theta, const Bond& angle) const {
     return NEAR_INFINITY;
   }
   return 0.;
+}
+
+double RigidAngle::random_angle(const Angle& angle, const double beta,
+    Random * random) const {
+  return degrees_to_radians(angle.property("degrees"));
+}
+
+void RigidAngle::random_branch(
+    const Angle& a2a1m1,
+    const Angle& a2a1m2,
+    const Angle& m1a1m2,
+    const double beta,
+    double * theta_a2a1m1,
+    double * theta_a2a1m2,
+    double * theta_m1a1m2,
+    Random * random) const {
+  ASSERT(a2a1m1.model() == "RigidAngle" &&
+         a2a1m2.model() == "RigidAngle" &&
+         m1a1m2.model() == "RigidAngle", "Branch model mismatch");
+  *theta_a2a1m1 = random_angle(a2a1m1, beta, random);
+  *theta_a2a1m2 = random_angle(a2a1m2, beta, random);
+  *theta_m1a1m2 = random_angle(m1a1m2, beta, random);
 }
 
 }  // namespace feasst
