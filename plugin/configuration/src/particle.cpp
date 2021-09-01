@@ -157,8 +157,7 @@ void Particle::add_angle(const Angle& angle) {
            ++site3_index) {
         const int site3 = angle.site_indices()[site3_index];
         angle_neighbors_[site1].push_back({site2, site3});
-        angle_neighbors_[site2].push_back({site1, site3});
-        angle_neighbors_[site3].push_back({site1, site2});
+        angle_neighbors_[site3].push_back({site2, site1});
       }
     }
   }

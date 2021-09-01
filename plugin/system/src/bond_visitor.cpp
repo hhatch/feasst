@@ -107,50 +107,61 @@ void BondVisitor::compute_two(const Select& selection,
 void BondVisitor::compute_three(
     const Select& selection,
     const Configuration& config) {
+  DEBUG("BondThreeBody of " << selection.str());
   double en = 0.;
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
     const int part_index = selection.particle_index(select_index);
     const Particle& part = config.select_particle(part_index);
-    const int part_type = part.type();
-    for (const Angle& angle : config.particle_type(part_type).angles()) {
-      DEBUG("sites " << angle.site(0) << " " << angle.site(1) << " " << angle.site(2));
-      const Site& site0 = part.site(angle.site(0));
-      if (site0.is_physical()) {
-        const Site& site1 = part.site(angle.site(1));
-        if (site1.is_physical()) {
-          const Site& site2 = part.site(angle.site(2));
-          if (site2.is_physical()) {
-            const Position& position0 = site0.position();
-            const Position& position1 = site1.position();
-            const Position& position2 = site2.position();
-            DEBUG(position0.str());
-            DEBUG(position1.str());
-            DEBUG(position2.str());
-            Position relative01 = position0;
-            Position relative21 = position2;
-            relative01.subtract(position1);
-            relative21.subtract(position1);
-            const Angle& angle_type =
-              config.unique_type(part_type).angle(angle.type());
-            ASSERT(angle_.deserialize_map().count(angle_type.model()) == 1,
-              "angle model " << angle_type.model() << " not recognized.");
-            DEBUG(relative01.str());
-            DEBUG(relative21.str());
-            en += angle_.deserialize_map()[angle_type.model()]->energy(
-              relative01, relative21, angle_type);
-            if (verbose_) {
-              if (std::abs(en) > NEAR_ZERO) {
-                const double ang = std::acos(relative01.cosine(relative21));
-                const double theta0 = degrees_to_radians(angle_type.property("theta0"));
-                INFO("angle " << part_index << " ijk " << angle.site(0) << " "
-                  << angle.site(1) << " " << angle.site(2) << " "
-                  << "rel01 " << relative01.str() << " "
-                  << "rel21 " << relative21.str() << " "
-                  << "ang " << ang << " "
-                  << "theta0 " << theta0 << " "
-                  << "diff " << ang - theta0);
+    const Particle& unique_part = config.unique_type(part.type());
+    const Particle& part_type = config.particle_type(part.type());
+    for (int site0_index : selection.site_indices(select_index)) {
+      const Site& site0 = part.site(site0_index);
+      for (const std::vector<int>& ang : part_type.angle_neighbors(site0_index)) {
+        const int site1_index = ang[0];
+        const int site2_index = ang[1];
+        const Site& site1 = part.site(site1_index);
+        const Site& site2 = part.site(site2_index);
+        if (site1.is_physical() && site2.is_physical()) {
+          if (site0_index < site1_index ||
+              !find_in_list(site1_index, selection.site_indices(select_index))) {
+//          if (true) {
+//            if ( (site0_index < site2_index && site1_index < site2_index) ||
+//                 !find_in_list(site2_index, selection.site_indices(select_index))) {
+            if (true) {
+              DEBUG("sites " << site0_index << " " << site1_index << " " << site2_index);
+              const Position& position0 = site0.position();
+              const Position& position1 = site1.position();
+              const Position& position2 = site2.position();
+              DEBUG("pos0 " << position0.str());
+              DEBUG("pos1 " << position1.str());
+              DEBUG("pos2 " << position2.str());
+              Position relative01 = position0;
+              Position relative21 = position2;
+              relative01.subtract(position1);
+              relative21.subtract(position1);
+              const Angle& angle_type = part_type.angle(site0_index,
+                site1_index, site2_index);
+              const Angle& angle = unique_part.angle(angle_type.type());
+              ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
+                "angle model " << angle_type.model() << " not recognized.");
+              DEBUG(relative01.str());
+              DEBUG(relative21.str());
+              en += angle_.deserialize_map()[angle.model()]->energy(
+                relative01, relative21, angle);
+              if (verbose_) {
+                if (std::abs(en) > NEAR_ZERO) {
+                  const double ang = std::acos(relative01.cosine(relative21));
+                  const double theta0 = degrees_to_radians(angle.property("theta0"));
+                  INFO("angle " << part_index << " ijk " << angle.site(0) << " "
+                    << angle.site(1) << " " << angle.site(2) << " "
+                    << "rel01 " << relative01.str() << " "
+                    << "rel21 " << relative21.str() << " "
+                    << "ang " << ang << " "
+                    << "theta0 " << theta0 << " "
+                    << "diff " << ang - theta0);
+                }
               }
             }
           }

@@ -541,7 +541,7 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
       //for (const std::string ref : {"0", "-1"}) {
         INFO("data " << data << " num_steps " << num_steps << " ref " << ref);
         MonteCarlo mc;
-        //mc.set(MakeRandomMT19937({{"seed", "123"}}));
+        mc.set(MakeRandomMT19937({{"seed", "123"}}));
         mc.add(MakeConfiguration({
           {"particle_type0", "../plugin/chain/test/data/data." + data},
           {"add_particles_of_type0", "1"},
@@ -584,7 +584,6 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
         INFO(bonds->bond(0).str());
         EXPECT_NEAR(1.00167, bonds->bond(0).average(), 8*bonds->bond(0).block_stdev());
 
-        // <U>=\int e[-betaU] = 1/2k for each oscillator
         INFO(en->accumulator().str());
         double en_expect;
         if (data == "dimer_harmonic") {

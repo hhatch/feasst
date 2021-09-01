@@ -38,10 +38,15 @@ void AngleHarmonic::serialize(std::ostream& ostr) const {
 }
 
 double AngleHarmonic::energy(const double radians, const Bond& angle) const {
+  DEBUG("radians " << radians);
   const double equil_radians =
     degrees_to_radians(angle.property("equilibrium_degrees"));
   const double k = angle.property("k_energy_per_radian_sq");
-  const double delta_rad = radians - equil_radians;
+  double delta_rad = radians - equil_radians;
+  DEBUG("delta_rad " << delta_rad);
+//  if (delta_rad > PI/2) delta_rad -= PI;
+//  if (delta_rad < PI/2) delta_rad += PI;
+//  INFO("delta_rad with pbc " << delta_rad);
   return k*delta_rad*delta_rad;
 }
 
