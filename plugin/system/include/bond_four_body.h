@@ -22,7 +22,7 @@ class BondFourBody {
       const Position& rk, const Position& rl, const Dihedral& dihedral) const;
   virtual double energy(const double radians, const Bond& dihedral) const = 0;
   virtual double random_dihedral_radians(const Angle& dihedral,
-    const double beta, Random * random) const;
+    const double beta, const int dimension, Random * random) const;
 
   // serialize
   std::string class_name() const { return class_name_; }

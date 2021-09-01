@@ -47,8 +47,7 @@ double RigidDihedral::energy(const double radians, const Bond& dihedral) const {
 }
 
 double RigidDihedral::random_dihedral_radians(const Angle& dihedral,
-    const double beta,
-    Random * random) const {
+    const double beta, const int dimension, Random * random) const {
   return degrees_to_radians(dihedral.property("degrees"));
 }
 

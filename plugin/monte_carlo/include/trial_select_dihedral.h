@@ -48,7 +48,7 @@ class TrialSelectDihedral : public TrialSelectAngle {
   explicit TrialSelectDihedral(argtype * args);
 
   /// Same as TrialSelectAngle, but also add the third anchor site, and add
-  /// dihedral_type as a property.
+  /// dihedral_type as an anchor property.
   void precompute(System * system) override;
 
   std::shared_ptr<TrialSelect> create(std::istream& istr) const override;

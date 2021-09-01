@@ -1,6 +1,8 @@
 
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "math/include/constants.h"
+#include "math/include/random.h"
 #include "system/include/bond_four_body.h"
 
 namespace feasst {
@@ -41,10 +43,18 @@ double BondFourBody::energy(const Position& ri, const Position& rj,
 }
 
 double BondFourBody::random_dihedral_radians(const Angle& dihedral,
-    const double beta,
-    Random * random) const {
-  FATAL("not implemented");
-  return 0.;
+    const double beta, const int dimension, Random * random) const {
+  ASSERT(dimension == 3, "dihedrals only implemented in 3D");
+  int attempt = 0;
+  while (attempt < 1e6) {
+    const double radians = 2*PI*random->uniform();
+    const double en = energy(radians, dihedral);
+    if (random->uniform() < std::exp(-beta*en)) {
+      return radians;
+    }
+    ++attempt;
+  }
+  FATAL("max attempts reached");
 }
 
 }  // namespace feasst

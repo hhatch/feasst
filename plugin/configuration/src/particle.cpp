@@ -187,9 +187,7 @@ void Particle::add_dihedral(const Dihedral& dihedral) {
              ++site4_index) {
           const int site4 = dihedral.site_indices()[site4_index];
           dihedral_neighbors_[site1].push_back({site2, site3, site4});
-          dihedral_neighbors_[site2].push_back({site1, site3, site4});
-          dihedral_neighbors_[site3].push_back({site1, site2, site4});
-          dihedral_neighbors_[site4].push_back({site1, site2, site3});
+          dihedral_neighbors_[site4].push_back({site3, site2, site1});
         }
       }
     }

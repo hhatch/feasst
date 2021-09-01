@@ -30,7 +30,7 @@ class TrialSelectAngle : public TrialSelectBond {
   int anchor_site2() const { return anchor_site2_; }
 
   /// Same as TrialSelectBond, but also add the second anchor site, and add
-  /// angle_type as a property.
+  /// angle_type as an anchor property.
   void precompute(System * system) override;
 
   std::shared_ptr<TrialSelect> create(std::istream& istr) const override;

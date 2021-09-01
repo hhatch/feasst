@@ -145,7 +145,7 @@ void BondVisitor::compute_three(
                 site1_index, site2_index);
               const Angle& angle = unique_part.angle(angle_type.type());
               ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
-                "angle model " << angle_type.model() << " not recognized.");
+                "angle model " << angle.model() << " not recognized.");
               DEBUG(relative01.str());
               DEBUG(relative21.str());
               en += angle_.deserialize_map()[angle.model()]->energy(
@@ -181,21 +181,39 @@ void BondVisitor::compute_four(
        ++select_index) {
     const int part_index = selection.particle_index(select_index);
     const Particle& part = config.select_particle(part_index);
-    const int part_type = part.type();
-    for (const Dihedral& dihedral : config.particle_type(part_type).dihedrals()) {
-      const Position& ri = part.site(dihedral.site(0)).position();
-      const Position& rj = part.site(dihedral.site(1)).position();
-      const Position& rk = part.site(dihedral.site(2)).position();
-      const Position& rl = part.site(dihedral.site(3)).position();
-      const Dihedral& dihedral_type =
-        config.unique_type(part_type).dihedral(dihedral.type());
-      ASSERT(dihedral_.deserialize_map().count(dihedral_type.model()) == 1,
-        "dihedral model " << dihedral_type.model() << " not recognized.");
-      en += dihedral_.deserialize_map()[dihedral_type.model()]->energy(
-        ri, rj, rk, rl, dihedral_type);
-      if (verbose_) {
-        if (std::abs(en) > NEAR_ZERO) {
-          FATAL("not impl");
+    const Particle& unique_part = config.unique_type(part.type());
+    const Particle& part_type = config.particle_type(part.type());
+    for (int site0_index : selection.site_indices(select_index)) {
+      const Site& site0 = part.site(site0_index);
+      for (const std::vector<int>& dih : part_type.dihedral_neighbors(site0_index)) {
+        const int site1_index = dih[0];
+        const int site2_index = dih[1];
+        const int site3_index = dih[2];
+        const Site& site1 = part.site(site1_index);
+        const Site& site2 = part.site(site2_index);
+        const Site& site3 = part.site(site3_index);
+        if (site1.is_physical() && site2.is_physical() && site3.is_physical()) {
+          if (site0_index < site1_index ||
+              !find_in_list(site1_index, selection.site_indices(select_index))) {
+            const Position& ri = site0.position();
+            const Position& rj = site1.position();
+            const Position& rk = site2.position();
+            const Position& rl = site3.position();
+            const Dihedral& dihedral_type = part_type.dihedral(site0_index, site1_index,
+              site2_index, site3_index);
+            INFO("type of dihedral " << dihedral_type.type());
+            const Dihedral& dihedral = unique_part.dihedral(dihedral_type.type());
+            INFO("model of dihedral " << dihedral.model());
+            ASSERT(dihedral_.deserialize_map().count(dihedral.model()) == 1,
+              "dihedral model " << dihedral.model() << " not recognized.");
+            en += dihedral_.deserialize_map()[dihedral.model()]->energy(
+              ri, rj, rk, rl, dihedral);
+            if (verbose_) {
+              if (std::abs(en) > NEAR_ZERO) {
+                FATAL("not impl");
+              }
+            }
+          }
         }
       }
     }
