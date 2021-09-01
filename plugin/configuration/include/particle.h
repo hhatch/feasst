@@ -166,7 +166,7 @@ class Particle : public PropertiedEntity,
   /// Find the bond between the given site indices.
   const Bond& bond(const int site_index1, const int site_index2) const;
 
-  /// Find the bonds connected to a given site.
+  /// List the site indices bonded to the given site.
   const std::vector<int>& bond_neighbors(const int site) const;
 
   //@}
@@ -199,6 +199,9 @@ class Particle : public PropertiedEntity,
   const Angle& angle(const int site_index1, const int site_index2,
                      const int site_index3) const;
 
+  /// List the site indices that form angles with the given site.
+  const std::vector<std::vector<int> >& angle_neighbors(const int site) const;
+
   //@}
   /** @name Dihedrals
     Dihedrals between four sites in the particle
@@ -229,6 +232,9 @@ class Particle : public PropertiedEntity,
   const Dihedral& dihedral(const int site_index1, const int site_index2,
                            const int site_index3, const int site_index4) const;
 
+  /// List the site indices that form dihedrals with the given site.
+  const std::vector<std::vector<int> >& dihedral_neighbors(const int site) const;
+
 //  //@}
 //  /** @name Impropers
 //    Impropers between four sites in the particle
@@ -255,14 +261,6 @@ class Particle : public PropertiedEntity,
 
 //  ~Particle() { check(); }
 
-  //const std::vector<std::vector<int> >& bond_list() const { return bond_list_; }
-  //const std::vector<std::vector<int> >& bond_neighbor() const {
-  //  return bond_neighbor_; }
-  const std::vector<std::vector<int> >& angle_list() const {
-    return angle_list_; }
-  const std::vector<std::vector<int> >& dihedral_list() const {
-    return dihedral_list_; }
-
   // This interface is for optimization and not for typical use
   Site * get_site(const int index) { return &sites_[index]; }
 
@@ -280,17 +278,16 @@ class Particle : public PropertiedEntity,
   // bond index
   std::vector<std::vector<int> > bond_list_;
   // the index of the other site
-  std::vector<std::vector<int> > bond_neighbor_;
+  std::vector<std::vector<int> > bond_neighbors_;
   // angle index
   std::vector<std::vector<int> > angle_list_;
+  std::vector<std::vector<std::vector<int> > > angle_neighbors_;
   // dihedral index
   std::vector<std::vector<int> > dihedral_list_;
+  std::vector<std::vector<std::vector<int> > > dihedral_neighbors_;
 
-  void resize_list_(std::vector<std::vector<int> > * list);
   void add_bond_(const Bond& bond, const int index,
     std::vector<std::vector<int> > * list);
-  void add_bond_neighbor_(const Bond& bond,
-                          std::vector<std::vector<int> > * list);
 };
 
 }  // namespace feasst

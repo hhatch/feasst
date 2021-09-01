@@ -47,11 +47,9 @@ TEST(Particle, bond) {
 
 TEST(Particle, angle) {
   Particle spce = FileLMP().read("../forcefield/data.spce");
-  TRY(
-    spce.angle(0, 1, 2);
-    CATCH_PHRASE("not found");
-  );
   EXPECT_EQ(0, spce.angle(1, 0, 2).type());
+  EXPECT_EQ(0, spce.angle(1, 2, 0).type());
+  EXPECT_EQ(0, spce.angle(0, 1, 2).type());
   Particle spce2 = test_serialize(spce);
 }
 

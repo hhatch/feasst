@@ -532,7 +532,8 @@ TEST(MayerSampling, trimer_grow_LONG) {
 TEST(MonteCarlo, BondHarmonic_LONG) {
   //for (const std::string data : {"dimer_harmonic"}) {
   //for (const std::string data : {"trimer_2spring"}) {
-  for (const std::string data : {"trimer_harmonic"}) {
+  //for (const std::string data : {"trimer_harmonic"}) {
+  for (const std::string data : {"tetramer_harmonic"}) {
   //for (const std::string data : {"dimer_harmonic", "trimer_2spring", "trimer_harmonic"}) {
     for (const std::string num_steps : {"1"}) {
     //for (const std::string num_steps : {"1", "4"}) {
@@ -553,15 +554,21 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
         mc.set(MakeThermoParams({{"beta", "1"}}));
         mc.set(MakeMetropolis());
         INFO("initial energy " << mc.criteria().current_energy());
-        if (data == "dimer") {
+        if (data == "dimer_harmonic") {
           mc.add(MakeTrialGrow({
             {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"},
              {"num_steps", num_steps}, {"reference_index", ref}}
           }));
-        } else {
+        } else if (data == "trimer_2spring" || data == "trimer_harmonic") {
           mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "0"}, {"anchor_site", "1"}},
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
             {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+        } else if (data == "tetramer_harmonic") {
+          mc.add(MakeTrialGrow({
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+            {{"angle", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
         }
         mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
@@ -586,6 +593,8 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           en_expect = 1.;
         } else if (data == "trimer_harmonic") {
           en_expect = 1.5;
+        } else if (data == "tetramer_harmonic") {
+          en_expect = 2.5;
         } else {
           FATAL("unrecognized data: " << data);
         }
