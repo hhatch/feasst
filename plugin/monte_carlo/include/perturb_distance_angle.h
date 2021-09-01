@@ -36,6 +36,11 @@ class PerturbDistanceAngle : public PerturbDistance {
   double random_angle_radians(const System& system,
     const TrialSelect * select,
     Random * random);
+  double random_angle_radians(const System& system,
+    const TrialSelect * select,
+    Random * random,
+    double * bond_energy  // return the bond energy for Rosenbluth exclusion
+  );
 
   /// Place mobile site randomly in the circle about the anchors.
   void place_in_circle(const double distance, const double angle,

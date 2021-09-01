@@ -166,6 +166,9 @@ class Particle : public PropertiedEntity,
   /// Find the bond between the given site indices.
   const Bond& bond(const int site_index1, const int site_index2) const;
 
+  /// Find the bonds connected to a given site.
+  const std::vector<int>& bond_neighbors(const int site) const;
+
   //@}
   /** @name Angles
     Angles between three sites in the particle
@@ -252,9 +255,9 @@ class Particle : public PropertiedEntity,
 
 //  ~Particle() { check(); }
 
-  const std::vector<std::vector<int> >& bond_list() const { return bond_list_; }
-  const std::vector<std::vector<int> >& bond_neighbor() const {
-    return bond_neighbor_; }
+  //const std::vector<std::vector<int> >& bond_list() const { return bond_list_; }
+  //const std::vector<std::vector<int> >& bond_neighbor() const {
+  //  return bond_neighbor_; }
   const std::vector<std::vector<int> >& angle_list() const {
     return angle_list_; }
   const std::vector<std::vector<int> >& dihedral_list() const {

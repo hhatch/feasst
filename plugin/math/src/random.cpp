@@ -251,42 +251,6 @@ double Random::standard_normal() {
 //  return v1*std::sqrt(-2*std::log(r)/r);
 }
 
-//double Random::harmonic_bond_length(const double equilibrium_length,
-//    const double beta_spring_constant,
-//    const int dimension) {
-//  ASSERT(dimension == 3,
-//    "dimen: " << dimension << " but only implemented in 3D.");
-//  const double sigma = std::sqrt(1./2./beta_spring_constant);
-//  const double max_length_sq = std::pow(equilibrium_length + 3.*sigma, 2);
-//  int attempt = 0;
-//  while (attempt < 1e6) {
-//    const double length = normal(equilibrium_length, sigma);
-//    if (uniform() < length*length/max_length_sq) return length;
-//    ++attempt;
-//  }
-//  FATAL("maximum attempts reached");
-//}
-//
-//double Random::bond_length(const double equilibrium_length,
-//    const double maximum_length,
-//    const double beta_spring_constant,
-//    const int exponent,
-//    const int dimension) {
-//  ASSERT(dimension == 3,
-//    "dimension: " << dimension << " but only implemented in 3D.");
-//  //const double max_length = 2*equilibrium_length;
-//  const double max_length_sq = std::pow(maximum_length, 2);
-//  int attempt = 0;
-//  while (attempt < 1e6) {
-//    const double length = maximum_length*uniform();
-//    const double exp_neg_delta_U = std::exp(-beta_spring_constant*
-//      std::pow(length - equilibrium_length, exponent));
-//    if (uniform() < length*length/max_length_sq*exp_neg_delta_U) return length;
-//    ++attempt;
-//  }
-//  FATAL("max attempts reached");
-//}
-//
 //double Random::bond_angle(const double theta0,
 //    const double beta_spring_constant,
 //    const int exponent,

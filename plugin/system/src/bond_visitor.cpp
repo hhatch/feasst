@@ -68,21 +68,35 @@ void BondVisitor::compute_two(const Select& selection,
        ++select_index) {
     const int part_index = selection.particle_index(select_index);
     const Particle& part = config.select_particle(part_index);
-    const int part_type = part.type();
-    for (const Bond& bond : config.particle_type(part_type).bonds()) {
-      const Position& position0 = part.site(bond.site(0)).position();
-      const Position& position1 = part.site(bond.site(1)).position();
-      Position relative = position0;
-      relative.subtract(position1);
-      const Bond& bond_type = config.unique_type(part_type).bond(bond.type());
-      ASSERT(bond_.deserialize_map().count(bond_type.model()) == 1,
-        "bond model " << bond_type.model() << " not recognized.");
-      en += bond_.deserialize_map()[bond_type.model()]->energy(
-        relative, bond_type);
-      if (verbose_) {
-        if (std::abs(en) > NEAR_ZERO) {
-          INFO("bond ij " << part_index << " " << bond.site(0) << " "
-            << bond.site(1) << " sq " << relative.squared_distance());
+    const Particle& unique_part = config.unique_type(part.type());
+    const Particle& part_type = config.particle_type(part.type());
+    for (int site0_index : selection.site_indices(select_index)) {
+      DEBUG("site0_index " << site0_index);
+      const Site& site0 = part.site(site0_index);
+      for (int site1_index : part_type.bond_neighbors(site0_index)) {
+        DEBUG("site1_index " << site1_index);
+        const Site& site1 = part.site(site1_index);
+        if (site1.is_physical()) {
+          if (site0_index < site1_index ||
+              !find_in_list(site1_index,
+                            selection.site_indices(select_index))) {
+            const Position& position0 = site0.position();
+            const Position& position1 = site1.position();
+            Position relative = position0;
+            relative.subtract(position1);
+            const Bond& bond_type = part_type.bond(site0_index, site1_index);
+            const Bond& bond = unique_part.bond(bond_type.type());
+            ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
+              "bond model " << bond.model() << " not recognized.");
+            en += bond_.deserialize_map()[bond.model()]->energy(
+              relative, bond);
+            if (verbose_) {
+              if (std::abs(en) > NEAR_ZERO) {
+                INFO("bond ij " << part_index << " " << bond.site(0) << " "
+                  << bond.site(1) << " sq " << relative.squared_distance());
+              }
+            }
+          }
         }
       }
     }
@@ -101,30 +115,45 @@ void BondVisitor::compute_three(
     const Particle& part = config.select_particle(part_index);
     const int part_type = part.type();
     for (const Angle& angle : config.particle_type(part_type).angles()) {
-      const Position& position0 = part.site(angle.site(0)).position();
-      const Position& position1 = part.site(angle.site(1)).position();
-      const Position& position2 = part.site(angle.site(2)).position();
-      Position relative01 = position0;
-      Position relative21 = position2;
-      relative01.subtract(position1);
-      relative21.subtract(position1);
-      const Angle& angle_type =
-        config.unique_type(part_type).angle(angle.type());
-      ASSERT(angle_.deserialize_map().count(angle_type.model()) == 1,
-        "angle model " << angle_type.model() << " not recognized.");
-      en += angle_.deserialize_map()[angle_type.model()]->energy(
-        relative01, relative21, angle_type);
-      if (verbose_) {
-        if (std::abs(en) > NEAR_ZERO) {
-          const double ang = std::acos(relative01.cosine(relative21));
-          const double theta0 = degrees_to_radians(angle_type.property("theta0"));
-          INFO("angle " << part_index << " ijk " << angle.site(0) << " "
-            << angle.site(1) << " " << angle.site(2) << " "
-            << "rel01 " << relative01.str() << " "
-            << "rel21 " << relative21.str() << " "
-            << "ang " << ang << " "
-            << "theta0 " << theta0 << " "
-            << "diff " << ang - theta0);
+      DEBUG("sites " << angle.site(0) << " " << angle.site(1) << " " << angle.site(2));
+      const Site& site0 = part.site(angle.site(0));
+      if (site0.is_physical()) {
+        const Site& site1 = part.site(angle.site(1));
+        if (site1.is_physical()) {
+          const Site& site2 = part.site(angle.site(2));
+          if (site2.is_physical()) {
+            const Position& position0 = site0.position();
+            const Position& position1 = site1.position();
+            const Position& position2 = site2.position();
+            DEBUG(position0.str());
+            DEBUG(position1.str());
+            DEBUG(position2.str());
+            Position relative01 = position0;
+            Position relative21 = position2;
+            relative01.subtract(position1);
+            relative21.subtract(position1);
+            const Angle& angle_type =
+              config.unique_type(part_type).angle(angle.type());
+            ASSERT(angle_.deserialize_map().count(angle_type.model()) == 1,
+              "angle model " << angle_type.model() << " not recognized.");
+            DEBUG(relative01.str());
+            DEBUG(relative21.str());
+            en += angle_.deserialize_map()[angle_type.model()]->energy(
+              relative01, relative21, angle_type);
+            if (verbose_) {
+              if (std::abs(en) > NEAR_ZERO) {
+                const double ang = std::acos(relative01.cosine(relative21));
+                const double theta0 = degrees_to_radians(angle_type.property("theta0"));
+                INFO("angle " << part_index << " ijk " << angle.site(0) << " "
+                  << angle.site(1) << " " << angle.site(2) << " "
+                  << "rel01 " << relative01.str() << " "
+                  << "rel21 " << relative21.str() << " "
+                  << "ang " << ang << " "
+                  << "theta0 " << theta0 << " "
+                  << "diff " << ang - theta0);
+              }
+            }
+          }
         }
       }
     }

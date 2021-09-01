@@ -100,7 +100,10 @@ void Position::set_to_origin(const int dimension) {
 }
 
 double Position::cosine(const Position& position) const {
-  double cos = dot_product(position)/distance()/position.distance();
+  const double dist = position.distance();
+  ASSERT(dist > NEAR_ZERO, "dist: " << dist << " is too small. "
+    << "May be caused by particles in an angle on top of each other.");
+  double cos = dot_product(position)/distance()/dist;
   ASSERT(std::abs(cos) < 1 + NEAR_ZERO, "|cos: " << cos << "| > 1");
   if (cos < -1) cos = -1.;
   if (cos > 1) cos = 1.;

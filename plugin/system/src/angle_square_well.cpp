@@ -49,7 +49,7 @@ double AngleSquareWell::energy(const double radians, const Bond& angle) const {
 }
 
 double AngleSquareWell::random_angle_radians(const Angle& angle, const double beta,
-    Random * random) const {
+    const int dimension, Random * random) const {
   return degrees_to_radians(random->uniform_real(angle.property("minimum"),
                                                  angle.property("maximum")));
 }

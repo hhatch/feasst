@@ -147,39 +147,6 @@ class Random {
     return mean + stdev*standard_normal(); }
 
 //  /**
-//    Return a randomly selected bond length with harmonic potential as described
-//    in Frenkel and Smit, Alg 43, page 578 and Allen and Tildesley, Section G.3.
-//
-//    \f$U=\f$ spring_constant(length - equilibrium_length)\f$^2
-//
-//    \f$P(l)dl \propto l**2\exp[-\beta U(length)]dlf$
-//
-//    Note that the spring_constant has units of energy/length^2.
-//    The usual 1/2 factor is not included, but can be incorporated into
-//    the spring constant manually by the user input to the forcefield file.
-//
-//    The maximal length is 3 sigma beyond the mean.
-//    Only currently implemented for 3 dimensions.
-//   */
-//  double harmonic_bond_length(const double equilibrium_length,
-//    const double beta_spring_constant, /// units of 1/length^2
-//    const int dimension);
-//
-//  /**
-//    Same as above, but generalized for arbitrary exponential powers.
-//
-//    \f$U =\f$ spring_constant(length - equilibrium_length)\f$^exponent
-//
-//    If exponent == 2, use harmonic_bond_length.
-//   */
-//  double bond_length(
-//    const double equilibrium_length,
-//    const double maximum_length,
-//    const double beta_spring_constant, // units of 1/length^exponent
-//    const int exponent,
-//    const int dimension);
-//
-//  /**
 //    Return bond angle selected from probability distribution associated with
 //    bending energy as described in Frenkel and Smit, page 343,
 //    below Equation 13.3.6.

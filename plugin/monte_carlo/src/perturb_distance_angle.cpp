@@ -38,18 +38,32 @@ void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
 double PerturbDistanceAngle::random_angle_radians(const System& system,
     const TrialSelect* select,
     Random * random) {
+  FATAL("not implemented");
+}
+double PerturbDistanceAngle::random_angle_radians(const System& system,
+    const TrialSelect* select, Random * random, double * bond_energy) {
   const Angle& angle = system.configuration().unique_type(
     select->particle_type()).angle(angle_type_);
   const double beta = system.thermo_params().beta();
-  return angle_.deserialize_map()[angle.model()]->random_angle_radians(angle, beta, random);
+  ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
+    angle.model() << " not found");
+  const BondThreeBody * model = angle_.deserialize_map()[angle.model()].get();
+  const double radians = model->random_angle_radians(angle, beta, system.dimension(), random);
+  *bond_energy += model->energy(radians, angle);
+  DEBUG("bond_energy " << *bond_energy);
+  return radians;
 }
 
 void PerturbDistanceAngle::move(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
-  const double distance = random_distance(*system, select, random);
-  const double angle = random_angle_radians(*system, select, random);
+  double bond_energy = 0.;
+  const double distance = random_distance(*system, select, random, &bond_energy);
+  DEBUG("bond_energy " << bond_energy);
+  const double angle = random_angle_radians(*system, select, random, &bond_energy);
+  DEBUG("final angle pert bond_energy " << bond_energy);
+  select->add_exclude_energy(bond_energy);
   DEBUG("angle: " << angle);
   place_in_circle(distance, angle, system, select, random);
 }

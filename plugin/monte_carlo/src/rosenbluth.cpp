@@ -106,7 +106,8 @@ Rosenbluth::Rosenbluth(std::istream& istr) {
 
 void Rosenbluth::set_energy(const int step, const double energy,
     const double excluded) {
-  DEBUG("en: " << energy);
+  DEBUG("energy: " << energy);
+  DEBUG("excluded: " << excluded);
   ASSERT(!std::isinf(energy), "energy: " << energy << " is inf.");
   ASSERT(!std::isnan(energy), "energy: " << energy << " is nan.");
   ASSERT(!std::isinf(excluded), "excluded: " << excluded << " is inf.");

@@ -530,41 +530,68 @@ TEST(MayerSampling, trimer_grow_LONG) {
 }
 
 TEST(MonteCarlo, BondHarmonic_LONG) {
-  for (const std::string num_steps : {"1", "4"}) {
-    for (const std::string ref : {"0", "-1"}) {
-      INFO("num_steps " << num_steps << " ref " << ref);
-      MonteCarlo mc;
-      mc.add(MakeConfiguration({
-        {"particle_type0", "../forcefield/data.dimer_harmonic"},
-        {"add_particles_of_type0", "1"},
-        {"cubic_box_length", "10"}}));
-      //mc.add(MakePotential(MakeLennardJones()));
-      FATAL("add BondVisitor in every potential factory");
-      mc.add(MakePotential(MakeBondVisitor()));
-      mc.add_to_reference(MakePotential(MakeDontVisitModel()));
-      mc.add_to_reference(MakePotential(MakeBondVisitor()));
-      mc.set(MakeThermoParams({{"beta", "1"}}));
-      mc.set(MakeMetropolis());
-      mc.add(MakeTrialGrow({
-        //{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}, {"num_steps", "1"}}
-        {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"},
-         {"num_steps", num_steps}, {"reference_index", ref}}
-      }));
-    //  mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
-      auto en = MakeEnergy({{"steps_per_write", "1e5"}});
-      mc.add(en);
-      auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
-      // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
-      mc.add(bonds);
-      mc.attempt(3e5);
-      //INFO(bonds->bond_hist(0).str());
-      DEBUG(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
-      EXPECT_NEAR(1.00167, bonds->bond(0).average(), 8*bonds->bond(0).block_stdev());
-      DEBUG(en->accumulator().str());
+  //for (const std::string data : {"dimer_harmonic"}) {
+  //for (const std::string data : {"trimer_2spring"}) {
+  for (const std::string data : {"trimer_harmonic"}) {
+  //for (const std::string data : {"dimer_harmonic", "trimer_2spring", "trimer_harmonic"}) {
+    for (const std::string num_steps : {"1"}) {
+    //for (const std::string num_steps : {"1", "4"}) {
+      for (const std::string ref : {"-1"}) {
+      //for (const std::string ref : {"0", "-1"}) {
+        INFO("data " << data << " num_steps " << num_steps << " ref " << ref);
+        MonteCarlo mc;
+        //mc.set(MakeRandomMT19937({{"seed", "123"}}));
+        mc.add(MakeConfiguration({
+          {"particle_type0", "../plugin/chain/test/data/data." + data},
+          {"add_particles_of_type0", "1"},
+          {"cubic_box_length", "10"}}));
+        //mc.add(MakePotential(MakeLennardJones()));
+        WARN("add BondVisitor in every potential factory");
+        mc.add(MakePotential(MakeBondVisitor()));
+        mc.add_to_reference(MakePotential(MakeDontVisitModel()));
+        mc.add_to_reference(MakePotential(MakeBondVisitor()));
+        mc.set(MakeThermoParams({{"beta", "1"}}));
+        mc.set(MakeMetropolis());
+        INFO("initial energy " << mc.criteria().current_energy());
+        if (data == "dimer") {
+          mc.add(MakeTrialGrow({
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"},
+             {"num_steps", num_steps}, {"reference_index", ref}}
+          }));
+        } else {
+          mc.add(MakeTrialGrow({
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "0"}, {"anchor_site", "1"}},
+            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+        }
+        mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+        mc.add(MakeCheckEnergy({{"steps_per", "1e0"}}));
+        auto en = MakeEnergy({{"steps_per_write", "1e5"}});
+        mc.add(en);
+        auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
+        // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
+        mc.add(bonds);
+        mc.attempt(3e5);
+        //INFO(bonds->bond_hist(0).str());
+        //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+        INFO(bonds->bond(0).str());
+        EXPECT_NEAR(1.00167, bonds->bond(0).average(), 8*bonds->bond(0).block_stdev());
 
-      // equipartition theorem expects the vibrational DOF to add 1/2kT
-      EXPECT_NEAR(0.5, en->accumulator().average(), 8*en->accumulator().block_stdev());
-      EXPECT_GT(en->accumulator().average(), 0);
+        // <U>=\int e[-betaU] = 1/2k for each oscillator
+        INFO(en->accumulator().str());
+        double en_expect;
+        if (data == "dimer_harmonic") {
+          en_expect = 0.5;
+        } else if (data == "trimer_2spring") {
+          en_expect = 1.;
+        } else if (data == "trimer_harmonic") {
+          en_expect = 1.5;
+        } else {
+          FATAL("unrecognized data: " << data);
+        }
+        EXPECT_NEAR(en_expect, en->accumulator().average(), 8*en->accumulator().block_stdev());
+        EXPECT_GT(en->accumulator().average(), 0);
+      }
     }
   }
 }

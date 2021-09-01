@@ -40,7 +40,9 @@ double BondHarmonic::energy(const double distance, const Bond& bond) const {
   const double k = bond.property("k_energy_per_length_sq");
   const double l0 = bond.property("equilibrium_length");
   const double dl = distance - l0;
-  return k*dl*dl;
+  const double en = k*dl*dl;
+  DEBUG("bond harmonic " << en);
+  return en;
 }
 
 double BondHarmonic::random_distance(const Bond& bond, const double beta,

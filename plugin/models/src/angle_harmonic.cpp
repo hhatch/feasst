@@ -38,16 +38,11 @@ void AngleHarmonic::serialize(std::ostream& ostr) const {
 }
 
 double AngleHarmonic::energy(const double radians, const Bond& angle) const {
-  //const double equilibrium_degrees = degrees_to_radians(angle.property("equilibrium_degrees"));
-  //const double k_energy_per_radian_sq = degrees_to_radians(angle.property("k_energy_per_radian_sq"));
-  FATAL("not implemented");
-  return 0.;
-}
-
-double AngleHarmonic::random_angle_radians(const Angle& angle, const double beta,
-    Random * random) const {
-  FATAL("not implemented");
-  return 0.;
+  const double equil_radians =
+    degrees_to_radians(angle.property("equilibrium_degrees"));
+  const double k = angle.property("k_energy_per_radian_sq");
+  const double delta_rad = radians - equil_radians;
+  return k*delta_rad*delta_rad;
 }
 
 }  // namespace feasst

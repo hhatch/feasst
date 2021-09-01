@@ -254,4 +254,10 @@ Particle::Particle(std::istream& istr)
   feasst_deserialize(&angle_list_, istr);
 }
 
+const std::vector<int>& Particle::bond_neighbors(const int site) const {
+  ASSERT(site < static_cast<int>(bond_neighbor_.size()),
+    "site: " << site << " is not bonded");
+  return bond_neighbor_[site];
+}
+
 }  // namespace feasst

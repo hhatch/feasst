@@ -64,8 +64,9 @@ void PerturbDistance::move_once_(System * system,
   DEBUG("mobile " << select->mobile().str());
   DEBUG("old pos " << site->str());
   random->unit_sphere_surface(site);
-  double bond_energy;
+  double bond_energy = 0.;
   site->multiply(random_distance(*system, select, random, &bond_energy));
+  DEBUG("final dist pert bond_energy " << bond_energy);
   select->add_exclude_energy(bond_energy);
   site->add(select->anchor_position(0, 0, *system));
   DEBUG("new pos " << site->str());
@@ -110,7 +111,8 @@ double PerturbDistance::random_distance(const System& system,
     bond.model() << " not found");
   const BondTwoBody * model = bond_.deserialize_map()[bond.model()].get();
   const double dist = model->random_distance(bond, beta, system.dimension(), random);
-  *bond_energy = model->energy(dist, bond);
+  *bond_energy += model->energy(dist, bond);
+  DEBUG("bond_energy " << *bond_energy);
   return dist;
 }
 

@@ -1,7 +1,9 @@
 
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "math/include/constants.h"
 #include "system/include/bond_three_body.h"
 
 namespace feasst {
@@ -40,6 +42,28 @@ double BondThreeBody::energy(const Position& relative01,
     const Bond& angle) const {
   const double radians = std::acos(relative01.cosine(relative21));
   return energy(radians, angle);
+}
+
+double BondThreeBody::random_angle_radians(const Angle& angle,
+    const double beta, const int dimension, Random * random) const {
+  ASSERT(dimension == 2 || dimension == 3,
+    "unrecognized dimension: " << dimension);
+  double min_rad = 0.;
+  if (angle.has_property("minimum_degrees")) {
+    min_rad = degrees_to_radians(angle.property("minimum_degrees"));
+  }
+  int attempt = 0;
+  while (attempt < 1e6) {
+    const double radians = min_rad + (PI - min_rad)*random->uniform();
+    const double en = energy(radians, angle);
+    double jacobian = 1.;
+    if (dimension == 3) jacobian = std::sin(radians);
+    if (random->uniform() < jacobian*std::exp(-beta*en)) {
+      return radians;
+    }
+    ++attempt;
+  }
+  FATAL("max attempts reached");
 }
 
 void BondThreeBody::random_branch(

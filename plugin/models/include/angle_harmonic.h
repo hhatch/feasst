@@ -9,14 +9,15 @@ namespace feasst {
 
 /**
   U(angle) = k_energy_per_radian_sq*(angle - equilibrium_degrees)^2
-  with parameters given in Angle Properties
+  with parameters given in Angle Properties.
+
+  The usual 1/2 factor is not included, but can be incorporated into
+  the k parameter manually by the user input to the forcefield file.
  */
 class AngleHarmonic : public BondThreeBody {
  public:
   AngleHarmonic() {}
   double energy(const double radians, const Bond& angle) const override;
-  double random_angle_radians(const Angle& angle, const double beta,
-    Random * random) const override;
   std::shared_ptr<BondThreeBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit AngleHarmonic(std::istream& istr);
