@@ -312,6 +312,8 @@ TEST(Configuration, dihedrals) {
   EXPECT_EQ(9, config->particle_type(0).num_bonds());
   EXPECT_EQ(1, config->unique_type(0).num_bonds());
   EXPECT_EQ(0, config->particle(0).num_bonds());
+  EXPECT_EQ("RigidBond", config->unique_type(0).bond(0).model());
+  EXPECT_EQ(9, config->particle_type(0).num_bonds());
 }
 
 }  // namespace feasst

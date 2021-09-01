@@ -205,6 +205,10 @@ void FileLMP::read_properties(const std::string file_name,
     find_or_fail("Angle Properties", file);
     read_properties_("angle", num_angle_types_, particle, file);
   }
+  if (num_dihedrals_ != 0) {
+    find_or_fail("Dihedral Properties", file);
+    read_properties_("dihedral", num_dihedral_types_, particle, file);
+  }
 }
 
 void FileLMP::read_properties_(const std::string property_type,
