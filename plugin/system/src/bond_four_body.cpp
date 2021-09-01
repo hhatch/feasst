@@ -38,8 +38,20 @@ BondFourBody::BondFourBody(std::istream& istr) {
 
 double BondFourBody::energy(const Position& ri, const Position& rj,
     const Position& rk, const Position& rl, const Dihedral& dihedral) const {
-  FATAL("not implemented");
-  return 0.;
+  Position rji = rj;
+  rji.subtract(ri);
+  Position rkj = rk;
+  rkj.subtract(rj);
+  Position rlk = rl;
+  rlk.subtract(rk);
+  Position n1 = rji.cross_product(rkj);
+  const double n1_mag = n1.distance();
+  ASSERT(std::abs(n1_mag) > NEAR_ZERO, "n1 is too small");
+  Position n2 = rkj.cross_product(rlk);
+  const double n2_mag = n2.distance();
+  ASSERT(std::abs(n2_mag) > NEAR_ZERO, "n2 is too small");
+  const double radians = n1.dot_product(n2)/n1_mag/n2_mag;
+  return radians;
 }
 
 double BondFourBody::random_dihedral_radians(const Angle& dihedral,
