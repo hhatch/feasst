@@ -46,7 +46,7 @@ double PerturbDihedral::random_dihedral_radians(const System& system,
   const BondFourBody * model = dihedral_.deserialize_map()[dihedral.model()].get();
   const double radians = model->random_dihedral_radians(dihedral, beta, system.dimension(), random);
   *bond_energy += model->energy(radians, dihedral);
-  INFO("bond_energy " << *bond_energy);
+  DEBUG("bond_energy " << *bond_energy);
   return radians;
 }
 
@@ -56,12 +56,10 @@ void PerturbDihedral::move(System * system,
   DEBUG(class_name());
   double bond_energy = 0.;
   const double distance = random_distance(*system, select, random, &bond_energy);
-  INFO("bond_energy dist " << bond_energy);
   const double angle = random_angle_radians(*system, select, random, &bond_energy);
-  INFO("bond_energy dist+ang " << bond_energy);
   const double dihedral = random_dihedral_radians(*system, select, random, &bond_energy);
   select->add_exclude_energy(bond_energy);
-  INFO("bond_energy dist+ang+dih " << bond_energy);
+  DEBUG("bond_energy dist+ang+dih " << bond_energy);
   place_dihedral(distance, angle, dihedral, system, select);
 }
 
@@ -70,7 +68,7 @@ void PerturbDihedral::place_dihedral(const double distance,
   const double dihedral,
   System * system,
   TrialSelect * select) {
-  DEBUG("angle " << angle);
+  DEBUG("placing dihedral at radian angle " << angle);
   const int dimen = system->configuration().dimension();
   ASSERT(dimen == 3, "not implemented for dimen: " << dimen);
   if (origin_.dimension() == 0) origin_.set_to_origin(dimen);
@@ -108,11 +106,11 @@ void PerturbDihedral::place_dihedral(const double distance,
   site->multiply(distance);
   rkl_ = rk;
   rkl_.subtract(rl);
-  const Position n2 = rjk_.cross_product(rkl_);
-  DEBUG("n2 " << n2.str());
-  rot_mat_.axis_angle(n2, radians_to_degrees(PI - angle));
+  const Position n1 = rkl_.cross_product(rjk_);
+  DEBUG("n1 " << n1.str());
+  rot_mat_.axis_angle(n1, radians_to_degrees(PI - angle));
   rot_mat_.rotate(origin_, site);
-  rot_mat_.axis_angle(rjk_, radians_to_degrees(PI - dihedral));
+  rot_mat_.axis_angle(rjk_, radians_to_degrees(dihedral));
   rot_mat_.rotate(origin_, site);
   site->add(rj);  // return to frame of reference
   DEBUG("new pos " << site->str());

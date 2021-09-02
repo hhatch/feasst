@@ -15,24 +15,24 @@ namespace feasst {
   The mobile site is directly bonded to the first anchor site, the second anchor
   site is bonded to first anchor, and the third anchor is bonded to the second.
 
-  mobile("i") - anchor("j") - anchor2("k") - anchor3("l")
+  anchor3("l") - anchor2("k") - anchor("j") - mobile("i")
 
   Dihedral angles are defined as follows, as shown in
   https://en.wikipedia.org/wiki/Dihedral_angle and the first convention in
   http://trappe.oit.umn.edu/torsion.html.
-  The first half-plane is defined by all three anchors (i,j,k).
-  The second half-plane is defined by the mobile site and the first two anchors (j,k,l).
+  The first half-plane is defined by all three anchors (l,k,j).
+  The second half-plane is defined by the mobile site and the first two anchors (i,j,k).
   The normal of the first plane, \f$n_1\f$, is given by
 
-  \f$n_1=r_{ji} \times r_{kj}\f$
+  \f$n_1=r_{kl} \times r_{jk}\f$
 
   where
 
-  \f$r_{ij} = r_i - r_j\f$.
+  \f$r_{kl} = r_k - r_l\f$.
 
   The normal of the second plane, \f$n_2\f$, is given by
 
-  \f$n_2=r_{kj} \times r_{lk}\f$
+  \f$n_2=r_{jk} \times r_{ij}\f$
 
   and the dihedral angle, \f$\phi\f$, is given by
 

@@ -570,6 +570,7 @@ TEST(MonteCarlo, RigidBondAngleDihedral) {
     perturb->precompute(select.get(), &system);
     perturb->perturb(&system, select.get(), random.get());
     perturb->finalize(&system);
+    FileXYZ().write_for_vmd("tmp/rigid.xyz", system.configuration());
     vis.compute_all(system.configuration());
     EXPECT_EQ(0, vis.energy());
   }

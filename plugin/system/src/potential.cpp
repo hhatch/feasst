@@ -115,7 +115,6 @@ double Potential::select_energy(const Select& select, Configuration * config) {
     }
     cache_.load(stored_energy_);
   }
-  INFO("potential: " << stored_energy_);
   return stored_energy_;
 }
 

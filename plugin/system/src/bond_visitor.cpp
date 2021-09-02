@@ -202,6 +202,10 @@ void BondVisitor::compute_four(
             const Position& rj = site1.position();
             const Position& rk = site2.position();
             const Position& rl = site3.position();
+            TRACE("ri " << ri.str());
+            TRACE("rj " << rj.str());
+            TRACE("rk " << rk.str());
+            TRACE("rl " << rl.str());
             const Dihedral& dihedral_type = part_type.dihedral(site0_index, site1_index,
               site2_index, site3_index);
             TRACE("type of dihedral " << dihedral_type.type());
@@ -211,7 +215,7 @@ void BondVisitor::compute_four(
               "dihedral model " << dihedral.model() << " not recognized.");
             en += dihedral_.deserialize_map()[dihedral.model()]->energy(
               ri, rj, rk, rl, dihedral);
-            INFO("en: " << en << " sites " << site0_index << " " << site1_index << " " << site2_index << " " << site3_index);
+            TRACE("en: " << en << " sites " << site0_index << " " << site1_index << " " << site2_index << " " << site3_index);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
                 FATAL("not impl");

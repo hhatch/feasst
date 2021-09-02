@@ -37,6 +37,7 @@ void RigidDihedral::serialize(std::ostream& ostr) const {
 }
 
 double RigidDihedral::energy(const double radians, const Bond& dihedral) const {
+  TRACE("radians " << radians);
   const double theta = degrees_to_radians(dihedral.property("degrees"));
   const double delta = degrees_to_radians(dihedral.property("delta"));
   ASSERT(!std::isnan(radians), "radians is nan");
