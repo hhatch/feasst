@@ -601,6 +601,8 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           en_expect = 1.5;
         } else if (data == "tetramer_harmonic") {
           en_expect = 2.5;
+        } else if (data == "pentamer_harmonic") {
+          en_expect = 4.5;
         } else {
           FATAL("unrecognized data: " << data);
         }

@@ -45,8 +45,8 @@ Angles
 
 Dihedral Properties
 
-0 RigidDihedral degrees 170.0 delta 0.001
-#0 DihedralHarmonic equilibrium_degrees 170.0 k_energy_per_radian_sq 60
+0 DihedralHarmonic equilibrium_degrees 90.0 k_energy_per_radian_sq 60
+#0 RigidDihedral degrees 90.0 delta 0.001
 
 Dihedrals
 

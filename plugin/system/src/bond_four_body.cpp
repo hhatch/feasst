@@ -54,7 +54,7 @@ double BondFourBody::energy(const Position& ri, const Position& rj,
   return radians;
 }
 
-double BondFourBody::random_dihedral_radians(const Angle& dihedral,
+double BondFourBody::random_dihedral_radians(const Dihedral& dihedral,
     const double beta, const int dimension, Random * random) const {
   ASSERT(dimension == 3, "dihedrals only implemented in 3D");
   int attempt = 0;

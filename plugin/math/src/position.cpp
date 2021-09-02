@@ -117,7 +117,9 @@ void Position::divide(const double denominator) {
 }
 
 void Position::normalize() {
-  divide(distance());
+  const double dist = distance();
+  ASSERT(std::abs(dist) > NEAR_ZERO, " cannot normalize a 0 vector: " << str());
+  divide(dist);
 }
 
 bool Position::is_equal(const Position& position,

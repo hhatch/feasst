@@ -31,6 +31,7 @@ std::shared_ptr<Perturb> PerturbDistanceAngle::create(std::istream& istr) const 
 
 void PerturbDistanceAngle::precompute(TrialSelect * select, System * system) {
   PerturbDistance::precompute(select, system);
+  ASSERT(select->has_property("angle_type"), "cannot obtain angle properties");
   angle_type_ = feasst::round(select->property("angle_type"));
   DEBUG("angle_type_ " << angle_type_);
 }

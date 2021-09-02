@@ -23,7 +23,7 @@ class BondFourBody {
   virtual double energy(
     const double dihedral_radians, // See TrialSelectDihedral
     const Bond& dihedral) const = 0;
-  virtual double random_dihedral_radians(const Angle& dihedral,
+  virtual double random_dihedral_radians(const Dihedral& dihedral,
     const double beta, const int dimension, Random * random) const;
 
   // serialize

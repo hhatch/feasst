@@ -201,9 +201,9 @@ void BondVisitor::compute_four(
             const Position& rl = site3.position();
             const Dihedral& dihedral_type = part_type.dihedral(site0_index, site1_index,
               site2_index, site3_index);
-            INFO("type of dihedral " << dihedral_type.type());
+            TRACE("type of dihedral " << dihedral_type.type());
             const Dihedral& dihedral = unique_part.dihedral(dihedral_type.type());
-            INFO("model of dihedral " << dihedral.model());
+            TRACE("model of dihedral " << dihedral.model());
             ASSERT(dihedral_.deserialize_map().count(dihedral.model()) == 1,
               "dihedral model " << dihedral.model() << " not recognized.");
             en += dihedral_.deserialize_map()[dihedral.model()]->energy(

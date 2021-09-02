@@ -31,35 +31,34 @@ std::shared_ptr<Perturb> PerturbDihedral::create(std::istream& istr) const {
 
 void PerturbDihedral::precompute(TrialSelect * select, System * system) {
   PerturbDistanceAngle::precompute(select, system);
-  const int dihedral_type = feasst::round(select->property("dihedral_type"));
-  const Dihedral& dihedral = system->configuration().unique_type(
-    select->particle_type()).dihedral(dihedral_type);
-  dihedral_ = degrees_to_radians(dihedral.property("theta0"));
-  DEBUG("dihedral_ " << dihedral_);
-  const int dimen = system->configuration().dimension();
-  ASSERT(dimen == 3, "not implemented for dimen " << dimen);
-  if (dihedral.has_property("spring_constant")) {
-    spring_constant_ = dihedral.property("spring_constant");
-  }
+  ASSERT(select->has_property("dihedral_type"), "cannot obtain dihedral properties");
+  dihedral_type_ = feasst::round(select->property("dihedral_type"));
+  DEBUG("dihedral_type_ " << dihedral_type_);
 }
 
-double PerturbDihedral::random_dihedral(Random * random,
-    const double beta,
-    const int dimension) const {
-  if (is_rigid()) return dihedral_;
-  FATAL("for trappe, different functional form to select based on U");
-  return 0.;
-  //return random->bond_angle(dihedral_, beta*spring_constant_, 2, dimension);
+double PerturbDihedral::random_dihedral_radians(const System& system,
+    const TrialSelect * select, Random * random, double * bond_energy) {
+  const Dihedral& dihedral = system.configuration().unique_type(
+    select->particle_type()).dihedral(dihedral_type_);
+  const double beta = system.thermo_params().beta();
+  ASSERT(dihedral_.deserialize_map().count(dihedral.model()) == 1,
+    dihedral.model() << " not found");
+  const BondFourBody * model = dihedral_.deserialize_map()[dihedral.model()].get();
+  const double radians = model->random_dihedral_radians(dihedral, beta, system.dimension(), random);
+  *bond_energy += model->energy(radians, dihedral);
+  DEBUG("bond_energy " << *bond_energy);
+  return radians;
 }
 
 void PerturbDihedral::move(System * system,
     TrialSelect * select,
     Random * random) {
   DEBUG(class_name());
-  const double beta = system->thermo_params().beta();
-  const double distance = random_distance(*system, select, random);
-  const double angle = random_angle_radians(*system, select, random);
-  const double dihedral = random_dihedral(random, beta, system->dimension());
+  double bond_energy = 0.;
+  const double distance = random_distance(*system, select, random, &bond_energy);
+  const double angle = random_angle_radians(*system, select, random, &bond_energy);
+  const double dihedral = random_dihedral_radians(*system, select, random, &bond_energy);
+  select->add_exclude_energy(bond_energy);
   place_dihedral(distance, angle, dihedral, system, select);
 }
 
@@ -68,6 +67,7 @@ void PerturbDihedral::place_dihedral(const double distance,
   const double dihedral,
   System * system,
   TrialSelect * select) {
+  DEBUG("angle " << angle);
   const int dimen = system->configuration().dimension();
   ASSERT(dimen == 3, "not implemented for dimen: " << dimen);
   if (origin_.dimension() == 0) origin_.set_to_origin(dimen);
@@ -77,8 +77,8 @@ void PerturbDihedral::place_dihedral(const double distance,
   DEBUG("old pos " << site->str());
 
   /*
-    For given sites j, k (anchors), place site, i, according to bond angle,
-    length and dihedral.
+    For given sites j, k and l (anchors), place site, i, according to bond
+    length, angle and dihedral.
 
     l
      \
@@ -94,7 +94,7 @@ void PerturbDihedral::place_dihedral(const double distance,
    */
   const Position& rj = select->anchor_position(0, 0, *system);
   const Position& rk = select->anchor_position(0, 1, *system);
-  const Position& rl = select->anchor_position(0, 1, *system);
+  const Position& rl = select->anchor_position(0, 2, *system);
   DEBUG("rj: " << rj.str() << " rk: " << rk.str() << " rl: " << rl.str());
   rjk_ = rj;
   rjk_.subtract(rk);
@@ -106,6 +106,7 @@ void PerturbDihedral::place_dihedral(const double distance,
   rkl_ = rk;
   rkl_.subtract(rl);
   const Position n2 = rjk_.cross_product(rkl_);
+  DEBUG("n2 " << n2.str());
   rot_mat_.axis_angle(n2, radians_to_degrees(PI - angle));
   rot_mat_.rotate(origin_, site);
   rot_mat_.axis_angle(rjk_, radians_to_degrees(PI - dihedral));
@@ -120,8 +121,7 @@ PerturbDihedral::PerturbDihedral(std::istream& istr)
   ASSERT(class_name_ == "PerturbDihedral", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(7579 == version, "mismatch version: " << version);
-  feasst_deserialize(&dihedral_, istr);
-  feasst_deserialize(&spring_constant_, istr);
+  feasst_deserialize(&dihedral_type_, istr);
 }
 
 void PerturbDihedral::serialize(std::ostream& ostr) const {
@@ -133,13 +133,7 @@ void PerturbDihedral::serialize_perturb_dihedral_(
   ostr << class_name_ << " ";
   serialize_perturb_distance_(ostr);
   feasst_serialize_version(7579, ostr);
-  feasst_serialize(dihedral_, ostr);
-  feasst_serialize(spring_constant_, ostr);
-}
-
-bool PerturbDihedral::is_rigid() const {
-  if (std::abs(spring_constant_ + 1) < NEAR_ZERO) return true;
-  return false;
+  feasst_serialize(dihedral_type_, ostr);
 }
 
 }  // namespace feasst

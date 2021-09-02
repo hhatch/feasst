@@ -44,9 +44,6 @@ double AngleHarmonic::energy(const double radians, const Bond& angle) const {
   const double k = angle.property("k_energy_per_radian_sq");
   double delta_rad = radians - equil_radians;
   DEBUG("delta_rad " << delta_rad);
-//  if (delta_rad > PI/2) delta_rad -= PI;
-//  if (delta_rad < PI/2) delta_rad += PI;
-//  INFO("delta_rad with pbc " << delta_rad);
   return k*delta_rad*delta_rad;
 }
 

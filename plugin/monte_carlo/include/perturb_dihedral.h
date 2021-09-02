@@ -3,6 +3,7 @@
 #define FEASST_MONTE_CARLO_PERTURB_DIHEDRAL_H_
 
 #include "math/include/matrix.h"
+#include "system/include/rigid_angle.h"
 #include "monte_carlo/include/perturb_distance_angle.h"
 
 namespace feasst {
@@ -24,20 +25,16 @@ class PerturbDihedral : public PerturbDistanceAngle {
   /// Thus, when 2D and reverse (e.g., kji instead of ijk), angle = 2pi - angle.
   void precompute(TrialSelect * select, System * system) override;
 
-  /// Return the dihedral angle.
-  double dihedral() const { return dihedral_; }
-
-  /// Return the spring constant. If rigid, return -1 (default).
-  double spring_constant() const { return spring_constant_; }
-
-  /// Return true if dihedral is rigid (e.g., if spring_constant is -1).
-  bool is_rigid() const;
+  /// Return the dihedral angle type.
+  double dihedral_type() const { return dihedral_type_; }
 
   /// Return the randomly selected angle from the potential.
   /// If the spring constant is -1 (rigid), simply return the angle.
-  double random_dihedral(Random * random,
-    const double beta,  /// inverse temperature
-    const int dimension) const;
+  double random_dihedral_radians(const System& system,
+    const TrialSelect * select,
+    Random * random,
+    double * bond_energy  // return the bond energy for Rosenbluth exclusion.
+  );
 
   /// Place mobile site with given bond distance, angle and dihedral.
   void place_dihedral(const double distance, const double angle,
@@ -59,14 +56,14 @@ class PerturbDihedral : public PerturbDistanceAngle {
   void serialize_perturb_dihedral_(std::ostream& ostr) const;
 
  private:
-  double dihedral_ = 0.;
-  double spring_constant_ = -1;
+  int dihedral_type_ = 0.;
 
   // temporary
   Position rjk_;
   Position rkl_;
   Position origin_;
   RotationMatrix rot_mat_;
+  RigidDihedral dihedral_;
 };
 
 inline std::shared_ptr<PerturbDihedral> MakePerturbDihedral(

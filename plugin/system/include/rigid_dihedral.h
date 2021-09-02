@@ -16,7 +16,7 @@ class RigidDihedral : public BondFourBody {
  public:
   RigidDihedral() {}
   double energy(const double radians, const Bond& dihedral) const override;
-  double random_dihedral_radians(const Angle& dihedral, const double beta,
+  double random_dihedral_radians(const Dihedral& dihedral, const double beta,
     const int dimension, Random * random) const override;
   std::shared_ptr<BondFourBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;

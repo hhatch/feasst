@@ -62,7 +62,7 @@ class PerturbDistanceAngle : public PerturbDistance {
   void serialize_perturb_distance_angle_(std::ostream& ostr) const;
 
  private:
-  double angle_type_ = 0.;
+  int angle_type_ = 0.;
 
   // temporary
   Position rjk_;

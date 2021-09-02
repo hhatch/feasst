@@ -111,8 +111,8 @@ void Matrix::invert() {
 
 void RotationMatrix::check() const {
   Matrix::check();
-  ASSERT(matrix().size() == matrix()[0].size(), "not square");
-  ASSERT(std::abs(determinant() - 1.) < 10*NEAR_ZERO, "not unit determinant("
+  ASSERT(matrix().size() == matrix()[0].size(), str() << "not square");
+  ASSERT(std::abs(determinant() - 1.) < 10*NEAR_ZERO, str() << "not unit determinant("
     << determinant() << ")");
 }
 
