@@ -17,6 +17,8 @@
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/seek_num_particles.h"
 #include "monte_carlo/include/trial_compute_move.h"
+#include "monte_carlo/include/trial_select_dihedral.h"
+#include "monte_carlo/include/perturb_dihedral.h"
 #include "steppers/include/log.h"
 #include "steppers/include/check_energy_and_tune.h"
 #include "steppers/include/log_and_movie.h"
@@ -529,13 +531,61 @@ TEST(MayerSampling, trimer_grow_LONG) {
   EXPECT_NEAR(0, mayer->mayer().average(), 4*mayer->mayer().block_stdev());
 }
 
+TEST(MonteCarlo, RigidBondAngleDihedral) {
+  for (const std::string data : {
+    "../forcefield/data.dimer",
+    "../forcefield/data.trimer_0.4L",
+    "../plugin/chain/test/data/data.tetramer_rigid",
+    }) {
+    INFO(data);
+    System system;
+    system.add(*MakeConfiguration({
+      {"cubic_box_length", "10"},
+      {"particle_type", data},
+      {"add_particles_of_type0", "1"}}));
+    system.set(MakeThermoParams({{"beta", "1"}}));
+    system.precompute();
+    auto random = MakeRandomMT19937();
+    BondVisitor vis;
+
+    std::shared_ptr<TrialSelect> select;
+    std::shared_ptr<Perturb> perturb;
+    if (data == "../forcefield/data.dimer") {
+      select = MakeTrialSelectBond({{"particle_type", "0"}, {"mobile_site", "1"},
+        {"anchor_site", "0"}});
+      perturb = MakePerturbDistance();
+    } else if (data == "../forcefield/data.trimer_0.4L") {
+      select = MakeTrialSelectAngle({{"particle_type", "0"}, {"mobile_site", "2"},
+        {"anchor_site", "0"}, {"anchor_site2", "1"}});
+      perturb = MakePerturbDistanceAngle();
+    } else if (data == "../plugin/chain/test/data/data.tetramer_rigid") {
+      select = MakeTrialSelectDihedral({{"particle_type", "0"}, {"mobile_site", "3"},
+        {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}});
+      perturb = MakePerturbDihedral();
+    } else {
+      FATAL("unrecognized " << data);
+    }
+    select->precompute(&system);
+    select->sel(&system, random.get());
+    perturb->precompute(select.get(), &system);
+    perturb->perturb(&system, select.get(), random.get());
+    perturb->finalize(&system);
+    vis.compute_all(system.configuration());
+    EXPECT_EQ(0, vis.energy());
+  }
+}
+
 TEST(MonteCarlo, BondHarmonic_LONG) {
-  //for (const std::string data : {"dimer_harmonic"}) {
-  //for (const std::string data : {"trimer_2spring"}) {
-  //for (const std::string data : {"trimer_harmonic"}) {
-  //for (const std::string data : {"tetramer_harmonic"}) {
-  for (const std::string data : {"pentamer_harmonic"}) {
-  //for (const std::string data : {"dimer_harmonic", "trimer_2spring", "trimer_harmonic"}) {
+  for (const std::string data : {
+//    "dimer_harmonic",
+//    "trimer_rigid_angle",
+//    "trimer_harmonic",
+//    "tetramer_harmonic_no_dihedral",
+//    "tetramer_harmonic_rigid_bond_angle",
+    "tetramer_rigid",
+//    "tetramer_harmonic",
+//    "pentamer_harmonic",
+    }) {
     for (const std::string num_steps : {"1"}) {
     //for (const std::string num_steps : {"1", "4"}) {
       for (const std::string ref : {"-1"}) {
@@ -549,6 +599,7 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           {"cubic_box_length", "10"}}));
         //mc.add(MakePotential(MakeLennardJones()));
         WARN("add BondVisitor in every potential factory");
+        WARN("put num steps and ref back");
         mc.add(MakePotential(MakeBondVisitor()));
         mc.add_to_reference(MakePotential(MakeDontVisitModel()));
         mc.add_to_reference(MakePotential(MakeBondVisitor()));
@@ -559,16 +610,24 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           mc.add(MakeTrialGrow({
             {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "trimer_2spring" || data == "trimer_harmonic") {
+        } else if (data == "trimer_rigid_angle" || data == "trimer_harmonic") {
           mc.add(MakeTrialGrow({
             {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
             {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "tetramer_harmonic") {
+        } else if (data == "tetramer_harmonic_no_dihedral") {
           mc.add(MakeTrialGrow({
             {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
             {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
             {{"angle", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}},
+          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+        } else if (data == "tetramer_harmonic" ||
+                   data == "tetramer_harmonic_rigid_bond_angle" ||
+                   data == "tetramer_rigid") {
+          mc.add(MakeTrialGrow({
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+            {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
         } else if (data == "pentamer_harmonic") {
           mc.add(MakeTrialGrow({
@@ -578,7 +637,8 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
             {{"dihedral", "1"}, {"mobile_site", "4"}, {"anchor_site", "3"}, {"anchor_site2", "2"}, {"anchor_site3", "1"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
         }
-        mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
+        mc.add(MakeLogAndMovie({{"steps_per", "1"}, {"file_name", "tmp/harmonic"}}));
+        //mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
         mc.add(MakeCheckEnergy({{"steps_per", "1e0"}}));
         auto en = MakeEnergy({{"steps_per_write", "1e5"}});
         mc.add(en);
@@ -595,12 +655,18 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
         double en_expect;
         if (data == "dimer_harmonic") {
           en_expect = 0.5;
-        } else if (data == "trimer_2spring") {
+        } else if (data == "trimer_rigid_angle") {
           en_expect = 1.;
         } else if (data == "trimer_harmonic") {
           en_expect = 1.5;
-        } else if (data == "tetramer_harmonic") {
+        } else if (data == "tetramer_harmonic_rigid_bond_angle") {
+          en_expect = 0.5;
+        } else if (data == "tetramer_harmonic_no_dihedral") {
           en_expect = 2.5;
+        } else if (data == "tetramer_harmonic") {
+          en_expect = 3.0;
+        } else if (data == "tetramer_rigid") {
+          en_expect = 0.0;
         } else if (data == "pentamer_harmonic") {
           en_expect = 4.5;
         } else {

@@ -3,12 +3,10 @@
 4 sites
 3 bonds
 2 angles
-1 dihedrals
 
 1 site types
 1 bond types
 1 angle types
-1 dihedral types
 
 Site Properties
 
@@ -18,8 +16,8 @@ Sites
 
 0 0 0.0 0.0 0.0
 1 0 1.0 0.0 0.0
-2 0 1.0 1.0 0.0
-2 0 1.0 1.0 1.0
+2 0 2.0 0.0 0.0
+2 0 3.0 0.0 0.0
 
 Bond Properties
 
@@ -39,12 +37,4 @@ Angles
 
 0 0 0 1 2
 0 0 1 2 3
-
-Dihedral Properties
-
-0 DihedralHarmonic equilibrium_degrees 90.0 k_energy_per_radian_sq 60
-
-Dihedrals
-
-0 0 0 1 2 3
 

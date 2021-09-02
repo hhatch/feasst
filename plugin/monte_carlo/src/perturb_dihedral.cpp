@@ -46,7 +46,7 @@ double PerturbDihedral::random_dihedral_radians(const System& system,
   const BondFourBody * model = dihedral_.deserialize_map()[dihedral.model()].get();
   const double radians = model->random_dihedral_radians(dihedral, beta, system.dimension(), random);
   *bond_energy += model->energy(radians, dihedral);
-  DEBUG("bond_energy " << *bond_energy);
+  INFO("bond_energy " << *bond_energy);
   return radians;
 }
 
@@ -56,9 +56,12 @@ void PerturbDihedral::move(System * system,
   DEBUG(class_name());
   double bond_energy = 0.;
   const double distance = random_distance(*system, select, random, &bond_energy);
+  INFO("bond_energy dist " << bond_energy);
   const double angle = random_angle_radians(*system, select, random, &bond_energy);
+  INFO("bond_energy dist+ang " << bond_energy);
   const double dihedral = random_dihedral_radians(*system, select, random, &bond_energy);
   select->add_exclude_energy(bond_energy);
+  INFO("bond_energy dist+ang+dih " << bond_energy);
   place_dihedral(distance, angle, dihedral, system, select);
 }
 

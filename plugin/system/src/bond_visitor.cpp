@@ -70,6 +70,7 @@ void BondVisitor::compute_two(const Select& selection,
     const Particle& part = config.select_particle(part_index);
     const Particle& unique_part = config.unique_type(part.type());
     const Particle& part_type = config.particle_type(part.type());
+    if (part_type.num_bonds() == 0) continue;
     for (int site0_index : selection.site_indices(select_index)) {
       DEBUG("site0_index " << site0_index);
       const Site& site0 = part.site(site0_index);
@@ -114,8 +115,9 @@ void BondVisitor::compute_three(
        ++select_index) {
     const int part_index = selection.particle_index(select_index);
     const Particle& part = config.select_particle(part_index);
-    const Particle& unique_part = config.unique_type(part.type());
     const Particle& part_type = config.particle_type(part.type());
+    if (part_type.num_angles() == 0) continue;
+    const Particle& unique_part = config.unique_type(part.type());
     for (int site0_index : selection.site_indices(select_index)) {
       const Site& site0 = part.site(site0_index);
       for (const std::vector<int>& ang : part_type.angle_neighbors(site0_index)) {
@@ -183,6 +185,7 @@ void BondVisitor::compute_four(
     const Particle& part = config.select_particle(part_index);
     const Particle& unique_part = config.unique_type(part.type());
     const Particle& part_type = config.particle_type(part.type());
+    if (part_type.num_dihedrals() == 0) continue;
     for (int site0_index : selection.site_indices(select_index)) {
       const Site& site0 = part.site(site0_index);
       for (const std::vector<int>& dih : part_type.dihedral_neighbors(site0_index)) {
@@ -208,6 +211,7 @@ void BondVisitor::compute_four(
               "dihedral model " << dihedral.model() << " not recognized.");
             en += dihedral_.deserialize_map()[dihedral.model()]->energy(
               ri, rj, rk, rl, dihedral);
+            INFO("en: " << en << " sites " << site0_index << " " << site1_index << " " << site2_index << " " << site3_index);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
                 FATAL("not impl");

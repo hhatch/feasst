@@ -23,7 +23,7 @@ Sites
 
 Bond Properties
 
-0 BondHarmonic equilibrium_length 1.0 k_energy_per_length_sq 600
+0 RigidBond length 1.0 delta 0.0001
 
 Bonds
 
@@ -33,7 +33,7 @@ Bonds
 
 Angle Properties
 
-0 AngleHarmonic equilibrium_degrees 90.0 k_energy_per_radian_sq 60
+0 RigidAngle degrees 90.0 delta 0.0001
 
 Angles
 
