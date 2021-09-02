@@ -92,7 +92,7 @@ void AnalyzeBonds::update(const Criteria& criteria,
       const Position& rj = part.site(dihedral.site(1)).position();
       const Position& rk = part.site(dihedral.site(2)).position();
       const Position& rl = part.site(dihedral.site(3)).position();
-      const double phi = dihedral_calc_.radians(ri, rj, rk, rl);
+      const double phi = ri.torsion_angle_radians(rj, rk, rl);
       dihedral_[dihedral.type()].accumulate(phi);
       dihedral_hist_[dihedral.type()].add(phi);
     }

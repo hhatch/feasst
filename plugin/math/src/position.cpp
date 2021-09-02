@@ -318,4 +318,23 @@ double Position::vertex_angle_radians(const Position& ri, const Position& rk) co
   return std::acos(rij.cosine(rkj));
 }
 
+double Position::torsion_angle_radians(const Position& rj, const Position& rk,
+    const Position& rl) const {
+  Position rij = *this;
+  rij.subtract(rj);
+  Position rjk = rj;
+  rjk.subtract(rk);
+  Position rkl = rk;
+  rkl.subtract(rl);
+  Position n1 = rkl.cross_product(rjk);
+  const double n1_mag = n1.distance();
+  ASSERT(std::abs(n1_mag) > NEAR_ZERO, "n1 is too small");
+  DEBUG("n1 " << n1.str());
+  Position n2 = rjk.cross_product(rij);
+  const double n2_mag = n2.distance();
+  ASSERT(std::abs(n2_mag) > NEAR_ZERO, "n2 is too small");
+  DEBUG("n2 " << n2.str());
+  return std::acos(n1.dot_product(n2)/n1_mag/n2_mag);
+}
+
 }  // namespace feasst

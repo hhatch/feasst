@@ -141,6 +141,36 @@ class Position {
    */
   double vertex_angle_radians(const Position& ri, const Position& rk) const;
 
+  /**
+    Dihedral or torsion angles are defined by the angle between planes.
+    For a molecule, these planes may be defined by four positions:
+    l - j - k - i. Note that the order is reversible.
+
+    The normal of the first plane, \f$n_1\f$, is given by
+
+    \f$n_1=r_{kl} \times r_{jk}\f$
+
+    where
+
+    \f$r_{kl} = r_k - r_l\f$.
+
+    The normal of the second plane, \f$n_2\f$, is given by
+
+    \f$n_2=r_{jk} \times r_{ij}\f$
+
+    and the dihedral angle, \f$\phi\f$, is given by
+
+    \f$\cos\phi = \frac{n_1 \cdot n_2}{|n_1||n_2|}\f$.
+
+    For more discussion, see https://en.wikipedia.org/wiki/Dihedral_angle
+    or http://trappe.oit.umn.edu/torsion.html.
+
+    In this convention, a syn-periplanar (cis) configuration corresponds to 0
+    while a anti-periplaner (trans) corresponds to PI.
+   */
+  double torsion_angle_radians(const Position& rj, const Position& rk,
+    const Position& rl) const;
+
   /// Normalize the position such that the distance from the origin is unity,
   /// but the direction from the origin is the same.
   void normalize();
