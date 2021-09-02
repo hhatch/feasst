@@ -81,20 +81,18 @@ void BondVisitor::compute_two(const Select& selection,
           if (site0_index < site1_index ||
               !find_in_list(site1_index,
                             selection.site_indices(select_index))) {
-            const Position& position0 = site0.position();
-            const Position& position1 = site1.position();
-            Position relative = position0;
-            relative.subtract(position1);
+            const Position& ri = site0.position();
+            const Position& rj = site1.position();
             const Bond& bond_type = part_type.bond(site0_index, site1_index);
             const Bond& bond = unique_part.bond(bond_type.type());
             ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
               "bond model " << bond.model() << " not recognized.");
             en += bond_.deserialize_map()[bond.model()]->energy(
-              relative, bond);
+              ri, rj, bond);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
                 INFO("bond ij " << part_index << " " << bond.site(0) << " "
-                  << bond.site(1) << " sq " << relative.squared_distance());
+                  << bond.site(1) << " sq " << ri.squared_distance(rj));
               }
             }
           }
@@ -133,33 +131,24 @@ void BondVisitor::compute_three(
 //                 !find_in_list(site2_index, selection.site_indices(select_index))) {
             if (true) {
               DEBUG("sites " << site0_index << " " << site1_index << " " << site2_index);
-              const Position& position0 = site0.position();
-              const Position& position1 = site1.position();
-              const Position& position2 = site2.position();
-              DEBUG("pos0 " << position0.str());
-              DEBUG("pos1 " << position1.str());
-              DEBUG("pos2 " << position2.str());
-              Position relative01 = position0;
-              Position relative21 = position2;
-              relative01.subtract(position1);
-              relative21.subtract(position1);
+              const Position& ri = site0.position();
+              const Position& rj = site1.position();
+              const Position& rk = site2.position();
               const Angle& angle_type = part_type.angle(site0_index,
                 site1_index, site2_index);
               const Angle& angle = unique_part.angle(angle_type.type());
               ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
                 "angle model " << angle.model() << " not recognized.");
-              DEBUG(relative01.str());
-              DEBUG(relative21.str());
               en += angle_.deserialize_map()[angle.model()]->energy(
-                relative01, relative21, angle);
+                ri, rj, rk, angle);
               if (verbose_) {
                 if (std::abs(en) > NEAR_ZERO) {
-                  const double ang = std::acos(relative01.cosine(relative21));
+                  const double ang = rj.vertex_angle_radians(ri, rk);
                   const double theta0 = degrees_to_radians(angle.property("theta0"));
                   INFO("angle " << part_index << " ijk " << angle.site(0) << " "
                     << angle.site(1) << " " << angle.site(2) << " "
-                    << "rel01 " << relative01.str() << " "
-                    << "rel21 " << relative21.str() << " "
+                    << "ri " << ri.str() << " "
+                    << "rj " << rj.str() << " "
                     << "ang " << ang << " "
                     << "theta0 " << theta0 << " "
                     << "diff " << ang - theta0);

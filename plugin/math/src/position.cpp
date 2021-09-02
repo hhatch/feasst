@@ -310,4 +310,12 @@ Position Position::spherical() const {
   return spherical;
 }
 
+double Position::vertex_angle_radians(const Position& ri, const Position& rk) const {
+  Position rij = ri;
+  rij.subtract(*this);
+  Position rkj = rk;
+  rkj.subtract(*this);
+  return std::acos(rij.cosine(rkj));
+}
+
 }  // namespace feasst

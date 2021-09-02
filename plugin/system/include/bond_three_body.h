@@ -23,10 +23,9 @@ class Random;
 class BondThreeBody {
  public:
   BondThreeBody() {}
-  double radians(const Position& relative01, const Position& relative21) const;
+  virtual double energy(const Position& ri, const Position& rj,
+    const Position& rk, const Bond& angle) const;
   virtual double energy(const double radians, const Bond& angle) const = 0;
-  virtual double energy(const Position& relative01, const Position& relative21,
-    const Bond& angle) const;
 
   /**
     Return a randomly selected bond angle.

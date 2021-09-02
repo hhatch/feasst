@@ -77,4 +77,14 @@ TEST(Position, distance) {
   EXPECT_NEAR(x1.distance(x2), 72.135428188928074, NEAR_ZERO);
 }
 
+TEST(Position, vertex_angle_radians) {
+  Position ri({0, 0, 0}), rj({1, 0, 0}), rk({1, 1, 0});
+  EXPECT_DOUBLE_EQ(rj.vertex_angle_radians(ri, rk), PI/2.);
+}
+//
+//TEST(Position, torsion_angle_radians) {
+//  Position ri({0, 0, 0}), rj({1, 0, 0}), rk({1, 1, 0}, rl({1, 1, 1});
+//  EXPECT_DOUBLE_EQ(ri.torsion_angle_radians(rj, rk, rl), PI);
+//}
+
 }  // namespace feasst

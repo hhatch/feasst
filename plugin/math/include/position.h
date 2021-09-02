@@ -135,6 +135,12 @@ class Position {
   /// Return the cosine of the angle between self and given vector.
   double cosine(const Position& position) const;
 
+  /**
+    Return the angle, in radians, formed by self as vertex, and two points.
+    For example, the angle between i - j - k, which form a line, is PI.
+   */
+  double vertex_angle_radians(const Position& ri, const Position& rk) const;
+
   /// Normalize the position such that the distance from the origin is unity,
   /// but the direction from the origin is the same.
   void normalize();

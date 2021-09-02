@@ -34,17 +34,9 @@ BondTwoBody::BondTwoBody(std::istream& istr) {
   ASSERT(264 == version, "mismatch version: " << version);
 }
 
-double BondTwoBody::energy(const Position& relative, const Bond& bond) const {
-  return energy(relative.distance(), bond);
+double BondTwoBody::energy(const Position& ri, const Position& rj,
+    const Bond& bond) const {
+  return energy(ri.distance(rj), bond);
 }
-
-//double BondTwoBody::random_distance(const Bond& bond, const double beta,
-//    Random * random) const {
-//  double length = random->uniform_real(0, 2*bond.property("equilibrium_length");
-//  int attempt = 0;
-//  while (attempt < 1e6) {
-//  }
-//  FATAL("max attempts reached");
-//}
 
 }  // namespace feasst

@@ -73,23 +73,17 @@ void AnalyzeBonds::update(const Criteria& criteria,
     const Particle& part = config.select_particle(part_index);
     const int part_type = part.type();
     for (const Bond& bond : config.particle_type(part_type).bonds()) {
-      const Position& position0 = part.site(bond.site(0)).position();
-      const Position& position1 = part.site(bond.site(1)).position();
-      Position relative = position0;
-      relative.subtract(position1);
-      const double distance = relative.distance();
+      const Position& ri = part.site(bond.site(0)).position();
+      const Position& rj = part.site(bond.site(1)).position();
+      const double distance = ri.distance(rj);
       bond_[bond.type()].accumulate(distance);
       bond_hist_[bond.type()].add(distance);
     }
     for (const Angle& angle : config.particle_type(part_type).angles()) {
-      const Position& position0 = part.site(angle.site(0)).position();
-      const Position& position1 = part.site(angle.site(1)).position();
-      const Position& position2 = part.site(angle.site(2)).position();
-      Position relative01 = position0;
-      Position relative21 = position2;
-      relative01.subtract(position1);
-      relative21.subtract(position1);
-      const double theta = angle_calc_.radians(relative01, relative21);
+      const Position& ri = part.site(angle.site(0)).position();
+      const Position& rj = part.site(angle.site(1)).position();
+      const Position& rk = part.site(angle.site(2)).position();
+      const double theta = rj.vertex_angle_radians(ri, rk);
       angle_[angle.type()].accumulate(theta);
       angle_hist_[angle.type()].add(theta);
     }
