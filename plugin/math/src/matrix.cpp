@@ -119,7 +119,9 @@ void RotationMatrix::check() const {
 RotationMatrix& RotationMatrix::axis_angle(const Position& axis,
     const double degree_angle) {
   Position unit_axis = axis;
-  unit_axis.normalize();
+  if (unit_axis.size() != 2) {
+    unit_axis.normalize();
+  }
   set_size(unit_axis.size(), unit_axis.size());
   axis_angle_opt(unit_axis, degree_angle);
   check();

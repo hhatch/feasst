@@ -583,9 +583,9 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
 //    "trimer_harmonic",
 //    "tetramer_harmonic_no_dihedral",
 //    "tetramer_harmonic_rigid_bond_angle",
-    "tetramer_rigid",
+//    "tetramer_rigid",
 //    "tetramer_harmonic",
-//    "pentamer_harmonic",
+    "pentamer_harmonic",
     }) {
     for (const std::string num_steps : {"1"}) {
     //for (const std::string num_steps : {"1", "4"}) {
@@ -593,7 +593,7 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
       //for (const std::string ref : {"0", "-1"}) {
         INFO("data " << data << " num_steps " << num_steps << " ref " << ref);
         MonteCarlo mc;
-        mc.set(MakeRandomMT19937({{"seed", "123"}}));
+        //mc.set(MakeRandomMT19937({{"seed", "123"}}));
         mc.add(MakeConfiguration({
           {"particle_type0", "../plugin/chain/test/data/data." + data},
           {"add_particles_of_type0", "1"},
@@ -674,7 +674,6 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           FATAL("unrecognized data: " << data);
         }
         EXPECT_NEAR(en_expect, en->accumulator().average(), 8*en->accumulator().block_stdev());
-        EXPECT_GT(en->accumulator().average(), 0);
       }
     }
   }

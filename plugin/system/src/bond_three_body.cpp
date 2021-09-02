@@ -37,11 +37,15 @@ BondThreeBody::BondThreeBody(std::istream& istr) {
   ASSERT(943 == version, "mismatch version: " << version);
 }
 
+double BondThreeBody::radians(const Position& relative01,
+    const Position& relative21) const {
+  return std::acos(relative01.cosine(relative21));
+}
+
 double BondThreeBody::energy(const Position& relative01,
     const Position& relative21,
     const Bond& angle) const {
-  const double radians = std::acos(relative01.cosine(relative21));
-  return energy(radians, angle);
+  return energy(radians(relative01, relative21), angle);
 }
 
 double BondThreeBody::random_angle_radians(const Angle& angle,

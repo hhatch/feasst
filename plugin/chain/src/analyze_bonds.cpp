@@ -16,11 +16,13 @@ class MapAnalyzeBonds {
 static MapAnalyzeBonds mapper_ = MapAnalyzeBonds();
 
 AnalyzeBonds::AnalyzeBonds(argtype args) : AnalyzeUpdateOnly(&args) {
-  Histogram bhist, ahist;
+  Histogram bhist, ahist, dhist;
   bhist.set_width_center(dble("bond_bin_width", &args, 1), 0.);
   bond_hist_.push_back(bhist);
   ahist.set_width_center(dble("angle_bin_width", &args, 1), 0.);
   angle_hist_.push_back(ahist);
+  dhist.set_width_center(dble("dihedral_bin_width", &args, 1), 0.);
+  dihedral_hist_.push_back(dhist);
   check_all_used(args);
 }
 
@@ -29,8 +31,10 @@ void AnalyzeBonds::serialize(std::ostream& ostr) const {
   feasst_serialize_version(2390, ostr);
   feasst_serialize_fstobj(bond_, ostr);
   feasst_serialize_fstobj(angle_, ostr);
+  feasst_serialize_fstobj(dihedral_, ostr);
   feasst_serialize_fstobj(bond_hist_, ostr);
   feasst_serialize_fstobj(angle_hist_, ostr);
+  feasst_serialize_fstobj(dihedral_hist_, ostr);
 }
 
 AnalyzeBonds::AnalyzeBonds(std::istream& istr)
@@ -39,8 +43,10 @@ AnalyzeBonds::AnalyzeBonds(std::istream& istr)
   ASSERT(version == 2390, "version mismatch: " << version);
   feasst_deserialize_fstobj(&bond_, istr);
   feasst_deserialize_fstobj(&angle_, istr);
+  feasst_deserialize_fstobj(&dihedral_, istr);
   feasst_deserialize_fstobj(&bond_hist_, istr);
   feasst_deserialize_fstobj(&angle_hist_, istr);
+  feasst_deserialize_fstobj(&dihedral_hist_, istr);
 }
 
 void AnalyzeBonds::initialize(Criteria * criteria,
@@ -83,10 +89,18 @@ void AnalyzeBonds::update(const Criteria& criteria,
       Position relative21 = position2;
       relative01.subtract(position1);
       relative21.subtract(position1);
-      const double theta = radians_to_degrees(
-        std::acos(relative01.cosine(relative21)));
+      const double theta = angle_calc_.radians(relative01, relative21);
       angle_[angle.type()].accumulate(theta);
       angle_hist_[angle.type()].add(theta);
+    }
+    for (const Dihedral& dihedral : config.particle_type(part_type).dihedrals()) {
+      const Position& ri = part.site(dihedral.site(0)).position();
+      const Position& rj = part.site(dihedral.site(1)).position();
+      const Position& rk = part.site(dihedral.site(2)).position();
+      const Position& rl = part.site(dihedral.site(3)).position();
+      const double phi = dihedral_calc_.radians(ri, rj, rk, rl);
+      dihedral_[dihedral.type()].accumulate(phi);
+      dihedral_hist_[dihedral.type()].add(phi);
     }
   }
 }

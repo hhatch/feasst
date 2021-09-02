@@ -36,8 +36,8 @@ BondFourBody::BondFourBody(std::istream& istr) {
   ASSERT(7509 == version, "mismatch version: " << version);
 }
 
-double BondFourBody::energy(const Position& ri, const Position& rj,
-    const Position& rk, const Position& rl, const Dihedral& dihedral) const {
+double BondFourBody::radians(const Position& ri, const Position& rj, const Position& rk,
+  const Position& rl) const {
   Position rij = ri;
   rij.subtract(rj);
   Position rjk = rj;
@@ -52,9 +52,12 @@ double BondFourBody::energy(const Position& ri, const Position& rj,
   const double n2_mag = n2.distance();
   ASSERT(std::abs(n2_mag) > NEAR_ZERO, "n2 is too small");
   TRACE("n2 " << n2.str());
-  const double radians = std::acos(n1.dot_product(n2)/n1_mag/n2_mag);
-  TRACE("radians " << radians);
-  return energy(radians, dihedral);
+  return std::acos(n1.dot_product(n2)/n1_mag/n2_mag);
+}
+
+double BondFourBody::energy(const Position& ri, const Position& rj,
+    const Position& rk, const Position& rl, const Dihedral& dihedral) const {
+  return energy(radians(ri, rj, rk, rl), dihedral);
 }
 
 double BondFourBody::random_dihedral_radians(const Dihedral& dihedral,
