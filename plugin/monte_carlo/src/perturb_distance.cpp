@@ -97,11 +97,6 @@ void PerturbDistance::serialize(std::ostream& ostr) const {
 
 double PerturbDistance::random_distance(const System& system,
     const TrialSelect* select,
-    Random * random) {
-  FATAL("not implemented");
-}
-double PerturbDistance::random_distance(const System& system,
-    const TrialSelect* select,
     Random * random,
     double * bond_energy) {
   const Bond& bond = system.configuration().unique_types().particle(

@@ -19,7 +19,7 @@ Sites
 0 0 0.0 0.0 0.0
 1 0 1.0 0.0 0.0
 2 0 1.0 1.0 0.0
-2 0 1.0 1.0 1.0
+3 0 1.0 1.0 1.0
 
 Bond Properties
 
@@ -29,7 +29,7 @@ Bonds
 
 0 0 0 1
 1 0 1 2
-1 0 2 3
+2 0 2 3
 
 Angle Properties
 
@@ -38,7 +38,7 @@ Angle Properties
 Angles
 
 0 0 0 1 2
-0 0 1 2 3
+1 0 1 2 3
 
 Dihedral Properties
 

@@ -585,7 +585,8 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
 //    "tetramer_harmonic_rigid_bond_angle",
 //    "tetramer_rigid",
 //    "tetramer_harmonic",
-    "pentamer_harmonic",
+    "tetramer_branched",
+//    "pentamer_harmonic",
     }) {
     for (const std::string num_steps : {"1"}) {
     //for (const std::string num_steps : {"1", "4"}) {
@@ -630,6 +631,11 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
             {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
             {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
           }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+        } else if (data == "tetramer_branched") {
+          mc.add(MakeTrialGrow({
+            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+            {{"branch", "1"}, {"mobile_site", "2"}, {"mobile_site2", "3"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
+          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
         } else if (data == "pentamer_harmonic") {
           mc.add(MakeTrialGrow({
             {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
@@ -668,6 +674,8 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
           en_expect = 3.0;
         } else if (data == "tetramer_rigid") {
           en_expect = 0.0;
+        } else if (data == "tetramer_branched") {
+          en_expect = 3.0;
         } else if (data == "pentamer_harmonic") {
           en_expect = 4.5;
         } else {

@@ -1,8 +1,14 @@
 # LAMMPS-inspired data file
+#
+#       1
+#       |
+#       0
+#     /   \
+#   2      3
 
 4 sites
 3 bonds
-2 angles
+3 angles
 
 1 site types
 1 bond types
@@ -16,8 +22,8 @@ Sites
 
 0 0 0.0 0.0 0.0
 1 0 1.0 0.0 0.0
-2 0 2.0 0.0 0.0
-3 0 3.0 0.0 0.0
+2 0 0.0 1.0 0.0
+3 0 0.0 0.0 1.0
 
 Bond Properties
 
@@ -26,8 +32,8 @@ Bond Properties
 Bonds
 
 0 0 0 1
-1 0 1 2
-2 0 2 3
+1 0 0 2
+2 0 0 3
 
 Angle Properties
 
@@ -35,6 +41,8 @@ Angle Properties
 
 Angles
 
-0 0 0 1 2
-1 0 1 2 3
+0 0 1 0 2
+1 0 1 0 3
+2 0 2 0 3
+
 

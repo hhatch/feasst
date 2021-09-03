@@ -39,7 +39,6 @@ class PerturbDistance : public PerturbMove {
   double bond_type() const { return bond_type_; }
 
   /// Return the randomly selected distance from the bond potential.
-  double random_distance(const System& system, const TrialSelect* select, Random * random);
   double random_distance(const System& system,
     const TrialSelect* select,
     Random * random,

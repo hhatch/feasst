@@ -14,11 +14,11 @@ TEST(BondVisitor, spce) {
   BondVisitor visitor;
   BondSquareWell model;
   visitor.compute_all(config);
-  INFO(visitor.energy()/NEAR_INFINITY);
-  EXPECT_NEAR(115*NEAR_INFINITY, visitor.energy(), NEAR_INFINITY/1e10);
+  DEBUG(visitor.energy()/NEAR_INFINITY);
+  EXPECT_NEAR(15*NEAR_INFINITY, visitor.energy(), NEAR_INFINITY/1e10);
   AngleSquareWell angle;
   visitor.compute_all(config);
-  EXPECT_NEAR(115*NEAR_INFINITY, visitor.energy(), NEAR_INFINITY/1e10);
+  EXPECT_NEAR(15*NEAR_INFINITY, visitor.energy(), NEAR_INFINITY/1e10);
 
   BondVisitor visitor2 = test_serialize(visitor);
   BondSquareWell model2 = test_serialize(model);

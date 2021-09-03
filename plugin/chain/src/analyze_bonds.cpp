@@ -61,6 +61,10 @@ void AnalyzeBonds::initialize(Criteria * criteria,
     angle_.push_back(Accumulator());
     if (atype != 0) angle_hist_.push_back(angle_hist_[0]);
   }
+  for (int dtype = 0; dtype < config.num_dihedral_types(); ++dtype) {
+    dihedral_.push_back(Accumulator());
+    if (dtype != 0) dihedral_hist_.push_back(dihedral_hist_[0]);
+  }
 }
 
 void AnalyzeBonds::update(const Criteria& criteria,
