@@ -48,7 +48,6 @@ def mc(thread, mn, mx):
             grow[0]["particle_type"] = "0"
             mc.add(fst.MakeTrialGrow(fst.ArgsVector(grow),
                                      fst.args({"reference_index": "0", "num_steps": "4"})))
-        mc.add(fst.MakeCheckRigidBonds(fst.args({"steps_per": str(args.steps_per)})))
     else:
         mc.add(fst.MakeTrialRotate(fst.args({"weight": "1.", "tunable_param": "1."})))
         mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))

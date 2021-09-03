@@ -410,7 +410,7 @@ TEST(MonteCarlo, cg4_flexible_LONG) {
     EXPECT_NE(0, bonds->bond_hist(type-1).histogram()[bin + 1]);
     bin = bonds->bond_hist(type-1).size() - 1;
     EXPECT_NEAR(0.5, bonds->bond_hist(type-1).histogram()[bin]/
-                     bonds->bond_hist(type-1).histogram()[bin - 1], 0.05);
+                     bonds->bond_hist(type-1).histogram()[bin - 1], 0.075);
   }
 }
 
@@ -468,7 +468,7 @@ TEST(MayerSampling, b2_cg4_flexible_LONG) {
   INFO("mayer_ref: " << mayer->mayer_ref().str());
   INFO("b22 " << mayer->second_virial_ratio()
     << " +/- " << mayer->second_virial_ratio_block_stdev());
-  EXPECT_NEAR(100, mayer->second_virial_ratio(), 0.15);
+  EXPECT_NEAR(0, mayer->second_virial_ratio(), 8*mayer->second_virial_ratio_block_stdev());
 //  INFO(bonds->bond_hist(0).str());
 }
 
@@ -657,8 +657,7 @@ TEST(MonteCarlo, BondHarmonic_LONG) {
       //INFO(bonds->bond_hist(0).str());
       //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
       DEBUG(bonds->bond(0).str());
-      double z_fac = 12;
-      if (data == "tetramer_branched") z_fac = 20.;
+      const double z_fac = 20;
       double l_expect = 1.00167;
       if (data == "tetramer_harmonic_rigid_bond_angle" || data == "tetramer_rigid") {
         l_expect = 1.;

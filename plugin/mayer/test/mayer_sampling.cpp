@@ -86,7 +86,7 @@ TEST(MonteCarlo, ljb2_LONG) {
   MayerSampling mayer = ljb2(1e7);
   const double b2 = 2./3.*PI*mayer.second_virial_ratio();
   INFO("b2 " << b2);
-  EXPECT_NEAR(-5.3, b2, 0.2);
+  EXPECT_NEAR(-5.3, b2, 0.3);
   EXPECT_GT(std::abs(2.0944 - b2), 0.0001); // HS value
 }
 

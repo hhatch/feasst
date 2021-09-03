@@ -113,7 +113,6 @@ def mc(thread, mn, mx):
     print(0.9*args.num_procs*args.num_hours)
     mc.set(fst.MakeCheckpoint(fst.args({"file_name": "checkpoint" + str(thread) + ".fst",
                                         "num_hours_terminate": str(0.9*args.num_procs*args.num_hours)})))
-    mc.add(fst.MakeCheckRigidBonds(fst.args({"steps_per": str(steps_per)})))
     return mc
 
 windows=fst.WindowExponential(fst.args({
