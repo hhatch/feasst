@@ -12,22 +12,22 @@ namespace feasst {
 
   \f$U(\phi)=c_0+c_1[1+\cos(\phi)]+c_2[1-\cos(2\phi)]+c_3[1+\cos(3\phi)]\f$
  */
-class DihedralTRAPPE : public BondFourBody {
+class DihedralTraPPE : public BondFourBody {
  public:
-  explicit DihedralTRAPPE(const argtype& args = argtype()) {}
+  explicit DihedralTraPPE(const argtype& args = argtype()) {}
   double energy(const double radians, const Bond& dihedral) const override;
   std::shared_ptr<BondFourBody> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
-  explicit DihedralTRAPPE(std::istream& istr);
-  virtual ~DihedralTRAPPE() {}
+  explicit DihedralTraPPE(std::istream& istr);
+  virtual ~DihedralTraPPE() {}
 
  protected:
   void serialize_dihedral_trappe_(std::ostream& ostr) const;
 };
 
-inline std::shared_ptr<DihedralTRAPPE> MakeDihedralTRAPPE(
+inline std::shared_ptr<DihedralTraPPE> MakeDihedralTraPPE(
     const argtype &args = argtype()) {
-  return std::make_shared<DihedralTRAPPE>(args);
+  return std::make_shared<DihedralTraPPE>(args);
 }
 
 }  // namespace feasst

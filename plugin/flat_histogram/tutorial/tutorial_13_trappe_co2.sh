@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Compare the results with TRAPPE CO2: http://trappe.oit.umn.edu/
+# Compare the results with TraPPE CO2: http://trappe.oit.umn.edu/
 # Comment on any observed differences. Possible causes include: Gibbs vs FH GCMC, system size, Ewald, etc
 
 # Write a SLURM script to file and queue it.

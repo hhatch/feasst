@@ -6,37 +6,37 @@
 
 namespace feasst {
 
-class MapDihedralTRAPPE {
+class MapDihedralTraPPE {
  public:
-  MapDihedralTRAPPE() {
-    auto obj = MakeDihedralTRAPPE();
-    obj->deserialize_map()["DihedralTRAPPE"] = obj;
+  MapDihedralTraPPE() {
+    auto obj = MakeDihedralTraPPE();
+    obj->deserialize_map()["DihedralTraPPE"] = obj;
   }
 };
 
-static MapDihedralTRAPPE mapper_ = MapDihedralTRAPPE();
+static MapDihedralTraPPE mapper_ = MapDihedralTraPPE();
 
-std::shared_ptr<BondFourBody> DihedralTRAPPE::create(std::istream& istr) const {
-  return std::make_shared<DihedralTRAPPE>(istr);
+std::shared_ptr<BondFourBody> DihedralTraPPE::create(std::istream& istr) const {
+  return std::make_shared<DihedralTraPPE>(istr);
 }
 
-DihedralTRAPPE::DihedralTRAPPE(std::istream& istr) : BondFourBody(istr) {
-  // ASSERT(class_name_ == "DihedralTRAPPE", "name: " << class_name_);
+DihedralTraPPE::DihedralTraPPE(std::istream& istr) : BondFourBody(istr) {
+  // ASSERT(class_name_ == "DihedralTraPPE", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(846 == version, "mismatch version: " << version);
 }
 
-void DihedralTRAPPE::serialize_dihedral_trappe_(std::ostream& ostr) const {
+void DihedralTraPPE::serialize_dihedral_trappe_(std::ostream& ostr) const {
   serialize_bond_four_body_(ostr);
   feasst_serialize_version(846, ostr);
 }
 
-void DihedralTRAPPE::serialize(std::ostream& ostr) const {
+void DihedralTraPPE::serialize(std::ostream& ostr) const {
   ostr << class_name_ << " ";
   serialize_dihedral_trappe_(ostr);
 }
 
-double DihedralTRAPPE::energy(const double radians, const Bond& dihedral) const {
+double DihedralTraPPE::energy(const double radians, const Bond& dihedral) const {
   FATAL("not implemented");
   return 0.;
 }
