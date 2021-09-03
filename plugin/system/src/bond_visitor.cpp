@@ -124,35 +124,36 @@ void BondVisitor::compute_three(
         const Site& site1 = part.site(site1_index);
         const Site& site2 = part.site(site2_index);
         if (site1.is_physical() && site2.is_physical()) {
-          if (site0_index < site1_index ||
-              !find_in_list(site1_index, selection.site_indices(select_index))) {
-//          if (true) {
-//            if ( (site0_index < site2_index && site1_index < site2_index) ||
-//                 !find_in_list(site2_index, selection.site_indices(select_index))) {
-            if (true) {
-              DEBUG("sites " << site0_index << " " << site1_index << " " << site2_index);
-              const Position& ri = site0.position();
-              const Position& rj = site1.position();
-              const Position& rk = site2.position();
-              const Angle& angle_type = part_type.angle(site0_index,
-                site1_index, site2_index);
-              const Angle& angle = unique_part.angle(angle_type.type());
-              ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
-                "angle model " << angle.model() << " not recognized.");
-              en += angle_.deserialize_map()[angle.model()]->energy(
-                ri, rj, rk, angle);
-              if (verbose_) {
-                if (std::abs(en) > NEAR_ZERO) {
-                  const double ang = rj.vertex_angle_radians(ri, rk);
-                  const double theta0 = degrees_to_radians(angle.property("theta0"));
-                  INFO("angle " << part_index << " ijk " << angle.site(0) << " "
-                    << angle.site(1) << " " << angle.site(2) << " "
-                    << "ri " << ri.str() << " "
-                    << "rj " << rj.str() << " "
-                    << "ang " << ang << " "
-                    << "theta0 " << theta0 << " "
-                    << "diff " << ang - theta0);
-                }
+          /*
+             three bodies are defined by sites 0-1-2, which also appear as 2-1-0
+             but never 1-0-2, as that would change the angle/vertex.
+             Therefore, when avoiding double counts for whole-molecule compute,
+             check that site0 < site2, unless site2 isn't in selection.
+           */
+          if (site0_index < site2_index ||
+              !find_in_list(site2_index, selection.site_indices(select_index))) {
+            DEBUG("sites " << site0_index << " " << site1_index << " " << site2_index);
+            const Position& ri = site0.position();
+            const Position& rj = site1.position();
+            const Position& rk = site2.position();
+            const Angle& angle_type = part_type.angle(site0_index,
+              site1_index, site2_index);
+            const Angle& angle = unique_part.angle(angle_type.type());
+            ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
+              "angle model " << angle.model() << " not recognized.");
+            en += angle_.deserialize_map()[angle.model()]->energy(
+              ri, rj, rk, angle);
+            if (verbose_) {
+              if (std::abs(en) > NEAR_ZERO) {
+                const double ang = rj.vertex_angle_radians(ri, rk);
+                const double theta0 = degrees_to_radians(angle.property("theta0"));
+                INFO("angle " << part_index << " ijk " << angle.site(0) << " "
+                  << angle.site(1) << " " << angle.site(2) << " "
+                  << "ri " << ri.str() << " "
+                  << "rj " << rj.str() << " "
+                  << "ang " << ang << " "
+                  << "theta0 " << theta0 << " "
+                  << "diff " << ang - theta0);
               }
             }
           }
@@ -185,8 +186,14 @@ void BondVisitor::compute_four(
         const Site& site2 = part.site(site2_index);
         const Site& site3 = part.site(site3_index);
         if (site1.is_physical() && site2.is_physical() && site3.is_physical()) {
-          if (site0_index < site1_index ||
-              !find_in_list(site1_index, selection.site_indices(select_index))) {
+          /*
+             four bodies defined by sites 0-1-2-3 also appear as 3-2-1-0,
+             but never 0-2-1-3, etc, as that would change the angle.
+             Therefore, when avoiding double counts for whole-molecule compute,
+             check that site0 < site3, unless site3 isn't in selection.
+           */
+          if (site0_index < site3_index ||
+              !find_in_list(site3_index, selection.site_indices(select_index))) {
             const Position& ri = site0.position();
             const Position& rj = site1.position();
             const Position& rk = site2.position();
@@ -219,7 +226,7 @@ void BondVisitor::compute_four(
 }
 
 void BondVisitor::compute_all(const Select& selection,
-    const Configuration& config) {
+                              const Configuration& config) {
   compute_two(selection, config);
   compute_three(selection, config);
   compute_four(selection, config);
@@ -227,29 +234,25 @@ void BondVisitor::compute_all(const Select& selection,
 }
 
 void BondVisitor::compute_all(const Configuration& config,
-    const int group_index) {
-  //INFO("group_index " << group_index);
+                              const int group_index) {
   const Select& selection = config.group_selects()[group_index];
   compute_all(selection, config);
 }
 
-void BondVisitor::compute_two(
-    const Configuration& config,
-    const int group_index) {
+void BondVisitor::compute_two(const Configuration& config,
+                              const int group_index) {
   const Select& selection = config.group_selects()[group_index];
   compute_two(selection, config);
 }
 
-void BondVisitor::compute_three(
-    const Configuration& config,
-    const int group_index) {
+void BondVisitor::compute_three(const Configuration& config,
+                                const int group_index) {
   const Select& selection = config.group_selects()[group_index];
   compute_three(selection, config);
 }
 
-void BondVisitor::compute_four(
-    const Configuration& config,
-    const int group_index) {
+void BondVisitor::compute_four(const Configuration& config,
+                               const int group_index) {
   const Select& selection = config.group_selects()[group_index];
   compute_four(selection, config);
 }

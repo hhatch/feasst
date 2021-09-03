@@ -577,112 +577,117 @@ TEST(MonteCarlo, RigidBondAngleDihedral) {
 }
 
 TEST(MonteCarlo, BondHarmonic_LONG) {
+  WARN("add BondVisitor in every potential factory");
+  WARN("put num steps and ref back");
   for (const std::string data : {
-//    "dimer_harmonic",
-//    "trimer_rigid_angle",
-//    "trimer_harmonic",
-//    "tetramer_harmonic_no_dihedral",
-//    "tetramer_harmonic_rigid_bond_angle",
-//    "tetramer_rigid",
-//    "tetramer_harmonic",
+    "dimer_harmonic",
+    "trimer_rigid_angle",
+    "trimer_harmonic",
+    "tetramer_harmonic_no_dihedral",
+    "tetramer_harmonic_rigid_bond_angle",
+    "tetramer_rigid",
+    "tetramer_harmonic",
     "tetramer_branched",
-//    "pentamer_harmonic",
+    "pentamer_harmonic",
     }) {
-    for (const std::string num_steps : {"1"}) {
-    //for (const std::string num_steps : {"1", "4"}) {
-      for (const std::string ref : {"-1"}) {
-      //for (const std::string ref : {"0", "-1"}) {
-        INFO("data " << data << " num_steps " << num_steps << " ref " << ref);
-        MonteCarlo mc;
-        //mc.set(MakeRandomMT19937({{"seed", "123"}}));
-        mc.add(MakeConfiguration({
-          {"particle_type0", "../plugin/chain/test/data/data." + data},
-          {"add_particles_of_type0", "1"},
-          {"cubic_box_length", "10"}}));
-        //mc.add(MakePotential(MakeLennardJones()));
-        WARN("add BondVisitor in every potential factory");
-        WARN("put num steps and ref back");
-        mc.add(MakePotential(MakeBondVisitor()));
-        mc.add_to_reference(MakePotential(MakeDontVisitModel()));
-        mc.add_to_reference(MakePotential(MakeBondVisitor()));
-        mc.set(MakeThermoParams({{"beta", "1"}}));
-        mc.set(MakeMetropolis());
-        INFO("initial energy " << mc.criteria().current_energy());
-        if (data == "dimer_harmonic") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "trimer_rigid_angle" || data == "trimer_harmonic") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "tetramer_harmonic_no_dihedral") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
-            {{"angle", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "tetramer_harmonic" ||
-                   data == "tetramer_harmonic_rigid_bond_angle" ||
-                   data == "tetramer_rigid") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
-            {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "tetramer_branched") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-            {{"branch", "1"}, {"mobile_site", "2"}, {"mobile_site2", "3"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        } else if (data == "pentamer_harmonic") {
-          mc.add(MakeTrialGrow({
-            {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-            {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
-            {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
-            {{"dihedral", "1"}, {"mobile_site", "4"}, {"anchor_site", "3"}, {"anchor_site2", "2"}, {"anchor_site3", "1"}},
-          }, {{"num_steps", num_steps}, {"reference_index", ref}}));
-        }
-        mc.add(MakeLogAndMovie({{"steps_per", "1"}, {"file_name", "tmp/harmonic"}}));
-        //mc.add(MakeLogAndMovie({{"steps_per", "1e3"}, {"file_name", "tmp/harmonic"}}));
-        mc.add(MakeCheckEnergy({{"steps_per", "1e0"}}));
-        auto en = MakeEnergy({{"steps_per_write", "1e5"}});
-        mc.add(en);
-        auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
-        // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
-        mc.add(bonds);
-        mc.attempt(3e5);
-        //INFO(bonds->bond_hist(0).str());
-        //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
-        INFO(bonds->bond(0).str());
-        EXPECT_NEAR(1.00167, bonds->bond(0).average(), 8*bonds->bond(0).block_stdev());
-
-        INFO(en->accumulator().str());
-        double en_expect;
-        if (data == "dimer_harmonic") {
-          en_expect = 0.5;
-        } else if (data == "trimer_rigid_angle") {
-          en_expect = 1.;
-        } else if (data == "trimer_harmonic") {
-          en_expect = 1.5;
-        } else if (data == "tetramer_harmonic_rigid_bond_angle") {
-          en_expect = 0.5;
-        } else if (data == "tetramer_harmonic_no_dihedral") {
-          en_expect = 2.5;
-        } else if (data == "tetramer_harmonic") {
-          en_expect = 3.0;
-        } else if (data == "tetramer_rigid") {
-          en_expect = 0.0;
-        } else if (data == "tetramer_branched") {
-          en_expect = 3.0;
-        } else if (data == "pentamer_harmonic") {
-          en_expect = 4.5;
-        } else {
-          FATAL("unrecognized data: " << data);
-        }
-        EXPECT_NEAR(en_expect, en->accumulator().average(), 8*en->accumulator().block_stdev());
+    //for (const std::string num_steps : {"1"}) {
+    for (const std::string num_steps : {"1", "4"}) {
+      std::string ref = "-1";
+      if (num_steps == "4") ref = "0";
+      INFO("data " << data << " num_steps " << num_steps << " ref " << ref);
+      MonteCarlo mc;
+      //mc.set(MakeRandomMT19937({{"seed", "123"}}));
+      mc.add(MakeConfiguration({
+        {"particle_type0", "../plugin/chain/test/data/data." + data},
+        {"add_particles_of_type0", "1"},
+        {"cubic_box_length", "10"}}));
+      //mc.add(MakePotential(MakeLennardJones()));
+      mc.add(MakePotential(MakeBondVisitor()));
+      mc.add_to_reference(MakePotential(MakeDontVisitModel()));
+      mc.add_to_reference(MakePotential(MakeBondVisitor()));
+      mc.set(MakeThermoParams({{"beta", "1"}}));
+      mc.set(MakeMetropolis());
+      DEBUG("initial energy " << mc.criteria().current_energy());
+      if (data == "dimer_harmonic") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+      } else if (data == "trimer_rigid_angle" || data == "trimer_harmonic") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+          {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+      } else if (data == "tetramer_harmonic_no_dihedral") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+          {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+          {{"angle", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+      } else if (data == "tetramer_harmonic" ||
+                 data == "tetramer_harmonic_rigid_bond_angle" ||
+                 data == "tetramer_rigid") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+          {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+          {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+      } else if (data == "tetramer_branched") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+          {{"branch", "1"}, {"mobile_site", "2"}, {"mobile_site2", "3"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
+      } else if (data == "pentamer_harmonic") {
+        mc.add(MakeTrialGrow({
+          {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+          {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+          {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}},
+          {{"dihedral", "1"}, {"mobile_site", "4"}, {"anchor_site", "3"}, {"anchor_site2", "2"}, {"anchor_site3", "1"}},
+        }, {{"num_steps", num_steps}, {"reference_index", ref}}));
       }
+      //const std::string steps_per = "1";
+      const std::string steps_per = "1e3";
+      mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/harmonic"}}));
+      mc.add(MakeCheckEnergy({{"steps_per", steps_per}}));
+      auto en = MakeEnergy({{"steps_per_write", steps_per}});
+      mc.add(en);
+      auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}});
+      // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
+      mc.add(bonds);
+      mc.attempt(3e5);
+      //INFO(bonds->bond_hist(0).str());
+      //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+      DEBUG(bonds->bond(0).str());
+      double z_fac = 12;
+      if (data == "tetramer_branched") z_fac = 20.;
+      double l_expect = 1.00167;
+      if (data == "tetramer_harmonic_rigid_bond_angle" || data == "tetramer_rigid") {
+        l_expect = 1.;
+      }
+      EXPECT_NEAR(l_expect, bonds->bond(0).average(), z_fac*bonds->bond(0).block_stdev());
+      DEBUG(en->accumulator().str());
+      double en_expect;
+      if (data == "dimer_harmonic") {
+        en_expect = 0.5;
+      } else if (data == "trimer_rigid_angle") {
+        en_expect = 1.;
+      } else if (data == "trimer_harmonic") {
+        en_expect = 1.5;
+      } else if (data == "tetramer_harmonic_rigid_bond_angle") {
+        en_expect = 0.5;
+      } else if (data == "tetramer_harmonic_no_dihedral") {
+        en_expect = 2.5;
+      } else if (data == "tetramer_harmonic") {
+        en_expect = 3.0;
+      } else if (data == "tetramer_rigid") {
+        en_expect = 0.0;
+      } else if (data == "tetramer_branched") {
+        en_expect = 3.0;
+      } else if (data == "pentamer_harmonic") {
+        en_expect = 4.5;
+      } else {
+        FATAL("unrecognized data: " << data);
+      }
+      EXPECT_NEAR(en_expect, en->accumulator().average(), z_fac*en->accumulator().block_stdev());
     }
   }
 }
