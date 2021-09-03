@@ -82,6 +82,7 @@
 #include "cluster/include/energy_map_neighbor_criteria.h"
 #include "cluster/include/energy_map_all_criteria.h"
 #include "system/include/bond_four_body.h"
+#include "models/include/dihedral_harmonic.h"
 #include "models/include/dihedral_trappe.h"
 #include "system/include/rigid_dihedral.h"
 #include "system/include/bond_visitor.h"
@@ -158,8 +159,8 @@
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze.h"
-#include "steppers/include/density_profile.h"
 #include "chain/include/analyze_bonds.h"
+#include "steppers/include/density_profile.h"
 #include "monte_carlo/include/analyze_factory.h"
 #include "steppers/include/log_and_movie.h"
 #include "steppers/include/seek_analyze.h"
@@ -205,8 +206,8 @@
 #include "cluster/include/compute_remove_avb.h"
 #include "cluster/include/compute_gca.h"
 #include "cluster/include/compute_add_avb_divalent.h"
-#include "morph/include/compute_morph.h"
 #include "cluster/include/compute_remove_avb_divalent.h"
+#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_volume.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_add.h"
@@ -378,7 +379,6 @@ using namespace std;
 %shared_ptr(feasst::AngleSquareWell);
 %shared_ptr(feasst::RigidAngle);
 %shared_ptr(feasst::BondTwoBody);
-%shared_ptr(feasst::BondLength);
 %shared_ptr(feasst::BondHarmonic);
 %shared_ptr(feasst::BondSquareWell);
 %shared_ptr(feasst::RigidBond);
@@ -388,6 +388,7 @@ using namespace std;
 %shared_ptr(feasst::EnergyMapNeighborCriteria);
 %shared_ptr(feasst::EnergyMapAllCriteria);
 %shared_ptr(feasst::BondFourBody);
+%shared_ptr(feasst::DihedralHarmonic);
 %shared_ptr(feasst::DihedralTRAPPE);
 %shared_ptr(feasst::RigidDihedral);
 %shared_ptr(feasst::BondVisitor);
@@ -473,8 +474,8 @@ using namespace std;
 %shared_ptr(feasst::Analyze);
 %shared_ptr(feasst::AnalyzeWriteOnly);
 %shared_ptr(feasst::AnalyzeUpdateOnly);
-%shared_ptr(feasst::DensityProfile);
 %shared_ptr(feasst::AnalyzeBonds);
+%shared_ptr(feasst::DensityProfile);
 %shared_ptr(feasst::AnalyzeFactory);
 %shared_ptr(feasst::LogAndMovie);
 %shared_ptr(feasst::AnalyzeData);
@@ -519,8 +520,8 @@ using namespace std;
 %shared_ptr(feasst::ComputeRemoveAVB);
 %shared_ptr(feasst::ComputeGCA);
 %shared_ptr(feasst::ComputeAddAVBDivalent);
-%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::ComputeRemoveAVBDivalent);
+%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::TrialComputeVolume);
 %shared_ptr(feasst::TrialComputeRemove);
 %shared_ptr(feasst::TrialComputeAdd);
@@ -669,6 +670,7 @@ using namespace std;
 %include cluster/include/energy_map_neighbor_criteria.h
 %include cluster/include/energy_map_all_criteria.h
 %include system/include/bond_four_body.h
+%include models/include/dihedral_harmonic.h
 %include models/include/dihedral_trappe.h
 %include system/include/rigid_dihedral.h
 %include system/include/bond_visitor.h
@@ -745,8 +747,8 @@ using namespace std;
 %include monte_carlo/include/trial.h
 %include monte_carlo/include/trial_factory.h
 %include monte_carlo/include/analyze.h
-%include steppers/include/density_profile.h
 %include chain/include/analyze_bonds.h
+%include steppers/include/density_profile.h
 %include monte_carlo/include/analyze_factory.h
 %include steppers/include/log_and_movie.h
 %include steppers/include/seek_analyze.h
@@ -792,8 +794,8 @@ using namespace std;
 %include cluster/include/compute_remove_avb.h
 %include cluster/include/compute_gca.h
 %include cluster/include/compute_add_avb_divalent.h
-%include morph/include/compute_morph.h
 %include cluster/include/compute_remove_avb_divalent.h
+%include morph/include/compute_morph.h
 %include monte_carlo/include/trial_compute_volume.h
 %include monte_carlo/include/trial_compute_remove.h
 %include monte_carlo/include/trial_compute_add.h

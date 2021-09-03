@@ -1,6 +1,6 @@
-BondTwoBody
+DihedralHarmonic
 =====================================================
 
-.. doxygenclass:: feasst::BondTwoBody
+.. doxygenclass:: feasst::DihedralHarmonic
    :project: FEASST
    :members:

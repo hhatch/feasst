@@ -3,6 +3,7 @@
 
    AngleHarmonic
    BondHarmonic
+   DihedralHarmonic
    DihedralTRAPPE
    Yukawa
    SquareWell
