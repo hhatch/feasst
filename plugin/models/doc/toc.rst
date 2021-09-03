@@ -4,7 +4,7 @@
    AngleHarmonic
    BondHarmonic
    DihedralHarmonic
-   DihedralTRAPPE
+   DihedralTraPPE
    Yukawa
    SquareWell
    LennardJonesAlpha

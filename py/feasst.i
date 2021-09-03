@@ -389,7 +389,7 @@ using namespace std;
 %shared_ptr(feasst::EnergyMapAllCriteria);
 %shared_ptr(feasst::BondFourBody);
 %shared_ptr(feasst::DihedralHarmonic);
-%shared_ptr(feasst::DihedralTRAPPE);
+%shared_ptr(feasst::DihedralTraPPE);
 %shared_ptr(feasst::RigidDihedral);
 %shared_ptr(feasst::BondVisitor);
 %shared_ptr(feasst::VisitModel);

@@ -576,7 +576,7 @@ TEST(MonteCarlo, RigidBondAngleDihedral) {
   }
 }
 
-TEST(MonteCarlo, BondHarmonic_LONG) {
+TEST(MonteCarlo, equipartition_LONG) {
   WARN("add BondVisitor in every potential factory");
   WARN("put num steps and ref back");
   for (const std::string data : {
