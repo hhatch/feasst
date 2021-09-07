@@ -99,6 +99,7 @@ TEST(MonteCarlo, chain) {
 // HWH this test is known to fail infrequently
 TEST(MonteCarlo, TrialGrow) {
   for (const std::string particle : {"lj", "spce"}) {
+    INFO(particle);
     double box_length = 8.;
     std::string data = "forcefield/data.dimer";
     if (particle == "spce") {
@@ -577,8 +578,6 @@ TEST(MonteCarlo, RigidBondAngleDihedral) {
 }
 
 TEST(MonteCarlo, equipartition_LONG) {
-  WARN("add BondVisitor in every potential factory");
-  WARN("put num steps and ref back");
   for (const std::string data : {
     "dimer_harmonic",
     "trimer_rigid_angle",
@@ -601,10 +600,8 @@ TEST(MonteCarlo, equipartition_LONG) {
         {"particle_type0", "../plugin/chain/test/data/data." + data},
         {"add_particles_of_type0", "1"},
         {"cubic_box_length", "10"}}));
-      //mc.add(MakePotential(MakeLennardJones()));
-      mc.add(MakePotential(MakeBondVisitor()));
+      mc.add(MakePotential(MakeDontVisitModel()));
       mc.add_to_reference(MakePotential(MakeDontVisitModel()));
-      mc.add_to_reference(MakePotential(MakeBondVisitor()));
       mc.set(MakeThermoParams({{"beta", "1"}}));
       mc.set(MakeMetropolis());
       DEBUG("initial energy " << mc.criteria().current_energy());
@@ -698,10 +695,8 @@ TEST(MonteCarlo, single_butane) {
     {"particle_type0", "../forcefield/data.n-butane"},
     {"add_particles_of_type0", "1"},
     {"cubic_box_length", "100"}}));
-  //mc.add(MakePotential(MakeLennardJones()));
-  //mc.add(MakePotential(MakeLennardJones(),
-  //                     MakeVisitModelIntra({{"cutoff",  "4"}})));
-  mc.add(MakePotential(MakeBondVisitor()));
+  mc.add(MakePotential(MakeLennardJones(),
+                       MakeVisitModelIntra({{"cutoff",  "4"}})));
   mc.set(MakeThermoParams({{"beta", "1"}}));
   mc.set(MakeMetropolis());
   DEBUG("initial energy " << mc.criteria().current_energy());

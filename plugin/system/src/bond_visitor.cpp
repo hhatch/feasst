@@ -89,7 +89,8 @@ void BondVisitor::compute_two(const Select& selection,
               "bond model " << bond.model() << " not recognized.");
             en += bond_.deserialize_map()[bond.model()]->energy(
               ri, rj, bond);
-            if (verbose_) {
+            if (true) {
+            //if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
                 INFO("bond ij " << part_index << " " << bond.site(0) << " "
                   << bond.site(1) << " sq " << ri.squared_distance(rj));
@@ -118,6 +119,7 @@ void BondVisitor::compute_three(
     const Particle& unique_part = config.unique_type(part.type());
     for (int site0_index : selection.site_indices(select_index)) {
       const Site& site0 = part.site(site0_index);
+      DEBUG("site0_index " << site0_index);
       for (const std::vector<int>& ang : part_type.angle_neighbors(site0_index)) {
         const int site1_index = ang[0];
         const int site2_index = ang[1];

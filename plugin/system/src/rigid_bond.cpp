@@ -39,6 +39,8 @@ double RigidBond::energy(const double distance, const Bond& bond) const {
   const double length = bond.property("length");
   const double delta = bond.property("delta");
   if (std::abs(distance - length) > delta) {
+    INFO("distance " << distance <<
+         " sites " << feasst_str(bond.site_indices()));
     return NEAR_INFINITY;
   }
   return 0.;

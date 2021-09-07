@@ -50,10 +50,10 @@ class BondVisitor {
   void serialize_bond_visitor_(std::ostream& ostr) const;
 
  private:
-  double energy_;
-  double energy_two_body_;
-  double energy_three_body_;
-  double energy_four_body_;
+  double energy_ = 0.;
+  double energy_two_body_ = 0.;
+  double energy_three_body_ = 0.;
+  double energy_four_body_ = 0.;
   bool verbose_;
 
   // temporary

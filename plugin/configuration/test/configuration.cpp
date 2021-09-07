@@ -304,11 +304,11 @@ TEST(Configuration, dihedrals) {
   EXPECT_EQ(7, config->particle_type(0).num_dihedrals());
   EXPECT_EQ(1, config->unique_type(0).num_dihedrals());
   EXPECT_EQ(0, config->particle(0).num_dihedrals());
-  EXPECT_EQ("RigidDihedral", config->unique_type(0).dihedral(0).model());
+  EXPECT_EQ("DihedralTraPPE", config->unique_type(0).dihedral(0).model());
   EXPECT_EQ(8, config->particle_type(0).num_angles());
   EXPECT_EQ(1, config->unique_type(0).num_angles());
   EXPECT_EQ(0, config->particle(0).num_angles());
-  EXPECT_EQ("RigidAngle", config->unique_type(0).angle(0).model());
+  EXPECT_EQ("AngleHarmonic", config->unique_type(0).angle(0).model());
   EXPECT_EQ(9, config->particle_type(0).num_bonds());
   EXPECT_EQ(1, config->unique_type(0).num_bonds());
   EXPECT_EQ(0, config->particle(0).num_bonds());

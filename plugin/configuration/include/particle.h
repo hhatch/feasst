@@ -286,6 +286,10 @@ class Particle : public PropertiedEntity,
   std::vector<std::vector<int> > dihedral_list_;
   std::vector<std::vector<std::vector<int> > > dihedral_neighbors_;
 
+  // temporary and not serialized
+  std::vector<int> empty_;
+  std::vector<std::vector<int> > empty2d_;
+
   void add_bond_(const Bond& bond, const int index,
     std::vector<std::vector<int> > * list);
 };

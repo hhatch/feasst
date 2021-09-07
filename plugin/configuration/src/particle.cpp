@@ -289,20 +289,26 @@ Particle::Particle(std::istream& istr)
 }
 
 const std::vector<int>& Particle::bond_neighbors(const int site) const {
-  ASSERT(site < static_cast<int>(bond_neighbors_.size()),
-    "site: " << site << " is not bonded");
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+  if (site >= static_cast<int>(bond_neighbors_.size())) {
+    return empty_;
+  }
   return bond_neighbors_[site];
 }
 
 const std::vector<std::vector<int> >& Particle::angle_neighbors(const int site) const {
-  ASSERT(site < static_cast<int>(angle_neighbors_.size()),
-    "site: " << site << " does not have any angles");
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+  if (site >= static_cast<int>(angle_neighbors_.size())) {
+    return empty2d_;
+  }
   return angle_neighbors_[site];
 }
 
 const std::vector<std::vector<int> >& Particle::dihedral_neighbors(const int site) const {
-  ASSERT(site < static_cast<int>(dihedral_neighbors_.size()),
-    "site: " << site << " does not have any dihedrals");
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+  if (site >= static_cast<int>(dihedral_neighbors_.size())) {
+    return empty2d_;
+  }
   return dihedral_neighbors_[site];
 }
 
