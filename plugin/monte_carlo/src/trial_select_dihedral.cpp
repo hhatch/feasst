@@ -49,7 +49,7 @@ TrialSelectDihedral::TrialSelectDihedral(std::istream& istr)
 }
 
 void TrialSelectDihedral::serialize_trial_select_dihedral_(std::ostream& ostr) const {
-  serialize_trial_select_bond_(ostr);
+  serialize_trial_select_angle_(ostr);
   feasst_serialize_version(8954, ostr);
   feasst_serialize(anchor_site3_, ostr);
 }
