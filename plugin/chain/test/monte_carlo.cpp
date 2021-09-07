@@ -691,4 +691,48 @@ TEST(MonteCarlo, equipartition_LONG) {
   }
 }
 
+TEST(MonteCarlo, single_butane) {
+  MonteCarlo mc;
+  //mc.set(MakeRandomMT19937({{"seed", "123"}}));
+  mc.add(MakeConfiguration({
+    {"particle_type0", "../forcefield/data.n-butane"},
+    {"add_particles_of_type0", "1"},
+    {"cubic_box_length", "100"}}));
+  //mc.add(MakePotential(MakeLennardJones()));
+  //mc.add(MakePotential(MakeLennardJones(),
+  //                     MakeVisitModelIntra({{"cutoff",  "4"}})));
+  mc.add(MakePotential(MakeBondVisitor()));
+  mc.set(MakeThermoParams({{"beta", "1"}}));
+  mc.set(MakeMetropolis());
+  DEBUG("initial energy " << mc.criteria().current_energy());
+  mc.add(MakeTrialGrow({
+    {{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+    {{"angle", "1"}, {"mobile_site", "2"}, {"anchor_site", "1"}, {"anchor_site2", "0"}},
+    {{"dihedral", "1"}, {"mobile_site", "3"}, {"anchor_site", "2"}, {"anchor_site2", "1"}, {"anchor_site3", "0"}}}));
+  //const std::string steps_per = "1";
+  const std::string steps_per = "1e3";
+  mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/butane"}}));
+  mc.add(MakeCheckEnergy({{"steps_per", steps_per}}));
+  auto en = MakeEnergy({{"steps_per_write", steps_per}});
+  mc.add(en);
+  const int bins = 20;
+  auto bonds = MakeAnalyzeBonds({
+      {"bond_bin_width", "0.05"}, {"angle_bin_width", "0.05"},
+      {"dihedral_bin_width", str(PI/bins)}, {"dihedral_bin_center", str(PI/bins/2)}});
+  // auto bonds = MakeAnalyzeBonds({{"bond_bin_width", "0.05"}, {"steps_per", "1e3"}});
+  mc.add(bonds);
+  mc.attempt(1e3);
+  //INFO(bonds->bond_hist(0).str());
+  //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
+//  INFO(bonds->bond(0).str());
+//  INFO(bonds->bond_hist(0).str());
+//  INFO(bonds->angle(0).str());
+//  INFO(bonds->angle_hist(0).str());
+//  INFO(bonds->dihedral(0).str());
+//  INFO(bonds->dihedral_hist(0).str());
+//  std::ofstream ss("tmp/butane_dihedral.txt");
+//  ss << bonds->dihedral_hist(0).str();
+  EXPECT_NEAR(bonds->dihedral_hist(0).histogram()[19], 700, 70);
+}
+
 }  // namespace feasst

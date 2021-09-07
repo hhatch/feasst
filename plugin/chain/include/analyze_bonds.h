@@ -19,10 +19,13 @@ class AnalyzeBonds : public AnalyzeUpdateOnly {
   /**
     args:
     - bond_bin_width: bin width for bond histogram (default: 1).
+    - bond_bin_center: center of first bin in bond histogram (default: 0).
     - angle_bin_width: bin width for angle histogram in units of degrees.
       (default: 1).
+    - angle_bin_center: center of first bin in angle histogram (default: 0).
     - dihedral_bin_width: bin width for dihedral histogram in units of degrees.
       (default: 1).
+    - dihedral_bin_center: center of first bin in dihedral histogram (default: 0).
    */
   AnalyzeBonds(argtype args = argtype());
 

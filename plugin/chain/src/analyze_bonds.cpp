@@ -17,11 +17,14 @@ static MapAnalyzeBonds mapper_ = MapAnalyzeBonds();
 
 AnalyzeBonds::AnalyzeBonds(argtype args) : AnalyzeUpdateOnly(&args) {
   Histogram bhist, ahist, dhist;
-  bhist.set_width_center(dble("bond_bin_width", &args, 1), 0.);
+  bhist.set_width_center(dble("bond_bin_width", &args, 1),
+                         dble("bond_bin_center", &args, 0.));
   bond_hist_.push_back(bhist);
-  ahist.set_width_center(dble("angle_bin_width", &args, 1), 0.);
+  ahist.set_width_center(dble("angle_bin_width", &args, 1),
+                         dble("angle_bin_center", &args, 0.));
   angle_hist_.push_back(ahist);
-  dhist.set_width_center(dble("dihedral_bin_width", &args, 1), 0.);
+  dhist.set_width_center(dble("dihedral_bin_width", &args, 1),
+                         dble("dihedral_bin_center", &args, 0.));
   dihedral_hist_.push_back(dhist);
   check_all_used(args);
 }
