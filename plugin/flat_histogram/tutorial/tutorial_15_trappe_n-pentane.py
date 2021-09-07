@@ -8,15 +8,15 @@ parser.add_argument("--num_procs", type=int, help="number of processors", defaul
 parser.add_argument("--num_hours", type=float, help="number of hours before restart", default=5*24)
 parser.add_argument("--dccb_cutoff", type=int, help="cutoff for dual cut configurational bias", default=4)
 parser.add_argument("--dccb_begin", type=int, help="number of molecules before using DCCB", default=300)
-parser.add_argument("--lx", type=float, help="box length in x", default=33.0)
-parser.add_argument("--ly", type=float, help="box length in y", default=33.0)
-parser.add_argument("--lz", type=float, help="box length in z", default=33.0)
-parser.add_argument("--max_particles", type=int, help="maximum number of particles", default=400)
-parser.add_argument("--temperature", type=float, help="temperature in Kelvin", default=263.15)
+parser.add_argument("--lx", type=float, help="box length in x", default=28.0)
+parser.add_argument("--ly", type=float, help="box length in y", default=28.0)
+parser.add_argument("--lz", type=float, help="box length in z", default=28.0)
+parser.add_argument("--max_particles", type=int, help="maximum number of particles", default=110)
+parser.add_argument("--temperature", type=float, help="temperature in Kelvin", default=439)
 parser.add_argument("--particle", "-p", type=str, help="data file of alkane", required=True)
 parser.add_argument("--collect_flatness", type=int, help="number of WL flatness to begin collection", default=18)
 parser.add_argument("--min_flatness", type=int, help="number of WL flatness to switch to TM", default=22)
-parser.add_argument("--beta_mu", type=int, help="baseline chemical potential of each species", default=-7)
+parser.add_argument("--beta_mu", type=int, help="baseline chemical potential of each species", default=-1)
 args = parser.parse_args()
 print("args:", args)
 
@@ -30,6 +30,7 @@ def mc(thread, mn, mx):
                              fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
     mc.add(fst.MakePotential(fst.MakeBondVisitor()))
     mc.add(fst.MakePotential(fst.MakeLongRangeCorrections()))
+    ref = "0"
     if mx > args.dccb_begin:
         reference = fst.Potential(fst.MakeLennardJones(), fst.MakeVisitModelCell(fst.args({"min_length": str(args.dccb_cutoff)})))
         reference.set_model_params(mc.configuration())
@@ -38,12 +39,13 @@ def mc(thread, mn, mx):
         mc.add_to_reference(reference)
         mc.add_to_reference(fst.MakePotential(fst.MakeLennardJones(),
                             fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
-        ref = "0"
         num = "4"
     else:
-        ref = "-1"
         num = "1"
-    mc.set(fst.MakeThermoParams(fst.args({"beta": str(1./args.temperature), "chemical_potential0": str(args.beta_mu*args.temperature)})))
+        mc.add_to_reference(fst.MakePotential(fst.DontVisitModel()))
+    print('ref', ref, 'num', num)
+    beta = 1./fst.kelvin2kJpermol(args.temperature);
+    mc.set(fst.MakeThermoParams(fst.args({"beta": str(beta), "chemical_potential0": str(args.beta_mu/beta)})))
     mc.set(fst.MakeFlatHistogram(
         fst.MakeMacrostateNumParticles(
             fst.Histogram(fst.args({"width": "1", "max": str(mx), "min": str(mn)}))),
@@ -52,11 +54,6 @@ def mc(thread, mn, mx):
             "collect_flatness": str(args.collect_flatness),
             "min_flatness": str(args.min_flatness),
             "min_sweeps": "1000"}))))
-    #mc.add(fst.MakeTrialTranslate(fst.args({"particle_type": "0", "weight": "1.",
-    #    "tunable_param": "1."})))
-    #mc.add(fst.MakeTrialRotate(fst.args({"particle_type": "0", "weight": "1.",
-    #    "tunable_param": "1."})))
-    #mc.add(fst.MakeTrialTransfer(fst.args({"particle_type": "0", "weight": "4"})))
     mc.add(fst.MakeTrialGrow(fst.ArgsVector([
         {"transfer": "true", "particle_type": "0", "site": "0", "weight": "4"},
         {"bond": "true", "mobile_site": "1", "anchor_site": "0"},
@@ -86,7 +83,8 @@ def mc(thread, mn, mx):
         {"particle_type": "0", "weight": "0.25",
          "dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
     ]), fst.args({"reference_index": ref, "num_steps": num})))
-
+    mc.add(fst.MakeTrialCrankshaft(fst.args({"weight": "1.", "tunable_param": "25.", "max_length": "5.", "reference_index": ref, "num_steps": num})));
+    mc.add(fst.MakeTrialPivot(fst.args({"weight": "1.", "tunable_param": "25.", "max_length": "5.", "reference_index": ref, "num_steps": num})));
     mc.add(fst.MakeCheckEnergy(fst.args({"steps_per": str(steps_per), "tolerance": "0.0001"})))
     mc.add(fst.MakeTune(fst.args({"steps_per": str(steps_per), "stop_after_phase": "0"})))
     mc.add(fst.MakeLogAndMovie(fst.args({"steps_per": str(steps_per),
