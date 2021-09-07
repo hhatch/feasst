@@ -126,13 +126,13 @@ PerturbDihedral::PerturbDihedral(std::istream& istr)
 }
 
 void PerturbDihedral::serialize(std::ostream& ostr) const {
+  ostr << class_name_ << " ";
   serialize_perturb_dihedral_(ostr);
 }
 
 void PerturbDihedral::serialize_perturb_dihedral_(
     std::ostream& ostr) const {
-  ostr << class_name_ << " ";
-  serialize_perturb_distance_(ostr);
+  serialize_perturb_distance_angle_(ostr);
   feasst_serialize_version(7579, ostr);
   feasst_serialize(dihedral_type_, ostr);
 }

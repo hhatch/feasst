@@ -136,19 +136,19 @@ void PerturbDistanceAngle::place_in_circle(const double distance,
 
 PerturbDistanceAngle::PerturbDistanceAngle(std::istream& istr)
   : PerturbDistance(istr) {
-  ASSERT(class_name_ == "PerturbDistanceAngle", "name: " << class_name_);
+  //ASSERT(class_name_ == "PerturbDistanceAngle", "name: " << class_name_);
   const int version = feasst_deserialize_version(istr);
   ASSERT(788 == version, "mismatch version: " << version);
   feasst_deserialize(&angle_type_, istr);
 }
 
 void PerturbDistanceAngle::serialize(std::ostream& ostr) const {
+  ostr << class_name_ << " ";
   serialize_perturb_distance_angle_(ostr);
 }
 
 void PerturbDistanceAngle::serialize_perturb_distance_angle_(
     std::ostream& ostr) const {
-  ostr << class_name_ << " ";
   serialize_perturb_distance_(ostr);
   feasst_serialize_version(788, ostr);
   feasst_serialize(angle_type_, ostr);
