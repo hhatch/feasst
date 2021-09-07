@@ -1,15 +1,13 @@
 # LAMMPS-inspired data file
 # TraPPE http://trappe.oit.umn.edu/
 
-5 sites
-4 bonds
-3 angles
-2 dihedrals
+3 sites
+2 bonds
+1 angles
 
 2 site types
 1 bond types
 1 angle types
-1 dihedral types
 
 Units
 
@@ -31,9 +29,7 @@ Sites
 
 0 0 0.00 0.00 0.00
 1 1 1.54 0.00 0.00
-2 1 1.54 1.54 0.00
-3 1 1.54 1.54 1.54
-4 0 3.08 1.54 1.54
+2 0 1.54 1.54 0.00
 
 Bond Properties
 
@@ -43,8 +39,6 @@ Bonds
 
 0 0 0 1
 1 0 1 2
-2 0 2 3
-3 0 3 4
 
 Angle Properties
 
@@ -53,15 +47,4 @@ Angle Properties
 Angles
 
 0 0 0 1 2
-1 0 1 2 3
-2 0 2 3 4
-
-Dihedral Properties
-
-0 DihedralTraPPE c0 0. c1 2.951883663322944 c2 -0.5669632059318694 c3 6.579400558997022
-
-Dihedrals
-
-0 0 0 1 2 3
-1 0 1 2 3 4
 
