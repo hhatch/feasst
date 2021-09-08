@@ -57,7 +57,6 @@ def mc(thread, mn, mx):
     grow_inv=[]
     num_sites = mc.configuration().particle_type(0).num_sites()
     for site in range(num_sites):
-        print(site)
         if site == 0:
             grow += [{"transfer": "true", "site": "0"}]
             grow_inv += [{"transfer": "true", "site": "9"}]
@@ -108,7 +107,7 @@ windows=fst.WindowExponential(fst.args({
     "alpha": "1.75",
     "num": str(args.num_procs),
     "maximum": str(args.max_particles),
-    "extra_overlap": "2"})).boundaries()
+    "extra_overlap": "0"})).boundaries()
 print(windows)
 
 if args.task == 0:
