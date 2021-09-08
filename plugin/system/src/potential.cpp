@@ -52,11 +52,6 @@ Potential::Potential(argtype args) : Potential(&args) {
   check_all_used(args);
 }
 
-Potential::Potential(std::shared_ptr<BondVisitor> bond_visitor,
-    argtype args) : Potential(args) {
-  bond_visitor_ = bond_visitor;
-}
-
 void Potential::set(const ModelParams& model_params) {
   model_params_override_ = true;
   model_params_ = ModelParams(model_params);
@@ -84,12 +79,9 @@ const ModelParams& Potential::model_params(const Configuration& config) const {
 }
 
 double Potential::energy(Configuration * config) {
-  ASSERT(bond_visitor_ || visit_model_, "visitor must be set.");
+  ASSERT(visit_model_, "visitor must be set.");
   if (prevent_cache_ || !cache_.is_unloading(&stored_energy_)) {
-    if (bond_visitor_) {
-      bond_visitor_->compute_all(*config, group_index_);
-      stored_energy_ = bond_visitor_->energy();
-    } else if (model_params_override_) {
+    if (model_params_override_) {
       stored_energy_ = model_->compute(model_params_, group_index_, config,
                                        visit_model_.get());
     } else {
@@ -103,10 +95,7 @@ double Potential::energy(Configuration * config) {
 double Potential::select_energy(const Select& select, Configuration * config) {
   ASSERT(visit_model_, "visitor must be set.");
   if (prevent_cache_ || !cache_.is_unloading(&stored_energy_)) {
-    if (bond_visitor_) {
-      bond_visitor_->compute_all(select, *config);
-      stored_energy_ = bond_visitor_->energy();
-    } else if (model_params_override_) {
+    if (model_params_override_) {
       stored_energy_ = model_->compute(model_params_, select, group_index_,
                                        config, visit_model_.get());
     } else {
@@ -124,7 +113,6 @@ int Potential::cell_index() const {
 }
 
 void Potential::precompute(Configuration * config) {
-  if (bond_visitor_) return;
   visit_model_->precompute(config);
   const ModelParams& params = model_params(*config);
   model_->precompute(params);

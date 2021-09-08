@@ -26,9 +26,8 @@ def mc(thread, mn, mx):
     mc.add(fst.MakeConfiguration(fst.args({"side_length0": str(args.lx), "side_length1": str(args.ly), "side_length2": str(args.lz),
         "particle_type0": args.particle})))
     mc.add(fst.MakePotential(fst.MakeLennardJones()))
-    #mc.add(fst.MakePotential(fst.MakeLennardJones(),
-    #                         fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
-    mc.add(fst.MakePotential(fst.MakeBondVisitor()))
+    mc.add(fst.MakePotential(fst.MakeLennardJones(),
+                             fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
     mc.add(fst.MakePotential(fst.MakeLongRangeCorrections()))
     if mx > args.dccb_begin:
         reference = fst.Potential(fst.MakeLennardJones(), fst.MakeVisitModelCell(fst.args({"min_length": str(args.dccb_cutoff)})))
