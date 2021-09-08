@@ -41,8 +41,8 @@ double RigidAngle::energy(const double radians, const Bond& angle) const {
   const double delta = degrees_to_radians(angle.property("delta"));
   ASSERT(!std::isnan(radians), "radians is nan");
   if (std::abs(radians - theta) > delta) {
-    INFO("radians " << radians);
-    return NEAR_INFINITY;
+    FATAL("radians(" << radians << ")-theta(" << theta << ")=" << radians - theta
+      << " > delta: " << delta);
   }
   return 0.;
 }

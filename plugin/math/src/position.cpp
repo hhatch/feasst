@@ -315,7 +315,14 @@ double Position::vertex_angle_radians(const Position& ri, const Position& rk) co
   rij.subtract(*this);
   Position rkj = rk;
   rkj.subtract(*this);
-  return std::acos(rij.cosine(rkj));
+  double rad = std::acos(rij.cosine(rkj));
+  if (ri.dimension() == 2) {
+    // if the z-dimension of the cross product is positive, reverse
+    if (rij.coord(0)*rkj.coord(1) > rij.coord(1)*rkj.coord(0)) {
+      rad = 2.*PI - rad;
+    }
+  }
+  return rad;
 }
 
 double Position::torsion_angle_radians(const Position& rj, const Position& rk,

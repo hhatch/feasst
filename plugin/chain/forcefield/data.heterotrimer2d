@@ -39,8 +39,8 @@ Bonds
 
 Angle Properties
 
-0 RigidAngle degrees 270 delta 0.000001
+0 RigidAngle degrees 90 delta 0.000001
 
 Angles
 
-0 0 1 0 2
+0 0 2 0 1

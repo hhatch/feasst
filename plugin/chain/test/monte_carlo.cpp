@@ -220,12 +220,23 @@ TEST(MonteCarlo, cg7mab2_LONG) {
   }
 }
 
+TEST(System, Angles2D) {
+  MonteCarlo mc;
+  mc.add(MakeConfiguration({{"side_length0", "6"}, {"side_length1", "6"},
+    {"particle_type", "../plugin/chain/forcefield/data.heterotrimer2d"},
+    {"add_particles_of_type0", "1"}}));
+  mc.add(MakePotential(MakeLennardJones()));
+  mc.set(MakeThermoParams({{"beta", "1"}}));
+  mc.set(MakeMetropolis());
+  INFO(mc.criteria().current_energy());
+}
+
 MonteCarlo test_avb(const bool avb2, const bool avb4 = true) {
   MonteCarlo mc;
   mc.set(MakeRandomMT19937({{"seed", "time"}}));
   //mc.set(MakeRandomMT19937({{"seed", "123"}}));
-  mc.add(MakeConfiguration(MakeDomain({{"side_length0", "6"}, {"side_length1", "6"}}),
-    {{"particle_type", "../plugin/chain/forcefield/data.heterotrimer2d"}}));
+  mc.add(MakeConfiguration({{"side_length0", "6"}, {"side_length1", "6"},
+    {"particle_type", "../plugin/chain/forcefield/data.heterotrimer2d"}}));
   EXPECT_EQ(2, mc.configuration().dimension());
   mc.add(MakePotential(MakeLennardJones(),
     MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))));
@@ -521,7 +532,7 @@ TEST(MayerSampling, trimer_grow_LONG) {
   }
   const std::string steps_per = "1e4";
   mc.add(MakeLogAndMovie({{"steps_per", steps_per}, {"file_name", "tmp/trib"}}));
-  mc.add(MakeCheckEnergy({{"steps_per", steps_per}}));
+  mc.add(MakeCheckEnergy({{"steps_per", steps_per}, {"tolerance", "1e-4"}}));
   mc.attempt(1e6);
   double b2hs = 2./3.*PI*std::pow(mc.configuration().model_params().sigma().value(0), 3); // A^3
   INFO(b2hs*mayer->second_virial_ratio());
@@ -654,7 +665,11 @@ TEST(MonteCarlo, equipartition_LONG) {
       //INFO(bonds->bond_hist(0).str());
       //INFO(bonds->bond(0).average() << " +/- " << 3*bonds->bond(0).block_stdev());
       DEBUG(bonds->bond(0).str());
-      const double z_fac = 20;
+      double z_fac = 20;
+      if (num_steps != "1") {
+        z_fac *= 3;
+        if (data == "tetramer_branched") { z_fac *= 2; }
+      }
       double l_expect = 1.00167;
       if (data == "tetramer_harmonic_rigid_bond_angle" || data == "tetramer_rigid") {
         l_expect = 1.;

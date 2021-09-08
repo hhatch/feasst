@@ -138,6 +138,14 @@ class Position {
   /**
     Return the angle, in radians, formed by self as vertex, and two points.
     For example, the angle between i - j - k, which form a line, is PI.
+    While i and k are given, j is self.
+
+    In 2D, maintain chirality such that angles are clock-wise rotated.
+    This is implemented by checking that the z-dimension of
+
+    \f$r_{ij} \times r_{kj} < 0\f$.
+
+    If not, then reverse the angle, \f$\theta \rightarrow 2\pi - \theta\f$.
    */
   double vertex_angle_radians(const Position& ri, const Position& rk) const;
 

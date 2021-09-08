@@ -16,6 +16,10 @@ namespace feasst {
   anchor site is bonded to the first anchor site.
   The angle is defined as: anchor2 - anchor1 - mobile, where anchor1 is the
   vertex.
+
+  In 2D, angle i-j-k is not the same as angle k-j-i.
+  Thus, TrialSelectAngle sites in the order mobile-anchor-anchor2 must be in the
+  same order as in FileLMP.
  */
 class TrialSelectAngle : public TrialSelectBond {
  public:

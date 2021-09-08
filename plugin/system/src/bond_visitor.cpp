@@ -62,7 +62,7 @@ BondVisitor::BondVisitor(std::istream& istr) {
 void BondVisitor::compute_two(const Select& selection,
     const Configuration& config) {
   double en = 0.;
-  //INFO(selection.str());
+  //TRACE(selection.str());
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
@@ -89,10 +89,9 @@ void BondVisitor::compute_two(const Select& selection,
               "bond model " << bond.model() << " not recognized.");
             en += bond_.deserialize_map()[bond.model()]->energy(
               ri, rj, bond);
-            if (true) {
-            //if (verbose_) {
+            if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
-                INFO("bond ij " << part_index << " " << bond.site(0) << " "
+                TRACE("bond ij " << part_index << " " << bond.site(0) << " "
                   << bond.site(1) << " sq " << ri.squared_distance(rj));
               }
             }
@@ -107,7 +106,7 @@ void BondVisitor::compute_two(const Select& selection,
 void BondVisitor::compute_three(
     const Select& selection,
     const Configuration& config) {
-  DEBUG("BondThreeBody of " << selection.str());
+  TRACE("BondThreeBody of " << selection.str());
   double en = 0.;
   for (int select_index = 0;
        select_index < selection.num_particles();
@@ -134,25 +133,36 @@ void BondVisitor::compute_three(
            */
           if (site0_index < site2_index ||
               !find_in_list(site2_index, selection.site_indices(select_index))) {
-            DEBUG("sites " << site0_index << " " << site1_index << " " << site2_index);
-            const Position& ri = site0.position();
-            const Position& rj = site1.position();
-            const Position& rk = site2.position();
+            TRACE("sites " << site0_index << " " << site1_index << " " << site2_index);
+            const Position * ri = &site0.position();
+            const Position * rj = &site1.position();
+            const Position * rk = &site2.position();
             const Angle& angle_type = part_type.angle(site0_index,
               site1_index, site2_index);
             const Angle& angle = unique_part.angle(angle_type.type());
             ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
               "angle model " << angle.model() << " not recognized.");
+
+            // In 2D, angle i-j-k is not the same as k-j-i.
+            // angle i-j-k = 2pi - angle k-j-i
+            if (ri->dimension() == 2) {
+              TRACE("site0 of angle " << angle.site(0));
+              if (angle.site(0) != site0_index) {
+                ri = &site2.position();
+                rk = &site0.position();
+              }
+            }
             en += angle_.deserialize_map()[angle.model()]->energy(
-              ri, rj, rk, angle);
+              *ri, *rj, *rk, angle);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
-                const double ang = rj.vertex_angle_radians(ri, rk);
+                const double ang = rj->vertex_angle_radians(*ri, *rk);
                 const double theta0 = degrees_to_radians(angle.property("theta0"));
-                INFO("angle " << part_index << " ijk " << angle.site(0) << " "
+                TRACE("angle " << part_index << " ijk " << angle.site(0) << " "
                   << angle.site(1) << " " << angle.site(2) << " "
-                  << "ri " << ri.str() << " "
-                  << "rj " << rj.str() << " "
+                  << "ri " << ri->str() << " "
+                  << "rj " << rj->str() << " "
+                  << "rk " << rk->str() << " "
                   << "ang " << ang << " "
                   << "theta0 " << theta0 << " "
                   << "diff " << ang - theta0);
