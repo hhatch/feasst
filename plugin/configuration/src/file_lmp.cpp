@@ -101,7 +101,8 @@ Particle FileLMP::read(const std::string file_name) {
   read_num_and_types_(file_name);
 
   // read until Sites section
-  find_or_fail("Sites", file);
+  bool is_found = find("Sites", file);
+  if (!is_found) FATAL("Could not find Sites in " << file_name);
 
   // read Sites section
   int isite, itype;
@@ -125,7 +126,8 @@ Particle FileLMP::read(const std::string file_name) {
 
   // read Bonds section
   if (num_bonds_ > 0) {
-    find_or_fail("Bonds", file);
+    is_found = find("Bonds", file);
+    if (!is_found) FATAL("Could not find Bonds in " << file_name);
     int ibond, a1, a2;
     for (int bond_index = 0; bond_index < num_bonds_; ++bond_index) {
       file >> ibond >> itype >> a1 >> a2;
@@ -139,7 +141,8 @@ Particle FileLMP::read(const std::string file_name) {
 
   // read Angles section
   if (num_angles_ > 0) {
-    find_or_fail("Angles", file);
+    is_found = find("Angles", file);
+    if (!is_found) FATAL("Could not find Angles in " << file_name);
     int iangle, a1, a2, a3;
     for (int angle_index = 0; angle_index < num_angles_; ++angle_index) {
       file >> iangle >> itype >> a1 >> a2 >> a3;
@@ -154,7 +157,8 @@ Particle FileLMP::read(const std::string file_name) {
 
   // read Dihedrals section
   if (num_dihedrals_ > 0) {
-    find_or_fail("Dihedrals", file);
+    is_found = find("Dihedrals", file);
+    if (!is_found) FATAL("Could not find Dihedrals in " << file_name);
     int idihedral, a1, a2, a3, a4;
     for (int dihedral_index = 0; dihedral_index < num_dihedrals_; ++dihedral_index) {
       file >> idihedral >> itype >> a1 >> a2 >> a3 >> a4;
@@ -170,7 +174,8 @@ Particle FileLMP::read(const std::string file_name) {
 
 //  // read Impropers section
 //  if (num_impropers_ > 0) {
-//    find_or_fail("Impropers", file);
+//    is_found = find("Impropers", file);
+//    if (!is_found) FATAL("Could not find Impropers in " << file_name);
 //    int iimproper, a1, a2, a3, a4;
 //    for (int improper_index = 0; improper_index < num_impropers_; ++improper_index) {
 //      file >> iimproper >> itype >> a1 >> a2 >> a3 >> a4;
@@ -195,18 +200,22 @@ void FileLMP::read_properties(const std::string file_name,
 
   read_num_and_types_(file_name);
 
-  find_or_fail("Site Properties", file);
+  bool is_found = find("Site Properties", file);
+  if (!is_found) FATAL("Could not find \"Site Properties\" in " << file_name);
   read_properties_("site", num_site_types_, particle, file);
   if (num_bonds_ != 0) {
-    find_or_fail("Bond Properties", file);
+    is_found = find("Bond Properties", file);
+    if (!is_found) FATAL("Could not find \"Bond Properties\" in " << file_name);
     read_properties_("bond", num_bond_types_, particle, file);
   }
   if (num_angles_ != 0) {
-    find_or_fail("Angle Properties", file);
+    is_found = find("Angle Properties", file);
+    if (!is_found) FATAL("Could not find \"Angle Properties\" in " << file_name);
     read_properties_("angle", num_angle_types_, particle, file);
   }
   if (num_dihedrals_ != 0) {
-    find_or_fail("Dihedral Properties", file);
+    is_found = find("Dihedral Properties", file);
+    if (!is_found) FATAL("Could not find \"Dihedral Properties\" in " << file_name);
     read_properties_("dihedral", num_dihedral_types_, particle, file);
   }
 }

@@ -271,7 +271,8 @@ LnProbability Clones::ln_prob(Histogram * macrostates,
         edges.push_back(lower);
       }
     }
-    ASSERT(upper_index > index_upper_min, "No overlap.");
+    ASSERT(upper_index > index_upper_min, "No overlap when upper_index: " <<
+      upper_index << " and index_upper_min: " << index_upper_min);
 
     // average the ln_probs of the overlapping region
     Accumulator ln_prob_shift;
