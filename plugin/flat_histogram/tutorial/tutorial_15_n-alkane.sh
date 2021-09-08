@@ -29,6 +29,15 @@ python tutorial_15_n-alkane.py \
   --num_hours $num_hours \
   --num_procs $num_procs
 
+python tutorial_15_n-alkane.py \
+  --particle ~/feasst/forcefield/data.n-butane \
+  --temperature 392 \
+  --max_particles 136 \
+  --beta_mu -7 \
+  --task \$SLURM_ARRAY_TASK_ID \
+  --num_hours $num_hours \
+  --num_procs $num_procs
+
 echo "Job is done"
 echo "Time is \$(date)"
 _EOF_

@@ -7,16 +7,16 @@ parser.add_argument("--task", type=int, help="SLURM job array index", default=0)
 parser.add_argument("--num_procs", type=int, help="number of processors", default=12)
 parser.add_argument("--num_hours", type=float, help="number of hours before restart", default=5*24)
 parser.add_argument("--dccb_cutoff", type=int, help="cutoff for dual cut configurational bias", default=4)
-parser.add_argument("--dccb_begin", type=int, help="number of molecules before using DCCB", default=300)
+parser.add_argument("--dccb_begin", type=int, help="number of molecules before using DCCB", default=0)
 parser.add_argument("--lx", type=float, help="box length in x", default=28.0)
 parser.add_argument("--ly", type=float, help="box length in y", default=28.0)
 parser.add_argument("--lz", type=float, help="box length in z", default=28.0)
-parser.add_argument("--max_particles", type=int, help="maximum number of particles", default=110)
-parser.add_argument("--temperature", type=float, help="temperature in Kelvin", default=439)
+parser.add_argument("--max_particles", type=int, help="maximum number of particles", default=136)
+parser.add_argument("--temperature", type=float, help="temperature in Kelvin", default=392)
 parser.add_argument("--particle", "-p", type=str, help="data file of alkane", required=True)
 parser.add_argument("--collect_flatness", type=int, help="number of WL flatness to begin collection", default=18)
 parser.add_argument("--min_flatness", type=int, help="number of WL flatness to switch to TM", default=22)
-parser.add_argument("--beta_mu", type=int, help="baseline chemical potential of each species", default=-1)
+parser.add_argument("--beta_mu", type=int, help="baseline chemical potential of each species", default=-7)
 args = parser.parse_args()
 print("args:", args)
 
@@ -26,24 +26,22 @@ def mc(thread, mn, mx):
     mc.add(fst.MakeConfiguration(fst.args({"side_length0": str(args.lx), "side_length1": str(args.ly), "side_length2": str(args.lz),
         "particle_type0": args.particle})))
     mc.add(fst.MakePotential(fst.MakeLennardJones()))
-    mc.add(fst.MakePotential(fst.MakeLennardJones(),
-                             fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
+    #mc.add(fst.MakePotential(fst.MakeLennardJones(),
+    #                         fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
     mc.add(fst.MakePotential(fst.MakeBondVisitor()))
     mc.add(fst.MakePotential(fst.MakeLongRangeCorrections()))
-    ref = "0"
     if mx > args.dccb_begin:
         reference = fst.Potential(fst.MakeLennardJones(), fst.MakeVisitModelCell(fst.args({"min_length": str(args.dccb_cutoff)})))
         reference.set_model_params(mc.configuration())
         for site_type in range(mc.configuration().num_site_types()):
             reference.set_model_param("cutoff", site_type, args.dccb_cutoff)
         mc.add_to_reference(reference)
-        mc.add_to_reference(fst.MakePotential(fst.MakeLennardJones(),
-                            fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
-        num = "4"
+        #mc.add_to_reference(fst.MakePotential(fst.MakeLennardJones(),
+        #                    fst.MakeVisitModelIntra(fst.args({"cutoff": "4"}))))
+        stage_args = {"reference_index": "0", "num_steps": "4"}
     else:
-        num = "1"
         mc.add_to_reference(fst.MakePotential(fst.DontVisitModel()))
-    print('ref', ref, 'num', num)
+        stage_args = {"reference_index": "0", "num_steps": "1"}
     beta = 1./fst.kelvin2kJpermol(args.temperature);
     mc.set(fst.MakeThermoParams(fst.args({"beta": str(beta), "chemical_potential0": str(args.beta_mu/beta)})))
     mc.set(fst.MakeFlatHistogram(
@@ -54,37 +52,39 @@ def mc(thread, mn, mx):
             "collect_flatness": str(args.collect_flatness),
             "min_flatness": str(args.min_flatness),
             "min_sweeps": "1000"}))))
-    mc.add(fst.MakeTrialGrow(fst.ArgsVector([
-        {"transfer": "true", "particle_type": "0", "site": "0", "weight": "4"},
-        {"bond": "true", "mobile_site": "1", "anchor_site": "0"},
-        {"angle": "true", "mobile_site": "2", "anchor_site": "1", "anchor_site2": "0"},
-        {"dihedral": "true", "mobile_site": "3", "anchor_site": "2", "anchor_site2": "1", "anchor_site3": "0"},
-        {"dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
-    ]), fst.args({"reference_index": ref, "num_steps": num})))
-    mc.add(fst.MakeTrialGrow(fst.ArgsVector([
-        {"particle_type": "0", "weight": "2",
-         "bond": "true", "mobile_site": "1", "anchor_site": "0"},
-        {"angle": "true", "mobile_site": "2", "anchor_site": "1", "anchor_site2": "0"},
-        {"dihedral": "true", "mobile_site": "3", "anchor_site": "2", "anchor_site2": "1", "anchor_site3": "0"},
-        {"dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
-    ]), fst.args({"reference_index": ref, "num_steps": num})))
-    mc.add(fst.MakeTrialGrow(fst.ArgsVector([
-        {"particle_type": "0", "weight": "1",
-         "angle": "true", "mobile_site": "2", "anchor_site": "1", "anchor_site2": "0"},
-        {"dihedral": "true", "mobile_site": "3", "anchor_site": "2", "anchor_site2": "1", "anchor_site3": "0"},
-        {"dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
-    ]), fst.args({"reference_index": ref, "num_steps": num})))
-    mc.add(fst.MakeTrialGrow(fst.ArgsVector([
-        {"particle_type": "0", "weight": "0.5",
-         "dihedral": "true", "mobile_site": "3", "anchor_site": "2", "anchor_site2": "1", "anchor_site3": "0"},
-        {"dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
-    ]), fst.args({"reference_index": ref, "num_steps": num})))
-    mc.add(fst.MakeTrialGrow(fst.ArgsVector([
-        {"particle_type": "0", "weight": "0.25",
-         "dihedral": "true", "mobile_site": "4", "anchor_site": "3", "anchor_site2": "2", "anchor_site3": "1"},
-    ]), fst.args({"reference_index": ref, "num_steps": num})))
-    mc.add(fst.MakeTrialCrankshaft(fst.args({"weight": "1.", "tunable_param": "25.", "max_length": "5.", "reference_index": ref, "num_steps": num})));
-    mc.add(fst.MakeTrialPivot(fst.args({"weight": "1.", "tunable_param": "25.", "max_length": "5.", "reference_index": ref, "num_steps": num})));
+    mc.add(fst.MakeTrialTranslate(fst.args({"weight": "0.5"})))
+    mc.add(fst.MakeTrialRotate(fst.args({"weight": "0.5"})))
+    grow=[]
+    grow_inv=[]
+    num_sites = mc.configuration().particle_type(0).num_sites()
+    for site in range(num_sites):
+        print(site)
+        if site == 0:
+            grow += [{"transfer": "true", "site": "0"}]
+            grow_inv += [{"transfer": "true", "site": "9"}]
+        elif site == 1:
+            grow += [{"bond": "true", "mobile_site": "1", "anchor_site": "0"}]
+            grow_inv += [{"bond": "true", "mobile_site": "8", "anchor_site": "9"}]
+        elif site == 2:
+            grow += [{"angle": "true", "mobile_site": "2", "anchor_site": "1", "anchor_site2": "0"}]
+            grow_inv += [{"angle": "true", "mobile_site": "7", "anchor_site": "8", "anchor_site2": "9"}]
+        else:
+            grow += [{"dihedral": "true", "mobile_site": str(site), "anchor_site": str(site-1), "anchor_site2": str(site-2), "anchor_site3": str(site-3)}]
+            grow_inv += [{"dihedral": "true", "mobile_site": str(num_sites - site - 1), "anchor_site": str(num_sites - site), "anchor_site2": str(num_sites - site + 1), "anchor_site3": str(num_sites - site + 2)}]
+    import copy
+    for site in range(num_sites):
+        g= copy.deepcopy(grow[site:num_sites])
+        g[0]["particle_type"] = "0"
+        weight = 1./float(num_sites - site)
+        if site == 0: weight = 4
+        g[0]["weight"] = str(weight)
+        g_inv = copy.deepcopy(grow_inv[site:num_sites])
+        g_inv[0]["particle_type"] = "0"
+        g_inv[0]["weight"] = str(weight)
+        mc.add(fst.MakeTrialGrow(fst.ArgsVector(g), fst.args(stage_args)))
+        mc.add(fst.MakeTrialGrow(fst.ArgsVector(g_inv), fst.args(stage_args)))
+    mc.add(fst.MakeTrialCrankshaft(fst.args(dict({"weight": "0.25", "tunable_param": "25.", "max_length": "5."}, **stage_args))))
+    mc.add(fst.MakeTrialPivot(fst.args(dict({"weight": "0.25", "tunable_param": "25.", "max_length": "5."}, **stage_args))))
     mc.add(fst.MakeCheckEnergy(fst.args({"steps_per": str(steps_per), "tolerance": "0.0001"})))
     mc.add(fst.MakeTune(fst.args({"steps_per": str(steps_per), "stop_after_phase": "0"})))
     mc.add(fst.MakeLogAndMovie(fst.args({"steps_per": str(steps_per),
