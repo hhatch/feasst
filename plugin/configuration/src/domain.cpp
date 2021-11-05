@@ -191,6 +191,26 @@ double Domain::max_side_length() const {
   return maximum(side_lengths_.coord());
 }
 
+double Domain::inscribed_sphere_diameter() const {
+  if (!is_tilted()) return min_side_length();
+  ASSERT(dimension() == 3, "only implemented for 3D");
+  Position A({side_length(0), 0., 0.}),
+           B({xy(), side_length(1), 0.}),
+           C({xz(), yz(), side_length(2)});
+  Position BcrossC = B;
+  BcrossC.cross_product(C);
+  Position CcrossA = C;
+  BcrossC.cross_product(A);
+  Position AcrossB = A;
+  BcrossC.cross_product(B);
+  const double widthA = BcrossC.dot_product(A)/BcrossC.distance();
+  const double widthB = CcrossA.dot_product(B)/CcrossA.distance();
+  const double widthC = AcrossB.dot_product(C)/AcrossB.distance();
+  if (widthA < widthB && widthA < widthC) return widthA;
+  if (widthB < widthA && widthB < widthC) return widthB;
+  return widthC;
+}
+
 std::string Domain::status_header() const {
   std::stringstream ss;
   ss << ",volume";

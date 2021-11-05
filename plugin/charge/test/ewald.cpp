@@ -17,7 +17,7 @@ namespace feasst {
 TEST(Ewald, ewald) {
   Configuration config = spce_sample1();
   auto ewald = MakeEwald({
-    {"alpha", str(5.6/config.domain().min_side_length())},
+    {"alpha", str(5.6/config.domain().inscribed_sphere_diameter())},
     {"kmax_squared", "27"}
   });
   ewald->precompute(&config);
