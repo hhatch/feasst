@@ -199,18 +199,21 @@ double Domain::inscribed_sphere_diameter() const {
     Position A({side_length(0), 0., 0.}),
              B({xy(), side_length(1), 0.}),
              C({xz(), yz(), side_length(2)});
-    Position BcrossC = B;
-    BcrossC.cross_product(C);
-    Position CcrossA = C;
-    BcrossC.cross_product(A);
-    Position AcrossB = A;
-    BcrossC.cross_product(B);
+    DEBUG("A " << A.str());
+    DEBUG("B " << B.str());
+    DEBUG("C " << C.str());
+    Position BcrossC = B.cross_product(C);
+    Position CcrossA = C.cross_product(A);
+    Position AcrossB = A.cross_product(B);
     const double widthA = BcrossC.dot_product(A)/BcrossC.distance();
+    DEBUG("widthA " << widthA);
     const double widthB = CcrossA.dot_product(B)/CcrossA.distance();
+    DEBUG("widthB " << widthB);
     const double widthC = AcrossB.dot_product(C)/AcrossB.distance();
-    if (widthA < widthB && widthA < widthC) {
+    DEBUG("widthC " << widthC);
+    if (widthA <= widthB && widthA <= widthC) {
       diameter = widthA;
-    } else if (widthB < widthA && widthB < widthC) {
+    } else if (widthB <= widthA && widthB <= widthC) {
       diameter = widthB;
     } else {
       diameter = widthC;

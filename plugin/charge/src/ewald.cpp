@@ -88,7 +88,6 @@ void Ewald::update_wave_vectors(const Configuration& config) {
   for (int kx = 0; kx <= kxmax_; ++kx) {
   for (int ky = -kymax_; ky <= kymax_; ++ky) {
   for (int kz = -kzmax_; kz <= kzmax_; ++kz) {
-    // HWH DWS TRICLNIC add a check of inscribed sphere vs rcut to domain/system/potential/etc.
     kvec.set_vector({
       kx*ux_,
       //2.*PI*kx/lx,
@@ -291,7 +290,6 @@ void Ewald::update_struct_fact_eik(const Select& selection,
 
           // calculate eik of kx = +/-1 explicitly
           const std::vector<double>& pos = config.select_particle(part_index).site(site_index).position().coord();
-          // HWH DWS TRICLINIC update u dot r, v dot r, w dot r, etc
           const double x = pos[0];
           const double y = pos[1];
           const double z = pos[2];
