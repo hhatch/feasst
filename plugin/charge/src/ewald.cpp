@@ -716,4 +716,12 @@ void Ewald::check(const Configuration& config) const {
   }
 }
 
+int Ewald::wave_num(const int vector_index, const int dim) const {
+  return wave_num_[dimension_*vector_index + dim];
+}
+
+double Ewald::eik(const int part_index, const int site_index, const int kindex) const {
+  return eik()[part_index][site_index][kindex];
+}
+
 }  // namespace feasst
