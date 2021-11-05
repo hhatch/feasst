@@ -21,6 +21,19 @@ namespace feasst {
   summation.
 
   Ewald is not supported for use as a reference state for dual-cut.
+
+
+  Following the description in the classic DL-POLY user manual (version 1.9),
+  if the real space basis vectors are given by \f$\vec{a}, \vec{b}, \vec{c}\f$,
+  then reciprocal space basis vectors are
+
+  \f$V = \vec{a} \cdot \vec{b} \times \vec{c}\f$
+
+  \f$\vec{u} = 2\pi\vec{b}\times\vec{c}/V\f$
+
+  \f$\vec{v} = 2\pi\vec{b}\times\vec{c}/V\f$
+
+  \f$\vec{w} = 2\pi\vec{b}\times\vec{c}/V\f$
  */
 class Ewald : public VisitModel {
  public:
@@ -171,6 +184,7 @@ class Ewald : public VisitModel {
   std::vector<int> wave_num_;
   const int dimension_ = 3;
   //double stored_energy_ = 0.;
+  double ux_, uy_, uz_, vy_, vz_, wz_;
 
   // synchronization data
   double stored_energy() const { return data_.dble_1D()[0]; }

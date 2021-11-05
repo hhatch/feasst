@@ -177,4 +177,35 @@ TEST(Ewald, triclinic) {
   }
 }
 
+TEST(Ewald, srsw_ref_config) {
+  System system;
+  system.add(MakeConfiguration({
+    {"side_length0", "36.0"},
+    {"side_length1", "36.0"},
+    {"side_length2", "31.17691453623979"},
+    {"xy", "0.0"},
+    {"xz", "18.0"},
+    {"yz", "0.0"},
+    {"xyz_file", "../plugin/charge/test/data/spce_monoclinic_sample_periodic4.xyz"},
+    {"particle_type0", install_dir() + "/forcefield/spce.fstprt"},
+    {"cutoff", "10"}}));
+  system.add(MakePotential(MakeLennardJones()));
+  system.add(MakePotential(MakeLongRangeCorrections()));
+  system.add(MakePotential(MakeEwald({
+    {"alpha", feasst::str(5.6/24)},
+    {"kxmax", "5"},
+    {"kymax", "5"},
+    {"kzmax", "5"}})));
+  system.add(MakePotential(MakeChargeScreened()));
+  system.add(MakePotential(MakeChargeScreenedIntra(), MakeVisitModelBond()));
+  system.add(MakePotential(MakeChargeSelf()));
+  system.energy();
+  EXPECT_NEAR(system.stored_energy_profile()[0], 208.070232, 1e-4);
+  EXPECT_NEAR(system.stored_energy_profile()[1], -1.356010, 1e-4);
+  EXPECT_NEAR(system.stored_energy_profile()[2], 94.820632, 1e-4);
+  EXPECT_NEAR(system.stored_energy_profile()[3], -1480.270495, 1e-4);
+  EXPECT_NEAR(system.stored_energy_profile()[4], 19545.391012, 1e-4);
+  EXPECT_NEAR(system.stored_energy_profile()[5], -19710.066962, 1e-4);
+}
+
 }  // namespace feasst
