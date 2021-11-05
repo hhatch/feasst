@@ -172,13 +172,23 @@ class Ewald : public VisitModel {
   double kmax_squared() const { return kmax_squared_; }
 
   /// Return the eik vectors directly.
-  double eik(const int part_index, const int site_index, const int kindex) const;
+  double eik(const int part_index, const int site_index,
+    const int vector_index, const int dim, const bool real = true) const;
 
   /// Same as above, but for all particles, sites and wave vectors.
   const std::vector<std::vector<std::vector<double> > >& eik() const {
     return manual_data_.dble_3D(); }
 
-  /// Return the real part of the structure factor.
+  /// Return the real part of the structure factor for a given vector index
+  /// corresponding with wave_prefactor and wave_num.
+  double struct_fact_real(const int vector_index) const {
+    return struct_fact_real()[vector_index]; }
+
+  /// Return the imaginary part of the structure factor for a given vector index
+  /// corresponding with wave_prefactor and wave_num.
+  double struct_fact_imag(const int vector_index) const {
+    return struct_fact_imag()[vector_index]; }
+
   const std::vector<double>& struct_fact_real() const {
     return data_.dble_2D()[0]; }
 

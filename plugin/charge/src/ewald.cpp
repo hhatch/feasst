@@ -720,8 +720,36 @@ int Ewald::wave_num(const int vector_index, const int dim) const {
   return wave_num_[dimension_*vector_index + dim];
 }
 
-double Ewald::eik(const int part_index, const int site_index, const int kindex) const {
-  return eik()[part_index][site_index][kindex];
+double Ewald::eik(const int part_index, const int site_index,
+    const int vector_index, const int dim, const bool real) const {
+  // copy-pasted from update_struc_fact
+  const int eikrx0_index = 0.;
+  const int eikry0_index = eikrx0_index + kxmax_ + kymax_ + 1;//num_kx_ + kmax_;
+  const int eikrz0_index = eikry0_index + kymax_ + kzmax_ + 1;//num_ky_;
+  const int eikix0_index = eikrz0_index + kzmax_ + 1;//num_kx_ + num_ky_ + num_kz_;
+  const int eikiy0_index = eikix0_index + kxmax_ + kymax_ + 1;//num_kx_ + kmax_;
+  const int eikiz0_index = eikiy0_index + kymax_ + kzmax_ + 1;//num_ky_;
+  int index = -1;
+  if (dim == 0) {
+    if (real) {
+      index = eikrx0_index + wave_num(vector_index, dim);
+    } else {
+      index = eikix0_index + wave_num(vector_index, dim);
+    }
+  } else if (dim == 1) {
+    if (real) {
+      index = eikry0_index + wave_num(vector_index, dim);
+    } else {
+      index = eikiy0_index + wave_num(vector_index, dim);
+    }
+  } else if (dim == 2) {
+    if (real) {
+      index = eikrz0_index + wave_num(vector_index, dim);
+    } else {
+      index = eikiz0_index + wave_num(vector_index, dim);
+    }
+  }
+  return eik()[part_index][site_index][index];
 }
 
 }  // namespace feasst
