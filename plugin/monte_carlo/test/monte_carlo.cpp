@@ -19,6 +19,7 @@
 #include "monte_carlo/include/constrain_num_particles.h"
 #include "monte_carlo/include/seek_num_particles.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_volume.h"
 #include "monte_carlo/include/trial_add.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/run.h"
