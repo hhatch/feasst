@@ -4,6 +4,7 @@
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_translate.h"
 #include "steppers/include/log.h"
 #include "steppers/include/movie.h"
 

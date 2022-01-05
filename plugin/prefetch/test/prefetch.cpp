@@ -6,6 +6,8 @@
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_translate.h"
+#include "monte_carlo/include/trial_add.h"
 #include "prefetch/include/prefetch.h"
 #include "steppers/include/criteria_updater.h"
 #include "steppers/include/check_energy_and_tune.h"

@@ -8,6 +8,8 @@
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_add.h"
+#include "monte_carlo/include/trial_translate.h"
 
 namespace feasst {
 

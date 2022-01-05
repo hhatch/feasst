@@ -2,6 +2,7 @@
 #include "utils/include/serialize.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/trial_move.h"
+#include "monte_carlo/include/trial_add.h"
 #include "monte_carlo/include/perturb_translate.h"
 #include "monte_carlo/include/perturb_rotate.h"
 #include "monte_carlo/include/perturb_add.h"
@@ -14,38 +15,6 @@
 
 namespace feasst {
 
-class MapTrialTranslate {
- public:
-  MapTrialTranslate() {
-    auto obj = MakeTrialTranslate();
-    obj->deserialize_map()["TrialTranslate"] = obj;
-  }
-};
-
-static MapTrialTranslate mapperTranslate_ = MapTrialTranslate();
-
-TrialTranslate::TrialTranslate(argtype * args) :
-  TrialMove(std::make_shared<TrialSelectParticle>(args),
-            std::make_shared<PerturbTranslate>(args),
-            args) {
-  class_name_ = "TrialTranslate";
-  set_description("TrialTranslate");
-}
-TrialTranslate::TrialTranslate(argtype args) : TrialTranslate(&args) {
-  check_all_used(args);
-}
-
-TrialTranslate::TrialTranslate(std::istream& istr) : TrialMove(istr) {
-  const int version = feasst_deserialize_version(istr);
-  ASSERT(version == 3056, "mismatch version: " << version);
-}
-
-void TrialTranslate::serialize(std::ostream& ostr) const {
-  ostr << class_name_ << " ";
-  serialize_trial_move_(ostr);
-  feasst_serialize_version(3056, ostr);
-}
-
 std::shared_ptr<Trial> MakeTrialRotate(argtype args) {
   auto trial = MakeTrialMove(std::make_shared<TrialSelectParticle>(&args),
     std::make_shared<PerturbRotate>(&args),
@@ -53,39 +22,6 @@ std::shared_ptr<Trial> MakeTrialRotate(argtype args) {
     &args);
   check_all_used(args);
   return trial;
-}
-
-class MapTrialAdd {
- public:
-  MapTrialAdd() {
-    auto obj = MakeTrialAdd();
-    obj->deserialize_map()["TrialAdd"] = obj;
-  }
-};
-
-static MapTrialAdd mapperAdd_ = MapTrialAdd();
-
-TrialAdd::TrialAdd(argtype * args) : Trial(args) {
-  class_name_ = "TrialAdd";
-  set_description("TrialAdd");
-  auto perturb = std::make_shared<PerturbAdd>(args);
-  ASSERT(perturb->delay_add(), "TrialComputeAdd assumes delay_add is true");
-  add_stage(std::make_shared<TrialSelectParticle>(args), perturb, args);
-  set(std::make_shared<TrialComputeAdd>(args));
-}
-TrialAdd::TrialAdd(argtype args) : TrialAdd(&args) {
-  check_all_used(args);
-}
-
-TrialAdd::TrialAdd(std::istream& istr) : Trial(istr) {
-  const int version = feasst_deserialize_version(istr);
-  ASSERT(version == 3056, "mismatch version: " << version);
-}
-
-void TrialAdd::serialize(std::ostream& ostr) const {
-  ostr << class_name_ << " ";
-  serialize_trial_(ostr);
-  feasst_serialize_version(3056, ostr);
 }
 
 std::shared_ptr<Trial> MakeTrialRemove(argtype args) {

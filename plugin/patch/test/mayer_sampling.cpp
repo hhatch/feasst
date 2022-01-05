@@ -4,6 +4,7 @@
 #include "system/include/hard_sphere.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_translate.h"
 #include "steppers/include/log_and_movie.h"
 #include "models/include/square_well.h"
 #include "mayer/include/mayer_sampling.h"
