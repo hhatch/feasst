@@ -7,7 +7,7 @@
 
 namespace feasst {
 
-/// Attempt to add a particle.
+/// Attempt to remove a particle.
 class TrialRemove : public Trial {
  public:
   TrialRemove(argtype args = argtype());

@@ -7,6 +7,7 @@
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/trial_add.h"
 #include "monte_carlo/include/monte_carlo.h"

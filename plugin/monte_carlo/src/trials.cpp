@@ -16,15 +16,6 @@
 
 namespace feasst {
 
-std::shared_ptr<Trial> MakeTrialRotate(argtype args) {
-  auto trial = MakeTrialMove(std::make_shared<TrialSelectParticle>(&args),
-    std::make_shared<PerturbRotate>(&args),
-    "TrialRotate",
-    &args);
-  check_all_used(args);
-  return trial;
-}
-
 std::shared_ptr<TrialFactory> MakeTrialTransfer(argtype args) {
   argtype orig_args = args;
   auto factory = std::make_shared<TrialFactory>(&args);

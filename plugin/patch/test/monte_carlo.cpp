@@ -5,6 +5,7 @@
 #include "system/include/visit_model_cell.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/run.h"

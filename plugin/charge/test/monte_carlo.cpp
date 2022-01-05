@@ -10,6 +10,7 @@
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "steppers/include/check_properties.h"
 #include "steppers/include/check_physicality.h"

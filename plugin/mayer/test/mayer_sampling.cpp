@@ -12,6 +12,7 @@
 #include "steppers/include/movie.h"
 #include "steppers/include/tune.h"
 #include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/run.h"
