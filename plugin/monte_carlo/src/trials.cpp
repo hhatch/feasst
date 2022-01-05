@@ -3,6 +3,7 @@
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/trial_move.h"
 #include "monte_carlo/include/trial_add.h"
+#include "monte_carlo/include/trial_remove.h"
 #include "monte_carlo/include/perturb_translate.h"
 #include "monte_carlo/include/perturb_rotate.h"
 #include "monte_carlo/include/perturb_add.h"
@@ -21,27 +22,6 @@ std::shared_ptr<Trial> MakeTrialRotate(argtype args) {
     "TrialRotate",
     &args);
   check_all_used(args);
-  return trial;
-}
-
-std::shared_ptr<Trial> MakeTrialRemove(argtype args) {
-  auto trial = std::make_shared<Trial>(&args);
-  trial->set_description("TrialRemove");
-
-  // optimization: do not load coordinates if num_steps == 1, by default
-  { argtype tmpargs = args;
-    if (integer("num_steps", &tmpargs, 1) == 1) {
-      if (!used("load_coordinates", tmpargs)) {
-        args.insert({"load_coordinates", "false"});
-      }
-    }
-  }
-  trial->add_stage(
-    std::make_shared<TrialSelectParticle>(&args),
-    std::make_shared<PerturbRemove>(),
-    &args
-  );
-  trial->set(std::make_shared<TrialComputeRemove>());
   return trial;
 }
 

@@ -15,7 +15,7 @@ class MapTrialAdd {
   }
 };
 
-static MapTrialAdd mapperAdd_ = MapTrialAdd();
+static MapTrialAdd mapper_ = MapTrialAdd();
 
 TrialAdd::TrialAdd(argtype * args) : Trial(args) {
   class_name_ = "TrialAdd";

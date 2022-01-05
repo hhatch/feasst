@@ -12,9 +12,6 @@ namespace feasst {
 /// Attempt a rigid rotation of a random particle.
 std::shared_ptr<Trial> MakeTrialRotate(argtype args = argtype());
 
-/// Attempt to remove a particle.
-std::shared_ptr<Trial> MakeTrialRemove(argtype args = argtype());
-
 /// Attempt TrialAdd or TrialRemove with equal probability.
 std::shared_ptr<TrialFactory> MakeTrialTransfer(
   argtype args = argtype());
