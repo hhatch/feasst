@@ -86,6 +86,15 @@ void MonteCarlo::parse_(arglist * args) {
     return;
   }
 
+  // parse all derived classes of TrialFactoryNamed
+  std::shared_ptr<TrialFactoryNamed> trials =
+    parse(dynamic_cast<TrialFactoryNamed*>(std::make_shared<TrialFactoryNamed>().get()), args);
+  if (trials) {
+    DEBUG("parsing TrialFactoryNamed");
+    add(trials);
+    return;
+  }
+
   // parse all derived classes of Analyze
   std::shared_ptr<Analyze> an =
     parse(dynamic_cast<Analyze*>(std::make_shared<Analyze>().get()), args);

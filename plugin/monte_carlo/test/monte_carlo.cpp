@@ -84,7 +84,7 @@ TEST(MonteCarlo, serialize) {
     {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "1."}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"weight", "1."}, {"tunable_param", "1."}}},
-//    {"TrialTransfer", {{"weight", "4."}, {"particle_type", "0"}}},
+    {"TrialTransfer", {{"weight", "4."}, {"particle_type", "0"}}},
     {"Checkpoint", {{"num_hours", "0.0001"}, {"file_name", "tmp/ljrst"}}},
     {"Log", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.xyz"}}},
@@ -93,6 +93,12 @@ TEST(MonteCarlo, serialize) {
   }});
 
   MonteCarlo mc4 = test_serialize(*mc3);
+  EXPECT_EQ(mc4.trial(0).class_name(), "TrialTranslate");
+  EXPECT_EQ(mc4.trial(0).weight(), 1.);
+  EXPECT_EQ(mc4.trial(1).class_name(), "TrialAdd");
+  EXPECT_EQ(mc4.trial(1).weight(), 2.);
+  EXPECT_EQ(mc4.trial(2).class_name(), "TrialRemove");
+  EXPECT_EQ(mc4.trial(2).weight(), 2.);
   EXPECT_EQ(mc4.analyze(0).class_name(), "Log");
   EXPECT_EQ(mc4.analyze(1).class_name(), "Movie");
   EXPECT_EQ(mc4.modify(0).class_name(), "CheckEnergy");
