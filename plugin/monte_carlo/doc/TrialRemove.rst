@@ -1,6 +1,6 @@
-TrialTranslate
+TrialRemove
 =====================================================
 
-.. doxygenclass:: feasst::TrialTranslate
+.. doxygenclass:: feasst::TrialRemove
    :project: FEASST
    :members:

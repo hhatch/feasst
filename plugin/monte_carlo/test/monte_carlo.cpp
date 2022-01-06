@@ -120,15 +120,15 @@ TEST(MonteCarlo, NVT_BENCHMARK_LONG) {
     INFO("type: " << type);
     MonteCarlo mc;
     mc.set(MakeRandomMT19937({{"seed", "123"}}));
-    mc.add(MakeConfiguration({{"cubic_box_length", "8"}, {"particle_type0", "../forcefield/lj.fstprt"}}));
+    mc.add(MakeConfiguration({{"cubic_box_length", "8"},
+      {"particle_type0", "../forcefield/lj.fstprt"},
+      {"xyz_file", "../plugin/monte_carlo/test/data/bench.xyz"}}));
     mc.add(MakePotential(MakeLennardJones()));
 //    if (type == "all") {
 //      mc.set(0, MakePotential(MakeLennardJones(), MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))));
 //    } else if (type == "neighbor") {
 //      mc.set(0, MakePotential(MakeLennardJones(), MakeVisitModel(MakeVisitModelInner(MakeEnergyMapNeighbor()))));
 //    }
-    FileXYZ().load("../plugin/monte_carlo/test/data/bench.xyz",
-                   mc.get_system()->get_configuration());
     mc.set(MakeThermoParams({{"beta", "1.2"}, {"chemical_potential", "1."}}));
     mc.set(MakeMetropolis());
     INFO(mc.criteria().current_energy());

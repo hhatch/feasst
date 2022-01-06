@@ -1,6 +1,6 @@
-TrialTranslate
+TrialTransfer
 =====================================================
 
-.. doxygenclass:: feasst::TrialTranslate
+.. doxygenclass:: feasst::TrialTransfer
    :project: FEASST
    :members:

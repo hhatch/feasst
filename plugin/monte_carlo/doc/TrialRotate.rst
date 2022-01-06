@@ -1,6 +1,6 @@
-TrialTranslate
+TrialRotate
 =====================================================
 
-.. doxygenclass:: feasst::TrialTranslate
+.. doxygenclass:: feasst::TrialRotate
    :project: FEASST
    :members:
