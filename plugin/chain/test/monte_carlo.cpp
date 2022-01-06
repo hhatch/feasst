@@ -13,7 +13,6 @@
 #include "models/include/square_well.h"
 #include "models/include/lennard_jones_force_shift.h"
 #include "monte_carlo/include/trial.h"
-#include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/trial_add.h"

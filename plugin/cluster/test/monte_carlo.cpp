@@ -4,7 +4,7 @@
 #include "system/include/lennard_jones.h"
 #include "models/include/square_well.h"
 #include "configuration/include/domain.h"
-#include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_transfer.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "monte_carlo/include/trial_add.h"
 #include "monte_carlo/include/metropolis.h"

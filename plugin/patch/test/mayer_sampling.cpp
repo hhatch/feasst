@@ -3,7 +3,6 @@
 #include "math/include/utils_math.h"
 #include "system/include/hard_sphere.h"
 #include "monte_carlo/include/monte_carlo.h"
-#include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "steppers/include/log_and_movie.h"

@@ -3,7 +3,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/checkpoint.h"
 #include "monte_carlo/include/monte_carlo.h"
-#include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/action.h"
 
 // for parsing factories

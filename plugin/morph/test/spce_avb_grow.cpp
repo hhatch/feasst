@@ -6,7 +6,7 @@
 #include "system/include/dont_visit_model.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/monte_carlo.h"
-#include "monte_carlo/include/trials.h"
+#include "monte_carlo/include/trial_transfer.h"
 #include "monte_carlo/include/run.h"
 #include "steppers/include/energy.h"
 #include "steppers/include/criteria_writer.h"

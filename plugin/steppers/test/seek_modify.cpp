@@ -3,7 +3,6 @@
 #include "system/include/long_range_corrections.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
-#include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "steppers/include/wall_clock_limit.h"
 #include "steppers/include/check_energy_and_tune.h"

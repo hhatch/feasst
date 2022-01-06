@@ -1,7 +1,6 @@
 #include "utils/include/debug.h"
 #include "utils/include/io.h"
 #include "monte_carlo/include/trial_move.h"
-#include "monte_carlo/include/trials.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_move.h"
