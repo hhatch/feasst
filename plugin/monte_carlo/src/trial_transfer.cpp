@@ -26,15 +26,4 @@ TrialTransfer::TrialTransfer(argtype args) : TrialTransfer(&args) {
   check_all_used(args);
 }
 
-//TrialTransfer::TrialTransfer(std::istream& istr) : Trial(istr) {
-//  const int version = feasst_deserialize_version(istr);
-//  ASSERT(version == 9454, "mismatch version: " << version);
-//}
-//
-//void TrialTransfer::serialize(std::ostream& ostr) const {
-//  ostr << class_name_ << " ";
-//  serialize_trial_(ostr);
-//  feasst_serialize_version(9454, ostr);
-//}
-
 }  // namespace feasst

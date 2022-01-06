@@ -7,17 +7,13 @@
 
 namespace feasst {
 
-/// Attempt to add a particle.
+/// Add both a TrialAdd and TrialRemove with the same arguments.
 class TrialTransfer : public TrialFactoryNamed {
  public:
   TrialTransfer(argtype args = argtype());
   TrialTransfer(argtype * args);
-//  std::shared_ptr<Trial> create(std::istream& istr) const override {
-//    return std::make_shared<TrialTransfer>(istr); }
   std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
     return std::make_shared<TrialTransfer>(args); }
-//  void serialize(std::ostream& ostr) const override;
-//  explicit TrialTransfer(std::istream& istr);
   virtual ~TrialTransfer() {}
 };
 
