@@ -263,6 +263,19 @@ void MonteCarlo::add(std::shared_ptr<Trial> trial) {
   // modify_factory_.initialize(criteria_, &system_, &trial_factory_);
 }
 
+void MonteCarlo::add(std::shared_ptr<TrialFactoryNamed> trials) {
+  ASSERT(criteria_set_, "set Criteria before Trials.");
+  double total_weight = 0.;
+  for (std::shared_ptr<Trial> itrl : trials->trials()) {
+    total_weight += itrl->weight();
+  }
+  for (std::shared_ptr<Trial> itrl : trials->trials()) {
+    itrl->set_weight(itrl->weight()*itrl->weight()/total_weight);
+    DEBUG(itrl->weight() << " " << total_weight);
+    add(itrl);
+  }
+}
+
 bool MonteCarlo::duplicate_stepper_file_name_(const std::string file_name) {
   if (!file_name.empty()) {
     for (const std::shared_ptr<Analyze> an : analyze_factory_.analyzers()) {

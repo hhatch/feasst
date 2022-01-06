@@ -24,15 +24,4 @@ std::shared_ptr<TrialFactory> MakeTrialTransfer(argtype args) {
   return factory;
 }
 
-std::shared_ptr<Trial> MakeTrialVolume(argtype args) {
-  auto trial = MakeTrial(&args);
-  trial->set_description("TrialVolume");
-  trial->add_stage(
-    std::make_shared<TrialSelectParticle>(&args),
-    std::make_shared<PerturbVolume>(&args),
-    &args);
-  trial->set(MakeTrialComputeVolume());
-  return trial;
-}
-
 }  // namespace feasst

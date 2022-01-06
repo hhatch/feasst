@@ -123,6 +123,7 @@ class TrialFactoryNamed {
   const std::vector<std::shared_ptr<Trial> >& trials() const { return trials_; }
   // serialize
   std::string class_name() const { return class_name_; }
+  void add(std::shared_ptr<Trial> trial) { trials_.push_back(trial); }
 //  virtual void serialize(std::ostream& ostr) const;
 //  virtual std::shared_ptr<TrialFactoryNamed> create(std::istream& istr) const;
   virtual std::shared_ptr<TrialFactoryNamed> create(argtype * args) const;
