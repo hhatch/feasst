@@ -77,6 +77,26 @@ TEST(MonteCarlo, serialize) {
   EXPECT_EQ(mc2.modify(0).class_name(), "ModifyFactory");
   EXPECT_EQ(mc2.modify(0).modify(0).class_name(), "CheckEnergy");
   EXPECT_EQ(mc2.modify(0).modify(1).class_name(), "Tune");
+
+  auto mc3 = MakeMonteCarlo({{
+    {"Configuration", {{"cubic_box_length", "8"}, {"particle_type0", "../forcefield/lj.fstprt"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "1."}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {{"weight", "1."}, {"tunable_param", "1."}}},
+//    {"TrialTransfer", {{"weight", "4."}, {"particle_type", "0"}}},
+    {"Checkpoint", {{"num_hours", "0.0001"}, {"file_name", "tmp/ljrst"}}},
+    {"Log", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.txt"}}},
+    {"Movie", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.xyz"}}},
+    {"CheckEnergy", {{"steps_per", str(1e4)}, {"tolerance", str(1e-9)}}},
+    {"Tune", {{"steps_per", str(1e4)}}},
+  }});
+
+  MonteCarlo mc4 = test_serialize(*mc3);
+  EXPECT_EQ(mc4.analyze(0).class_name(), "Log");
+  EXPECT_EQ(mc4.analyze(1).class_name(), "Movie");
+  EXPECT_EQ(mc4.modify(0).class_name(), "CheckEnergy");
+  EXPECT_EQ(mc4.modify(1).class_name(), "Tune");
 }
 
 TEST(MonteCarlo, NVT_NO_FEASST_BENCHMARK_LONG) {
