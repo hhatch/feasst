@@ -7,9 +7,6 @@
 
 namespace feasst {
 
-/// Rigidly pivot an end segment of a chain to a random orientation.
-std::shared_ptr<Trial> MakeTrialPivot(argtype args = argtype());
-
 /**
   Reptate a linear chain by taking one end and adding it to the other end.
   For heteropolymers, this perturbation changes the composition of all

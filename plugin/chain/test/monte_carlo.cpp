@@ -39,6 +39,7 @@
 #include "cluster/include/trial_avb2.h"
 #include "cluster/include/energy_map_neighbor.h"
 #include "chain/include/trials.h"
+#include "chain/include/trial_pivot.h"
 #include "chain/include/trial_crankshaft.h"
 #include "chain/include/trial_grow.h"
 #include "chain/include/trial_grow_linear.h"

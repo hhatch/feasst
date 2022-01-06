@@ -24,15 +24,6 @@
 
 namespace feasst {
 
-std::shared_ptr<Trial> MakeTrialPivot(argtype args) {
-  auto trial = MakeTrialMove(std::make_shared<SelectEndSegment>(&args),
-    std::make_shared<PerturbPivot>(&args),
-    "TrialPivot",
-    &args);
-  check_all_used(args);
-  return trial;
-}
-
 std::shared_ptr<Trial> MakeTrialReptate(argtype args) {
   auto trial = MakeTrialMove(std::make_shared<SelectReptate>(&args),
     std::make_shared<PerturbReptate>(&args),

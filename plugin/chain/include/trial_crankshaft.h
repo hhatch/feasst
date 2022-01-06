@@ -1,5 +1,5 @@
-#ifndef FEASST_CHAIN_TRIAL_CRANKSHFT_H_
-#define FEASST_CHAIN_TRIAL_CRANKSHFT_H_
+#ifndef FEASST_CHAIN_TRIAL_CRANKSHAFT_H_
+#define FEASST_CHAIN_TRIAL_CRANKSHAFT_H_
 
 #include <memory>
 #include "utils/include/arguments.h"
@@ -26,4 +26,4 @@ inline std::shared_ptr<TrialCrankshaft> MakeTrialCrankshaft(argtype args = argty
 
 }  // namespace feasst
 
-#endif  // FEASST_CHAIN_TRIAL_CRANKSHFT_H_
+#endif  // FEASST_CHAIN_TRIAL_CRANKSHAFT_H_
