@@ -33,15 +33,6 @@ std::shared_ptr<Trial> MakeTrialPivot(argtype args) {
   return trial;
 }
 
-std::shared_ptr<Trial> MakeTrialCrankshaft(argtype args) {
-  auto trial = MakeTrialMove(std::make_shared<SelectSegment>(&args),
-    std::make_shared<PerturbCrankshaft>(&args),
-    "TrialCrankshaft",
-    &args);
-  check_all_used(args);
-  return trial;
-}
-
 std::shared_ptr<Trial> MakeTrialReptate(argtype args) {
   auto trial = MakeTrialMove(std::make_shared<SelectReptate>(&args),
     std::make_shared<PerturbReptate>(&args),
