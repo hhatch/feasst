@@ -1,5 +1,6 @@
-chain/include/trials
+TrialSwapSites
 =====================================================
 
-.. doxygenfile:: chain/include/trials.h
+.. doxygenclass:: feasst::TrialSwapSites
    :project: FEASST
+   :members:

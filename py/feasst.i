@@ -208,7 +208,6 @@
 #include "cluster/include/trial_rigid_cluster.h"
 #include "cluster/include/trial_transfer_avb_divalent.h"
 #include "cluster/include/trial_transfer_avb.h"
-#include "chain/include/trials.h"
 #include "chain/include/trial_grow.h"
 #include "monte_carlo/include/trial_add.h"
 #include "morph/include/trial_morph.h"
@@ -217,6 +216,7 @@
 #include "charge/include/trial_add_multiple.h"
 #include "cluster/include/trial_avb4.h"
 #include "beta_expanded/include/trial_beta.h"
+#include "chain/include/trial_swap_sites.h"
 #include "beta_expanded/include/compute_beta.h"
 #include "cluster/include/compute_move_cluster.h"
 #include "cluster/include/compute_add_avb.h"
@@ -235,6 +235,9 @@
 #include "cluster/include/compute_avb2.h"
 #include "cluster/include/compute_avb4.h"
 #include "monte_carlo/include/trial_move.h"
+#include "chain/include/trial_pivot.h"
+#include "chain/include/trial_reptate.h"
+#include "chain/include/trial_crankshaft.h"
 #include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"
 #include "configuration/include/visit_configuration.h"
@@ -540,6 +543,7 @@ using namespace std;
 %shared_ptr(feasst::TrialTransfer);
 %shared_ptr(feasst::TrialAdd);
 %shared_ptr(feasst::TrialMorphExpanded);
+%shared_ptr(feasst::TrialSwapSites);
 %shared_ptr(feasst::ComputeBeta);
 %shared_ptr(feasst::ComputeMoveCluster);
 %shared_ptr(feasst::ComputeAddAVB);
@@ -558,6 +562,9 @@ using namespace std;
 %shared_ptr(feasst::ComputeAVB2);
 %shared_ptr(feasst::ComputeAVB4);
 %shared_ptr(feasst::TrialMove);
+%shared_ptr(feasst::TrialPivot);
+%shared_ptr(feasst::TrialReptate);
+%shared_ptr(feasst::TrialCrankshaft);
 %shared_ptr(feasst::TrialRotate);
 %shared_ptr(feasst::TrialTranslate);
 %shared_ptr(feasst::VisitConfiguration);
@@ -821,7 +828,6 @@ using namespace std;
 %include cluster/include/trial_rigid_cluster.h
 %include cluster/include/trial_transfer_avb_divalent.h
 %include cluster/include/trial_transfer_avb.h
-%include chain/include/trials.h
 %include chain/include/trial_grow.h
 %include monte_carlo/include/trial_add.h
 %include morph/include/trial_morph.h
@@ -830,6 +836,7 @@ using namespace std;
 %include charge/include/trial_add_multiple.h
 %include cluster/include/trial_avb4.h
 %include beta_expanded/include/trial_beta.h
+%include chain/include/trial_swap_sites.h
 %include beta_expanded/include/compute_beta.h
 %include cluster/include/compute_move_cluster.h
 %include cluster/include/compute_add_avb.h
@@ -848,6 +855,9 @@ using namespace std;
 %include cluster/include/compute_avb2.h
 %include cluster/include/compute_avb4.h
 %include monte_carlo/include/trial_move.h
+%include chain/include/trial_pivot.h
+%include chain/include/trial_reptate.h
+%include chain/include/trial_crankshaft.h
 %include monte_carlo/include/trial_rotate.h
 %include monte_carlo/include/trial_translate.h
 %include configuration/include/visit_configuration.h
