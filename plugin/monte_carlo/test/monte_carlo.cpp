@@ -209,6 +209,34 @@ TEST(MonteCarlo, NVT_cells_BENCHMARK_LONG) {
   mc.attempt(1e5);
 }
 
+TEST(MonteCarlo, NVT_cells2_BENCHMARK_LONG) {
+  auto mc = MakeMonteCarlo({{
+    {"RandomMT19937", {{"seed", "default"}}},
+    {"Configuration", {{"cubic_box_length", "12"},
+                       {"particle_type", "../forcefield/lj.fstprt"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"ReferencePotential", {{"Model", "LennardJones"}, {"VisitModel", "VisitModelCell"}, {"min_length", "1"}}},
+    {"ThermoParams", {{"beta", "0.1"}, {"chemical_potential", "10"}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {
+      {"weight", "1"},
+      {"reference_index", "0"},
+      {"num_steps", "4"},
+      {"tunable_param", "1"}}},
+    {"TrialAdd", {{"particle_type", "0"}}},
+    {"Run", {{"until_num_particles", "200"}}},
+    {"RemoveTrial", {{"name", "TrialAdd"}}},
+    {"ThermoParams", {{"beta", "1.2"}}},
+    {"Log", {{"steps_per", str(1e4)}, {"file_name", "tmp/cell.txt"}}},
+    {"Movie", {{"steps_per", str(1e4)}, {"file_name", "tmp/cell.xyz"}}},
+    {"CheckEnergy", {{"steps_per", str(1e4)}, {"tolerance", str(1e-9)}}},
+    {"Tune", {{"steps_per", str(1e4)}}},
+    {"OptimizedPotential", {{"Model", "LennardJones"}, {"VisitModel", "VisitModelCell"}, {"min_length", "3"}}}
+  }});
+  mc->initialize_system();
+  mc->attempt(1e5);
+}
+
 TEST(MonteCarlo, NVT_SRSW) {
   const int nMol = 500;
   const double rho = 1e-3;
@@ -265,6 +293,42 @@ TEST(MonteCarlo, GCMC) {
   EXPECT_NEAR(mc.trial(0).num_attempts(), trials/5, trials*0.02);
   EXPECT_NEAR(mc.trial(1).num_attempts(), trials*2/5., trials*0.025);
   EXPECT_NEAR(mc.trial(2).num_attempts(), trials*2/5., trials*0.025);
+//  const double sum0 = profile->profile()[0].sum();
+//  const double sum1 = profile->profile()[1].sum();
+//  const double sum2 = profile->profile()[2].sum();
+//  EXPECT_NEAR(2*sum0, sum1, 0.1*sum0);
+//  EXPECT_NEAR(sum1, sum2, 0.1*sum0);
+}
+
+TEST(MonteCarlo, GCMC2) {
+  auto mc = MakeMonteCarlo({{
+    {"Configuration", {{"cubic_box_length", "8"}, {"particle_type0", "../forcefield/lj.fstprt"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
+    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "-3"}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {{"weight", "1."}, {"tunable_param", "1."}}},
+    {"TrialTransfer", {{"weight", "4."}, {"particle_type", "0"}}},
+    {"NumParticles", {{"steps_per_write", str(1e5)},
+                      {"file_name", "tmp/ljnum.txt"}}},
+    {"Log", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.txt"}}},
+    {"Movie", {{"steps_per", str(1e4)}, {"file_name", "tmp/lj.xyz"}}},
+    {"CheckEnergy", {{"steps_per", str(1e4)}, {"tolerance", str(1e-9)}}},
+    {"ProfileTrials", {{"steps_per_update", str(1e2)},
+      {"steps_per_write", str(1e2)},
+      {"append", "true"},
+      {"file_name", "tmp/lj_profile.txt"}}},
+  }});
+  const int trials = 1e4;
+  //const int trials = 1e6;
+  EXPECT_NEAR(mc->trial(0).weight(), 1, NEAR_ZERO);
+  EXPECT_NEAR(mc->trial(1).weight(), 2, NEAR_ZERO);
+  EXPECT_NEAR(mc->trial(2).weight(), 2, NEAR_ZERO);
+  mc->attempt(trials);
+  EXPECT_EQ(mc->trials().num(), 3);
+  EXPECT_NEAR(mc->trial(0).num_attempts(), trials/5, trials*0.02);
+  EXPECT_NEAR(mc->trial(1).num_attempts(), trials*2/5., trials*0.025);
+  EXPECT_NEAR(mc->trial(2).num_attempts(), trials*2/5., trials*0.025);
 //  const double sum0 = profile->profile()[0].sum();
 //  const double sum1 = profile->profile()[1].sum();
 //  const double sum2 = profile->profile()[2].sum();

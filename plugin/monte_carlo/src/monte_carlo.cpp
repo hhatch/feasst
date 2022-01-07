@@ -60,6 +60,22 @@ void MonteCarlo::parse_(arglist * args) {
     return;
   }
 
+  // parse reference Potential
+  if (args->begin()->first == "ReferencePotential") {
+    DEBUG("parsing ReferencePotential");
+    add_to_reference(MakePotential(args->begin()->second));
+    args->erase(args->begin());
+    return;
+  }
+
+  // parse optimized Potential
+  if (args->begin()->first == "OptimizedPotential") {
+    DEBUG("parsing OptimizedPotential");
+    add_to_optimized(MakePotential(args->begin()->second));
+    args->erase(args->begin());
+    return;
+  }
+
   // parse ThermoParams
   if (args->begin()->first == "ThermoParams") {
     DEBUG("parsing ThermoParams");
