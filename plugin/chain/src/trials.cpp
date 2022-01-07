@@ -24,15 +24,6 @@
 
 namespace feasst {
 
-std::shared_ptr<Trial> MakeTrialReptate(argtype args) {
-  auto trial = MakeTrialMove(std::make_shared<SelectReptate>(&args),
-    std::make_shared<PerturbReptate>(&args),
-    "TrialReptate",
-    &args);
-  check_all_used(args);
-  return trial;
-}
-
 std::shared_ptr<Trial> MakeTrialSwapSites(argtype args) {
   auto trial = MakeTrial(&args);
   trial->set_description("TrialSwapSites");

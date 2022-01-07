@@ -8,19 +8,6 @@
 namespace feasst {
 
 /**
-  Reptate a linear chain by taking one end and adding it to the other end.
-  For heteropolymers, this perturbation changes the composition of all
-  particles with the same type.
-  Thus, individual heteropolymers should be added as unique particle types.
-  The bond length is taken as the bond between site 0 and 1, and is assumed
-  to be constant.
-  Thus, as currently implemented, heteropolymers must have the same bond length.
-  This trial may not be compatible with angle and dihedral potentials.
-  Instead, use "reptate" in TrialGrow.
- */
-std::shared_ptr<Trial> MakeTrialReptate(argtype args = argtype());
-
-/**
   Swap the types of two sites in a particle.
   args:
   - site_type1: type of site to swap.
