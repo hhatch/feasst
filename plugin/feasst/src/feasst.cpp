@@ -10,7 +10,10 @@
   feasst::install_dir().
  */
 int main() {
-  std::cout << "version: " << feasst::version() << std::endl;
+  std::cout
+    << "*********************************************************" << std::endl
+    << "feasst version: " << feasst::version() << std::endl
+    << "*********************************************************" << std::endl;
   std::string line;
   feasst::arglist list;
   feasst::argtype variables;
