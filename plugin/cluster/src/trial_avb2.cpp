@@ -23,46 +23,80 @@ void gen_avb2_args_(const bool out_to_in, argtype * args,
   }
 }
 
-std::shared_ptr<Trial> MakeTrialAVB2Half(argtype args) {
+class MapTrialAVB2Half {
+ public:
+  MapTrialAVB2Half() {
+    auto obj = MakeTrialAVB2Half({{"out_to_in", "true"}});
+    obj->deserialize_map()["TrialAVB2Half"] = obj;
+  }
+};
+
+static MapTrialAVB2Half mapper_ = MapTrialAVB2Half();
+
+TrialAVB2Half::TrialAVB2Half(argtype * args) : Trial(args) {
+  class_name_ = "TrialAVB2Half";
   // read out_to_in and then put it back in args
-  const bool out_to_in = boolean("out_to_in", &args);
+  const bool out_to_in = boolean("out_to_in", args);
   if (out_to_in) {
-    args.insert({"out_to_in", "true"});
+    args->insert({"out_to_in", "true"});
   } else {
-    args.insert({"out_to_in", "false"});
+    args->insert({"out_to_in", "false"});
   }
 
   argtype perturb_args;
-  gen_avb2_args_(out_to_in, &args, &perturb_args);
-  auto trial = MakeTrial(&args);
-  auto compute = std::make_shared<ComputeAVB2>(&args);
+  gen_avb2_args_(out_to_in, args, &perturb_args);
+  auto compute = std::make_shared<ComputeAVB2>(args);
   if (out_to_in) {
-    trial->set_description("TrialAVB2out_to_in");
-    trial->set_weight(trial->weight()*compute->probability_out_to_in());
+    set_description("TrialAVB2out_to_in");
+    set_weight(weight()*compute->probability_out_to_in());
   } else {
-    trial->set_description("TrialAVB2in_to_out");
-    trial->set_weight(trial->weight()*(1. - compute->probability_out_to_in()));
+    set_description("TrialAVB2in_to_out");
+    set_weight(weight()*(1. - compute->probability_out_to_in()));
   }
-  trial->add_stage(
-    std::make_shared<SelectParticleAVB>(&args),
+  add_stage(
+    std::make_shared<SelectParticleAVB>(args),
     std::make_shared<PerturbMoveAVB>(&perturb_args),
-    &args);
-  trial->set(compute);
-  check_all_used(args);
+    args);
+  set(compute);
+//  check_all_used(args);
   check_all_used(perturb_args);
-  return trial;
+}
+TrialAVB2Half::TrialAVB2Half(argtype args) : TrialAVB2Half(&args) {
+  check_all_used(args);
 }
 
-std::shared_ptr<TrialFactory> MakeTrialAVB2(argtype args) {
-  argtype out2in_args(args);
+TrialAVB2Half::TrialAVB2Half(std::istream& istr) : Trial(istr) {
+  const int version = feasst_deserialize_version(istr);
+  ASSERT(version == 3056, "mismatch version: " << version);
+}
+
+void TrialAVB2Half::serialize(std::ostream& ostr) const {
+  ostr << class_name_ << " ";
+  serialize_trial_(ostr);
+  feasst_serialize_version(3056, ostr);
+}
+
+class MapTrialAVB2 {
+ public:
+  MapTrialAVB2() {
+    auto obj = MakeTrialAVB2();
+    obj->deserialize_map()["TrialAVB2"] = obj;
+  }
+};
+
+static MapTrialAVB2 mapper_trial_avb2__ = MapTrialAVB2();
+
+TrialAVB2::TrialAVB2(argtype * args) : TrialFactoryNamed() {
+  class_name_ = "TrialAVB2";
+  argtype out2in_args(*args);
   out2in_args.insert({"out_to_in", "true"});
-  argtype in2out_args(args);
+  argtype in2out_args(*args);
   in2out_args.insert({"out_to_in", "false"});
-  auto factory = std::make_shared<TrialFactory>(&args);
-  factory->add(MakeTrialAVB2Half(out2in_args));
-  factory->add(MakeTrialAVB2Half(in2out_args));
-  return factory;
+  add(MakeTrialAVB2Half(out2in_args));
+  add(MakeTrialAVB2Half(in2out_args));
 }
-
+TrialAVB2::TrialAVB2(argtype args) : TrialAVB2(&args) {
+  // check_all_used(args);
+}
 
 }  // namespace feasst
