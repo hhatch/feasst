@@ -67,13 +67,13 @@ TrialAVB2Half::TrialAVB2Half(argtype args) : TrialAVB2Half(&args) {
 
 TrialAVB2Half::TrialAVB2Half(std::istream& istr) : Trial(istr) {
   const int version = feasst_deserialize_version(istr);
-  ASSERT(version == 3056, "mismatch version: " << version);
+  ASSERT(version == 1634, "mismatch version: " << version);
 }
 
 void TrialAVB2Half::serialize(std::ostream& ostr) const {
   ostr << class_name_ << " ";
   serialize_trial_(ostr);
-  feasst_serialize_version(3056, ostr);
+  feasst_serialize_version(1634, ostr);
 }
 
 class MapTrialAVB2 {
