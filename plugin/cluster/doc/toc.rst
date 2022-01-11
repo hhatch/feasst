@@ -9,7 +9,7 @@
    SelectCluster
    SelectParticleAVBDivalent
    PerturbPointReflect
-   trial_avb2
+   TrialAVB2Half
    trial_rigid_cluster
    trial_transfer_avb_divalent
    trial_transfer_avb
