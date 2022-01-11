@@ -5,13 +5,25 @@
 
 namespace feasst {
 
-std::shared_ptr<TrialFactory> MakeTrialTransferMultiple(argtype args) {
-  argtype rm_args = args, add_args = args;
+class MapTrialTransferMultiple {
+ public:
+  MapTrialTransferMultiple() {
+    auto obj = MakeTrialTransferMultiple();
+    obj->deserialize_map()["TrialTransferMultiple"] = obj;
+  }
+};
+
+static MapTrialTransferMultiple mapper_ = MapTrialTransferMultiple();
+
+TrialTransferMultiple::TrialTransferMultiple(argtype * args) : TrialFactoryNamed() {
+  class_name_ = "TrialTransferMultiple";
+  argtype rm_args = *args, add_args = *args;
   str("shift", &add_args, ""); // remove shift
-  auto factory = std::make_shared<TrialFactory>(&args);
-  factory->add(MakeTrialAddMultiple(add_args));
-  factory->add(MakeTrialRemoveMultiple(rm_args));
-  return factory;
+  add(MakeTrialAddMultiple(add_args));
+  add(MakeTrialRemoveMultiple(rm_args));
+}
+TrialTransferMultiple::TrialTransferMultiple(argtype args) : TrialTransferMultiple(&args) {
+  //check_all_used(args);
 }
 
 }  // namespace feasst
