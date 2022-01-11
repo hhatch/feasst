@@ -222,8 +222,9 @@ TEST(TrialGrow, transfer_avb_spce) {
   DEBUG("sig0 " << system.potential(0).model().sigma_index());
   DEBUG("sig1 " << system.potential(1).model().sigma_index());
   DEBUG("sig2 " << system.potential(2).model().sigma_index());
-  bool accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
-  EXPECT_EQ(grow->num(), 2);
+  //bool accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
+  bool accepted = grow->trial_(0)->attempt(metropolis.get(), &system, ran.get());
+  EXPECT_EQ(static_cast<int>(grow->trials().size()), 2);
   DEBUG("check");
   system.check();
   EXPECT_GT(config.num_particles(), 0);
@@ -238,10 +239,10 @@ TEST(TrialGrow, transfer_avb_spce) {
   DEBUG(config.particle(1).site(0).position().str());
   DEBUG(config.particle(1).site(1).position().str());
   DEBUG(config.particle(1).site(2).position().str());
-  double delta = grow->trial(0).accept().energy_new() - en_old;
+  double delta = grow->trials()[0]->accept().energy_new() - en_old;
   DEBUG("deltaU " << delta);
-  DEBUG(grow->trial(0).accept().ln_metropolis_prob());
-  EXPECT_NEAR(grow->trial(0).accept().ln_metropolis_prob(),
+  DEBUG(grow->trials()[0]->accept().ln_metropolis_prob());
+  EXPECT_NEAR(grow->trials()[0]->accept().ln_metropolis_prob(),
     std::log(vol_av/2.)
     -system.thermo_params().beta()*delta
     +system.thermo_params().beta_mu(0),
@@ -255,11 +256,12 @@ TEST(TrialGrow, transfer_avb_spce) {
 
   DEBUG("**begin remove test**");
 
-  accepted = grow->attempt(metropolis.get(), &system, 1, ran.get());
+  //accepted = grow->attempt(metropolis.get(), &system, 1, ran.get());
+  accepted = grow->trial_(1)->attempt(metropolis.get(), &system, ran.get());
   //ASSERT(accepted, "er");
-  delta = - grow->trial(1).accept().energy_old();
+  delta = - grow->trials()[1]->accept().energy_old();
   DEBUG("deltaU: " << delta);
-  EXPECT_NEAR(grow->trial(1).accept().ln_metropolis_prob(),
+  EXPECT_NEAR(grow->trials()[1]->accept().ln_metropolis_prob(),
     -std::log(vol_av/2.)
     -system.thermo_params().beta()*delta
     -system.thermo_params().beta_mu(0),
@@ -269,12 +271,13 @@ TEST(TrialGrow, transfer_avb_spce) {
   if (accepted) return;
 
   DEBUG("**add a third**");
-  accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
+  // accepted = grow->attempt(metropolis.get(), &system, 0, ran.get());
+  accepted = grow->trial_(0)->attempt(metropolis.get(), &system, ran.get());
   DEBUG("old en " << en_old);
-  DEBUG("new en " << grow->trial(0).accept().energy_new());
-  delta = grow->trial(0).accept().energy_new() - en_old;
+  DEBUG("new en " << grow->trials()[0]->accept().energy_new());
+  delta = grow->trials()[0]->accept().energy_new() - en_old;
   DEBUG("deltaU: " << delta);
-  EXPECT_DOUBLE_EQ(grow->trial(0).accept().ln_metropolis_prob(),
+  EXPECT_DOUBLE_EQ(grow->trials()[0]->accept().ln_metropolis_prob(),
     std::log((2./3.)*vol_av/2.)
     -system.thermo_params().beta()*delta
     +system.thermo_params().beta_mu(0));
@@ -291,10 +294,11 @@ TEST(TrialGrow, transfer_avb_spce) {
   );
   avb4->precompute(metropolis.get(), &system);
   en_old = metropolis->current_energy();
-  accepted = avb4->attempt(metropolis.get(), &system, 0, ran.get());
+  //accepted = avb4->attempt(metropolis.get(), &system, 0, ran.get());
+  accepted = avb4->trial_(0)->attempt(metropolis.get(), &system, ran.get());
   DEBUG("accepted? " << accepted);
-  DEBUG("new energy " << avb4->trial(0).accept().energy_new());
-  delta = avb4->trial(0).accept().energy_new() - en_old;
+  DEBUG("new energy " << avb4->trials()[0]->accept().energy_new());
+  delta = avb4->trials()[0]->accept().energy_new() - en_old;
 //  EXPECT_NEAR(avb4->trial(0).accept().ln_metropolis_prob(),
 //    std::log(vol_av/2.)
 //    -system.thermo_params().beta()*delta

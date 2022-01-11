@@ -2,6 +2,7 @@
 #define FEASST_CHAIN_TRIAL_GROW_H_
 
 #include <memory>
+#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial_factory.h"
 
 namespace feasst {
@@ -112,12 +113,24 @@ excluded from the energy in the acceptance probability.
 
 \endrst
  */
-std::shared_ptr<TrialFactory> MakeTrialGrow(
+class TrialGrow : public TrialFactoryNamed {
+ public:
+  TrialGrow(
   std::vector<argtype> args,  /// list of arguments, one for each stage.
   /// Optionally, set the default values for the following TrialStage arguments:
   /// num_steps, reference_index and new_only.
   /// Any option applied by the above args overwrites this option.
   const argtype& default_args = argtype());
+  //TrialGrow(argtype * args);
+//  std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
+//    return std::make_shared<TrialGrow>(args); }
+  virtual ~TrialGrow() {}
+};
+
+inline std::shared_ptr<TrialGrow> MakeTrialGrow(
+  std::vector<argtype> args,
+  const argtype& default_args = argtype()) {
+  return std::make_shared<TrialGrow>(args, default_args); }
 
 }  // namespace feasst
 

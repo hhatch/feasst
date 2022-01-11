@@ -39,9 +39,20 @@
 
 namespace feasst {
 
-std::shared_ptr<TrialFactory> MakeTrialGrow(std::vector<argtype> args,
-    const argtype& default_args) {
-  auto factory = std::make_shared<TrialFactory>(&args[0]);
+class MapTrialGrow {
+ public:
+  MapTrialGrow() {
+    auto obj = MakeTrialGrow({{{"particle_type", "0"}, {"bond", "1"}, {"mobile_site", "1"}, {"anchor_site", "0"}}});
+    obj->deserialize_map()["TrialGrow"] = obj;
+  }
+};
+
+static MapTrialGrow mapper_ = MapTrialGrow();
+
+TrialGrow::TrialGrow(std::vector<argtype> args,
+    const argtype& default_args) : TrialFactoryNamed() {
+  class_name_ = "TrialGrow";
+  double weight = dble("weight", &args[0], -1.);
   // First, determine all trial types from args[0]
   std::vector<std::string> trial_types;
   const int num_args = static_cast<int>(args.size());
@@ -84,6 +95,9 @@ std::shared_ptr<TrialFactory> MakeTrialGrow(std::vector<argtype> args,
     DEBUG("trial_type: " << trial_type);
     std::shared_ptr<Trial> trial = MakeTrial();
     trial->set_description("TrialGrow" + trial_type);
+    if (weight > 0) {
+      trial->set_weight(weight/static_cast<int>(trial_types.size()));
+    }
     std::shared_ptr<TrialCompute> compute;
     for (int iarg = 0; iarg < num_args; ++iarg) {
       DEBUG("iarg: " << iarg);
@@ -223,9 +237,8 @@ std::shared_ptr<TrialFactory> MakeTrialGrow(std::vector<argtype> args,
     }
     trial->set(compute);
     DEBUG("compute " << compute->class_name());
-    factory->add(trial);
+    add(trial);
   }
-  return factory;
 }
 
 }  // namespace feasst

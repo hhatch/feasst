@@ -224,4 +224,10 @@ std::shared_ptr<TrialFactoryNamed> TrialFactoryNamed::factory(const std::string 
   return template_factory(deserialize_map(), name, args);
 }
 
+void TrialFactoryNamed::precompute(Criteria * criteria, System * system) {
+  for (std::shared_ptr<Trial> trial : trials_) {
+    trial->precompute(criteria, system);
+  }
+}
+
 }  // namespace feasst
