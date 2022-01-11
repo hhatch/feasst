@@ -215,13 +215,10 @@ TEST(MonteCarlo, NVT_cells2_BENCHMARK_LONG) {
     {"Configuration", {{"cubic_box_length", "12"},
                        {"particle_type", "../forcefield/lj.fstprt"}}},
     {"Potential", {{"Model", "LennardJones"}}},
-    {"ReferencePotential", {{"Model", "LennardJones"}, {"VisitModel", "VisitModelCell"}, {"min_length", "1"}}},
     {"ThermoParams", {{"beta", "0.1"}, {"chemical_potential", "10"}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {
       {"weight", "1"},
-      {"reference_index", "0"},
-      {"num_steps", "4"},
       {"tunable_param", "1"}}},
     {"TrialAdd", {{"particle_type", "0"}}},
     {"Run", {{"until_num_particles", "200"}}},
