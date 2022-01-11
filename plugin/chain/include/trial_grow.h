@@ -26,6 +26,9 @@ namespace feasst {
   - translate: if true (default: false), translate site (which is required arg
     for TrialSelectParticle).
     In addition, must have number of stages equal to number of sites.
+  - default_num_steps: optional default number of steps for all stages.
+  - default_reference_index: optional default reference index for all stages.
+  - default_new_only: optional default new only for all stages.
 
   The following options may be used in any argtype.
   If used in the first, then its a partial regrowth move.
@@ -115,22 +118,16 @@ excluded from the energy in the acceptance probability.
  */
 class TrialGrow : public TrialFactoryNamed {
  public:
-  TrialGrow(
-  std::vector<argtype> args,  /// list of arguments, one for each stage.
-  /// Optionally, set the default values for the following TrialStage arguments:
-  /// num_steps, reference_index and new_only.
-  /// Any option applied by the above args overwrites this option.
-  const argtype& default_args = argtype());
+  /// list of arguments, one for each stage.
+  TrialGrow(std::vector<argtype> args);
   //TrialGrow(argtype * args);
 //  std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
 //    return std::make_shared<TrialGrow>(args); }
   virtual ~TrialGrow() {}
 };
 
-inline std::shared_ptr<TrialGrow> MakeTrialGrow(
-  std::vector<argtype> args,
-  const argtype& default_args = argtype()) {
-  return std::make_shared<TrialGrow>(args, default_args); }
+inline std::shared_ptr<TrialGrow> MakeTrialGrow(std::vector<argtype> args) {
+  return std::make_shared<TrialGrow>(args); }
 
 }  // namespace feasst
 

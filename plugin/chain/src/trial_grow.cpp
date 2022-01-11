@@ -49,10 +49,12 @@ class MapTrialGrow {
 
 static MapTrialGrow mapper_ = MapTrialGrow();
 
-TrialGrow::TrialGrow(std::vector<argtype> args,
-    const argtype& default_args) : TrialFactoryNamed() {
+TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
   class_name_ = "TrialGrow";
   double weight = dble("weight", &args[0], -1.);
+  const std::string default_num_steps = str("default_num_steps", &args[0], "1");
+  const std::string default_reference_index = str("default_reference_index", &args[0], "-1");
+  const std::string default_new_only = str("default_new_only", &args[0], "false");
   // First, determine all trial types from args[0]
   std::vector<std::string> trial_types;
   const int num_args = static_cast<int>(args.size());
@@ -223,13 +225,12 @@ TrialGrow::TrialGrow(std::vector<argtype> args,
           compute = std::make_shared<TrialComputeMove>(&iargs);
         }
       }
-      argtype dflt_args = default_args;
-      const std::string num_steps = str("num_steps", &iargs, str("num_steps", &dflt_args, "1"));
+      const std::string num_steps = str("num_steps", &iargs, default_num_steps);
       //ASSERT(trial_type != "translate" || num_steps == "1",
       //  "For " << trial_type << ", num_steps must be 1");
       argtype stage_args = {{"num_steps", num_steps},
-        {"reference_index", str("reference_index", &iargs, str("reference_index", &dflt_args, "-1"))},
-        {"new_only", str("new_only", &iargs, str("new_only", &dflt_args, "false"))},
+        {"reference_index", str("reference_index", &iargs, default_reference_index)},
+        {"new_only", str("new_only", &iargs, default_new_only)},
       };
       check_all_used(iargs);
       trial->add_stage(select, perturb, &stage_args);

@@ -85,12 +85,10 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
     mc.add(MakeTrialGrow(
       {
         //{{"transfer", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}},
-        {{avb_type, "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
+        {{"default_num_steps", "2"}, {"default_reference_index", "0"},
+         {avb_type, "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
         {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-        {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
-      },
-      {{"num_steps", "2"}, {"reference_index", "0"}}
-    ));
+        {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}}}));
   }
   if (avb_type != "transfer_avb") {
     mc.add(MakeTrialTransfer({
@@ -206,14 +204,11 @@ TEST(TrialGrow, transfer_avb_spce) {
   const double vol_av = system.neighbor_criteria(0).volume(config.dimension());
 
   DEBUG("vol_av: " << vol_av);
-  auto grow = MakeTrialGrow(
-    {
-      {{"transfer_avb", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
-      {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-      {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
-    },
-    {{"num_steps", "2"}, {"reference_index", "0"}}
-  );
+  auto grow = MakeTrialGrow({
+    {{"default_num_steps", "2"}, {"default_reference_index", "0"},
+     {"transfer_avb", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
+    {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+    {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}}});
   DEBUG("precompute");
   grow->precompute(metropolis.get(), &system);
   DEBUG("energy");
@@ -284,14 +279,11 @@ TEST(TrialGrow, transfer_avb_spce) {
 
   DEBUG("** attempt avb4 **");
   if (config.num_particles() != 3) return;
-  auto avb4 = MakeTrialGrow(
-    {
-      {{"regrow_avb4", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
-      {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
-      {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}},
-    },
-    {{"num_steps", "1"}, {"reference_index", "0"}}
-  );
+  auto avb4 = MakeTrialGrow({
+    {{"default_num_steps", "1"}, {"default_reference_index", "0"},
+      {"regrow_avb4", "true"}, {"particle_type", "0"}, {"weight", "4"}, {"site", "0"}, {"neighbor_index", "0"}, {"target_particle_type", "0"}, {"target_site", "0"}},
+    {{"bond", "true"}, {"mobile_site", "1"}, {"anchor_site", "0"}},
+    {{"angle", "true"}, {"mobile_site", "2"}, {"anchor_site", "0"}, {"anchor_site2", "1"}}});
   avb4->precompute(metropolis.get(), &system);
   en_old = metropolis->current_energy();
   //accepted = avb4->attempt(metropolis.get(), &system, 0, ran.get());
