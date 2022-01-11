@@ -10,10 +10,10 @@
    SelectParticleAVBDivalent
    PerturbPointReflect
    TrialAVB2Half
-   trial_rigid_cluster
-   trial_transfer_avb_divalent
-   trial_transfer_avb
-   trial_avb4
+   TrialTranslateCluster
+   TrialAddAVBDivalent
+   TrialAddAVB
+   TrialAVB4
    ComputeMoveCluster
    ComputeAddAVB
    ComputeRemoveAVB
