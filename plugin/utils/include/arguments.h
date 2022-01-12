@@ -131,6 +131,9 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
 void add_if_not_used(const std::string& key, argtype * args,
   const std::string& value);
 
+/// convert a space-delimited string into argtype
+argtype line_to_argtype(const std::string line);
+
 }  // namespace feasst
 
 #endif  // FEASST_UTILS_ARGUMENTS_H_

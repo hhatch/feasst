@@ -118,16 +118,42 @@ excluded from the energy in the acceptance probability.
  */
 class TrialGrow : public TrialFactoryNamed {
  public:
+  TrialGrow() : TrialFactoryNamed() {}
   /// list of arguments, one for each stage.
   TrialGrow(std::vector<argtype> args);
-  //TrialGrow(argtype * args);
-//  std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
-//    return std::make_shared<TrialGrow>(args); }
   virtual ~TrialGrow() {}
+
+ protected:
+  void build_(std::vector<argtype> * args);
 };
 
 inline std::shared_ptr<TrialGrow> MakeTrialGrow(std::vector<argtype> args) {
   return std::make_shared<TrialGrow>(args); }
+
+class TrialGrowFile : public TrialGrow {
+ public:
+  TrialGrowFile() : TrialGrow() {}
+  /// list of arguments, one for each stage.
+  TrialGrowFile(std::vector<argtype> args);
+  /// list of arguments, one for each stage.
+  /**
+   args:
+   - particle_type: index of particle type to grow.
+   - file_name: name of TrialGrowFile file with the following format:
+     line1: TrialGrowFile
+     line2: optional space
+     line3: stage with key pair separated by space (e.g., "particle_type 1 transfer true")
+     lineX: additional stages until end of file or empty line (repeat line 2/3).
+   */
+  explicit TrialGrowFile(argtype args);
+  explicit TrialGrowFile(argtype * args);
+  std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
+    return std::make_shared<TrialGrowFile>(args); }
+  virtual ~TrialGrowFile() {}
+};
+
+inline std::shared_ptr<TrialGrowFile> MakeTrialGrowFile(argtype args) {
+  return std::make_shared<TrialGrowFile>(args); }
 
 }  // namespace feasst
 

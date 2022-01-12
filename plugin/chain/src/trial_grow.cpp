@@ -1,5 +1,6 @@
 #include "utils/include/debug.h"
 #include "utils/include/io.h"
+#include "utils/include/file.h"
 #include "monte_carlo/include/trial_move.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_remove.h"
@@ -49,48 +50,48 @@ class MapTrialGrow {
 
 static MapTrialGrow mapper_ = MapTrialGrow();
 
-TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
+void TrialGrow::build_(std::vector<argtype> * args) {
   class_name_ = "TrialGrow";
-  double weight = dble("weight", &args[0], -1.);
-  const std::string default_num_steps = str("default_num_steps", &args[0], "1");
-  const std::string default_reference_index = str("default_reference_index", &args[0], "-1");
-  const std::string default_new_only = str("default_new_only", &args[0], "false");
+  const int num_args = static_cast<int>(args->size());
+  ASSERT(num_args > 0, "TrialGrow requires args.size: " << num_args << " > 0");
+  double weight = dble("weight", &(*args)[0], -1.);
+  const std::string default_num_steps = str("default_num_steps", &(*args)[0], "1");
+  const std::string default_reference_index = str("default_reference_index", &(*args)[0], "-1");
+  const std::string default_new_only = str("default_new_only", &(*args)[0], "false");
   // First, determine all trial types from args[0]
   std::vector<std::string> trial_types;
-  const int num_args = static_cast<int>(args.size());
-  ASSERT(num_args > 0, "TrialGrow requires args.size: " << num_args << " > 0");
-  if (used("transfer", args[0])) {
-    str("transfer", &args[0]);
+  if (used("transfer", (*args)[0])) {
+    str("transfer", &(*args)[0]);
     trial_types.push_back("add");
     trial_types.push_back("remove");
   }
-  if (used("transfer_avb", args[0])) {
-    str("transfer_avb", &args[0]);
+  if (used("transfer_avb", (*args)[0])) {
+    str("transfer_avb", &(*args)[0]);
     trial_types.push_back("add_avb");
     trial_types.push_back("remove_avb");
   }
-  if (used("regrow_avb2", args[0])) {
-    str("regrow_avb2", &args[0]);
+  if (used("regrow_avb2", (*args)[0])) {
+    str("regrow_avb2", &(*args)[0]);
     trial_types.push_back("regrow_avb2_in");
     trial_types.push_back("regrow_avb2_out");
   }
-  if (used("regrow", args[0])) {
-    str("regrow", &args[0]);
+  if (used("regrow", (*args)[0])) {
+    str("regrow", &(*args)[0]);
     trial_types.push_back("regrow");
   }
-  if (used("regrow_avb4", args[0])) {
-    str("regrow_avb4", &args[0]);
+  if (used("regrow_avb4", (*args)[0])) {
+    str("regrow_avb4", &(*args)[0]);
     trial_types.push_back("regrow_avb4");
   }
-  if (used("translate", args[0])) {
-    str("translate", &args[0]);
+  if (used("translate", (*args)[0])) {
+    str("translate", &(*args)[0]);
     trial_types.push_back("translate");
   }
   if (trial_types.size() == 0) trial_types.push_back("partial_regrow");
-  const std::string site = str("site", &args[0], "-1");
+  const std::string site = str("site", &(*args)[0], "-1");
 
   // Second, determine the particle_type and first site from args[0]
-  const std::string particle_type = str("particle_type", &args[0]);
+  const std::string particle_type = str("particle_type", &(*args)[0]);
 
   // Finally, add each trial to the factory
   for (const std::string trial_type : trial_types) {
@@ -103,7 +104,7 @@ TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
     std::shared_ptr<TrialCompute> compute;
     for (int iarg = 0; iarg < num_args; ++iarg) {
       DEBUG("iarg: " << iarg);
-      argtype iargs = args[iarg];
+      argtype iargs = (*args)[iarg];
       std::shared_ptr<TrialSelect> select;
       std::shared_ptr<Perturb> perturb;
       if (iarg == 0 && trial_type != "partial_regrow") {
@@ -242,4 +243,58 @@ TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
   }
 }
 
+TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
+  build_(&args);
+}
+
+class MapTrialGrowFile {
+ public:
+  MapTrialGrowFile() {
+    auto obj = std::make_shared<TrialGrowFile>();
+    obj->deserialize_map()["TrialGrowFile"] = obj;
+  }
+};
+
+static MapTrialGrowFile mapper_trial_grow_file_ = MapTrialGrowFile();
+
+// Convert file contents to a list of argtypes to use in the above constructor
+TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
+  INFO("here");
+  const std::string file_name = str("file_name", args);
+  const int particle_type = integer("particle_type", args);
+  INFO("here");
+  std::vector<argtype> reformated;
+  INFO("here");
+  std::ifstream file(file_name);
+  INFO("here");
+  ASSERT(file.good(), "cannot find " << file_name);
+  INFO("here");
+  // until end of file, find TrialGrowFile
+  // check for optional empty line
+  // read each line as all arguments in one stage
+  // when empty line or end of file is reached, add Trial and repeat
+  const bool is_found = find("TrialGrowFile", file);
+  INFO("is_found " << is_found);
+  ASSERT(is_found, "TrialGrowFile not found in " << file_name);
+  INFO("here");
+  std::string line;
+  INFO("here");
+  while (std::getline(file, line)) {
+    INFO("line: " << line);
+    if (line.empty()) {
+      if (reformated.size() > 0) {
+        reformated[0]["particle_type"] = str(particle_type);
+        build_(&reformated);
+        reformated.clear();
+      }
+    } else {
+      if (line[0] != '#') {
+        reformated.push_back(line_to_argtype(line));
+      }
+    }
+  }
+  INFO("here");
+}
+TrialGrowFile::TrialGrowFile(argtype args) : TrialGrowFile(&args) {
+}
 }  // namespace feasst

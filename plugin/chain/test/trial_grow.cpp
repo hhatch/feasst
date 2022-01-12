@@ -56,4 +56,17 @@ TEST(TrialGrow, bond_harmonic) {
   }
 }
 
+TEST(TrialGrow, file) {
+//  MonteCarlo mc;  
+//  mc.set(MakeRandomMT19937({{"seed", "123"}}));
+//  mc.add(MakeConfiguration({{"cubic_box_length", "10"},
+//    {"particle_type0", "plugin/chain/test/data/dimer_harmonic.fstprt"},
+//    {"add_particles_of_type0", "1"}}));
+//  mc.add(MakePotential(MakeIdealGas()));
+//  mc.set(MakeThermoParams({{"beta", "1"}}));
+//  mc.set(MakeMetropolis());
+//  mc.add(std::make_shared<TrialGrow>({{"file_name", "plugin/chain/test/data/dimer_harmonic.fstprt"}}));
+  auto trial = MakeTrialGrowFile({{"particle_type", "0"}, {"file_name", "../forcefield/dimer.fstprt"}});
+}
+
 }  // namespace feasst

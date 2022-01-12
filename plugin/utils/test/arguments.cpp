@@ -123,4 +123,10 @@ TEST(Utils, add_if_not_used) {
   EXPECT_EQ(args["hi"], "you");
 }
 
+TEST(Arguments, line_to_argtype) {
+  argtype args = line_to_argtype("key1 val1 key2 val2");
+  argtype expected = {{"key1", "val1"}, {"key2", "val2"}};
+  EXPECT_EQ(args, expected);
+}
+
 }  // namespace feasst
