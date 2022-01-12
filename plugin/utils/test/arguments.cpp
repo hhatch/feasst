@@ -123,4 +123,15 @@ TEST(Utils, add_if_not_used) {
   EXPECT_EQ(args["hi"], "you");
 }
 
+TEST(Arguments, extract) {
+  argtype args = {{"hi", "there"}, {"hows", "things"}};
+  argtype args2 = args;
+  argtype extracted = extract_until("hows", &args);
+  EXPECT_EQ("{{\"hi\",\"there\"},}", str(extracted));
+  EXPECT_EQ(args.size(), 0);
+  argtype extracted2 = extract_until("asdf", &args2);
+  EXPECT_EQ(extracted2.size(), 2);
+  EXPECT_EQ(args2.size(), 0);
+}
+
 }  // namespace feasst

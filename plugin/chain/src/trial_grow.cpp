@@ -89,7 +89,7 @@ TrialGrow::TrialGrow(std::vector<argtype> args) : TrialFactoryNamed() {
   if (trial_types.size() == 0) trial_types.push_back("partial_regrow");
   const std::string site = str("site", &args[0], "-1");
 
-  // Second, determine the particle_type and first site from args[0]
+  // Second, determine the particle_type from args[0]
   const std::string particle_type = str("particle_type", &args[0]);
 
   // Finally, add each trial to the factory
