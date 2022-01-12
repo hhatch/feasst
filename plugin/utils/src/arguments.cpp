@@ -136,20 +136,4 @@ void add_if_not_used(const std::string& key, argtype * args,
   }
 }
 
-argtype extract_until(const std::string key, argtype *args) {
-  argtype extracted;
-  int num_args = static_cast<int>(args->size());
-  for (int iarg = 0; iarg < num_args; ++iarg) {
-    auto pair = args->begin();
-    if (pair->first == key) {
-      args->erase(pair);
-      return extracted;
-    } else {
-      extracted.insert(*pair);
-      args->erase(pair);
-    }
-  }
-  return extracted;
-}
-
 }  // namespace feasst

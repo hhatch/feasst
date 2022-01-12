@@ -131,9 +131,6 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
 void add_if_not_used(const std::string& key, argtype * args,
   const std::string& value);
 
-/// extract arguments from beginning until given key
-argtype extract_until(const std::string key, argtype *args);
-
 }  // namespace feasst
 
 #endif  // FEASST_UTILS_ARGUMENTS_H_
