@@ -9,7 +9,7 @@
    SelectReptate
    PerturbReptate
    AnalyzeBonds
-   trial_grow
+   TrialGrow
    TrialSwapSites
    TrialPivot
    TrialReptate

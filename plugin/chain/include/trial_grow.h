@@ -150,6 +150,9 @@ class TrialGrowFile : public TrialGrow {
   std::shared_ptr<TrialFactoryNamed> create(argtype * args) const override {
     return std::make_shared<TrialGrowFile>(args); }
   virtual ~TrialGrowFile() {}
+
+ private:
+  void add_(const int particle_type, std::vector<argtype> * args); 
 };
 
 inline std::shared_ptr<TrialGrowFile> MakeTrialGrowFile(argtype args) {

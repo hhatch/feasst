@@ -257,35 +257,30 @@ class MapTrialGrowFile {
 
 static MapTrialGrowFile mapper_trial_grow_file_ = MapTrialGrowFile();
 
+void TrialGrowFile::add_(const int particle_type, std::vector<argtype> * args) {
+  (*args)[0]["particle_type"] = str(particle_type);
+  build_(args);
+  args->clear();
+}
+
 // Convert file contents to a list of argtypes to use in the above constructor
 TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
-  INFO("here");
   const std::string file_name = str("file_name", args);
   const int particle_type = integer("particle_type", args);
-  INFO("here");
   std::vector<argtype> reformated;
-  INFO("here");
   std::ifstream file(file_name);
-  INFO("here");
   ASSERT(file.good(), "cannot find " << file_name);
-  INFO("here");
   // until end of file, find TrialGrowFile
   // check for optional empty line
   // read each line as all arguments in one stage
   // when empty line or end of file is reached, add Trial and repeat
   const bool is_found = find("TrialGrowFile", file);
-  INFO("is_found " << is_found);
   ASSERT(is_found, "TrialGrowFile not found in " << file_name);
-  INFO("here");
   std::string line;
-  INFO("here");
   while (std::getline(file, line)) {
-    INFO("line: " << line);
     if (line.empty()) {
       if (reformated.size() > 0) {
-        reformated[0]["particle_type"] = str(particle_type);
-        build_(&reformated);
-        reformated.clear();
+        add_(particle_type, &reformated);
       }
     } else {
       if (line[0] != '#') {
@@ -293,7 +288,9 @@ TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
       }
     }
   }
-  INFO("here");
+  if (reformated.size() > 0) {
+    add_(particle_type, &reformated);
+  }
 }
 TrialGrowFile::TrialGrowFile(argtype args) : TrialGrowFile(&args) {
 }
