@@ -289,13 +289,15 @@ void MonteCarlo::add(std::shared_ptr<Trial> trial) {
 
 void MonteCarlo::add(std::shared_ptr<TrialFactoryNamed> trials) {
   ASSERT(criteria_set_, "set Criteria before Trials.");
-  double total_weight = 0.;
+//  double total_weight = 0.;
+//  for (std::shared_ptr<Trial> itrl : trials->trials()) {
+//    total_weight += itrl->weight();
+//  }
+//  INFO("total weight " << total_weight);
   for (std::shared_ptr<Trial> itrl : trials->trials()) {
-    total_weight += itrl->weight();
-  }
-  for (std::shared_ptr<Trial> itrl : trials->trials()) {
-    itrl->set_weight(itrl->weight()*itrl->weight()/total_weight);
-    DEBUG(itrl->weight() << " " << total_weight);
+//    INFO("itrl weight " << itrl->weight());
+//    itrl->set_weight(itrl->weight()*itrl->weight()/total_weight);
+//    INFO(itrl->weight() << " " << total_weight);
     add(itrl);
   }
 }

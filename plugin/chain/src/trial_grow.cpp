@@ -99,7 +99,13 @@ void TrialGrow::build_(std::vector<argtype> * args) {
     std::shared_ptr<Trial> trial = MakeTrial();
     trial->set_description("TrialGrow" + trial_type);
     if (weight > 0) {
-      trial->set_weight(weight/static_cast<int>(trial_types.size()));
+      trial->set_weight(weight);
+      //trial->set_weight(weight/static_cast<int>(trial_types.size()));
+    }
+    if (trial_type == "add" || trial_type == "remove" ||
+        trial_type == "add_avb" || trial_type == "remove_avb" ||
+        trial_type == "regrow_avb2_in" || trial_type == "regrow_avb2_out") {
+      trial->set_weight(trial->weight()/2.);
     }
     std::shared_ptr<TrialCompute> compute;
     for (int iarg = 0; iarg < num_args; ++iarg) {
@@ -257,8 +263,9 @@ class MapTrialGrowFile {
 
 static MapTrialGrowFile mapper_trial_grow_file_ = MapTrialGrowFile();
 
-void TrialGrowFile::add_(const int particle_type, std::vector<argtype> * args) {
-  (*args)[0]["particle_type"] = str(particle_type);
+void TrialGrowFile::add_(const argtype add_args, std::vector<argtype> * args) {
+  argtype * arg0 = &(*args)[0];
+  arg0->insert(add_args.begin(), add_args.end());
   build_(args);
   args->clear();
 }
@@ -266,7 +273,6 @@ void TrialGrowFile::add_(const int particle_type, std::vector<argtype> * args) {
 // Convert file contents to a list of argtypes to use in the above constructor
 TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
   const std::string file_name = str("file_name", args);
-  const int particle_type = integer("particle_type", args);
   std::vector<argtype> reformated;
   std::ifstream file(file_name);
   ASSERT(file.good(), "cannot find " << file_name);
@@ -280,7 +286,7 @@ TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
   while (std::getline(file, line)) {
     if (line.empty()) {
       if (reformated.size() > 0) {
-        add_(particle_type, &reformated);
+        add_(*args, &reformated);
       }
     } else {
       if (line[0] != '#') {
@@ -289,7 +295,7 @@ TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
     }
   }
   if (reformated.size() > 0) {
-    add_(particle_type, &reformated);
+    add_(*args, &reformated);
   }
 }
 TrialGrowFile::TrialGrowFile(argtype args) : TrialGrowFile(&args) {

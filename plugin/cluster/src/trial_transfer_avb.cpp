@@ -95,8 +95,12 @@ static MapTrialTransferAVB mapper_trial_transfer_avb__ = MapTrialTransferAVB();
 TrialTransferAVB::TrialTransferAVB(argtype * args) : TrialFactoryNamed() {
   class_name_ = "TrialTransferAVB";
   argtype orig_args = *args;
-  add(MakeTrialAddAVB(orig_args));
-  add(MakeTrialRemoveAVB(orig_args));
+  auto trial_add = MakeTrialAddAVB(orig_args);
+  trial_add->set_weight(trial_add->weight()/2.);
+  add(trial_add);
+  auto trial_remove = MakeTrialRemoveAVB(orig_args);
+  trial_remove->set_weight(trial_remove->weight()/2.);
+  add(trial_remove);
 }
 TrialTransferAVB::TrialTransferAVB(argtype args) : TrialTransferAVB(&args) {
   // check_all_used(args);

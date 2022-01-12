@@ -146,6 +146,10 @@ TEST(MonteCarlo, TrialGrow_LONG) {
     mc.add(MakeTrialGrow(grow_args));
     EXPECT_EQ(4, mc.trial(0).stage(0).rosenbluth().num());
     EXPECT_EQ(5, mc.trial(0).stage(1).rosenbluth().num());
+    EXPECT_EQ(3, mc.trials().num());
+    EXPECT_EQ(50, mc.trial(0).weight());
+    EXPECT_EQ(50, mc.trial(1).weight());
+    EXPECT_EQ(100, mc.trial(2).weight());
     mc.add(MakeLogAndMovie({{"steps_per", str(1e0)}, {"file_name", "tmp/lj"}}));
     mc.add(MakeCheckEnergyAndTune({{"steps_per", str(1e0)}, {"tolerance", str(1e-9)}}));
     EXPECT_EQ(3, mc.trials().num());

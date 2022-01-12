@@ -19,8 +19,12 @@ TrialTransferMultiple::TrialTransferMultiple(argtype * args) : TrialFactoryNamed
   class_name_ = "TrialTransferMultiple";
   argtype rm_args = *args, add_args = *args;
   str("shift", &add_args, ""); // remove shift
-  add(MakeTrialAddMultiple(add_args));
-  add(MakeTrialRemoveMultiple(rm_args));
+  auto trial_add = MakeTrialAddMultiple(add_args);
+  trial_add->set_weight(trial_add->weight()/2.);
+  add(trial_add);
+  auto trial_remove = MakeTrialRemoveMultiple(rm_args);
+  trial_remove->set_weight(trial_remove->weight()/2.);
+  add(trial_remove);
 }
 TrialTransferMultiple::TrialTransferMultiple(argtype args) : TrialTransferMultiple(&args) {
   //check_all_used(args);

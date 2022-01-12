@@ -19,8 +19,12 @@ static MapTrialTransfer mapper_ = MapTrialTransfer();
 TrialTransfer::TrialTransfer(argtype * args) : TrialFactoryNamed() {
   class_name_ = "TrialTransfer";
   argtype orig_args = *args;
-  add(std::make_shared<TrialAdd>(args));
-  add(MakeTrialRemove(orig_args));
+  auto trial_add = std::make_shared<TrialAdd>(args);
+  trial_add->set_weight(trial_add->weight()/2.);
+  add(trial_add);
+  auto trial_remove = MakeTrialRemove(orig_args);
+  trial_remove->set_weight(trial_remove->weight()/2.);
+  add(trial_remove);
 }
 TrialTransfer::TrialTransfer(argtype args) : TrialTransfer(&args) {
   check_all_used(args);

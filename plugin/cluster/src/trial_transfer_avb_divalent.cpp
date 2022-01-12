@@ -192,8 +192,12 @@ static MapTrialTransferAVBDivalent mapper_trial_transfer_avb_divalent__ = MapTri
 TrialTransferAVBDivalent::TrialTransferAVBDivalent(argtype * args) : TrialFactoryNamed() {
   class_name_ = "TrialTransferAVBDivalent";
   argtype orig_args = *args;
-  add(MakeTrialAddAVBDivalent(orig_args));
-  add(MakeTrialRemoveAVBDivalent(orig_args));
+  auto trial_add = MakeTrialAddAVBDivalent(orig_args);
+  trial_add->set_weight(trial_add->weight()/2.);
+  add(trial_add);
+  auto trial_remove = MakeTrialRemoveAVBDivalent(orig_args);
+  trial_remove->set_weight(trial_remove->weight()/2.);
+  add(trial_remove);
 }
 TrialTransferAVBDivalent::TrialTransferAVBDivalent(argtype args) : TrialTransferAVBDivalent(&args) {
   // check_all_used(args);

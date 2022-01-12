@@ -92,8 +92,12 @@ TrialAVB2::TrialAVB2(argtype * args) : TrialFactoryNamed() {
   out2in_args.insert({"out_to_in", "true"});
   argtype in2out_args(*args);
   in2out_args.insert({"out_to_in", "false"});
-  add(MakeTrialAVB2Half(out2in_args));
-  add(MakeTrialAVB2Half(in2out_args));
+  auto trial_out2in = MakeTrialAVB2Half(out2in_args);
+  trial_out2in->set_weight(trial_out2in->weight()/2.);
+  add(trial_out2in);
+  auto trial_in2out = MakeTrialAVB2Half(in2out_args);
+  trial_in2out->set_weight(trial_in2out->weight()/2.);
+  add(trial_in2out);
 }
 TrialAVB2::TrialAVB2(argtype args) : TrialAVB2(&args) {
   // check_all_used(args);
