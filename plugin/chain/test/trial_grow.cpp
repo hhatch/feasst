@@ -57,8 +57,9 @@ TEST(TrialGrow, bond_harmonic) {
 }
 
 TEST(TrialGrow, file) {
-  auto trial = MakeTrialGrowFile({{"particle_type", "0"}, {"file_name", "../forcefield/dimer.fstprt"}});
-  EXPECT_EQ(static_cast<int>(trial->trials().size()), 5); 
+  auto trial = MakeTrialGrowFile({{"particle_type", "0"},
+    {"file_name", "../plugin/chain/test/data/dimer_grow_file.txt"}});
+  EXPECT_EQ(static_cast<int>(trial->trials().size()), 5);
 }
 
 }  // namespace feasst

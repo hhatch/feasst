@@ -22,13 +22,3 @@ Bond Properties
 Bonds
 
 0 0 0 1
-
-TrialGrowFile
-
-# (re)grow entire particle
-transfer true regrow true site 0
-bond true mobile_site 1 anchor_site 0
-
-bond true mobile_site 1 anchor_site 0
-
-bond true mobile_site 0 anchor_site 1

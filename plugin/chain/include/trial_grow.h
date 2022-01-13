@@ -152,7 +152,7 @@ class TrialGrowFile : public TrialGrow {
   virtual ~TrialGrowFile() {}
 
  private:
-  void add_(const argtype add_args, std::vector<argtype> * args); 
+  void add_(const argtype add_args, std::vector<argtype> * args);
 };
 
 inline std::shared_ptr<TrialGrowFile> MakeTrialGrowFile(argtype args) {
