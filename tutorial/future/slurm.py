@@ -13,13 +13,10 @@ default_slurm_params = {
     "procs_per_node": 4,
     "hours": 5*24}
 default_slurm_params["num_sims"] = default_slurm_params["num_nodes"]*default_slurm_params["procs_per_node"]
-
-# simulate inverse temperature from 0.8 to 1.2
 betas = np.linspace(0.8, 1.2, num=default_slurm_params["num_sims"])
 
 def slurm_queue():
-    with open("slurm.txt", "w") as myfile: myfile.write("""
-#!/bin/bash
+    with open("slurm.txt", "w") as myfile: myfile.write("""#!/bin/bash
 #SBATCH -n {procs_per_node}
 #SBATCH -N {num_nodes}
 #SBATCH -t {hours}:00:00
@@ -54,4 +51,4 @@ if __name__ == "__main__":
             pool.starmap(run, zip(range(0, default_slurm_params["num_sims"])))
     else:
         slurm_queue()
-        subprocess.call("slurm slurm.txt", shell=True, executable='/bin/bash')
+        subprocess.call("sbatch slurm.txt", shell=True, executable='/bin/bash')
