@@ -57,9 +57,24 @@ TEST(TrialGrow, bond_harmonic) {
 }
 
 TEST(TrialGrow, file) {
-  auto trial = MakeTrialGrowFile({{"particle_type", "0"},
+  auto trial = MakeTrialGrowFile({
+    {"particle_type", "0"},
+    {"weight", "100"},
+    {"default_num_steps", "3"},
+    {"default_reference_index", "2"},
     {"file_name", "../plugin/chain/test/data/dimer_grow_file.txt"}});
   EXPECT_EQ(static_cast<int>(trial->trials().size()), 5);
+  EXPECT_EQ(trial->trials()[0]->weight(), 50);
+  EXPECT_EQ(trial->trials()[1]->weight(), 50);
+  EXPECT_EQ(trial->trials()[2]->weight(), 100);
+  EXPECT_EQ(trial->trials()[3]->weight(), 0.1);
+  EXPECT_EQ(trial->trials()[4]->weight(), 100);
+  EXPECT_EQ(trial->trials()[0]->stage(0).num_steps(), 3);
+  EXPECT_EQ(trial->trials()[0]->stage(1).num_steps(), 2);
+  EXPECT_EQ(trial->trials()[1]->stage(0).num_steps(), 3);
+  EXPECT_EQ(trial->trials()[1]->stage(1).num_steps(), 2);
+  EXPECT_EQ(trial->trials()[0]->stage(0).reference(), 2);
+  EXPECT_EQ(trial->trials()[4]->stage(0).reference(), 15);
 }
 
 }  // namespace feasst
