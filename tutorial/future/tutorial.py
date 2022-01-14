@@ -1,5 +1,10 @@
-# define a pure component NVT MC Lennard-Jones simulation
+import subprocess
+import numpy as np
+import argparse
+from multiprocessing import Pool
+import random
 
+# define parameters a pure component NVT MC Lennard-Jones simulation
 default_sim_params = {
     "seed": "time",
     "length": 8,
@@ -12,6 +17,7 @@ default_sim_params = {
     "sim": 0,
 }
 
+# write fst script to run a single simulation
 def mc_lj(params=default_sim_params, file_name="tutorial.txt"):
     with open(file_name, "w") as myfile: myfile.write("""
 # high temperature gcmc to generate initial configuration
@@ -40,7 +46,58 @@ Energy steps_per_write {steps_per} file_name en{sim}.txt
 Run num_attempts {production}
 """.format(**params))
 
+# define scheduler params
+default_slurm_params = {
+    "file_name": "slurm.txt",
+    "num_nodes": 1,
+    "procs_per_node": 4,
+    "hours": 5*24}
+default_slurm_params["num_sims"] = default_slurm_params["num_nodes"]*default_slurm_params["procs_per_node"]
+
+# set a simulation parameter to vary for for each processor
+betas = np.linspace(0.8, 1.2, num=default_slurm_params["num_sims"])
+
+# write slurm script
+def slurm_queue():
+    with open("slurm.txt", "w") as myfile: myfile.write("""#!/bin/bash
+#SBATCH -n {procs_per_node}
+#SBATCH -N {num_nodes}
+#SBATCH -t {hours}:00:00
+#SBATCH -o hostname_%j.out
+#SBATCH -e hostname_%j.out
+echo "Running on host $(hostname)"
+echo "Time is $(date)"
+echo "Directory is $PWD"
+echo "ID is $SLURM_JOB_ID"
+
+cd $PWD
+python combine.py --run_type 1
+
+echo "Time is $(date)"
+""".format(**default_slurm_params))
+
+# run a single simulation as part of the batch to fill a node
+def run(sim):
+    params = default_sim_params
+    params["sim"] = sim
+    params["beta"] = betas[sim]
+    params["seed"] = random.randrange(1e9)
+    file_name = "tutorial_run"+str(sim)+".txt"
+    mc_lj(params, file_name=file_name)
+    subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
+
 if __name__ == "__main__":
-    import subprocess
-    mc_lj()
-    subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--run_type', type=int, default=0, help="0: run single simulation on host, 1: run batch on host 2: submit match to scheduler")
+    args = parser.parse_args()
+    if args.run_type == 0:
+        mc_lj()
+        subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
+    elif args.run_type == 1:
+        with Pool(default_slurm_params["num_sims"]) as pool:
+            pool.starmap(run, zip(range(0, default_slurm_params["num_sims"])))
+    elif args.run_type == 2:
+        slurm_queue()
+        subprocess.call("sbatch slurm.txt", shell=True, executable='/bin/bash')
+    else:
+        assert("unrecognized run_type")
