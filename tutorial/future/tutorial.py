@@ -4,8 +4,13 @@ import argparse
 from multiprocessing import Pool
 import random
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler, 3: restart")
+parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
+args = parser.parse_args()
+
 # define parameters a pure component NVT MC Lennard-Jones simulation
-default_sim_params = {
+params = {
     "seed": "time",
     "length": 8,
     "num_particles": 50,
@@ -15,10 +20,14 @@ default_sim_params = {
     "equilibration": 1e6,
     "production": 1e6,
     "sim": 0,
-}
+    "num_nodes": 1,
+    "procs_per_node": 32,
+    "num_hours": 5*24}
+params["num_sims"] = params["num_nodes"]*params["procs_per_node"]
+params["num_hours_terminate"] = 0.95*params["num_hours"]
 
 # write fst script to run a single simulation
-def mc_lj(params=default_sim_params, file_name="tutorial.txt"):
+def mc_lj(params=params, file_name="tutorial.txt"):
     with open(file_name, "w") as myfile: myfile.write("""
 # high temperature gcmc to generate initial configuration
 RandomMT19937 seed {seed}
@@ -29,6 +38,7 @@ ThermoParams beta 0.1 chemical_potential 10
 Metropolis
 TrialTranslate tunable_param 2 tunable_target_acceptance 0.2
 TrialAdd particle_type 0
+Checkpoint file_name checkpoint{sim}.fst num_hours 0.1 num_hours_terminate {num_hours_terminate}
 Run until_num_particles {num_particles}
 
 # nvt equilibration
@@ -46,56 +56,53 @@ Energy steps_per_write {steps_per} file_name en{sim}.txt
 Run num_attempts {production}
 """.format(**params))
 
-# define scheduler params
-default_slurm_params = {
-    "file_name": "slurm.txt",
-    "num_nodes": 1,
-    "procs_per_node": 4,
-    "hours": 5*24}
-default_slurm_params["num_sims"] = default_slurm_params["num_nodes"]*default_slurm_params["procs_per_node"]
-
-# set a simulation parameter to vary for for each processor
-betas = np.linspace(0.8, 1.2, num=default_slurm_params["num_sims"])
-
 # write slurm script
 def slurm_queue():
     with open("slurm.txt", "w") as myfile: myfile.write("""#!/bin/bash
 #SBATCH -n {procs_per_node}
 #SBATCH -N {num_nodes}
-#SBATCH -t {hours}:00:00
+#SBATCH -t {num_hours}:00:00
 #SBATCH -o hostname_%j.out
 #SBATCH -e hostname_%j.out
 echo "Running on host $(hostname)"
 echo "Time is $(date)"
 echo "Directory is $PWD"
 echo "ID is $SLURM_JOB_ID"
-
 cd $PWD
-python combine.py --run_type 1
-
+python combine.py --run_type 1 --task $SLURM_ARRAY_JOB_ID
+if [ $? == 0 ]; then
+  echo "Job is done"
+  scancel $SLURM_ARRAY_JOB_ID
+else
+  echo "Job is terminating, to be restarted again"
+fi
 echo "Time is $(date)"
-""".format(**default_slurm_params))
+""".format(**params))
+
+# set a simulation parameter to vary for for each processor
+betas = np.linspace(0.8, 1.2, num=params["num_sims"])
 
 # run a single simulation as part of the batch to fill a node
 def run(sim):
-    params = default_sim_params
-    params["sim"] = sim
-    params["beta"] = betas[sim]
-    params["seed"] = random.randrange(1e9)
-    file_name = "tutorial_run"+str(sim)+".txt"
-    mc_lj(params, file_name=file_name)
-    subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
+    if args.task == 0:
+        iparams = params
+        iparams["sim"] = sim
+        iparams["beta"] = betas[sim]
+        iparams["seed"] = random.randrange(1e9)
+        file_name = "tutorial_run"+str(sim)+".txt"
+        mc_lj(iparams, file_name=file_name)
+        subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
+    else:
+        subprocess.call("~/feasst/build/bin/rst < checkpoint" + str(sim) + ".txt", shell=True, executable='/bin/bash')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--run_type', type=int, default=0, help="0: run single simulation on host, 1: run batch on host 2: submit match to scheduler")
-    args = parser.parse_args()
     if args.run_type == 0:
         mc_lj()
         subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
     elif args.run_type == 1:
-        with Pool(default_slurm_params["num_sims"]) as pool:
-            pool.starmap(run, zip(range(0, default_slurm_params["num_sims"])))
+        if args.task == 0:
+            with Pool(params["num_sims"]) as pool:
+                pool.starmap(run, zip(range(0, params["num_sims"])))
     elif args.run_type == 2:
         slurm_queue()
         subprocess.call("sbatch slurm.txt", shell=True, executable='/bin/bash')

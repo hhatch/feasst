@@ -66,6 +66,9 @@ class MonteCarlo {
    */
   explicit MonteCarlo(arglist args);
 
+  /// Resume processing the above arguments after Checkpointing.
+  void resume();
+
   /// Set the random number generator.
   void set(std::shared_ptr<Random> random) { random_ = random; }
 

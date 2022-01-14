@@ -140,8 +140,7 @@ void MonteCarlo::parse_(arglist * args) {
 
 }
 
-MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
-  args_ = args;
+void MonteCarlo::resume() {
   int size = static_cast<int>(args_.size());
   int previous_size = size;
   while (size > 0) {
@@ -152,6 +151,11 @@ MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
     ASSERT(previous_size - 1 == size,
       "Unrecognized argument: " << args_.begin()->first);
   }
+}
+
+MonteCarlo::MonteCarlo(arglist args) : MonteCarlo() {
+  args_ = args;
+  resume();
 }
 
 void MonteCarlo::run(std::shared_ptr<Action> action) {
