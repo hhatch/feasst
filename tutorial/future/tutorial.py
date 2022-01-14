@@ -5,7 +5,7 @@ from multiprocessing import Pool
 import random
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler, 3: restart")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler")
 parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
 args = parser.parse_args()
 
@@ -17,12 +17,12 @@ params = {
     "fstprt": "/feasst/forcefield/lj.fstprt",
     "beta": 1.2,
     "steps_per": 1e5,
-    "equilibration": 1e6,
-    "production": 1e6,
+    "equilibration": 1e8,
+    "production": 1e8,
     "sim": 0,
     "num_nodes": 1,
     "procs_per_node": 32,
-    "num_hours": 5*24}
+    "num_hours": 0.05}
 params["num_sims"] = params["num_nodes"]*params["procs_per_node"]
 params["num_hours_terminate"] = 0.95*params["num_hours"]
 
