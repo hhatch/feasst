@@ -69,7 +69,7 @@ echo "Time is $(date)"
 echo "Directory is $PWD"
 echo "ID is $SLURM_JOB_ID"
 cd $PWD
-python combine.py --run_type 1 --task $SLURM_ARRAY_JOB_ID
+python tutorial.py --run_type 1 --task $SLURM_ARRAY_JOB_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
