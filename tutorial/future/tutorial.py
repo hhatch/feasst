@@ -4,6 +4,10 @@ import argparse
 from multiprocessing import Pool
 import random
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host 2: submit match to scheduler")
+args = parser.parse_args()
+
 # define parameters a pure component NVT MC Lennard-Jones simulation
 default_sim_params = {
     "seed": "time",
@@ -50,7 +54,7 @@ Run num_attempts {production}
 default_slurm_params = {
     "file_name": "slurm.txt",
     "num_nodes": 1,
-    "procs_per_node": 4,
+    "procs_per_node": 32,
     "hours": 5*24}
 default_slurm_params["num_sims"] = default_slurm_params["num_nodes"]*default_slurm_params["procs_per_node"]
 
@@ -71,7 +75,7 @@ echo "Directory is $PWD"
 echo "ID is $SLURM_JOB_ID"
 
 cd $PWD
-python combine.py --run_type 1
+python tutorial.py --run_type 1
 
 echo "Time is $(date)"
 """.format(**default_slurm_params))
@@ -87,9 +91,6 @@ def run(sim):
     subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--run_type', type=int, default=0, help="0: run single simulation on host, 1: run batch on host 2: submit match to scheduler")
-    args = parser.parse_args()
     if args.run_type == 0:
         mc_lj()
         subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
