@@ -4,12 +4,7 @@ import argparse
 from multiprocessing import Pool
 import random
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler")
-parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
-args = parser.parse_args()
-
-# define parameters a pure component NVT MC Lennard-Jones simulation
+# define parameters of a pure component NVT MC Lennard-Jones simulation
 params = {
     "seed": "time",
     "length": 8,
@@ -56,7 +51,7 @@ Energy steps_per_write {steps_per} file_name en{sim}.txt
 Run num_attempts {production}
 """.format(**params))
 
-# write slurm script
+# write slurm script to fill nodes with simulations
 def slurm_queue():
     with open("slurm.txt", "w") as myfile: myfile.write("""#!/bin/bash
 #SBATCH -n {procs_per_node}
@@ -79,8 +74,14 @@ fi
 echo "Time is $(date)"
 """.format(**params))
 
-# set a simulation parameter to vary for for each processor
+# set a simulation parameter to vary for each processor
 betas = np.linspace(0.8, 1.2, num=params["num_sims"])
+
+# parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler, 3: restart")
+parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
+args = parser.parse_args()
 
 # run a single simulation as part of the batch to fill a node
 def run(sim):
@@ -100,9 +101,8 @@ if __name__ == "__main__":
         mc_lj()
         subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
     elif args.run_type == 1:
-        if args.task == 0:
-            with Pool(params["num_sims"]) as pool:
-                pool.starmap(run, zip(range(0, params["num_sims"])))
+        with Pool(params["num_sims"]) as pool:
+            pool.starmap(run, zip(range(0, params["num_sims"])))
     elif args.run_type == 2:
         slurm_queue()
         subprocess.call("sbatch slurm.txt", shell=True, executable='/bin/bash')
