@@ -58,8 +58,8 @@ std::string str(const std::string& key, argtype * args);
 //// Depreciate
 //argtype get(const std::string& key, arglist * args);
 
-/// Return a human-readable string representing argtype
-std::string str(const argtype& args);
+/// Return a human-readable string representing argtype (use io template)
+//std::string str(const argtype& args);
 
 /// Return a human-readable string representing arglist
 std::string str(const arglist& args);

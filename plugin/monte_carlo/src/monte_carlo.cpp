@@ -24,8 +24,8 @@ MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 
 void MonteCarlo::parse_(arglist * args) {
   DEBUG("first " << args->begin()->first);
-  std::cout << "{" << args->begin()->first << ","
-            << str(args->begin()->second) << "}," << std::endl;
+  std::cout << args->begin()->first << " "
+            << str(args->begin()->second) << " " << std::endl;
 
   // parse all derived classes of Random
   std::shared_ptr<Random> ran =
