@@ -1,3 +1,4 @@
+import sys
 import subprocess
 import numpy as np
 import argparse
@@ -10,7 +11,7 @@ params = {
     "num_particles": 350, "equilibration": 1e6, "production": 1e8, # slow
     #"num_particles": 50, "equilibration": 1e6, "production": 1e6, # fast
     "steps_per": 1e5, "seed": "time",
-    "sim": 0, "num_hours": 0.05, "num_nodes": 1, "procs_per_node": 32}
+    "sim": 0, "num_hours": 0.01, "num_nodes": 1, "procs_per_node": 32}
 params["num_sims"] = params["num_nodes"]*params["procs_per_node"]
 params["num_minutes"] = round(params["num_hours"]*60)
 params["num_hours_terminate"] = 0.95*params["num_hours"]
@@ -78,9 +79,10 @@ def run(sim):
         params["seed"] = random.randrange(1e9)
         file_name = "tutorial_run"+str(sim)+".txt"
         mc_lj(params, file_name=file_name)
-        subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
+        syscode = subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
     else:
-        subprocess.call("~/feasst/build/bin/rst < checkpoint" + str(sim) + ".fst", shell=True, executable='/bin/bash')
+        syscode = subprocess.call("~/feasst/build/bin/rst checkpoint" + str(sim) + ".fst", shell=True, executable='/bin/bash')
+    return syscode
 
 if __name__ == "__main__":
     if args.run_type == 0:
@@ -88,7 +90,9 @@ if __name__ == "__main__":
         subprocess.call("~/feasst/build/bin/fst < tutorial.txt", shell=True, executable='/bin/bash')
     elif args.run_type == 1:
         with Pool(params["num_sims"]) as pool:
-            pool.starmap(run, zip(range(0, params["num_sims"])))
+            codes = pool.starmap(run, zip(range(0, params["num_sims"])))
+            if np.count_nonzero(codes) > 0:
+                sys.exit(1)
     elif args.run_type == 2:
         slurm_queue()
         subprocess.call("sbatch --array=0-10%1 slurm.txt", shell=True, executable='/bin/bash')
