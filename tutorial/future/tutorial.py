@@ -6,19 +6,13 @@ import random
 
 # define parameters of a pure component NVT MC Lennard-Jones simulation
 params = {
-    "seed": "time",
-    "length": 8,
-    "num_particles": 50,
-    "fstprt": "/feasst/forcefield/lj.fstprt",
-    "beta": 1.2,
-    "steps_per": 1e5,
-    "equilibration": 1e8,
-    "production": 1e8,
-    "sim": 0,
-    "num_nodes": 1,
-    "procs_per_node": 32,
-    "num_hours": 0.05}
+    "length": 8, "fstprt": "/feasst/forcefield/lj.fstprt", "beta": 1.2,
+    "num_particles": 350, "equilibration": 1e6, "production": 1e8, # slow
+    #"num_particles": 50, "equilibration": 1e6, "production": 1e6, # fast
+    "steps_per": 1e5, "seed": "time",
+    "sim": 0, "num_hours": 0.05, "num_nodes": 1, "procs_per_node": 3}
 params["num_sims"] = params["num_nodes"]*params["procs_per_node"]
+params["num_minutes"] = round(params["num_hours"]*60)
 params["num_hours_terminate"] = 0.95*params["num_hours"]
 
 # write fst script to run a single simulation
@@ -54,17 +48,10 @@ Run num_attempts {production}
 # write slurm script to fill nodes with simulations
 def slurm_queue():
     with open("slurm.txt", "w") as myfile: myfile.write("""#!/bin/bash
-#SBATCH -n {procs_per_node}
-#SBATCH -N {num_nodes}
-#SBATCH -t {num_hours}:00:00
-#SBATCH -o hostname_%j.out
-#SBATCH -e hostname_%j.out
-echo "Running on host $(hostname)"
-echo "Time is $(date)"
-echo "Directory is $PWD"
-echo "ID is $SLURM_JOB_ID"
+#SBATCH -n {procs_per_node} -N {num_nodes} -t {num_minutes}:00 -o hostname_%j.out -e hostname_%j.out
+echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
-python tutorial.py --run_type 1 --task $SLURM_ARRAY_JOB_ID
+python tutorial.py --run_type 1 --task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -79,19 +66,18 @@ betas = np.linspace(0.8, 1.2, num=params["num_sims"])
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler, 3: restart")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler")
 parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
 args = parser.parse_args()
 
 # run a single simulation as part of the batch to fill a node
 def run(sim):
     if args.task == 0:
-        iparams = params
-        iparams["sim"] = sim
-        iparams["beta"] = betas[sim]
-        iparams["seed"] = random.randrange(1e9)
+        params["sim"] = sim
+        params["beta"] = betas[sim]
+        params["seed"] = random.randrange(1e9)
         file_name = "tutorial_run"+str(sim)+".txt"
-        mc_lj(iparams, file_name=file_name)
+        mc_lj(params, file_name=file_name)
         subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
     else:
         subprocess.call("~/feasst/build/bin/rst < checkpoint" + str(sim) + ".txt", shell=True, executable='/bin/bash')
@@ -105,6 +91,6 @@ if __name__ == "__main__":
             pool.starmap(run, zip(range(0, params["num_sims"])))
     elif args.run_type == 2:
         slurm_queue()
-        subprocess.call("sbatch slurm.txt", shell=True, executable='/bin/bash')
+        subprocess.call("sbatch --array=0-10%1 slurm.txt", shell=True, executable='/bin/bash')
     else:
         assert("unrecognized run_type")
