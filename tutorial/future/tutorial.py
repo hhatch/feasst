@@ -80,7 +80,7 @@ def run(sim):
         mc_lj(params, file_name=file_name)
         subprocess.call("~/feasst/build/bin/fst < " + file_name + " > tutorial_run"+str(sim)+".log", shell=True, executable='/bin/bash')
     else:
-        subprocess.call("~/feasst/build/bin/rst < checkpoint" + str(sim) + ".txt", shell=True, executable='/bin/bash')
+        subprocess.call("~/feasst/build/bin/rst < checkpoint" + str(sim) + ".fst", shell=True, executable='/bin/bash')
 
 if __name__ == "__main__":
     if args.run_type == 0:

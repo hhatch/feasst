@@ -617,4 +617,34 @@ TEST(MonteCarlo, gen_5_spce_in_triclinic) {
   FileXYZ().write_for_vmd("tmp/spce_triclinic.xyz", mc.configuration());
 }
 
+TEST(MonteCarlo, checkpoint) {
+  auto mc = MakeMonteCarlo({{
+    {"Checkpoint", {{"file_name", "tmp/lj.fst"}}},
+    {"RandomModulo", {{"seed", "123"}}},
+    {"Configuration", {{"cubic_box_length", "8"},
+                       {"particle_type0", "../forcefield/lj.fstprt"},
+                       {"particle_type1", "../forcefield/atom.fstprt"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"Potential", {{"VisitModel", "LongRangeCorrections"}}},
+    {"ThermoParams", {{"beta", "0.1"}, {"chemical_potential", "10"}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {{"tunable_param", "0.2"},
+                        {"tunable_target_acceptance", "0.2"}}},
+    {"TrialAdd", {{"particle_type", "0"}}},
+    {"Log", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.txt"}}},
+    {"Movie", {{"steps_per", str(1e2)}, {"file_name", "tmp/lj.xyz"}}},
+    {"CheckEnergy", {{"steps_per", str(1e2)}, {"tolerance", "1e-8"}}},
+    {"Tune", {{"steps_per", str(1e2)}}},
+    {"Run", {{"until_num_particles", "50"}}},
+    {"WriteCheckpoint", {{}}},
+    {"garbage", {{}}},
+    {"ThermoParams", {{"beta", "1.2"}}},
+    {"RemoveTrial", {{"name", "TrialAdd"}}},
+    {"Run", {{"num_attempts", str(1e3)}}},
+    {"RemoveModify", {{"name", "Tune"}}},
+    {"Run", {{"num_attempts", str(1e3)}}},
+    {"WriteCheckpoint", {{}}},
+  }});
+}
+
 }  // namespace feasst
