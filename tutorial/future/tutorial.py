@@ -10,7 +10,7 @@ params = {
     "num_particles": 350, "equilibration": 1e6, "production": 1e8, # slow
     #"num_particles": 50, "equilibration": 1e6, "production": 1e6, # fast
     "steps_per": 1e5, "seed": "time",
-    "sim": 0, "num_hours": 0.05, "num_nodes": 1, "procs_per_node": 3}
+    "sim": 0, "num_hours": 0.05, "num_nodes": 1, "procs_per_node": 32}
 params["num_sims"] = params["num_nodes"]*params["procs_per_node"]
 params["num_minutes"] = round(params["num_hours"]*60)
 params["num_hours_terminate"] = 0.95*params["num_hours"]

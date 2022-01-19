@@ -141,6 +141,9 @@ void MonteCarlo::parse_(arglist * args) {
 }
 
 void MonteCarlo::resume() {
+  if (action_) {
+    run(action_);
+  }
   int size = static_cast<int>(args_.size());
   INFO("size " << size);
   int previous_size = size;
