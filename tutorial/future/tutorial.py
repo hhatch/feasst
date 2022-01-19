@@ -67,7 +67,7 @@ betas = np.linspace(0.8, 1.2, num=params["num_sims"])
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit match to scheduler")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run single simulation on host, 1: run batch on host, 2: submit batch to scheduler")
 parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
 args = parser.parse_args()
 
