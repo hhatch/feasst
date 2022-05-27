@@ -46,7 +46,7 @@ RemoveModify name Tune
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
+Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 delta_ln_prob_guess -4
 #Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20
 TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 4
 Tune trials_per_write {trials_per} file_name lj_tune[sim_index].txt multistate true

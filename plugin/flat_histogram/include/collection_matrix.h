@@ -34,6 +34,14 @@ class CollectionMatrix {
  public:
   /**
     args:
+    - delta_ln_prob_guess: if the CollectionMatrix lacks transitions to compute
+      a delta_ln_prob, use this value instead (default: 0).
+      This guess can affect the initial convergence.
+      When a simulation starts at low macrostate, a negative number encourages
+      acceptance of macrostates that have not yet been visited.
+      And for high macrostate, a positive number may help.
+      If the value is too large, a very low probability trial may be accepted,
+      creating a large free energy difference that will be difficult to sample.
    */
   explicit CollectionMatrix(argtype args = argtype());
   explicit CollectionMatrix(argtype * args);
@@ -80,6 +88,7 @@ class CollectionMatrix {
   explicit CollectionMatrix(std::istream& istr);
 
  private:
+  double delta_ln_prob_guess_;
   std::vector<std::vector<Accumulator> > matrix_;
 
   bool if_zero_(const int macro, const int block, const bool lower) const;

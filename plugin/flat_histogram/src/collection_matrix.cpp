@@ -13,6 +13,7 @@
 namespace feasst {
 
 CollectionMatrix::CollectionMatrix(argtype * args) {
+  delta_ln_prob_guess_ = dble("delta_ln_prob_guess", args, 0);
 }
 CollectionMatrix::CollectionMatrix(argtype args)
   : CollectionMatrix(&args) {
@@ -54,7 +55,7 @@ void CollectionMatrix::compute_ln_prob(
 //    if (block == -1) INFO("ln_prob_previous " << ln_prob_previous);
     if (if_zero_(macro - 1, block, true) ||
         if_zero_(macro, block, false)) {
-      ln_prob->set_value(macro, ln_prob_previous);
+      ln_prob->set_value(macro, ln_prob_previous + delta_ln_prob_guess_);
     } else {
       double prob_decrease;
       if (block == -1) {
@@ -105,12 +106,14 @@ void CollectionMatrix::increment(
 
 void CollectionMatrix::serialize(std::ostream& ostr) const {
   feasst_serialize_version(2468, ostr);
+  feasst_serialize(delta_ln_prob_guess_, ostr);
   feasst_serialize_fstobj(matrix_, ostr);
 }
 
 CollectionMatrix::CollectionMatrix(std::istream& istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 2468, "unrecognized verison: " << version);
+  feasst_deserialize(&delta_ln_prob_guess_, istr);
   feasst_deserialize_fstobj(&matrix_, istr);
 }
 
