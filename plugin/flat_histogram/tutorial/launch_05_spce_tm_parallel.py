@@ -6,10 +6,11 @@ import unittest
 
 # define parameters of a pure component NVT MC SPC/E simulation
 params = {
-    "cubic_box_length": 20, "fstprt": "/feasst/forcefield/spce.fstprt", "temperature": 525,
-    "max_particles": 265, "min_particles": 0, "min_sweeps": 200, "beta_mu": -8.14,
+    "cubic_box_length": 20, "fstprt": "/feasst/forcefield/spce.fstprt", "min_particles": 0,
+    "temperature": 525, "max_particles": 265,  "min_sweeps": 200, "beta_mu": -8.14,
+    #"temperature": 300, "max_particles": 296,  "min_sweeps": 200, "beta_mu": -15,
     "trials_per": 1e6, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
-    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 32, "dccb_cut": 3.165*2**(1./6.)}
+    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 4, "dccb_cut": 3.165*2**(1./6.)}
 params["alpha"] = 5.6/params["cubic_box_length"]
 R = 1.3806488E-23*6.02214129E+23 # J/mol/K
 params["beta"] = 1./(params["temperature"]*R/1e3) # mol/kJ
@@ -18,6 +19,7 @@ params["num_minutes"] = round(params["num_hours"]*60)
 params["hours_per_adjust"] = params["hours_per_adjust"]*params["procs_per_node"]
 params["hours_per_checkpoint"] = params["hours_per_checkpoint"]*params["procs_per_node"]
 params["num_hours_terminate"] = 0.95*params["num_hours"]*params["procs_per_node"]
+params["mu_init"] = -7
 
 # write fst script to run a single simulation
 def mc_spce(params=params, file_name="launch.txt"):
@@ -36,7 +38,7 @@ ConvertToRefPotential potential_index 1 cutoff {dccb_cut} use_cell true
 Potential Model ChargeScreenedIntra VisitModel VisitModelBond
 Potential Model ChargeSelf
 Potential VisitModel LongRangeCorrections
-ThermoParams beta {beta} chemical_potential {mu}
+ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
 TrialTranslate weight 0.5 tunable_param 0.2 tunable_target_acceptance 0.25
 TrialParticlePivot weight 0.5 particle_type 0 tunable_param 0.5 tunable_target_acceptance 0.25
@@ -49,12 +51,15 @@ CheckEnergy trials_per {trials_per} tolerance 1e-4
 TrialAdd particle_type 0
 Run until_num_particles [soft_macro_min]
 RemoveTrial name TrialAdd
+ThermoParams beta {beta} chemical_potential {mu}
+Metropolis
 Run num_trials {equilibration}
 RemoveModify name Tune
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
+Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 visits_per_delta_ln_prob_boost 10 exp_for_boost 0.5
+#Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
 #Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20
 TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 8
 Tune trials_per_write {trials_per} file_name spce_tune[sim_index].txt multistate true
