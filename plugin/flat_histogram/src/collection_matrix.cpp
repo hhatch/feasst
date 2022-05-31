@@ -14,35 +14,29 @@ namespace feasst {
 
 CollectionMatrix::CollectionMatrix(argtype * args) {
   delta_ln_prob_guess_ = dble("delta_ln_prob_guess", args, 0);
+  visits_per_delta_ln_prob_boost_ = integer("visits_per_delta_ln_prob_boost",
+    args, -1);
 }
 CollectionMatrix::CollectionMatrix(argtype args)
   : CollectionMatrix(&args) {
   FEASST_CHECK_ALL_USED(args);
 }
 
-bool CollectionMatrix::if_zero_(const int macro, const int block, const bool lower) const {
+int CollectionMatrix::visits_(const int macro, const int block, const bool lower) const {
   if (block == -1) {
     if (lower) {
-      if (matrix_[macro][1].num_values() == 0) {
-        return true;
-      }
+      return matrix_[macro][1].num_values();
     } else {
-      if (matrix_[macro][0].num_values() == 0) {
-        return true;
-      }
+      return matrix_[macro][0].num_values();
     }
   } else {
     if (lower) {
-      if (matrix_[macro][1].blocks()[0].size() == 0) {
-        return true;
-      }
+      return matrix_[macro][1].blocks()[0].size();
     } else {
-      if (matrix_[macro][0].blocks()[0].size() == 0) {
-        return true;
-      }
+      return matrix_[macro][0].blocks()[0].size();
     }
   }
-  return false;
+  FATAL("unrecognized");
 }
 
 void CollectionMatrix::compute_ln_prob(
@@ -53,9 +47,18 @@ void CollectionMatrix::compute_ln_prob(
   for (int macro = 1; macro < ln_prob->size(); ++macro) {
     const double ln_prob_previous = ln_prob->value(macro - 1);
 //    if (block == -1) INFO("ln_prob_previous " << ln_prob_previous);
-    if (if_zero_(macro - 1, block, true) ||
-        if_zero_(macro, block, false)) {
-      ln_prob->set_value(macro, ln_prob_previous + delta_ln_prob_guess_);
+    const int vis_up = visits_(macro - 1, block, true);
+    const int vis_down = visits_(macro, block, false);
+    if (vis_up == 0 || vis_down == 0) {
+      double delta_ln_prob = delta_ln_prob_guess_;
+      if (visits_per_delta_ln_prob_boost_ > 0) {
+        if (vis_up == 0) {
+          delta_ln_prob += 0.01*vis_down/visits_per_delta_ln_prob_boost_;
+        } else if (vis_down == 0) {
+          delta_ln_prob -= 0.01*vis_up/visits_per_delta_ln_prob_boost_;
+        }
+      }
+      ln_prob->set_value(macro, ln_prob_previous + delta_ln_prob);
     } else {
       double prob_decrease;
       if (block == -1) {
@@ -107,6 +110,7 @@ void CollectionMatrix::increment(
 void CollectionMatrix::serialize(std::ostream& ostr) const {
   feasst_serialize_version(2468, ostr);
   feasst_serialize(delta_ln_prob_guess_, ostr);
+  feasst_serialize(visits_per_delta_ln_prob_boost_, ostr);
   feasst_serialize_fstobj(matrix_, ostr);
 }
 
@@ -114,6 +118,7 @@ CollectionMatrix::CollectionMatrix(std::istream& istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 2468, "unrecognized verison: " << version);
   feasst_deserialize(&delta_ln_prob_guess_, istr);
+  feasst_deserialize(&visits_per_delta_ln_prob_boost_, istr);
   feasst_deserialize_fstobj(&matrix_, istr);
 }
 

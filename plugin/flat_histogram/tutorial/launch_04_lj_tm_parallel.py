@@ -8,12 +8,13 @@ import unittest
 params = {
     "cubic_box_length": 8, "fstprt": "/feasst/forcefield/lj.fstprt", "beta": 1/1.5,
     "max_particles": 370, "min_particles": 0, "min_sweeps": 1e4, "mu": -2.352321,
-    "trials_per": 1e7, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
-    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 32, "dccb_cut": 2**(1./6.)}
+    "trials_per": 1e5, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
+    "equilibration": 1e5, "num_nodes": 1, "procs_per_node": 4, "dccb_cut": 2**(1./6.)}
 params["num_minutes"] = round(params["num_hours"]*60)
 params["hours_per_adjust"] = params["hours_per_adjust"]*params["procs_per_node"]
 params["hours_per_checkpoint"] = params["hours_per_checkpoint"]*params["procs_per_node"]
 params["num_hours_terminate"] = 0.95*params["num_hours"]*params["procs_per_node"]
+params["mu_init"] = params["mu"]+1
 
 # write fst script to run a single simulation
 def mc_lj(params=params, file_name="launch.txt"):
@@ -29,7 +30,7 @@ Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt}
 Potential Model LennardJones
 Potential VisitModel LongRangeCorrections
 ConvertToRefPotential cutoff {dccb_cut} use_cell true
-ThermoParams beta {beta} chemical_potential {mu}
+ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
 TrialTranslate weight 1 tunable_param 0.2 tunable_target_acceptance 0.25
 Log trials_per {trials_per} file_name lj[sim_index].txt
@@ -45,8 +46,10 @@ Run num_trials {equilibration}
 RemoveModify name Tune
 
 # gcmc tm production
+ThermoParams beta {beta} chemical_potential {mu}
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 delta_ln_prob_guess -4
+Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 visits_per_delta_ln_prob_boost 25
+#Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
 #Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20
 TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 4
 Tune trials_per_write {trials_per} file_name lj_tune[sim_index].txt multistate true
