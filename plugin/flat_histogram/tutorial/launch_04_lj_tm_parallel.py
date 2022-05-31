@@ -8,8 +8,8 @@ import unittest
 params = {
     "cubic_box_length": 8, "fstprt": "/feasst/forcefield/lj.fstprt", "beta": 1/1.5,
     "max_particles": 370, "min_particles": 0, "min_sweeps": 1e4, "mu": -2.352321,
-    "trials_per": 1e5, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
-    "equilibration": 1e5, "num_nodes": 1, "procs_per_node": 4, "dccb_cut": 2**(1./6.)}
+    "trials_per": 1e6, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
+    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 4, "dccb_cut": 2**(1./6.)}
 params["num_minutes"] = round(params["num_hours"]*60)
 params["hours_per_adjust"] = params["hours_per_adjust"]*params["procs_per_node"]
 params["hours_per_checkpoint"] = params["hours_per_checkpoint"]*params["procs_per_node"]
@@ -48,7 +48,7 @@ RemoveModify name Tune
 # gcmc tm production
 ThermoParams beta {beta} chemical_potential {mu}
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 visits_per_delta_ln_prob_boost 25
+Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 visits_per_delta_ln_prob_boost 10 exp_for_boost 0.5
 #Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
 #Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20
 TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 4

@@ -16,6 +16,7 @@ CollectionMatrix::CollectionMatrix(argtype * args) {
   delta_ln_prob_guess_ = dble("delta_ln_prob_guess", args, 0);
   visits_per_delta_ln_prob_boost_ = integer("visits_per_delta_ln_prob_boost",
     args, -1);
+  exp_for_boost_ = dble("exp_for_boost", args, 2);
 }
 CollectionMatrix::CollectionMatrix(argtype args)
   : CollectionMatrix(&args) {
@@ -53,9 +54,32 @@ void CollectionMatrix::compute_ln_prob(
       double delta_ln_prob = delta_ln_prob_guess_;
       if (visits_per_delta_ln_prob_boost_ > 0) {
         if (vis_up == 0) {
-          delta_ln_prob += 0.01*vis_down/visits_per_delta_ln_prob_boost_;
+          //delta_ln_prob += 0.01*vis_down/visits_per_delta_ln_prob_boost_;
+          bool boost = true;
+          if (exp_for_boost_ > 0 && macro < ln_prob->size() - 1) {
+            const double ratio = matrix_[macro][0].average()/
+                                 matrix_[macro+1][0].average();
+            if (ratio > pow(10, exp_for_boost_) || ratio < pow(10, -exp_for_boost_)) {
+              boost = false;
+              DEBUG("macro " << macro << " ratio " << ratio);
+            }
+          }
+          if (boost) {
+            delta_ln_prob -= 0.01*vis_up/visits_per_delta_ln_prob_boost_;
+          }
         } else if (vis_down == 0) {
-          delta_ln_prob -= 0.01*vis_up/visits_per_delta_ln_prob_boost_;
+          bool boost = true;
+          if (exp_for_boost_ > 0 && macro > 1) {
+            const double ratio = matrix_[macro-1][1].average()/
+                                 matrix_[macro-2][1].average();
+            if (ratio > pow(10, exp_for_boost_) || ratio < pow(10, -exp_for_boost_)) {
+              boost = false;
+              DEBUG("macro " << macro << " ratio " << ratio);
+            }
+          }
+          if (boost) {
+            delta_ln_prob -= 0.01*vis_up/visits_per_delta_ln_prob_boost_;
+          }
         }
       }
       ln_prob->set_value(macro, ln_prob_previous + delta_ln_prob);
@@ -111,6 +135,7 @@ void CollectionMatrix::serialize(std::ostream& ostr) const {
   feasst_serialize_version(2468, ostr);
   feasst_serialize(delta_ln_prob_guess_, ostr);
   feasst_serialize(visits_per_delta_ln_prob_boost_, ostr);
+  feasst_serialize(exp_for_boost_, ostr);
   feasst_serialize_fstobj(matrix_, ostr);
 }
 
@@ -119,6 +144,7 @@ CollectionMatrix::CollectionMatrix(std::istream& istr) {
   ASSERT(version == 2468, "unrecognized verison: " << version);
   feasst_deserialize(&delta_ln_prob_guess_, istr);
   feasst_deserialize(&visits_per_delta_ln_prob_boost_, istr);
+  feasst_deserialize(&exp_for_boost_, istr);
   feasst_deserialize_fstobj(&matrix_, istr);
 }
 
