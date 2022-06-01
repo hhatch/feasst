@@ -28,6 +28,7 @@ class TransitionMatrix : public Bias {
  public:
   /**
     args:
+    - CollectionMatrix arguments.
     - min_visits: A sweep is performed when all macrostates are visited by
       another macrostate this number of times (default: 100).
     - average_visits: A sweep is performed when macrostates are visited by

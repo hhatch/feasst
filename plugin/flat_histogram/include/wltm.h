@@ -17,14 +17,12 @@ class WLTM : public Bias {
  public:
   /**
     args:
+    - WangLandau arguments.
+    - TransitionMatrix arguments.
     - collect_flatness: Begin populating the collection matrix when Wang-Landau
       has completed this many flatness checks.
       Note that populating the collection matrix does not necessarily mean that
       the collection matrix is used to compute the bias.
-    - min_flatness: After this many flatness checks have been completed
-      with Wang-Landau, use the bias from the collection matrix instead.
-      Also, increment the phase when this occurs.
-    - min_sweeps: Number of sweeps required for completion.
    */
   explicit WLTM(argtype args = argtype());
   explicit WLTM(argtype * args);
