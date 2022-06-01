@@ -23,9 +23,8 @@ WLTM::WLTM(argtype args) : WLTM(&args) {
 }
 
 bool WLTM::is_wl_bias_() {
-  if ((wang_landau_->num_flatness() < min_flatness_) &&
-      ((min_collect_sweeps_ == -1) ||
-       (transition_matrix_->num_iterations() < min_collect_sweeps_))) {
+  if ((wang_landau_->num_flatness() < min_flatness_) ||
+      (transition_matrix_->num_iterations() < min_collect_sweeps_)) {
     return true;
   }
   return false;
