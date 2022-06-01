@@ -108,6 +108,18 @@ class MapWLTM {
 
 static MapWLTM mapper_ = MapWLTM();
 
+std::shared_ptr<Bias> WLTM::create(std::istream& istr) const {
+  return std::make_shared<WLTM>(istr);
+}
+
+int WLTM::num_iterations() const {
+  if (production_ == 1) {
+    return transition_matrix_->num_iterations();
+  } else {
+    return 0;
+  }
+}
+
 WLTM::WLTM(std::istream& istr) : Bias(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 1946, "mismatch version: " << version);
@@ -126,10 +138,6 @@ WLTM::WLTM(std::istream& istr) : Bias(istr) {
   if (existing != 0) {
     transition_matrix_ = std::make_shared<TransitionMatrix>(istr);
   }
-}
-
-std::shared_ptr<Bias> WLTM::create(std::istream& istr) const {
-  return std::make_shared<WLTM>(istr);
 }
 
 void WLTM::serialize(std::ostream& ostr) const {
