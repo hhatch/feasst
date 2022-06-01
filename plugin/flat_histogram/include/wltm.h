@@ -23,6 +23,9 @@ class WLTM : public Bias {
       has completed this many flatness checks.
       Note that populating the collection matrix does not necessarily mean that
       the collection matrix is used to compute the bias.
+    - min_collect_sweeps: In addition to WangLandau::min_flatness, do not use
+      TransitionMatrix as bias until it has this minimum number of sweeps.
+      If -1, do nothing (default: -1).
    */
   explicit WLTM(argtype args = argtype());
   explicit WLTM(argtype * args);
@@ -68,9 +71,12 @@ class WLTM : public Bias {
  private:
   int collect_flatness_;
   int min_flatness_;
+  int min_collect_sweeps_;
   int production_ = 0;
   std::shared_ptr<WangLandau> wang_landau_;
   std::shared_ptr<TransitionMatrix> transition_matrix_;
+
+  bool is_wl_bias_();
 };
 
 inline std::shared_ptr<WLTM> MakeWLTM(argtype args = argtype()) {

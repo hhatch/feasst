@@ -107,7 +107,7 @@ int TransitionMatrix::min_vis_calc_(const Macrostate& macro) const {
       min_vis = vis;
     }
   }
-  ASSERT(min_vis != 1e9, "error");
+  // ASSERT(min_vis != 1e9, "error");
   return min_vis;
 }
 
