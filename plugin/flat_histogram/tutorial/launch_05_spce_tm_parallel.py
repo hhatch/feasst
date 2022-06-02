@@ -4,13 +4,13 @@ import argparse
 import random
 import unittest
 
-# define parameters of a pure component NVT MC SPC/E simulation
+# define parameters of a pure component NVT MC SPCE simulation
 params = {
     "cubic_box_length": 20, "fstprt": "/feasst/forcefield/spce.fstprt", "min_particles": 0,
     "temperature": 525, "max_particles": 265,  "min_sweeps": 200, "beta_mu": -8.14,
-    #"temperature": 300, "max_particles": 296,  "min_sweeps": 200, "beta_mu": -15,
+    #"temperature": 300, "max_particles": 296,  "min_sweeps": 200, "beta_mu": -15.24,
     "trials_per": 1e6, "hours_per_adjust": 0.01, "hours_per_checkpoint": 1, "seed": random.randrange(1e9), "num_hours": 5*24,
-    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 4, "dccb_cut": 3.165*2**(1./6.)}
+    "equilibration": 1e6, "num_nodes": 1, "procs_per_node": 32, "dccb_cut": 0.9*3.165}
 params["alpha"] = 5.6/params["cubic_box_length"]
 R = 1.3806488E-23*6.02214129E+23 # J/mol/K
 params["beta"] = 1./(params["temperature"]*R/1e3) # mol/kJ
@@ -20,6 +20,16 @@ params["hours_per_adjust"] = params["hours_per_adjust"]*params["procs_per_node"]
 params["hours_per_checkpoint"] = params["hours_per_checkpoint"]*params["procs_per_node"]
 params["num_hours_terminate"] = 0.95*params["num_hours"]*params["procs_per_node"]
 params["mu_init"] = -7
+params["dccb_cut"] = params["cubic_box_length"]/int(params["cubic_box_length"]/params["dccb_cut"]) # maximize inside box
+
+# write TrialGrowFile for SPCE
+with open('spce_grow.txt', 'w') as f:
+    f.write("""TrialGrowFile
+
+particle_type 0 weight 2 transfer true site 0 num_steps 10 reference_index 0
+bond true mobile_site 1 anchor_site 0 reference_index 0
+angle true mobile_site 2 anchor_site 0 anchor_site2 1 reference_index 0
+""")
 
 # write fst script to run a single simulation
 def mc_spce(params=params, file_name="launch.txt"):
@@ -31,10 +41,11 @@ Checkpoint file_name spce_checkpoint.fst num_hours {hours_per_checkpoint} num_ho
 
 # begin description of each MC clone
 RandomMT19937 seed {seed}
-Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt} physical_constants CODATA2010
+Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt} physical_constants CODATA2010 \
+    group0 oxygen oxygen_site_type 0
 Potential VisitModel Ewald alpha {alpha} kmax_squared 38
 Potential Model ModelTwoBodyFactory model0 LennardJones model1 ChargeScreened VisitModel VisitModelCutoffOuter table_size 1e6
-ConvertToRefPotential potential_index 1 cutoff {dccb_cut} use_cell true
+RefPotential Model HardSphere group oxygen cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut} cell_group oxygen
 Potential Model ChargeScreenedIntra VisitModel VisitModelBond
 Potential Model ChargeSelf
 Potential VisitModel LongRangeCorrections
@@ -45,7 +56,6 @@ TrialParticlePivot weight 0.5 particle_type 0 tunable_param 0.5 tunable_target_a
 Log trials_per {trials_per} file_name spce[sim_index].txt
 Tune
 CheckEnergy trials_per {trials_per} tolerance 1e-4
-#Checkpoint file_name spce_checkpoint[sim_index].fst num_hours {hours_per_checkpoint}
 
 # gcmc initialization and nvt equilibration
 TrialAdd particle_type 0
@@ -58,16 +68,15 @@ RemoveModify name Tune
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1 visits_per_delta_ln_prob_boost 10 exp_for_boost 0.5
-#Bias TransitionMatrix min_sweeps {min_sweeps} new_sweep 1
-#Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20
-TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 8
+Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+TrialGrowFile file_name spce_grow.txt
+RemoveAnalyze name Log
+Log trials_per {trials_per} file_name spce[sim_index].txt
 Tune trials_per_write {trials_per} file_name spce_tune[sim_index].txt multistate true
 Movie trials_per {trials_per} file_name spce[sim_index].xyz
 Energy trials_per_write {trials_per} file_name spce_en[sim_index].txt multistate true
-CriteriaUpdater trials_per {trials_per}
+CriteriaUpdater trials_per 1e5
 CriteriaWriter trials_per {trials_per} file_name spce_crit[sim_index].txt
-#Run until_criteria_complete true
 """.format(**params))
 
 # write slurm script to fill nodes with simulations
