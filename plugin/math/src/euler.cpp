@@ -1,6 +1,7 @@
 #include <cmath>
 #include <vector>
 #include <sstream>
+#include "utils/include/serialize.h"
 #include "math/include/euler.h"
 
 namespace feasst {
@@ -59,6 +60,21 @@ std::string Euler::str() const {
   std::stringstream ss;
   ss << phi_ << "," << theta_ << "," << psi_;
   return ss.str();
+}
+
+void Euler::serialize(std::ostream& ostr) const {
+  feasst_serialize_version(3509, ostr);
+  feasst_serialize(phi_, ostr);
+  feasst_serialize(theta_, ostr);
+  feasst_serialize(psi_, ostr);
+}
+
+Euler::Euler(std::istream& istr) {
+  const int version = feasst_deserialize_version(istr);
+  ASSERT(version == 3509, "unrecognized version: " << version);
+  feasst_deserialize(&phi_, istr);
+  feasst_deserialize(&theta_, istr);
+  feasst_deserialize(&psi_, istr);
 }
 
 }  // namespace feasst

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "math/include/position.h"
+#include "math/include/euler.h"
 #include "configuration/include/typed_entity.h"
 #include "configuration/include/properties.h"
 
@@ -35,7 +36,7 @@ class Site : public PropertiedEntity,
     return position_.coord(dimension); }
 
   /// Construct with a position.
-  Site(const Position position) : Site() { set_position(position); }
+  explicit Site(const Position position) : Site() { set_position(position); }
 
   /// Displace the Position of the Site.
   void displace(const Position displacement) {
@@ -63,12 +64,16 @@ class Site : public PropertiedEntity,
   /// Return the number of cells.
   int num_cells() const { return static_cast<int>(cells_.size()); }
 
+  /// Set the Euler angles (if anisotropic site).
+  void set_euler(const Euler& euler) { euler_ = euler; }
+
   void serialize(std::ostream& ostr) const;
   explicit Site(std::istream& istr);
   virtual ~Site() {}
 
  private:
   Position position_;
+  Euler euler_;
   bool is_physical_;
   std::vector<int> cells_;
 };

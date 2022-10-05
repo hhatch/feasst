@@ -1,6 +1,6 @@
-#include "configuration/include/site.h"
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/site.h"
 
 namespace feasst {
 
@@ -23,6 +23,7 @@ void Site::serialize(std::ostream& ostr) const {
   TypedEntity::serialize(ostr);
   feasst_serialize_version(481, ostr);
   feasst_serialize_fstobj(position_, ostr);
+  feasst_serialize_fstobj(euler_, ostr);
   feasst_serialize(is_physical_, ostr);
   feasst_serialize(cells_, ostr);
 }
@@ -33,6 +34,7 @@ Site::Site(std::istream& istr)
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 480 || version == 481, "unrecognized version: " << version);
   feasst_deserialize_fstobj(&position_, istr);
+  feasst_deserialize_fstobj(&euler_, istr);
   if (version == 480) {
     bool tmp;
     feasst_deserialize(&tmp, istr);

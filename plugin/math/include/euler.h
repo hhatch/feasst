@@ -44,10 +44,13 @@ class Euler {
 
   /// Return true if equal.
   bool is_equal(const Euler& euler, const double tolerance = 1e-8) const;
-  
+
   /// Return human readable format.
   std::string str() const;
 
+  void serialize(std::ostream& ostr) const;
+  explicit Euler(std::istream& istr);
+ 
  private:
   double phi_;
   double theta_;
