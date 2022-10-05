@@ -184,6 +184,9 @@ void RotationMatrix::quaternion(const Position& q) {
 }
 
 void RotationMatrix::euler_x(const double phi, const double theta, const double psi) {
+  if (num_rows() == 0) {
+    set_size(3, 3);
+  }
   const double sphi = std::sin(phi);
   const double cphi = std::cos(phi);
   const double stheta = std::sin(theta);
@@ -251,6 +254,22 @@ bool Matrix::is_identity(const double tolerance) const {
     }
   }
   return true;
+}
+
+void RotationMatrix::euler_x(double * phi, double * theta, double * psi) const {
+  if (std::abs(matrix()[2][2] - 1.) < 1e-12) {
+    *theta = std::acos(1.);
+  } else {
+    *theta = std::acos(matrix()[2][2]);
+  }
+  const double stheta = std::sin(*theta);
+  if (std::abs(stheta) < 1e-8) {
+    *phi = 0.;
+    *psi = std::atan2(matrix()[0][1], matrix()[0][0]);
+  } else {
+    *phi = std::atan2(matrix()[2][0]/stheta,-matrix()[2][1]/stheta);
+    *psi = std::atan2(matrix()[0][2]/stheta, matrix()[1][2]/stheta);
+  }
 }
 
 }  // namespace feasst

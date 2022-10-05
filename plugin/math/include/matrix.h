@@ -126,6 +126,9 @@ class RotationMatrix : public Matrix {
    */
   void euler_x(const double phi, const double theta, const double psi);
 
+  /// Obtain the Euler angles of the x-convention from the rotation matrix.
+  void euler_x(double * phi, double * theta, double * psi) const;
+
   /// Check square matrix, unit derminant, in addition to Matrix::check.
   void check() const override;
 

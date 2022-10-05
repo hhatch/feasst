@@ -1,8 +1,9 @@
 #include <cmath>
 #include "utils/test/utils.h"
+#include "utils/include/debug.h"
 #include "math/include/matrix.h"
 #include "math/include/constants.h"
-#include "utils/include/debug.h"
+#include "math/include/random_mt19937.h"
 
 namespace feasst {
 
@@ -83,12 +84,29 @@ TEST(RotationMatrix, euler_x) {
   mat.euler_x(PI, 0., 0.);
   x_n = mat.multiply(x);
   EXPECT_NEAR(x_n.coord(0), -0.6, NEAR_ZERO);
-  
+
   // check inverse rotation
   Matrix transpose = mat;
   transpose.transpose();
   Matrix identity = mat.multiply(transpose);
   EXPECT_TRUE(identity.is_identity());
+
+  // obtain Eulers from rotation matrix
+  RandomMT19937 random;
+  for (int i = 0; i < 10; ++i) {
+    const double phi = PI*(2*random.uniform() - 1);
+    const double theta = PI*(random.uniform());
+    const double psi = PI*(2*random.uniform() - 1);
+    DEBUG(phi << " " << theta << " " << psi);
+    RotationMatrix rot;
+    rot.euler_x(phi, theta, psi);
+    double phin, thetan, psin;
+    rot.euler_x(&phin, &thetan, &psin);
+    EXPECT_NEAR(phi, phin, NEAR_ZERO);
+    EXPECT_NEAR(theta, thetan, NEAR_ZERO);
+    EXPECT_NEAR(psi, psin, NEAR_ZERO);
+    DEBUG(phin << " " << thetan << " " << psin);
+  }
 }
 
 }  // namespace feasst
