@@ -183,28 +183,6 @@ void RotationMatrix::quaternion(const Position& q) {
   set_value(2, 2, q.coord(2)*q.coord(2) - q.coord(0)*q.coord(0) - q.coord(1)*q.coord(1) + q.coord(3)*q.coord(3));
 }
 
-void RotationMatrix::euler_x(const double phi, const double theta, const double psi) {
-  if (num_rows() == 0) {
-    set_size(3, 3);
-  }
-  const double sphi = std::sin(phi);
-  const double cphi = std::cos(phi);
-  const double stheta = std::sin(theta);
-  const double ctheta = std::cos(theta);
-  const double spsi = std::sin(psi);
-  const double cpsi = std::cos(psi);
-  // See https://mathworld.wolfram.com/EulerAngles.html.
-  set_value(0, 0, cpsi*cphi - ctheta*sphi*spsi); //a11
-  set_value(0, 1, cpsi*sphi + ctheta*cphi*spsi); //a12
-  set_value(0, 2, spsi*stheta);                  //a13
-  set_value(1, 0, -spsi*cphi - ctheta*sphi*cpsi);//a21
-  set_value(1, 1, -spsi*sphi + ctheta*cphi*cpsi);//a22
-  set_value(1, 2, cpsi*stheta);                  //a23
-  set_value(2, 0, stheta*sphi);                  //a31
-  set_value(2, 1, -stheta*cphi);                 //a32
-  set_value(2, 2, ctheta);                       //a33
-}
-
 void Matrix::multiply(const Matrix& matrix, Matrix * result, Position * tmp1, Position * tmp2) {
   if (result->num_rows() == 0) {
     result->set_size(num_rows(), matrix.num_columns());
@@ -254,22 +232,6 @@ bool Matrix::is_identity(const double tolerance) const {
     }
   }
   return true;
-}
-
-void RotationMatrix::euler_x(double * phi, double * theta, double * psi) const {
-  if (std::abs(matrix()[2][2] - 1.) < 1e-12) {
-    *theta = std::acos(1.);
-  } else {
-    *theta = std::acos(matrix()[2][2]);
-  }
-  const double stheta = std::sin(*theta);
-  if (std::abs(stheta) < 1e-8) {
-    *phi = 0.;
-    *psi = std::atan2(matrix()[0][1], matrix()[0][0]);
-  } else {
-    *phi = std::atan2(matrix()[2][0]/stheta,-matrix()[2][1]/stheta);
-    *psi = std::atan2(matrix()[0][2]/stheta, matrix()[1][2]/stheta);
-  }
 }
 
 }  // namespace feasst

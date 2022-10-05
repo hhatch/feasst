@@ -116,19 +116,6 @@ class RotationMatrix : public Matrix {
   /// Compute rotation matrix based on quaternions (3D only).
   void quaternion(const Position& quaternion);
 
-  /**
-    Compute rotation matrix based on Euler angles (3D only).
-    The x-convention is defined as follows:
-    1. rotate by phi [-pi, pi] about the z-axis.
-    2. rotate by theta [0, pi] about the new x-axis.
-    3. rotate by psi [-pi, pi] about the new z-axis.
-    See https://mathworld.wolfram.com/EulerAngles.html.
-   */
-  void euler_x(const double phi, const double theta, const double psi);
-
-  /// Obtain the Euler angles of the x-convention from the rotation matrix.
-  void euler_x(double * phi, double * theta, double * psi) const;
-
   /// Check square matrix, unit derminant, in addition to Matrix::check.
   void check() const override;
 
