@@ -5,16 +5,16 @@
    TypedEntity
    Bond
    PhysicalConstants
+   NeighborCriteria
+   Domain
    Site
    Particle
    ModelParam
    Group
    ParticleFactory
    Select
-   VisitParticles
-   FileLMP
-   NeighborCriteria
    Configuration
+   VisitParticles
    VisitConfiguration
    FileVMD
-   Domain
+   FileLMP

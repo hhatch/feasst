@@ -64,8 +64,14 @@ class Site : public PropertiedEntity,
   /// Return the number of cells.
   int num_cells() const { return static_cast<int>(cells_.size()); }
 
-  /// Set the Euler angles (if anisotropic site).
-  void set_euler(const Euler& euler) { euler_ = euler; }
+  /// Set if anisotropic (default: false).
+  void set_anisotropic(const bool aniso = false) { is_anisotropic_ = aniso; }
+
+  /// Set the Euler angles (and sets the site anisotropic).
+  void set_euler(const Euler& euler);
+
+  /// Return true if the site is anisotropic.
+  bool is_anisotropic() const { return is_anisotropic_; }
 
   void serialize(std::ostream& ostr) const;
   explicit Site(std::istream& istr);
@@ -75,6 +81,7 @@ class Site : public PropertiedEntity,
   Position position_;
   Euler euler_;
   bool is_physical_;
+  bool is_anisotropic_;
   std::vector<int> cells_;
 };
 

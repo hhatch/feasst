@@ -6,6 +6,7 @@ namespace feasst {
 
 Site::Site() : PropertiedEntity(), TypedEntity() {
   set_physical();
+  set_anisotropic();
 }
 
 void Site::add_property(const std::string name, const double value) {
@@ -18,6 +19,11 @@ int Site::cell(const int index) const {
   return cells_[index];
 }
 
+void Site::set_euler(const Euler& euler) {
+  euler_ = euler;
+  is_anisotropic_ = true; 
+}
+
 void Site::serialize(std::ostream& ostr) const {
   PropertiedEntity::serialize(ostr);
   TypedEntity::serialize(ostr);
@@ -25,6 +31,7 @@ void Site::serialize(std::ostream& ostr) const {
   feasst_serialize_fstobj(position_, ostr);
   feasst_serialize_fstobj(euler_, ostr);
   feasst_serialize(is_physical_, ostr);
+  feasst_serialize(is_anisotropic_, ostr);
   feasst_serialize(cells_, ostr);
 }
 
@@ -40,6 +47,7 @@ Site::Site(std::istream& istr)
     feasst_deserialize(&tmp, istr);
   }
   feasst_deserialize(&is_physical_, istr);
+  feasst_deserialize(&is_anisotropic_, istr);
   feasst_deserialize(&cells_, istr);
 }
 
