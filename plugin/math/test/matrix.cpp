@@ -53,4 +53,42 @@ TEST(Matrix, 2d) {
   EXPECT_FALSE(mat.is_equal(mat_inv));
 }
 
+TEST(Matrix, multiply) {
+  Matrix A({{1, 2, 3}, {4, 5, 6}});
+  Matrix B({{7, 8}, {9, 10}, {11, 12}});
+  Matrix C = A.multiply(B);
+  EXPECT_EQ(C.value(0, 0), 58);
+  EXPECT_EQ(C.value(0, 1), 64);
+  EXPECT_EQ(C.value(1, 0), 139);
+  EXPECT_EQ(C.value(1, 1), 154);
+}
+
+TEST(Matrix, is_identity) {
+  Matrix mat({{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
+  EXPECT_TRUE(mat.is_identity());
+}
+TEST(RotationMatrix, euler_x) {
+  RotationMatrix mat;
+  mat.set_size(3, 3);
+  Position x({0.6, 0.6, 0.6});
+  mat.euler_x(PI/2., 0., 0.);
+  Position x_n = mat.multiply(x);
+  EXPECT_NEAR(x_n.coord(1), -0.6, NEAR_ZERO);
+  mat.euler_x(0, PI/2., 0.);
+  x_n = mat.multiply(x);
+  EXPECT_NEAR(x_n.coord(2), -0.6, NEAR_ZERO);
+  mat.euler_x(0., 0., PI/2.);
+  x_n = mat.multiply(x);
+  EXPECT_NEAR(x_n.coord(1), -0.6, NEAR_ZERO);
+  mat.euler_x(PI, 0., 0.);
+  x_n = mat.multiply(x);
+  EXPECT_NEAR(x_n.coord(0), -0.6, NEAR_ZERO);
+  
+  // check inverse rotation
+  Matrix transpose = mat;
+  transpose.transpose();
+  Matrix identity = mat.multiply(transpose);
+  EXPECT_TRUE(identity.is_identity());
+}
+
 }  // namespace feasst

@@ -28,14 +28,19 @@ void Matrix::check() const {
   }
 }
 
-void Matrix::transpose() {
-  const auto mat = matrix_;
-  set_size(mat[0].size(), mat.size());
-  for (int row = 0; row < static_cast<int>(mat.size()); ++row) {
-    for (int col = 0; col < static_cast<int>(mat[row].size()); ++col) {
-      matrix_[col][row] = mat[row][col];
+void Matrix::transpose(Matrix * tmp) {
+  tmp->matrix_ = matrix_;
+  set_size(tmp->matrix()[0].size(), tmp->num_rows());
+  for (int row = 0; row < tmp->num_rows(); ++row) {
+    for (int col = 0; col < tmp->num_columns(); ++col) {
+      matrix_[col][row] = tmp->matrix()[row][col];
     }
   }
+}
+
+void Matrix::transpose() {
+  Matrix tmp;
+  transpose(&tmp);
 }
 
 void Matrix::multiply(const double constant) {
@@ -176,6 +181,76 @@ void RotationMatrix::quaternion(const Position& q) {
   set_value(0, 2, 2*(q.coord(2)*q.coord(0) + q.coord(1)*q.coord(3)));
   set_value(1, 2, 2*(q.coord(1)*q.coord(2) - q.coord(0)*q.coord(3)));
   set_value(2, 2, q.coord(2)*q.coord(2) - q.coord(0)*q.coord(0) - q.coord(1)*q.coord(1) + q.coord(3)*q.coord(3));
+}
+
+void RotationMatrix::euler_x(const double phi, const double theta, const double psi) {
+  const double sphi = std::sin(phi);
+  const double cphi = std::cos(phi);
+  const double stheta = std::sin(theta);
+  const double ctheta = std::cos(theta);
+  const double spsi = std::sin(psi);
+  const double cpsi = std::cos(psi);
+  // See https://mathworld.wolfram.com/EulerAngles.html.
+  set_value(0, 0, cpsi*cphi - ctheta*sphi*spsi); //a11
+  set_value(0, 1, cpsi*sphi + ctheta*cphi*spsi); //a12
+  set_value(0, 2, spsi*stheta);                  //a13
+  set_value(1, 0, -spsi*cphi - ctheta*sphi*cpsi);//a21
+  set_value(1, 1, -spsi*sphi + ctheta*cphi*cpsi);//a22
+  set_value(1, 2, cpsi*stheta);                  //a23
+  set_value(2, 0, stheta*sphi);                  //a31
+  set_value(2, 1, -stheta*cphi);                 //a32
+  set_value(2, 2, ctheta);                       //a33
+}
+
+void Matrix::multiply(const Matrix& matrix, Matrix * result, Position * tmp1, Position * tmp2) {
+  if (result->num_rows() == 0) {
+    result->set_size(num_rows(), matrix.num_columns());
+  }
+  if (tmp1->size() == 0) {
+    tmp1->set_to_origin(num_columns());
+    tmp2->set_to_origin(num_columns());
+  }
+  ASSERT(num_columns() == matrix.num_rows(),
+    num_columns() << " != " << matrix.num_rows());
+  ASSERT(result->num_rows() == num_rows(),
+    result->num_rows() << " != " << num_rows());
+  ASSERT(result->num_columns() == matrix.num_columns(),
+    result->num_columns() << " != " << matrix.num_columns());
+  Position row(num_columns());
+  Position col(matrix.num_rows());
+  for (int row1 = 0; row1 < num_rows(); ++row1) {
+    for (int col2 = 0; col2 < matrix.num_columns(); ++col2) {
+      row.set_vector(matrix_[row1]);
+      for (int row2 = 0; row2 < matrix.num_rows(); ++row2) {
+        col.set_coord(row2, matrix.matrix()[row2][col2]);
+      }
+      result->set_value(row1, col2, row.dot_product(col));
+    }
+  }
+}
+
+Matrix Matrix::multiply(const Matrix& matrix) {
+  Matrix result;
+  Position tmp1, tmp2;
+  multiply(matrix, &result, &tmp1, &tmp2);
+  return result;
+}
+
+bool Matrix::is_identity(const double tolerance) const {
+  for (int row = 0; row < num_rows(); ++row) {
+    for (int col = 0; col < num_columns(); ++col) {
+      if (row == col) {
+        if (std::abs(matrix_[row][col] - 1) > tolerance) {
+          return false;
+        }
+      } else {
+        if (std::abs(matrix_[row][col]) > tolerance) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 }
 
 }  // namespace feasst
