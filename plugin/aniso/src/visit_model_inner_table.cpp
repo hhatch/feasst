@@ -15,6 +15,10 @@ VisitModelInnerTable::VisitModelInnerTable(argtype args) : VisitModelInnerTable(
   FEASST_CHECK_ALL_USED(args);
 }
 
+void VisitModelInnerTable::precompute(Configuration * config) {
+  
+}
+
 void VisitModelInnerTable::compute(
     const int part1_index,
     const int site1_index,

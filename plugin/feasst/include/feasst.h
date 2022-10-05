@@ -264,6 +264,7 @@
 #include "math/include/solver_brent_dekker.h"
 #include "opt_lj/include/visit_model_opt_lj.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"
+#include "aniso/include/visit_model_inner_table.h"
 #include "aniso/include/anisotropic.h"
 #include "mayer/include/mayer_sampling.h"
 #include "confinement/include/model_lj_shape.h"
@@ -306,4 +307,5 @@ std::shared_ptr<feasst::Ewald> __feasst__Ewald = std::make_shared<feasst::Ewald>
 std::shared_ptr<feasst::MayerSampling> __feasst__MayerSampling = std::make_shared<feasst::MayerSampling>();
 std::shared_ptr<feasst::LennardJonesAlpha> __feasst__LennardJonesAlpha = std::make_shared<feasst::LennardJonesAlpha>();
 std::shared_ptr<feasst::VisitModelInnerPatch> __feasst__VisitModelInnerPatch = std::make_shared<feasst::VisitModelInnerPatch>();
+std::shared_ptr<feasst::VisitModelInnerTable> __feasst__VisitModelInnerTable = std::make_shared<feasst::VisitModelInnerTable>();
 std::shared_ptr<feasst::Tune> __feasst__Tune = std::make_shared<feasst::Tune>();

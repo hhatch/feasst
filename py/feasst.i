@@ -287,6 +287,7 @@
 #include "math/include/solver_brent_dekker.h"
 #include "opt_lj/include/visit_model_opt_lj.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"
+#include "aniso/include/visit_model_inner_table.h"
 #include "aniso/include/anisotropic.h"
 #include "mayer/include/mayer_sampling.h"
 #include "confinement/include/model_lj_shape.h"
@@ -653,6 +654,7 @@ using namespace std;
 %shared_ptr(feasst::SolverBrentDekker);
 %shared_ptr(feasst::VisitModelOptLJ);
 %shared_ptr(feasst::VisitModelOptRPM);
+%shared_ptr(feasst::VisitModelInnerTable);
 %shared_ptr(feasst::Anisotropic);
 %shared_ptr(feasst::MayerSampling);
 %shared_ptr(feasst::ModelLJShape);
@@ -959,6 +961,7 @@ using namespace std;
 %include math/include/solver_brent_dekker.h
 %include opt_lj/include/visit_model_opt_lj.h
 %include opt_lj/include/visit_model_opt_rpm.h
+%include aniso/include/visit_model_inner_table.h
 %include aniso/include/anisotropic.h
 %include mayer/include/mayer_sampling.h
 %include confinement/include/model_lj_shape.h
