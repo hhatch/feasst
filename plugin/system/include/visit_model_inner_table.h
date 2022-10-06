@@ -34,6 +34,9 @@ class VisitModelInnerTable : public VisitModelInner {
   void serialize(std::ostream& ostr) const override;
   explicit VisitModelInnerTable(std::istream& istr);
   virtual ~VisitModelInnerTable() {}
+
+ private:
+  int aniso_index_ = -1;
 };
 
 inline std::shared_ptr<VisitModelInnerTable> MakeVisitModelInnerTable(

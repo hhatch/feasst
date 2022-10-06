@@ -27,8 +27,10 @@
    ModelEmpty
    VisitModelIntraMap
    VisitModelIntra
+   VisitModelInnerTable
    VisitModelBond
    LongRangeCorrections
+   Anisotropic
    ModelTwoBodyTable
    Cells
    CutoffOuter
