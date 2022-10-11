@@ -14,6 +14,7 @@ TEST(MonteCarlo, VisitModelInnerTable) {
     {"ThermoParams", {{"beta", "1"}, {"chemical_potential", "1."}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"weight", "1."}, {"tunable_param", "1."}}},
+    {"TrialRotate", {{"weight", "1."}, {"tunable_param", "1."}}},
     {"Checkpoint", {{"num_hours", "0.0001"}, {"file_name", "tmp/aniso.fst"}}},
     {"Log", {{"trials_per", str(1e0)}, {"file_name", "tmp/aniso.txt"}}},
     {"Movie", {{"trials_per", str(1e0)}, {"file_name", "tmp/aniso.xyz"}}},

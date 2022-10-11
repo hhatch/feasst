@@ -50,11 +50,11 @@ class Euler {
 
   void serialize(std::ostream& ostr) const;
   explicit Euler(std::istream& istr);
- 
+
  private:
-  double phi_;
-  double theta_;
-  double psi_;
+  double phi_ = 0.;
+  double theta_ = 0.;
+  double psi_ = 0.;
 };
 
 }  // namespace feasst
