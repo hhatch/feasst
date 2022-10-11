@@ -18,8 +18,7 @@ VisitModelInnerTable::VisitModelInnerTable(argtype args) : VisitModelInnerTable(
 void VisitModelInnerTable::precompute(Configuration * config) {
   VisitModelInner::precompute(config);
   aniso_index_ = config->model_params().index("anisotropic");
-  INFO(aniso_index_);
-  INFO(config->model_params().index("cutoff"));
+  INFO("aniso_index_ " << aniso_index_);
 }
 
 void VisitModelInnerTable::compute(
