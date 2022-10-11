@@ -4,7 +4,7 @@
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/model_two_body.h"
-#include "system/include/visit_model_inner_table.h"
+#include "aniso/include/visit_model_inner_table.h"
 
 namespace feasst {
 
@@ -18,7 +18,7 @@ VisitModelInnerTable::VisitModelInnerTable(argtype args) : VisitModelInnerTable(
 void VisitModelInnerTable::precompute(Configuration * config) {
   VisitModelInner::precompute(config);
   aniso_index_ = config->model_params().index("anisotropic");
-  INFO("aniso_index_ " << aniso_index_);
+  DEBUG("aniso_index_ " << aniso_index_);
 }
 
 void VisitModelInnerTable::compute(
@@ -50,8 +50,8 @@ void VisitModelInnerTable::compute(
 class MapVisitModelInnerTable {
  public:
   MapVisitModelInnerTable() {
-    VisitModelInnerTable().deserialize_map()["VisitModelInnerTable"] =
-      std::make_shared<VisitModelInnerTable>();
+    auto obj = std::make_shared<VisitModelInnerTable>();
+    obj->deserialize_map()["VisitModelInnerTable"] = obj;
   }
 };
 

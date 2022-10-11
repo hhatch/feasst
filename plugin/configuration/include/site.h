@@ -70,6 +70,9 @@ class Site : public PropertiedEntity,
   /// Set the Euler angles (and sets the site anisotropic).
   void set_euler(const Euler& euler);
 
+  /// Return the Euler angles.
+  const Euler& euler() const { return euler_; }
+
   /// Return true if the site is anisotropic.
   bool is_anisotropic() const { return is_anisotropic_; }
 

@@ -104,7 +104,6 @@
 #include "system/include/model_empty.h"
 #include "system/include/visit_model_intra_map.h"
 #include "system/include/visit_model_intra.h"
-#include "system/include/visit_model_inner_table.h"
 #include "system/include/visit_model_bond.h"
 #include "system/include/long_range_corrections.h"
 #include "configuration/include/neighbor_criteria.h"
@@ -129,7 +128,6 @@
 #include "models/include/lennard_jones_cut_shift.h"
 #include "models/include/lennard_jones_force_shift.h"
 #include "models/include/mie.h"
-#include "system/include/anisotropic.h"
 #include "system/include/model_two_body_table.h"
 #include "configuration/include/group.h"
 #include "configuration/include/particle_factory.h"
@@ -246,8 +244,8 @@
 #include "cluster/include/compute_remove_avb_divalent.h"
 #include "charge/include/compute_add_multiple.h"
 #include "charge/include/compute_remove_multiple.h"
-#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_translate.h"
+#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_volume.h"
@@ -289,6 +287,10 @@
 #include "math/include/solver_brent_dekker.h"
 #include "opt_lj/include/visit_model_opt_lj.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"
+#include "aniso/include/file_xyz_euler.h"
+#include "aniso/include/visit_model_inner_table.h"
+#include "aniso/include/traj_euler.h"
+#include "aniso/include/anisotropic.h"
 #include "mayer/include/mayer_sampling.h"
 #include "confinement/include/model_lj_shape.h"
 #include "confinement/include/trial_anywhere.h"
@@ -440,7 +442,6 @@ using namespace std;
 %shared_ptr(feasst::ModelEmpty);
 %shared_ptr(feasst::VisitModelIntraMap);
 %shared_ptr(feasst::VisitModelIntra);
-%shared_ptr(feasst::VisitModelInnerTable);
 %shared_ptr(feasst::VisitModelBond);
 %shared_ptr(feasst::LongRangeCorrections);
 %shared_ptr(feasst::NeighborCriteria);
@@ -473,7 +474,6 @@ using namespace std;
 %shared_ptr(feasst::LennardJonesCutShift);
 %shared_ptr(feasst::LennardJonesForceShift);
 %shared_ptr(feasst::Mie);
-%shared_ptr(feasst::Anisotropic);
 %shared_ptr(feasst::ModelTwoBodyTable);
 %shared_ptr(feasst::Group);
 %shared_ptr(feasst::ParticleFactory);
@@ -609,8 +609,8 @@ using namespace std;
 %shared_ptr(feasst::ComputeRemoveAVBDivalent);
 %shared_ptr(feasst::ComputeAddMultiple);
 %shared_ptr(feasst::ComputeRemoveMultiple);
-%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::TrialComputeTranslate);
+%shared_ptr(feasst::ComputeMorph);
 %shared_ptr(feasst::TrialComputeAdd);
 %shared_ptr(feasst::TrialComputeRemove);
 %shared_ptr(feasst::TrialComputeVolume);
@@ -656,6 +656,11 @@ using namespace std;
 %shared_ptr(feasst::SolverBrentDekker);
 %shared_ptr(feasst::VisitModelOptLJ);
 %shared_ptr(feasst::VisitModelOptRPM);
+%shared_ptr(feasst::PrinterXYZEuler);
+%shared_ptr(feasst::FileXYZEuler);
+%shared_ptr(feasst::VisitModelInnerTable);
+%shared_ptr(feasst::TrajEuler);
+%shared_ptr(feasst::Anisotropic);
 %shared_ptr(feasst::MayerSampling);
 %shared_ptr(feasst::ModelLJShape);
 %shared_ptr(feasst::ModelLJShapeEnergyAtCutoff);
@@ -778,7 +783,6 @@ using namespace std;
 %include system/include/model_empty.h
 %include system/include/visit_model_intra_map.h
 %include system/include/visit_model_intra.h
-%include system/include/visit_model_inner_table.h
 %include system/include/visit_model_bond.h
 %include system/include/long_range_corrections.h
 %include configuration/include/neighbor_criteria.h
@@ -803,7 +807,6 @@ using namespace std;
 %include models/include/lennard_jones_cut_shift.h
 %include models/include/lennard_jones_force_shift.h
 %include models/include/mie.h
-%include system/include/anisotropic.h
 %include system/include/model_two_body_table.h
 %include configuration/include/group.h
 %include configuration/include/particle_factory.h
@@ -920,8 +923,8 @@ using namespace std;
 %include cluster/include/compute_remove_avb_divalent.h
 %include charge/include/compute_add_multiple.h
 %include charge/include/compute_remove_multiple.h
-%include morph/include/compute_morph.h
 %include monte_carlo/include/trial_compute_translate.h
+%include morph/include/compute_morph.h
 %include monte_carlo/include/trial_compute_add.h
 %include monte_carlo/include/trial_compute_remove.h
 %include monte_carlo/include/trial_compute_volume.h
@@ -963,6 +966,10 @@ using namespace std;
 %include math/include/solver_brent_dekker.h
 %include opt_lj/include/visit_model_opt_lj.h
 %include opt_lj/include/visit_model_opt_rpm.h
+%include aniso/include/file_xyz_euler.h
+%include aniso/include/visit_model_inner_table.h
+%include aniso/include/traj_euler.h
+%include aniso/include/anisotropic.h
 %include mayer/include/mayer_sampling.h
 %include confinement/include/model_lj_shape.h
 %include confinement/include/trial_anywhere.h

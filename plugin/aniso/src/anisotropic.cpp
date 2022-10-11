@@ -1,6 +1,6 @@
 #include <cmath>
 #include "utils/include/serialize.h"
-#include "system/include/anisotropic.h"
+#include "aniso/include/anisotropic.h"
 
 namespace feasst {
 

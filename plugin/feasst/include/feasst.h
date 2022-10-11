@@ -81,7 +81,6 @@
 #include "system/include/model_empty.h"
 #include "system/include/visit_model_intra_map.h"
 #include "system/include/visit_model_intra.h"
-#include "system/include/visit_model_inner_table.h"
 #include "system/include/visit_model_bond.h"
 #include "system/include/long_range_corrections.h"
 #include "configuration/include/neighbor_criteria.h"
@@ -106,7 +105,6 @@
 #include "models/include/lennard_jones_cut_shift.h"
 #include "models/include/lennard_jones_force_shift.h"
 #include "models/include/mie.h"
-#include "system/include/anisotropic.h"
 #include "system/include/model_two_body_table.h"
 #include "configuration/include/group.h"
 #include "configuration/include/particle_factory.h"
@@ -223,8 +221,8 @@
 #include "cluster/include/compute_remove_avb_divalent.h"
 #include "charge/include/compute_add_multiple.h"
 #include "charge/include/compute_remove_multiple.h"
-#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_translate.h"
+#include "morph/include/compute_morph.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_compute_remove.h"
 #include "monte_carlo/include/trial_compute_volume.h"
@@ -266,6 +264,10 @@
 #include "math/include/solver_brent_dekker.h"
 #include "opt_lj/include/visit_model_opt_lj.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"
+#include "aniso/include/file_xyz_euler.h"
+#include "aniso/include/visit_model_inner_table.h"
+#include "aniso/include/traj_euler.h"
+#include "aniso/include/anisotropic.h"
 #include "mayer/include/mayer_sampling.h"
 #include "confinement/include/model_lj_shape.h"
 #include "confinement/include/trial_anywhere.h"
@@ -307,4 +309,5 @@ std::shared_ptr<feasst::Ewald> __feasst__Ewald = std::make_shared<feasst::Ewald>
 std::shared_ptr<feasst::MayerSampling> __feasst__MayerSampling = std::make_shared<feasst::MayerSampling>();
 std::shared_ptr<feasst::LennardJonesAlpha> __feasst__LennardJonesAlpha = std::make_shared<feasst::LennardJonesAlpha>();
 std::shared_ptr<feasst::VisitModelInnerPatch> __feasst__VisitModelInnerPatch = std::make_shared<feasst::VisitModelInnerPatch>();
+std::shared_ptr<feasst::VisitModelInnerTable> __feasst__VisitModelInnerTable = std::make_shared<feasst::VisitModelInnerTable>();
 std::shared_ptr<feasst::Tune> __feasst__Tune = std::make_shared<feasst::Tune>();
