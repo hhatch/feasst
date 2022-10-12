@@ -86,5 +86,18 @@ print_xyz(domain, r_com, file_name=domain_name+'_0_0_0_0_0_0.xyz')
 print_xyz(domain, r_com, file_name=domain_name+'_50_0_0_0_0_0.xyz', sph=[50, 0, 0], euler=[0, 0, 0])
 
 # Compute energy of interaction between the two xyz file structures using AMBER.
-# Does AMBER have an easy-to-use Python API for something like this?
+# Does AMBER have a Python API?
 
+def loop_orientations(num_orientations_per_pi):
+    dangle = np.pi/num_orientations_per_pi
+    num_orientations = 0
+    for s1 in np.arange(0, 2*np.pi + dangle/2, dangle):
+        for s2 in np.arange(0, np.pi + dangle/2, dangle):
+            for e1 in np.arange(-np.pi, np.pi + dangle/2, dangle):
+                for e2 in np.arange(0, np.pi + dangle/2, dangle):
+                    for e3 in np.arange(-np.pi, np.pi + dangle/2, dangle):
+                        num_orientations += 1
+                        # do some calculations here
+    print('num_orientations', num_orientations)
+
+loop_orientations(num_orientations_per_pi=15)
