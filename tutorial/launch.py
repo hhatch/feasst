@@ -1,17 +1,33 @@
-# usage: Python /path/to/feasst/tutorial/launch.py will fill an HPC SLURM node with 32 NVT MC LJ simulations at various temperatures, restarting upon the hour.
+"""
+Usage:
+
+# fill an HPC SLURM node with 32 NVT MC LJ simulations at various temperatures, restarting upon the hour.
+python /path/to/feasst/tutorial/launch.py
+
+# run manually in your terminal
+python /path/to/feasst/tutorial/launch.py -r 1
+
+# run post processing and tests
+python /path/to/feasst/tutorial/launch.py -r 2
+"""
+
+#HWH: recast per 'cycle' instead of per trial
 
 import sys
 import subprocess
-import numpy as np
 import argparse
-from multiprocessing import Pool
+import unittest
 import random
+from multiprocessing import Pool
 
 # define parameters of a pure component NVT MC Lennard-Jones simulation
 params = {
     "cubic_box_length": 8, "fstprt": "/feasst/forcefield/lj.fstprt", "beta": 1.2,
-    "num_particles": 50, "equilibration": 1e6, "production": 1e8,
-    "trials_per": 1e5, "seed": random.randrange(int(1e9)), "num_hours": 1, "script": __file__}
+    "num_particles": 50,
+    "trials_per_iteration": 1e5,
+    "equilibration_iterations": 1e6,
+    "production_iterations": 1e8,
+    "seed": random.randrange(int(1e9)), "num_hours": 1, "script": __file__}
 params["num_minutes"] = round(params["num_hours"]*60)
 params["num_hours_terminate"] = 0.95*params["num_hours"]
 
@@ -33,16 +49,17 @@ Run until_num_particles {num_particles}
 
 # nvt equilibration
 RemoveTrial name TrialAdd
+Metropolis num_trials_per_iteration {trials_per_iteration} num_iterations_to_complete {equilibration_iterations}
 Tune
-CheckEnergy trials_per_update {trials_per} tolerance 1e-8
-Run num_trials {equilibration}
+CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-8
+Run until_criteria_complete true
 
 # nvt production
 RemoveModify name Tune
-Log trials_per_write {trials_per} file_name lj{sim}.txt
-Movie trials_per_write {trials_per} file_name lj{sim}.xyz
-Energy trials_per_write {trials_per} file_name en{sim}.txt
-Run num_trials {production}
+Log trials_per_write {trials_per_iteration} file_name lj{sim}.txt
+Movie trials_per_write {trials_per_iteration} file_name lj{sim}.xyz
+Energy trials_per_write {trials_per_iteration} file_name lj_en{sim}.txt
+Run num_trials {production_iterations}
 """.format(**params))
 
 # write slurm script to fill nodes with simulations
@@ -85,7 +102,17 @@ def run(sim):
         syscode = subprocess.call("../build/bin/fst < " + file_name + " > launch_run"+str(sim)+".log", shell=True, executable='/bin/bash')
     else:
         syscode = subprocess.call("../build/bin/rst checkpoint" + str(sim) + ".fst", shell=True, executable='/bin/bash')
+    if syscode == 0: # if simulation finishes with no errors, post-process
+        unittest.main(argv=[''], verbosity=2, exit=False)
     return syscode
+
+# after the simulation is complete, perform some tests or analysis
+class PostProcess(unittest.TestCase):
+    def test(self):
+        import pandas as pd
+        log = pd.read_csv('lj0.txt')
+        print(df)
+        self.assertTrue(log['attempt'][-1] > 1)
 
 if __name__ == "__main__":
     if args.run_type == 0:
@@ -96,5 +123,7 @@ if __name__ == "__main__":
             codes = pool.starmap(run, zip(range(0, params["num_sims"])))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
+    elif args.run_type == 2:
+        unittest.main(argv=[''], verbosity=2, exit=False)
     else:
         assert False  # unrecognized run_type

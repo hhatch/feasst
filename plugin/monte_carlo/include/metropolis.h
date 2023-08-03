@@ -17,8 +17,8 @@ class Metropolis : public Criteria {
  public:
   /**
     args:
-    - num_attempts_per_iteration: set the number of MonteCarlo trials,
-      or attempts (as measured by number of calls to is_accepted) default: 1e9.
+    - num_trials_per_iteration: define an iteration as a number of trials
+      (as measured by number of calls to is_accepted) default: 1e9.
    */
   explicit Metropolis(argtype args = argtype());
   explicit Metropolis(argtype * args);
@@ -40,7 +40,7 @@ class Metropolis : public Criteria {
   ~Metropolis() {}
 
  private:
-  int num_attempts_per_iteration_;
+  int num_trials_per_iteration_;
 };
 
 inline std::shared_ptr<Metropolis> MakeMetropolis(argtype args = argtype()) {
