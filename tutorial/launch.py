@@ -116,7 +116,7 @@ if __name__ == '__main__':
     if args.run_type == 0: # queue on SLURM
         slurm_queue()
         subprocess.call("sbatch --array=0-10%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['prefix']+ "_launch_ids.txt", shell=True, executable='/bin/bash')
-        with open(params['prefix']+ 'launch_ids.txt') as file1:
+        with open(params['prefix']+ '_launch_ids.txt') as file1:
             slurm_id = file1.readlines()[-1]
         with open('lj_params'+slurm_id, 'w') as file1:
             file1.write(json.dumps(params))
