@@ -28,7 +28,7 @@ parser.add_argument('--hours_terminate', type=float, default=1., help='number of
 parser.add_argument('--sim', type=int, default=0, help='simulation id')
 parser.add_argument('--num_procs', type=int, default=2, help='number of processors')
 parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
-parser.add_argument('--run_type', '-r', type=int, default=0, help='0: run, 1: submit to HPC queue, 2: post-process')
+parser.add_argument('--run_type', '-r', type=int, default=0, help='0: submit to HPC queue, 1: run, 2: post-process')
 parser.add_argument('--slurm_id', type=int, default=-1, help='Automatically input by slurm scheduler. If != -1, read args from file.')
 parser.add_argument('--slurm_task', type=int, default=0, help='Automatically input by slurm scheduler. If > 0, restart from checkpoint.')
 args = parser.parse_args()
@@ -98,11 +98,11 @@ class PostProcess(unittest.TestCase):
 
 # write slurm script to fill nodes with simulations
 def slurm_queue():
-    with open('slurm.txt', 'w') as myfile: myfile.write("""#!/bin/bash
+    with open(params['prefix'] + '_slurm.txt', 'w') as myfile: myfile.write("""#!/bin/bash
 #SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o hostname_%j.out -e hostname_%j.out
 echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
-python {script} --run_type 0 --slurm_id $SLURM_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
+python {script} --run_type 1 --slurm_id $SLURM_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -113,7 +113,14 @@ echo "Time is $(date)"
 """.format(**params))
 
 if __name__ == '__main__':
-    if args.run_type == 0: # run directly
+    if args.run_type == 0: # queue on SLURM
+        slurm_queue()
+        subprocess.call("sbatch --array=0-10%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['prefix']+ "_launch_ids.txt", shell=True, executable='/bin/bash')
+        with open(params['prefix']+ 'launch_ids.txt') as file1:
+            slurm_id = file1.readlines()[-1]
+        with open('lj_params'+slurm_id, 'w') as file1:
+            file1.write(json.dumps(params))
+    elif args.run_type == 1: # run directly
         if args.slurm_id != -1: # read parameter from file if submit via slurm
             with open('lj_params'+slurm_id, 'r') as file1:
                 params = json.load(file1)
@@ -121,13 +128,6 @@ if __name__ == '__main__':
             codes = pool.starmap(run, zip(range(0, params['num_procs'])))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
-    elif args.run_type == 1: # queue on SLURM
-        slurm_queue()
-        subprocess.call("sbatch --array=0-10%1 slurm.txt | awk '{print $4}' >> " + params['prefix']+ "_launch_ids.txt", shell=True, executable='/bin/bash')
-        with open(params['prefix']+ 'launch_ids.txt') as file1:
-            slurm_id = file1.readlines()[-1]
-        with open('lj_params'+slurm_id, 'w') as file1:
-            file1.write(json.dumps(params))
     elif args.run_type == 2: # post process
         unittest.main(argv=[''], verbosity=2, exit=False)
     else:
