@@ -40,7 +40,7 @@ params['hours_terminate'] = 0.95*params['hours_terminate']*params['num_procs'] #
 print('params', params)
 
 # write fst script to run a single simulation
-def mc(params=params, file_name='launch.txt'):
+def mc(params, file_name):
     with open(file_name, 'w') as myfile: myfile.write("""
 # high temperature gcmc to generate initial configuration
 MonteCarlo
@@ -69,7 +69,7 @@ RemoveModify name Tune
 Metropolis num_trials_per_iteration {trials_per_iteration} num_iterations_to_complete {production_iterations}
 Log trials_per_write {trials_per_iteration} file_name {prefix}{sim}.txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}{sim}.xyz
-Energy trials_per_write {trials_per_iteration} file_name {prefix}_en{sim}.txt
+Energy trials_per_write {trials_per_iteration} file_name {prefix}{sim}_en.txt
 Run until_criteria_complete true
 """.format(**params))
 
@@ -79,9 +79,9 @@ def run(sim):
         params['sim'] = sim
         params['beta'] = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_procs'])[sim]
         params['seed'] = random.randrange(int(1e9))
-        file_name = params['prefix']+'launch_run'+str(sim)+'.txt'
-        mc(params, file_name=file_name)
-        syscode = subprocess.call('../build/bin/fst < ' + file_name + ' > launch_run'+str(sim)+'.log', shell=True, executable='/bin/bash')
+        file_name = params['prefix']+str(sim)+'_launch_run'
+        mc(params, file_name=file_name+'.txt')
+        syscode = subprocess.call('../build/bin/fst < ' + file_name + '.txt  > ' + file_name + str(sim)+'.log', shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
         syscode = subprocess.call('../build/bin/rst checkpoint' + str(sim) + '.fst', shell=True, executable='/bin/bash')
     if sim == 0 and syscode == 0: # if simulation finishes with no errors, post-process
@@ -123,8 +123,8 @@ if __name__ == '__main__':
                 sys.exit(1)
     elif args.run_type == 1: # queue on SLURM
         slurm_queue()
-        subprocess.call("sbatch --array=0-10%1 slurm.txt | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
-        with open('launch_ids.txt') as file1:
+        subprocess.call("sbatch --array=0-10%1 slurm.txt | awk '{print $4}' >> " + params['prefix']+ "_launch_ids.txt", shell=True, executable='/bin/bash')
+        with open(params['prefix']+ 'launch_ids.txt') as file1:
             slurm_id = file1.readlines()[-1]
         with open('lj_params'+slurm_id, 'w') as file1:
             file1.write(json.dumps(params))
