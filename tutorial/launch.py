@@ -50,7 +50,7 @@ params['minutes'] = int(params['hours_terminate']*60) # minutes used for SLURM q
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before SLURM
 print('params', params)
 
-# write fst script to run a single simulation
+# write fst script for a single simulation given parameters in {}
 def mc(params, file_name):
     with open(file_name, 'w') as myfile: myfile.write("""
 # high temperature gcmc to generate initial configuration
