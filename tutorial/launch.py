@@ -147,7 +147,7 @@ if __name__ == '__main__':
     open(params['sim_id_file'], 'w').close() # clear file, then append sim id when complete
     if args.run_type == 0: # run directly
         if args.slurm_id != -1 and args.slurm_task == 0: # read param file if submit via slurm
-            with open('lj_params'+str(args.slurm_id)+'.txt', 'r') as file1:
+            with open('lj_params'+str(args.slurm_id)+'.json', 'r') as file1:
                 params = json.load(file1)
         with Pool(params['num_sims']) as pool:
             codes = pool.starmap(run, zip(range(0, params['num_sims'])))
@@ -162,7 +162,7 @@ if __name__ == '__main__':
             subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['slurm_id_file'], shell=True, executable='/bin/bash')
             with open(params['slurm_id_file'], 'r') as file1:
                 slurm_id = file1.read().splitlines()[-1]
-            with open('lj_params'+slurm_id+'.txt', 'w') as file1:
+            with open('lj_params'+slurm_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params))
     elif args.run_type == 2: # post process
         unittest.main(argv=[''], verbosity=2, exit=False)
