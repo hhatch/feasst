@@ -60,7 +60,7 @@ Potential VisitModel LongRangeCorrections
 ThermoParams beta {beta} chemical_potential -1
 Metropolis
 TrialTranslate tunable_param 2 tunable_target_acceptance 0.2
-Checkpoint file_name {prefix}_checkpoint{sim}.fst num_hours 0.1 num_hours_terminate {hours_terminate}
+Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours 0.1 num_hours_terminate {hours_terminate}
 
 # grand canonical ensemble initalization
 TrialAdd particle_type 0
@@ -93,7 +93,7 @@ def run(sim):
         mc(params, file_name=file_name+'.txt')
         syscode = subprocess.call('../build/bin/fst < ' + file_name + '.txt  > ' + file_name + '.log', shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
-        syscode = subprocess.call('../build/bin/rst ' + params['prefix'] + '_checkpoint' + str(sim) + '.fst', shell=True, executable='/bin/bash')
+        syscode = subprocess.call('../build/bin/rst ' + params['prefix'] + str(sim) + '_checkpoint.fst', shell=True, executable='/bin/bash')
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
         with open(params['sim_id_file'], 'a') as file1:
             file1.write(str(sim)+'\n')
