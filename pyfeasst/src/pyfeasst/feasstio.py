@@ -35,6 +35,25 @@ def read_checkpoint(filename):
     assert(len(checkpoint) == 1)  # checkpoint files should have only one line
     return checkpoint[0]
 
+def all_sims_complete(filename, num_sims):
+    """
+    Read filename and see if all sim ID's from [0, num_sims-1] are present (e.g., complete)
+
+    >>> from pyfeasst import feasstio
+    >>> all_sims_complete('../../tests/lj_sim_ids.txt', 8)
+    True
+    >>> all_sims_complete('../../tests/lj_sim_ids2.txt', 8)
+    False
+    """
+    with open (filename, "r") as file1:
+        lines = file1.read().splitlines()
+    ids = map(str, list(range(num_sims)))
+    for line in lines:
+        ids = [i for i in ids if i not in line]
+    if len(ids) == 0:
+        return True
+    return False
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

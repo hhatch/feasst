@@ -1,5 +1,6 @@
 """
 Example single-site Lennard-Jones canonical ensemble Monte Carlo simulation using FEASST.
+Multiple temperatures over multiple processors/nodes (with restarts) and plot results.
 Usage: python /path/to/feasst/tutorial/launch.py --help
 """
 
@@ -11,6 +12,8 @@ import random
 import json
 from multiprocessing import Pool
 import numpy as np
+import pandas as pd
+from pyfeasst import feasstio
 
 # parse arguments from command line
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -51,6 +54,7 @@ params['script'] = __file__
 params['minutes'] = int(params['hours_terminate']*60) # minutes used for SLURM queue time
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before SLURM
 params['num_sims'] = params['num_nodes']*params['num_procs']
+params['betas'] = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_sims'])
 print('params', params)
 
 # write fst script for a single simulation given parameters in {}
@@ -91,26 +95,36 @@ Run until_criteria_complete true
 # run a single simulation
 def run(sim):
     if args.slurm_task == 0:
-        betas = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_sims'])
         params['sim'] = sim + params['node']*params['num_procs']
-        params['beta'] = betas[sim]
+        params['beta'] = params['betas'][sim]
         params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
         mc(params, file_name=file_name+'.txt')
         syscode = subprocess.call('../build/bin/fst < ' + file_name + '.txt  > ' + file_name + '.log', shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
         syscode = subprocess.call('../build/bin/rst ' + params['prefix'] + '_checkpoint' + str(sim) + '.fst', shell=True, executable='/bin/bash')
-    if sim == 0 and syscode == 0: # if simulation finishes with no errors, post-process
-        unittest.main(argv=[''], verbosity=2, exit=False)
+    if syscode == 0: # if simulation finishes with no errors, write to sim id file and post-process
+        with open(params['sim_id_file'], 'a') as file1:
+            file1.write(str(sim)+'\n')
+        if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
+            open(params['sim_id_file'], 'w').close() # clear file
+            unittest.main(argv=[''], verbosity=2, exit=False)
     return syscode
 
 # after the simulation is complete, perform some tests or analysis
 class PostProcess(unittest.TestCase):
     def test(self):
-        import pandas as pd
-        log = pd.read_csv('lj0.txt')
-        print(log)
-        self.assertTrue(log['num_particles_of_type0'][0] == params['num_particles'])
+        ens = np.zeros(shape=(params['num_sims'], 2))
+        for sim in range(params['num_sims']):
+            log = pd.read_csv('lj'+str(sim)+'.txt')
+            self.assertTrue(int(log['num_particles_of_type0'][0]) == params['num_particles'])
+            en = pd.read_csv('lj'+str(sim)+'_en.txt')
+            ens[sim] = [en['average'][0], en['block_stdev'][0]]
+        import matplotlib.pyplot as plt
+        plt.errorbar(params['betas'], ens[:, 0], ens[:, 1], fmt='o')
+        plt.xlabel(r'$\beta$', fontsize=16)
+        plt.ylabel(r'$U$', fontsize=16)
+        plt.savefig(params['prefix']+'_en.png', bbox_inches='tight', transparent='True')
 
 # write slurm script to fill nodes with simulations
 def slurm_queue():
@@ -129,14 +143,16 @@ echo "Time is $(date)"
 """.format(**params))
 
 if __name__ == '__main__':
+    params['sim_id_file'] = params['prefix']+ "_sim_ids.txt"
+    open(params['sim_id_file'], 'w').close() # clear file, then append sim id when complete
     if args.run_type == 0: # queue on SLURM
-        params['id_file'] = params['prefix']+ "_launch_ids.txt"
-        open(params['id_file'], 'w').close() # empty file contents
+        params['slurm_id_file'] = params['prefix']+ "_slurm_ids.txt"
+        open(params['slurm_id_file'], 'w').close() # empty file contents
         for node in range(params['num_nodes']):
             params['node'] = node
             slurm_queue()
-            subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['id_file'], shell=True, executable='/bin/bash')
-            with open(params['id_file'], 'r') as file1:
+            subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['slurm_id_file'], shell=True, executable='/bin/bash')
+            with open(params['slurm_id_file'], 'r') as file1:
                 slurm_id = file1.read().splitlines()[-1]
             with open('lj_params'+slurm_id+'.txt', 'w') as file1:
                 file1.write(json.dumps(params))
