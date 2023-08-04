@@ -1,7 +1,7 @@
 """
 Example single-site Lennard-Jones canonical ensemble Monte Carlo simulation using FEASST.
-Multiple temperatures over multiple processors/nodes (with restarts) and plot results.
-Compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm
+Run multiple densities using multiple processors/nodes/restarts, and plot results.
+Compare with T*=0.9 in https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm.
 Usage: python /path/to/feasst/tutorial/launch.py --help
 """
 
@@ -18,33 +18,23 @@ from pyfeasst import feasstio
 
 # parse arguments from command line or change their default values.
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
-    help='FEASST particle definition')
+parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt', help='FEASST particle definition')
 parser.add_argument('--beta', type=float, default=1./0.9, help='inverse temperature')
+parser.add_argument('--num_particles', type=int, default=500, help='number of particles')
 parser.add_argument('--rho_lower', type=float, default=1e-3, help='lowest number density')
 parser.add_argument('--rho_upper', type=float, default=9e-3, help='highest number density')
-parser.add_argument('--num_particles', type=int, default=500, help='number of particles')
-parser.add_argument('--trials_per_iteration', type=int, default=int(1e5),
-    help='like cycles, but not necessary num_particles')
-parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
-    help='number of iterations for equilibraiton')
-parser.add_argument('--production_iterations', type=int, default=int(1e3),
-    help='number of iterations for production')
-parser.add_argument('--seed', type=int, default=random.randrange(int(1e9)),
-    help='random number generator seed')
+parser.add_argument('--trials_per_iteration', type=int, default=int(1e5), help='like cycles, but not necessary num_particles')
+parser.add_argument('--equilibration_iterations', type=int, default=int(1e1), help='number of iterations for equilibraiton')
+parser.add_argument('--production_iterations', type=int, default=int(1e3), help='number of iterations for production')
+parser.add_argument('--seed', type=int, default=random.randrange(int(1e9)), help='random number generator seed')
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
-parser.add_argument('--hours_terminate', type=float, default=0.1,
-    help='number of hours until termination')
+parser.add_argument('--hours_terminate', type=float, default=0.1, help='number of hours until termination')
 parser.add_argument('--sim', type=int, default=0, help='simulation ID')
 parser.add_argument('--num_procs', type=int, default=5, help='number of processors')
-parser.add_argument('--prefix', type=str, default='lj',
-    help='prefix for all output file names')
-parser.add_argument('--run_type', '-r', type=int, default=0,
-    help='0: run, 1: submit to queue, 2: post-process')
-parser.add_argument('--slurm_id', type=int, default=-1,
-    help='Automatically input by slurm scheduler. If != -1, read args from file')
-parser.add_argument('--slurm_task', type=int, default=0,
-    help='Automatically input by slurm scheduler. If > 0, restart from checkpoint')
+parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
+parser.add_argument('--run_type', '-r', type=int, default=0, help='0: run, 1: submit to queue, 2: post-process')
+parser.add_argument('--slurm_id', type=int, default=-1, help='Automatically input by slurm scheduler. If != -1, read args from file')
+parser.add_argument('--slurm_task', type=int, default=0, help='Automatically input by slurm scheduler. If > 0, restart from checkpoint')
 parser.add_argument('--max_restarts', type=int, default=10, help='Number of SLURM restarts')
 parser.add_argument('--num_nodes', type=int, default=1, help='Number of SLURM nodes')
 parser.add_argument('--node', type=int, default=0, help='node ID')
@@ -55,9 +45,8 @@ params['minutes'] = int(params['hours_terminate']*60) # minutes used for SLURM q
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before SLURM
 params['num_sims'] = params['num_nodes']*params['num_procs']
 params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
-params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.)
+params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()
-params['cubic_box_lengths'] = params['cubic_box_lengths'].tolist()
 
 # write fst script for a single simulation with params keys {} enclosed
 def mc(params, file_name):

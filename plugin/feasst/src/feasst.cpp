@@ -111,7 +111,7 @@ int main() {
   while (line.empty() || line[0] == '#') {
     std::getline(std::cin, line);
     ++num_lines;
-    ASSERT(num_lines < 1e4, "Improperly formated input");
+    ASSERT(num_lines < 1e6, "Improperly formated input");
   }
 
   if (line == "MonteCarlo") {
