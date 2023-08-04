@@ -40,7 +40,7 @@ parser.add_argument('--num_procs', type=int, default=4, help='number of processo
 parser.add_argument('--prefix', type=str, default='lj',
     help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
-    help='0: submit to HPC queue, 1: run, 2: post-process')
+    help='0: run, 1: submit to queue, 2: post-process')
 parser.add_argument('--slurm_id', type=int, default=-1,
     help='Automatically input by slurm scheduler. If != -1, read args from file')
 parser.add_argument('--slurm_task', type=int, default=0,
@@ -132,7 +132,7 @@ def slurm_queue():
 #SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o {prefix}_slurm_%j.txt -e {prefix}_slurm_%j.txt
 echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
-python {script} --run_type 1 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
+python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -145,7 +145,15 @@ echo "Time is $(date)"
 if __name__ == '__main__':
     params['sim_id_file'] = params['prefix']+ "_sim_ids.txt"
     open(params['sim_id_file'], 'w').close() # clear file, then append sim id when complete
-    if args.run_type == 0: # queue on SLURM
+    if args.run_type == 0: # run directly
+        if args.slurm_id != -1 and args.slurm_task == 0: # read param file if submit via slurm
+            with open('lj_params'+str(args.slurm_id)+'.txt', 'r') as file1:
+                params = json.load(file1)
+        with Pool(params['num_sims']) as pool:
+            codes = pool.starmap(run, zip(range(0, params['num_sims'])))
+            if np.count_nonzero(codes) > 0:
+                sys.exit(1)
+    elif args.run_type == 1: # queue on SLURM
         params['slurm_id_file'] = params['prefix']+ "_slurm_ids.txt"
         open(params['slurm_id_file'], 'w').close() # empty file contents
         for node in range(params['num_nodes']):
@@ -156,14 +164,6 @@ if __name__ == '__main__':
                 slurm_id = file1.read().splitlines()[-1]
             with open('lj_params'+slurm_id+'.txt', 'w') as file1:
                 file1.write(json.dumps(params))
-    elif args.run_type == 1: # run directly
-        if args.slurm_id != -1 and args.slurm_task == 0: # read param file if submit via slurm
-            with open('lj_params'+str(args.slurm_id)+'.txt', 'r') as file1:
-                params = json.load(file1)
-        with Pool(params['num_sims']) as pool:
-            codes = pool.starmap(run, zip(range(0, params['num_sims'])))
-            if np.count_nonzero(codes) > 0:
-                sys.exit(1)
     elif args.run_type == 2: # post process
         unittest.main(argv=[''], verbosity=2, exit=False)
     else:

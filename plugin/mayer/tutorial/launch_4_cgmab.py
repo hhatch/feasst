@@ -151,7 +151,7 @@ def slurm_queue():
 #SBATCH -n {procs_per_node} -N 1 -t 1440:00 -o hostname_%j.out -e hostname_%j.out
 echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
-python {script} --run_type 1
+python {script} --run_type 0
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -163,7 +163,7 @@ echo "Time is $(date)"
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: submit batch to scheduler, 1: run batch on host")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run, 1: submit to queue")
 args = parser.parse_args()
 
 params={'procs_per_node': 9, 'script': __file__}
@@ -218,12 +218,12 @@ class TestCGmAb(unittest.TestCase):
 
 if __name__ == "__main__":
     if args.run_type == 0:
-        slurm_queue()
-        subprocess.call("sbatch slurm.txt | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
-    elif args.run_type == 1:
         with Pool(params["procs_per_node"]) as pool:
             codes = pool.starmap(run, zip(range(0, params["procs_per_node"])))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
+    elif args.run_type == 1:
+        slurm_queue()
+        subprocess.call("sbatch slurm.txt | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
     else:
         assert False  # unrecognized run_type

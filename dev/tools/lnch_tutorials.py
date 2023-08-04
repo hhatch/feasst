@@ -13,7 +13,7 @@ for col in plugins.columns:
             if 'build' and 'dev' and 'feasst_test_env' and 'library' not in str(filename.parent):
                 with cd.cd(filename.parent):
                     print("Running:", filename.name, "in", filename.parent)
-                    subprocess.call("python " + str(filename.name) + " 2> launch.log", shell=True, executable='/bin/bash')
+                    subprocess.call("python " + str(filename.name) + " -r 1 2> launch.log", shell=True, executable='/bin/bash')
     #                subprocess.call("jupyter nbconvert --to notebook --inplace --ExecutePreprocessor.timeout=10000 --execute " + str(filename) + " > tutorial_log.txt 2>&1; grep \"Error\|Assertion\" tutorial_log.txt >> tutorial_failures.txt")
     #                subprocess.call("grep \"FAILED (fa\" " + str(filename) +" >> tutorial_failures.txt")
     #                subprocess.call("grep \"Error\" " + str(filename) +" >> tutorial_failures.txt")

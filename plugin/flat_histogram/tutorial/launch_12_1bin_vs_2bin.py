@@ -78,8 +78,8 @@ wrk=/wrk/$LOGNAME/$SLURM_JOB_ID/; mkdir -p $wrk; cd $wrk; echo "wrk:$wrk"
 rsync -au $original_dir/* .; rm hostname_*
 ls
 export OMP_NUM_THREADS={procs_per_node}
-python {script} --run_type 1 --dir $original_dir --min_particles {min_particles}
-#python {script} --run_type 1 --task $SLURM_ARRAY_TASK_ID --dir $original_dir --min_particles {min_particles}
+python {script} --run_type 0 --dir $original_dir --min_particles {min_particles}
+#python {script} --run_type 0 --task $SLURM_ARRAY_TASK_ID --dir $original_dir --min_particles {min_particles}
 echo "sync"
 rsync -au . $original_dir/
 if [ $? == 0 ]; then
@@ -93,7 +93,7 @@ echo "Time is $(date)"
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: submit batch to scheduler, 1: run batch on host")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run, 1: submit to queue")
 #parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
 parser.add_argument('--dir', type=str, default="", help="orginal working directory that the script was launched.")
 parser.add_argument('--min_particles', type=int, default=100, help="minimum number of particles")
@@ -173,15 +173,15 @@ def run(sim):
 
 if __name__ == "__main__":
     if args.run_type == 0:
-        for min_particles in [200]:
-            slurm_queue(min_particles=min_particles)
-            subprocess.call("sbatch slurm.txt | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
-    elif args.run_type == 1:
         params['num_1bin_batch'] = int(params['procs_per_node']/4)
         with Pool(3*params['num_1bin_batch']) as pool:
             codes = pool.starmap(run, zip(range(0, 3*params['num_1bin_batch'])))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
+    elif args.run_type == 1:
+        for min_particles in [200]:
+            slurm_queue(min_particles=min_particles)
+            subprocess.call("sbatch slurm.txt | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
     elif args.run_type == 2:
         unittest.main(argv=[''], verbosity=2, exit=False)
     else:

@@ -99,7 +99,7 @@ def slurm_queue(file_name):
 echo "Running {script} ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
 export OMP_NUM_THREADS={procs_per_node}
-python {script} --run_type 1 --task $SLURM_ARRAY_TASK_ID --params {params}
+python {script} --run_type 0 --task $SLURM_ARRAY_TASK_ID --params {params}
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -111,7 +111,7 @@ echo "Time is $(date)"
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_type', '-r', type=int, default=0, help="0: submit batch to scheduler, 1: run batch on host")
+parser.add_argument('--run_type', '-r', type=int, default=0, help="0: run, 1: submit to queue")
 parser.add_argument('--task', type=int, default=0, help="input by slurm scheduler. If >0, restart from checkpoint.")
 parser.add_argument('--params', type=str, default="", help="file name of the params file.")
 args = parser.parse_args()
@@ -196,6 +196,10 @@ def run():
 
 if __name__ == "__main__":
     if args.run_type == 0:
+        syscode = run()
+        if syscode != 0:
+            sys.exit(1)
+    elif args.run_type == 1:
         for node in range(params['num_nodes']):
             params["node"] = node
             params['params'] = 'lj_params'+str(node)
@@ -205,9 +209,5 @@ if __name__ == "__main__":
             slurm_file = 'lj_slurm'+str(node)+'.txt'
             slurm_queue(slurm_file)
             subprocess.call("sbatch --array=0-1%1 " + slurm_file + " | awk '{print $4}' >> launch_ids.txt", shell=True, executable='/bin/bash')
-    elif args.run_type == 1:
-        syscode = run()
-        if syscode != 0:
-            sys.exit(1)
     else:
         assert False  # unrecognized run_type
