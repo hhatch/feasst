@@ -32,7 +32,7 @@ parser.add_argument('--seed', type=int, default=random.randrange(int(1e9)),
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=0.1,
     help='number of hours until termination')
-parser.add_argument('--sim', type=int, default=0, help='simulation id')
+parser.add_argument('--sim', type=int, default=0, help='simulation ID')
 parser.add_argument('--num_procs', type=int, default=4, help='number of processors')
 parser.add_argument('--prefix', type=str, default='lj',
     help='prefix for all output file names')
@@ -43,6 +43,8 @@ parser.add_argument('--slurm_id', type=int, default=-1,
 parser.add_argument('--slurm_task', type=int, default=0,
     help='Automatically input by slurm scheduler. If > 0, restart from checkpoint')
 parser.add_argument('--num_restarts', type=int, default=10, help='Number of SLURM restarts')
+parser.add_argument('--num_nodes', type=int, default=1, help='Number of SLURM nodes')
+parser.add_argument('--node', type=int, default=0, help='node ID')
 args = parser.parse_args()
 params = vars(args)
 params['script'] = __file__
@@ -88,8 +90,8 @@ Run until_criteria_complete true
 # run a single simulation
 def run(sim):
     if args.slurm_task == 0:
-        betas = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_procs'])
-        params['sim'] = sim
+        betas = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_procs']*params['num_nodes'])
+        params['sim'] = sim + params['node']*params['num_procs']
         params['beta'] = betas[sim]
         params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
@@ -115,7 +117,7 @@ def slurm_queue():
 #SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o {prefix}_slurm_%j.txt -e {prefix}_slurm_%j.txt
 echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
-python {script} --run_type 1 --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
+python {script} --run_type 1 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -127,12 +129,16 @@ echo "Time is $(date)"
 
 if __name__ == '__main__':
     if args.run_type == 0: # queue on SLURM
-        slurm_queue()
-        subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['prefix']+ "_launch_ids.txt", shell=True, executable='/bin/bash')
-        with open(params['prefix']+ '_launch_ids.txt') as file1:
-            slurm_id = file1.read().splitlines()[-1]
-        with open('lj_params'+slurm_id+'.txt', 'w') as file1:
-            file1.write(json.dumps(params))
+        params['id_file'] = params['prefix']+ "_launch_ids.txt"
+        open(params['id_file'], 'w').close() # empty file contents
+        for node in range(num_nodes):
+            params['node'] = node
+            slurm_queue()
+            subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['id_file'], shell=True, executable='/bin/bash')
+            with open(params['id_file'], 'r') as file1:
+                slurm_id = file1.read().splitlines()[-1]
+            with open('lj_params'+slurm_id+'.txt', 'w') as file1:
+                file1.write(json.dumps(params))
     elif args.run_type == 1: # run directly
         if args.slurm_id != -1 and args.slurm_task == 0: # read param file if submit via slurm
             with open('lj_params'+str(args.slurm_id)+'.txt', 'r') as file1:
