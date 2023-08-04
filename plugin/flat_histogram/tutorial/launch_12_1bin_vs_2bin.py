@@ -1,3 +1,8 @@
+"""
+Comparison of the efficiency of 1 vs 2 bin flat histogram simulations, as described in
+https://doi.org/10.1021/acs.jpcb.3c00613
+"""
+
 import sys
 import subprocess
 import argparse
