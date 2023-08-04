@@ -50,6 +50,7 @@ params = vars(args)
 params['script'] = __file__
 params['minutes'] = int(params['hours_terminate']*60) # minutes used for SLURM queue time
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before SLURM
+params['num_sims'] = params['num_nodes']*params['num_procs']
 print('params', params)
 
 # write fst script for a single simulation given parameters in {}
@@ -90,7 +91,7 @@ Run until_criteria_complete true
 # run a single simulation
 def run(sim):
     if args.slurm_task == 0:
-        betas = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_procs']*params['num_nodes'])
+        betas = np.linspace(params['beta_lower'], params['beta_upper'], num=params['num_sims'])
         params['sim'] = sim + params['node']*params['num_procs']
         params['beta'] = betas[sim]
         params['seed'] = random.randrange(int(1e9))
@@ -131,7 +132,7 @@ if __name__ == '__main__':
     if args.run_type == 0: # queue on SLURM
         params['id_file'] = params['prefix']+ "_launch_ids.txt"
         open(params['id_file'], 'w').close() # empty file contents
-        for node in range(num_nodes):
+        for node in range(params['num_nodes']):
             params['node'] = node
             slurm_queue()
             subprocess.call("sbatch --array=0-" + str(params['num_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + params['id_file'], shell=True, executable='/bin/bash')
@@ -143,8 +144,8 @@ if __name__ == '__main__':
         if args.slurm_id != -1 and args.slurm_task == 0: # read param file if submit via slurm
             with open('lj_params'+str(args.slurm_id)+'.txt', 'r') as file1:
                 params = json.load(file1)
-        with Pool(params['num_procs']) as pool:
-            codes = pool.starmap(run, zip(range(0, params['num_procs'])))
+        with Pool(params['num_sims']) as pool:
+            codes = pool.starmap(run, zip(range(0, params['num_sims'])))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
     elif args.run_type == 2: # post process
