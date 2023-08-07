@@ -79,7 +79,7 @@ def slurm_queue_one_node(params):
 #SBATCH -t {minutes}:00
 #SBATCH -o {prefix}_slurm_%A_%a.txt
 #SBATCH -e {prefix}_slurm_%A_%a.txt
-echo "Running ID $SLURM_ARRAY_JOB_ID:$SLURM_ARRAY_TASK_ID on $(hostname) at $(date) in $PWD"
+echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
 python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
