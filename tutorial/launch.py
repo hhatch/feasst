@@ -101,6 +101,7 @@ def run(sim):
             params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
+        assert False
         syscode = subprocess.call('../build/bin/fst < '+file_name+'.txt  > '+file_name+'.log',
                                   shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
