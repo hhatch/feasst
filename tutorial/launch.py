@@ -7,7 +7,6 @@ Usage: python /path/to/feasst/tutorial/launch.py --help
 
 import subprocess
 import argparse
-import unittest
 import random
 import numpy as np
 import pandas as pd
@@ -117,7 +116,7 @@ def run(sim, params):
     return syscode
 
 def post_process(params):
-    """ Compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
+    """ Plot energy and compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
     ens = np.zeros(shape=(params['num_sims'], 2))
     for sim in range(params['num_sims']):
         log = pd.read_csv('lj'+str(sim)+'.txt')
