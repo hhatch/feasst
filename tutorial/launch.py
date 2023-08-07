@@ -56,7 +56,7 @@ params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=param
 params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()
 
-def write_feasst_script(file_name):
+def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(file_name, 'w', encoding="utf-8") as myfile:
         myfile.write("""
@@ -93,14 +93,14 @@ Run until_criteria_complete true
 """.format(**params))
 
 def run(sim):
-    """ Run a single simulation. """
+    """ Run a single simulation. If all simulations are complete, run PostProcess. """
     if args.slurm_task == 0:
         params['sim'] = sim + params['node']*params['num_procs']
         params['cubic_box_length'] = params['cubic_box_lengths'][sim]
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
-        write_feasst_script(file_name=file_name+'.txt')
+        write_feasst_script(params, file_name=file_name+'.txt')
         syscode = subprocess.call('../build/bin/fst < '+file_name+'.txt  > '+file_name+'.log',
                                   shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
@@ -109,7 +109,7 @@ def run(sim):
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
         with open(params['sim_id_file'], 'a', encoding="utf-8") as file1:
             file1.write(str(sim)+'\n')
-        # post process / test if all sims are complete (ensure once by clearing sim id file)
+        # if all sims are complete, post process or test once (by clearing sim id file)
         if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
             with open(params['sim_id_file'], 'w', encoding="utf-8") as file1:
                 file1.close() # clear file
@@ -117,7 +117,7 @@ def run(sim):
     return syscode
 
 class PostProcess(unittest.TestCase):
-    """ After the simulation is complete, test and analyze """
+    """ After the simulation is complete, test and analyze. """
     def test(self):
         """ Compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
         ens = np.zeros(shape=(params['num_sims'], 2))
