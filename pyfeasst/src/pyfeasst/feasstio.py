@@ -109,7 +109,8 @@ def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
     :param int slurm_task:
         Input by slurm scheduler. If > 0, restart from checkpoint.
     """
-    open(params['sim_id_file'], 'w').close() # clear file, then append sim id when complete
+    with open(params['sim_id_file'], 'w') as file1:
+        file1.close() # clear file, then append sim id when complete
     if run_type == 0: # run directly
         if slurm_id != -1: # if run from SLURM
             if slurm_task == 0: # read param file if not checkpoint
@@ -124,7 +125,8 @@ def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
                 sys.exit(1)
     elif run_type == 1: # queue on SLURM
         slurm_id_file = params['prefix']+ '_slurm_ids.txt'
-        open(slurm_id_file, 'w').close() # empty file contents
+        with open(slurm_id_file, 'w') as file1:
+            file1.close() # empty file contents
         for node in range(params['num_nodes']):
             params['node'] = node
             slurm_queue_one_node(params)
