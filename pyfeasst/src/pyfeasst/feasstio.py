@@ -5,7 +5,6 @@ This module provides some utility input / output functions for use with the FEAS
 import sys
 import json
 import subprocess
-import unittest
 from multiprocessing import Pool
 from itertools import repeat
 import numpy as np
@@ -92,13 +91,10 @@ fi
 echo "Time is $(date)"
 """.format(**params))
 
-def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
+def run_simulations(params, run_function, post_process_function, run_type, slurm_id, slurm_task):
     """
     Run a simulation either locally in the shell or queue on slurm
 
-    :param function run_function:
-        The name of the function to run that represents a single simulation,
-        and has a single argument that is the integer id of the simulation.
     :param dict params:
         Must have the following keys:
         sim_id_file: filename to write simulation id's for later checking of status,
@@ -107,8 +103,15 @@ def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
         max_restarts: maximum number of restarts,
         num_nodes: number of nodes,
         node: node index.
+    :param function run_function:
+        The name of the function to run that represents a single simulation,
+        and has the first argument that is the integer id of the simulation
+        and the second arguement as the params.
+    :param function post_process_function:
+        The name of the function to post process all simulations once complete,
+        and has the only argument as the params.
     :param int run_type:
-        0: run on local shell, 1: submit to slurm, 2: post-process unittest.
+        0: run on local shell, 1: submit to slurm, 2: post-process.
     :param int slurm_id:
         Input by slurm scheduler. If != -1, read args from file.
     :param int slurm_task:
@@ -141,7 +144,7 @@ def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
             with open('lj_params'+slurm_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params))
     elif run_type == 2: # post process
-        unittest.main(argv=[''], verbosity=2, exit=False)
+        post_process_function(params)
     else:
         assert False  # unrecognized run_type
 

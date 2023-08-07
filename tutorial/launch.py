@@ -94,7 +94,7 @@ Run until_criteria_complete true
 
 def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if args.slurm_task == 0:
+    if ARGS.slurm_task == 0:
         params['sim'] = sim + params['node']*params['num_procs']
         params['cubic_box_length'] = params['cubic_box_lengths'][sim]
         if params['seed'] == -1:
@@ -113,38 +113,37 @@ def run(sim, params):
         if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
             with open(params['sim_id_file'], 'w', encoding="utf-8") as file1:
                 file1.close() # clear file
-            unittest.main(argv=[''], verbosity=2, exit=False)
+            post_process(params)
     return syscode
 
-class PostProcess(unittest.TestCase):
-    """ After the simulation is complete, test and analyze. """
-    def test(self):
-        """ Compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
-        ens = np.zeros(shape=(params['num_sims'], 2))
+def post_process(params):
+    """ Compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
+    ens = np.zeros(shape=(params['num_sims'], 2))
+    for sim in range(params['num_sims']):
+        log = pd.read_csv('lj'+str(sim)+'.txt')
+        assert int(log['num_particles_of_type0'][0]) == params['num_particles']
+        energy = pd.read_csv('lj'+str(sim)+'_en.txt')
+        ens[sim] = np.array([energy['average'][0],
+                             energy['block_stdev'][0]])/params['num_particles']
+    # data from https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm
+    rhos_srsw = [0.001, 0.003, 0.005, 0.007, 0.009]
+    ens_srsw = [-9.9165E-03, -2.9787E-02, -4.9771E-02, -6.9805E-02, -8.9936E-02]
+    en_stds_srsw = [1.89E-05, 3.21E-05, 3.80E-05, 7.66E-05, 2.44E-05]
+    plt.errorbar(rhos_srsw, ens_srsw, en_stds_srsw, fmt='+', label='SRSW')
+    plt.errorbar(params['rhos'], ens[:, 0], ens[:, 1], fmt='x', label='FEASST')
+    plt.xlabel(r'$\rho$', fontsize=16)
+    plt.ylabel(r'$U/N$', fontsize=16)
+    plt.legend(fontsize=16)
+    plt.savefig(params['prefix']+'_en.png', bbox_inches='tight', transparent='True')
+    if len(rhos_srsw) == params['num_sims']: # compare with srsw exactly
         for sim in range(params['num_sims']):
-            log = pd.read_csv('lj'+str(sim)+'.txt')
-            self.assertTrue(int(log['num_particles_of_type0'][0]) == params['num_particles'])
-            energy = pd.read_csv('lj'+str(sim)+'_en.txt')
-            ens[sim] = np.array([energy['average'][0],
-                                 energy['block_stdev'][0]])/params['num_particles']
-        # data from https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm
-        rhos_srsw = [0.001, 0.003, 0.005, 0.007, 0.009]
-        ens_srsw = [-9.9165E-03, -2.9787E-02, -4.9771E-02, -6.9805E-02, -8.9936E-02]
-        en_stds_srsw = [1.89E-05, 3.21E-05, 3.80E-05, 7.66E-05, 2.44E-05]
-        plt.errorbar(rhos_srsw, ens_srsw, en_stds_srsw, fmt='+', label='SRSW')
-        plt.errorbar(params['rhos'], ens[:, 0], ens[:, 1], fmt='x', label='FEASST')
-        plt.xlabel(r'$\rho$', fontsize=16)
-        plt.ylabel(r'$U/N$', fontsize=16)
-        plt.legend(fontsize=16)
-        plt.savefig(params['prefix']+'_en.png', bbox_inches='tight', transparent='True')
-        if len(rhos_srsw) == params['num_sims']: # compare with srsw exactly
-            for sim in range(params['num_sims']):
-                self.assertAlmostEqual(ens[sim][0], ens_srsw[sim],
-                    delta=1.96*np.sqrt(ens[sim][1]**2 + en_stds_srsw[sim]**2))
+            diff = ens[sim][0] - ens_srsw[sim]
+            assert np.abs(diff) < 1.96*np.sqrt(ens[sim][1]**2 + en_stds_srsw[sim]**2)
 
 if __name__ == '__main__':
-    feasstio.run_simulations(run_function=run,
-                             params=PARAMS,
-                             run_type=args.run_type,
-                             slurm_id=args.slurm_id,
-                             slurm_task=args.slurm_task)
+    feasstio.run_simulations(params=PARAMS,
+                             run_function=run,
+                             post_process_function=post_process,
+                             run_type=ARGS.run_type,
+                             slurm_id=ARGS.slurm_id,
+                             slurm_task=ARGS.slurm_task)
