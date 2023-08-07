@@ -10,7 +10,7 @@ Basic tutorials:
    :glob:
 
    tutorial.ipynb
-   launch
+   tutorial
 
 Build and test models:
 
