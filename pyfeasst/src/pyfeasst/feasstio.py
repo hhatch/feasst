@@ -7,6 +7,7 @@ import json
 import subprocess
 import unittest
 from multiprocessing import Pool
+from itertools import repeat
 import numpy as np
 
 def vector3d_to_list(vec):
@@ -74,8 +75,12 @@ def slurm_queue_one_node(params):
         node: node index.
     """
     with open(params['prefix'] + '_slurm.txt', 'w') as myfile: myfile.write("""#!/bin/bash
-#SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o {prefix}_slurm_%j.txt -e {prefix}_slurm_%j.txt
-echo "Running ID $SLURM_JOB_ID on $(hostname) at $(date) in $PWD"
+#SBATCH -n {num_procs}
+#SBATCH -N 1
+#SBATCH -t {minutes}:00
+#SBATCH -o {prefix}_slurm_%A_%a.txt
+#SBATCH -e {prefix}_slurm_%A_%a.txt
+echo "Running ID $SLURM_ARRAY_JOB_ID:$SLURM_ARRAY_TASK_ID on $(hostname) at $(date) in $PWD"
 cd $PWD
 python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
@@ -120,7 +125,7 @@ def run_simulations(run_function, params, run_type, slurm_id, slurm_task):
             with open('lj_params.json', 'w') as file1:
                 file1.write(json.dumps(params))
         with Pool(params['num_sims']) as pool:
-            codes = pool.starmap(run_function, zip(range(0, params['num_sims'])))
+            codes = pool.starmap(run_function, zip(range(0, params['num_sims']), repeat(params)))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
     elif run_type == 1: # queue on SLURM

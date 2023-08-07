@@ -26,7 +26,7 @@ parser.add_argument('--trials_per_iteration', type=int, default=int(1e5),
     help='like cycles, but not necessary num_particles')
 parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
     help='number of iterations for equilibraiton')
-parser.add_argument('--production_iterations', type=int, default=int(1e3),
+parser.add_argument('--production_iterations', type=int, default=int(1e1),
     help='number of iterations for production')
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=0.1, help='hours until termination')
@@ -43,7 +43,7 @@ parser.add_argument('--slurm_id', type=int, default=-1, help='If != -1, read arg
 parser.add_argument('--slurm_task', type=int, default=0, help='If > 0, restart from checkpoint')
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
-# Define sim-dependent parameters in run(sim), with sim integer range of [0, num_sims-1].
+# Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
 args, unknownargs = parser.parse_known_args()
 assert len(unknownargs) == 0, 'An unknown argument was included: '+str(unknownargs)
 params = vars(args)
@@ -92,7 +92,7 @@ CPUTime trials_per_write {trials_per_iteration} file_name {prefix}{sim}_cpu.txt
 Run until_criteria_complete true
 """.format(**params))
 
-def run(sim):
+def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
     if args.slurm_task == 0:
         params['sim'] = sim + params['node']*params['num_procs']
@@ -101,7 +101,6 @@ def run(sim):
             params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
-        assert False
         syscode = subprocess.call('../build/bin/fst < '+file_name+'.txt  > '+file_name+'.log',
                                   shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
