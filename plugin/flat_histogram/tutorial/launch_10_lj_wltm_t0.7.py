@@ -6,9 +6,7 @@ The second node will have dccb but not avb.
 """
 
 import os
-import subprocess
 import argparse
-import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -130,31 +128,6 @@ CriteriaUpdater trials_per_update 1e5
 CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index]_crit.txt
 """.format(**params))
 
-def run(sim, params):
-    """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if args.queue_task == 0:
-        params['sim'] = sim
-        if params['seed'] == -1:
-            params['seed'] = random.randrange(int(1e9))
-        sim_node_dependent_params(params)
-        file_name = params['prefix']+str(sim)+'_launch_run'
-        write_feasst_script(params, file_name=file_name+'.txt')
-        syscode = subprocess.call(
-            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
-            shell=True, executable='/bin/bash')
-    else: # if queue_task < 1, restart from checkpoint
-        syscode = subprocess.call(
-            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
-            shell=True, executable='/bin/bash')
-    if syscode == 0: # if simulation finishes with no errors, write to sim id file
-        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
-            file1.write(str(sim)+'\n')
-        # if all sims are complete, post process or test once (by removing sim id file)
-        if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
-            os.remove(params['sim_id_file'])
-            post_process(params)
-    return syscode
-
 def post_process(params):
     # compare the lnpi with the srsw
     import numpy as np
@@ -219,9 +192,8 @@ def post_process(params):
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
-                             run_function=run,
-                             post_process_function=post_process,
+                             sim_node_dependent_params=sim_node_dependent_params,
+                             write_feasst_script=write_feasst_script,
+                             post_process=post_process,
                              queue_function=feasstio.slurm_single_node,
-                             run_type=args.run_type,
-                             queue_id=args.queue_id,
-                             queue_task=args.queue_task)
+                             args=args)

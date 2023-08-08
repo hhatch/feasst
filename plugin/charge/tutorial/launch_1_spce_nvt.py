@@ -5,9 +5,7 @@ There are systematic differences in the energy due to different Ewald cutoffs, e
 """
 
 import os
-import subprocess
 import argparse
-import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -59,7 +57,6 @@ params['cutoff'] = 0.5*params['cubic_box_length']
 params['alpha'] = 5.6/params['cubic_box_length']
 params['beta'] = 1./(params['temperature']*physical_constants.MolarGasConstant().value()/1e3) # mol/kJ
 
-
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(file_name, 'w', encoding='utf-8') as myfile:
@@ -101,44 +98,19 @@ CPUTime trials_per_write {trials_per_iteration} file_name {prefix}{sim}_cpu.txt
 Run until_criteria_complete true
 """.format(**params))
 
-def run(sim, params):
-    """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if args.queue_task == 0:
-        params['sim'] = sim + params['node']*params['procs_per_node']
-        if params['seed'] == -1:
-            params['seed'] = random.randrange(int(1e9))
-        file_name = params['prefix']+str(sim)+'_launch_run'
-        write_feasst_script(params, file_name=file_name+'.txt')
-        syscode = subprocess.call(
-            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
-            shell=True, executable='/bin/bash')
-    else: # if queue_task < 1, restart from checkpoint
-        syscode = subprocess.call(
-            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
-            shell=True, executable='/bin/bash')
-    if syscode == 0: # if simulation finishes with no errors, write to sim id file
-        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
-            file1.write(str(sim)+'\n')
-        # if all sims are complete, post process or test once (by removing sim id file)
-        if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
-            os.remove(params['sim_id_file'])
-            post_process(params)
-    return syscode
-
 def post_process(params):
     """ Approximately compare energy with https://doi.org/10.1063/1.476834 """
     if params['num_sims'] == 1: # compare energy
-      log = pd.read_csv(params['prefix']+'0.txt')
-      assert int(log['num_particles_of_type0'][0]) == params['num_particles']
-      energy = pd.read_csv(params['prefix']+'0_en.txt')
-      diff = energy['average'][0] - (-46.82)*params['num_particles']
-      assert np.abs(diff) < 20*np.sqrt(energy['block_stdev'][0]**2 + (0.02*params['num_particles'])**2)
+        log = pd.read_csv(params['prefix']+'0.txt')
+        assert int(log['num_particles_of_type0'][0]) == params['num_particles']
+        energy = pd.read_csv(params['prefix']+'0_en.txt')
+        diff = energy['average'][0] - (-46.82)*params['num_particles']
+        assert np.abs(diff) < 20*np.sqrt(energy['block_stdev'][0]**2 + (0.02*params['num_particles'])**2)
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
-                             run_function=run,
-                             post_process_function=post_process,
+                             sim_node_dependent_params=None,
+                             write_feasst_script=write_feasst_script,
+                             post_process=post_process,
                              queue_function=feasstio.slurm_single_node,
-                             run_type=args.run_type,
-                             queue_id=args.queue_id,
-                             queue_task=args.queue_task)
+                             args=args)
