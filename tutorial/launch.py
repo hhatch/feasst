@@ -62,7 +62,6 @@ def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(file_name, 'w', encoding='utf-8') as myfile:
         myfile.write("""
-# high temperature gcmc to generate initial configuration
 MonteCarlo
 RandomMT19937 seed {seed}
 Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt}
@@ -82,10 +81,12 @@ RemoveTrial name TrialAdd
 Metropolis num_trials_per_iteration {trials_per_iteration} num_iterations_to_complete {equilibration_iterations}
 Tune
 CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-8
+Log trials_per_write {trials_per_iteration} file_name {prefix}{sim}_eq.txt
 Run until_criteria_complete true
 RemoveModify name Tune
+RemoveAnalyze name Log
 
-# nvt production
+# canonical ensemble production
 Metropolis num_trials_per_iteration {trials_per_iteration} num_iterations_to_complete {production_iterations}
 Log trials_per_write {trials_per_iteration} file_name {prefix}{sim}.txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}{sim}.xyz
@@ -124,9 +125,9 @@ def post_process(params):
     """ Plot energy and compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
     ens = np.zeros(shape=(params['num_sims'], 2))
     for sim in range(params['num_sims']):
-        log = pd.read_csv('lj'+str(sim)+'.txt')
+        log = pd.read_csv(params['prefix']+str(sim)+'.txt')
         assert int(log['num_particles_of_type0'][0]) == params['num_particles']
-        energy = pd.read_csv('lj'+str(sim)+'_en.txt')
+        energy = pd.read_csv(params['prefix']+str(sim)+'_en.txt')
         ens[sim] = np.array([energy['average'][0],
                              energy['block_stdev'][0]])/params['num_particles']
     # data from https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm

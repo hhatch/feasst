@@ -130,10 +130,10 @@ def run_simulations(params, run_function, post_process_function, queue_function,
     if run_type == 0: # run directly
         if queue_id != -1: # if run from queue
             if queue_task == 0: # read param file if not checkpoint
-                with open('lj_params'+str(queue_id)+'.json', 'r') as file1:
+                with open(params['prefix']+'_params'+str(queue_id)+'.json', 'r') as file1:
                     params = json.load(file1)
         else:
-            with open('lj_params.json', 'w') as file1:
+            with open(params['prefix']+'_params.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
         with Pool(params['num_sims']) as pool:
             codes = pool.starmap(run_function, zip(range(0, params['num_sims']), repeat(params)))
