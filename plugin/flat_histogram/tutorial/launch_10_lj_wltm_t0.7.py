@@ -155,7 +155,66 @@ def run(sim, params):
     return syscode
 
 def post_process(params):
-    assert False
+    # compare the lnpi with the srsw
+    import numpy as np
+    import pandas as pd
+    from pyfeasst import macrostate_distribution
+    from pyfeasst import multistate_accumulator
+    num_block = 32
+    beta_mu_eq = list()
+    rho_vapor = list()
+    rho_liquid = list()
+    en_vapor = list()
+    en_liquid = list()
+    pressure = list()
+    for block in range(-1, num_block):
+        if block == -1:
+            ln_prob_header = 'ln_prob'
+            energy_header = 'e_average'
+        else:
+            ln_prob_header = 'ln_prob' + str(block)
+            energy_header = 'e_block' + str(block)
+        lnpi = macrostate_distribution.splice_files(prefix=params['prefix']+'n', suffix='_lnpi.txt',
+                                                    ln_prob_header=ln_prob_header)
+        lnpi.set_minimum_smoothing(30)
+        energy = multistate_accumulator.splice_by_node(prefix=params['prefix']+'n', suffix='_en.txt', num_nodes=params['num_nodes'])
+        lnpi.concat_dataframe(dataframe=energy, add_prefix='e_')
+        delta_beta_mu = lnpi.equilibrium()
+        beta_mu_eq.append(params['beta']*params['mu'] + delta_beta_mu)
+        for index, phase in enumerate(lnpi.split()):
+            n_gce = phase.average_macrostate()
+            rho = n_gce/params['cubic_box_length']**3
+            en = phase.ensemble_average(energy_header)/n_gce
+            if index == 0:
+                pressure.append(-phase.ln_prob()[0]/params['beta']/params['cubic_box_length']**3)
+                rho_vapor.append(rho)
+                en_vapor.append(en)
+            else:
+                rho_liquid.append(rho)
+                en_liquid.append(en)
+    data = pd.DataFrame(data={'rho_vapor': rho_vapor, 'rho_liquid': rho_liquid, 'pressure': pressure, 'en_vapor': en_vapor, 'en_liquid': en_liquid, 'beta_mu_eq': beta_mu_eq})
+    data.to_csv('launch_10_lj_wltm_t0.7.csv')
+    for col in data.columns:
+        print(col, data[col][0], '+/-', data[col][1:].std()/np.sqrt(len(data[col][1:])), data[col][1:].mean())
+
+    # check equilibrium properties from https://www.nist.gov/mml/csd/chemical-informatics-group/sat-tmmc-liquid-vapor-coexistence-properties-long-range
+    z_factor = 6
+    assert np.abs(data['rho_vapor'][0] - 1.996E-03) < z_factor*np.sqrt((data['rho_vapor'][1:].std()/np.sqrt(num_block))**2 + 1.422E-05**2)
+    assert np.abs(data['rho_liquid'][0] - 8.437E-01), z_factor*np.sqrt((data['rho_liquid'][1:].std()/np.sqrt(num_block))**2 + 2.49E-04**2)
+    assert np.abs(data['pressure'][0] - 1.370E-03), z_factor*np.sqrt((data['pressure'][1:].std()/np.sqrt(num_block))**2 + 9.507E-07**2)
+    assert np.abs(data['en_vapor'][0] - -2.500E-02), z_factor*np.sqrt((data['en_vapor'][1:].std()/np.sqrt(num_block))**2 + 3.323E-05**2)
+    assert np.abs(data['en_liquid'][0] - -6.106E+00), z_factor*np.sqrt((data['en_liquid'][1:].std()/np.sqrt(num_block))**2 + 1.832E-03**2)
+    assert np.abs(data['beta_mu_eq'][0] - -6.257E+00), z_factor*np.sqrt((data['beta_mu_eq'][1:].std()/np.sqrt(num_block))**2 + 4.639E-04**2)
+
+    # check lnpi
+    lnpi = macrostate_distribution.splice_files(prefix=params['prefix']+'n', suffix='_lnpi.txt')
+    df=pd.concat([lnpi.dataframe(), pd.read_csv('../test/data/stat070.csv')], axis=1)
+    df['deltalnPI']=df.lnPI-df.lnPI.shift(1)
+    df.to_csv('lj_lnpi.csv')
+    diverged=df[df.deltalnPI-df.delta_ln_prob > z_factor*df.delta_ln_prob_stdev]
+    print(diverged)
+    assert len(diverged) == 0
+
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
