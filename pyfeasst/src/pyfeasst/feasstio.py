@@ -4,6 +4,7 @@ This module provides some utility input / output functions for use with the FEAS
 
 import os
 import sys
+import random
 import json
 import subprocess
 from multiprocessing import Pool
@@ -106,7 +107,33 @@ fi
 echo "Time is $(date)"
 """.format(**params))
 
-def run_simulations(params, run_function, post_process_function, queue_function, args):
+def run_single(sim, params, args, sim_node_dependent_params, write_feasst_script, post_process):
+    """ Run a single simulation. If all simulations are complete, run PostProcess. """
+    if args.queue_task == 0:
+        params['sim'] = sim
+        if params['seed'] == -1:
+            params['seed'] = random.randrange(int(1e9))
+        if sim_node_dependent_params:
+            sim_node_dependent_params(params)
+        file_name = params['prefix']+str(sim)+'_run'
+        write_feasst_script(params, file_name=file_name+'.txt')
+        syscode = subprocess.call(
+            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
+            shell=True, executable='/bin/bash')
+    else: # if queue_task < 1, restart from checkpoint
+        syscode = subprocess.call(
+            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
+            shell=True, executable='/bin/bash')
+    if syscode == 0: # if simulation finishes with no errors, write to sim id file
+        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
+            file1.write(str(sim)+'\n')
+        # if all sims are complete, post process or test once (by removing sim id file)
+        if all_sims_complete(params['sim_id_file'], params['num_sims']):
+            os.remove(params['sim_id_file'])
+            post_process(params)
+    return syscode
+
+def run_simulations(params, sim_node_dependent_params, write_feasst_script, post_process, queue_function, args):
     """
     Run a simulation either locally in the shell or queue on HPC nodes
 
@@ -119,10 +146,13 @@ def run_simulations(params, run_function, post_process_function, queue_function,
         procs_per_sim: number of processors per sim,
         num_nodes: number of nodes,
         node: node index.
-    :param function per_node_params:
-        The name of the function to run that assigns parameters basked on the node.
-        The only argument is the node index.
-    :param function post_process_function:
+    :param function sim_node_dependent_params:
+        The name of the function that assigns parameters based on the sim and node.
+        The only argument is the parameters.
+    :param function write_feasst_script:
+        The name of the function to write the feasst text interface file,
+        which has the first argment as the parameters and the second argument as the filename.
+    :param function post_process:
         The name of the function to post process all simulations once complete,
         and has the only argument as the params.
     :param function queue_function:
@@ -143,7 +173,10 @@ def run_simulations(params, run_function, post_process_function, queue_function,
         sims_per_node = int(params['procs_per_node']/params['procs_per_sim'])
         with Pool(sims_per_node) as pool:
             sims = range(params['node']*sims_per_node, (params['node']+1)*sims_per_node)
-            codes = pool.starmap(run_function, zip(sims, repeat(params), repeat(args)))
+            codes = pool.starmap(run_single, zip(sims, repeat(params), repeat(args),
+                                                 repeat(sim_node_dependent_params),
+                                                 repeat(write_feasst_script),
+                                                 repeat(post_process)))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
     elif args.run_type == 1: # queue
@@ -159,7 +192,7 @@ def run_simulations(params, run_function, post_process_function, queue_function,
             with open(params['prefix']+'_params'+queue_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
     elif args.run_type == 2: # post process
-        post_process_function(params)
+        post_process(params)
     else:
         assert False  # unrecognized run_type
 

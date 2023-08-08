@@ -8,7 +8,6 @@ Usage: python /path/to/feasst/tutorial/launch.py --help
 import os
 import subprocess
 import argparse
-import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,8 +42,6 @@ parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in
 parser.add_argument('--node', type=int, default=0, help='node ID')
 parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
-def sim_node_dependent_params(params):
-    params['cubic_box_length'] = params['cubic_box_lengths'][params['sim']]
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
 # Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
@@ -55,13 +52,13 @@ params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
-params['num_sims'] = params['num_nodes']*params['procs_per_node']
 params['procs_per_sim'] = 1
+params['num_sims'] = params['num_nodes']*params['procs_per_node']
 params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
 params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()
-def per_sim_params(params):
-    params['cubic_box_length'] = params['cubic_box_lengths'][sim]
+def sim_node_dependent_params(params):
+    params['cubic_box_length'] = params['cubic_box_lengths'][params['sim']]
 
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -100,31 +97,6 @@ CPUTime trials_per_write {trials_per_iteration} file_name {prefix}{sim}_cpu.txt
 Run until_criteria_complete true
 """.format(**params))
 
-def run(sim, params, args):
-    """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if args.queue_task == 0:
-        params['sim'] = sim
-        if params['seed'] == -1:
-            params['seed'] = random.randrange(int(1e9))
-        sim_node_dependent_params(params)
-        file_name = params['prefix']+str(sim)+'_launch_run'
-        write_feasst_script(params, file_name=file_name+'.txt')
-        syscode = subprocess.call(
-            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
-            shell=True, executable='/bin/bash')
-    else: # if queue_task < 1, restart from checkpoint
-        syscode = subprocess.call(
-            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
-            shell=True, executable='/bin/bash')
-    if syscode == 0: # if simulation finishes with no errors, write to sim id file
-        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
-            file1.write(str(sim)+'\n')
-        # if all sims are complete, post process or test once (by removing sim id file)
-        if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
-            os.remove(params['sim_id_file'])
-            post_process(params)
-    return syscode
-
 def post_process(params):
     """ Plot energy and compare with https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm """
     ens = np.zeros(shape=(params['num_sims'], 2))
@@ -151,8 +123,8 @@ def post_process(params):
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
-                             run_function=run,
-                             #per_sim_params=per_sim_params,
-                             post_process_function=post_process,
+                             sim_node_dependent_params=sim_node_dependent_params,
+                             write_feasst_script=write_feasst_script,
+                             post_process=post_process,
                              queue_function=feasstio.slurm_single_node,
                              args=args)
