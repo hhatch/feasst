@@ -142,10 +142,28 @@ def post_process(params):
             diff = ens[sim][0] - ens_srsw[sim]
             assert np.abs(diff) < 1.96*np.sqrt(ens[sim][1]**2 + en_stds_srsw[sim]**2)
 
+def queue_one_node(params):
+    """ Write slurm script to fill one node. """
+    with open(params['prefix'] + '_slurm.txt', 'w') as myfile:
+        myfile.write("""#!/bin/bash
+#SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o {prefix}_slurm_%A_%a.txt -e {prefix}_slurm_%A_%a.txt
+echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
+cd $PWD
+python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
+if [ $? == 0 ]; then
+  echo "Job is done"
+  scancel $SLURM_ARRAY_JOB_ID
+else
+  echo "Job is terminating, to be restarted again"
+fi
+echo "Time is $(date)"
+""".format(**params))
+
 if __name__ == '__main__':
     feasstio.run_simulations(params=PARAMS,
                              run_function=run,
                              post_process_function=post_process,
+                             queue_function=queue_one_node,
                              run_type=ARGS.run_type,
                              slurm_id=ARGS.slurm_id,
                              slurm_task=ARGS.slurm_task)

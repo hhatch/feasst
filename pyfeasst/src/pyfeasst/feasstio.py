@@ -61,37 +61,7 @@ def all_sims_complete(filename, num_sims):
         return True
     return False
 
-def slurm_queue_one_node(params):
-    """
-    Write slurm script to fill one node.
-
-    :param dict params:
-        Must have the following keys:
-        num_procs: number of processors,
-        minutes: maximum number of minutes for job in queue,
-        prefix: prefix for all output file names,
-        script: script file name,
-        node: node index.
-    """
-    with open(params['prefix'] + '_slurm.txt', 'w') as myfile: myfile.write("""#!/bin/bash
-#SBATCH -n {num_procs}
-#SBATCH -N 1
-#SBATCH -t {minutes}:00
-#SBATCH -o {prefix}_slurm_%A_%a.txt
-#SBATCH -e {prefix}_slurm_%A_%a.txt
-echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
-cd $PWD
-python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
-if [ $? == 0 ]; then
-  echo "Job is done"
-  scancel $SLURM_ARRAY_JOB_ID
-else
-  echo "Job is terminating, to be restarted again"
-fi
-echo "Time is $(date)"
-""".format(**params))
-
-def run_simulations(params, run_function, post_process_function, run_type, slurm_id, slurm_task):
+def run_simulations(params, run_function, post_process_function, queue_function, run_type, slurm_id, slurm_task):
     """
     Run a simulation either locally in the shell or queue on slurm
 
@@ -110,6 +80,8 @@ def run_simulations(params, run_function, post_process_function, run_type, slurm
     :param function post_process_function:
         The name of the function to post process all simulations once complete,
         and has the only argument as the params.
+    :param function queue_function:
+        The name of the function to queue one node and has the only argument as the params.
     :param int run_type:
         0: run on local shell, 1: submit to slurm, 2: post-process.
     :param int slurm_id:
@@ -137,7 +109,7 @@ def run_simulations(params, run_function, post_process_function, run_type, slurm
             file1.close() # empty file contents
         for node in range(params['num_nodes']):
             params['node'] = node
-            slurm_queue_one_node(params)
+            queue_function(params)
             subprocess.call("sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + slurm_id_file, shell=True, executable='/bin/bash')
             with open(slurm_id_file, 'r') as file1:
                 slurm_id = file1.read().splitlines()[-1]
