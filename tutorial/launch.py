@@ -21,8 +21,8 @@ parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt'
     help='FEASST particle definition')
 parser.add_argument('--beta', type=float, default=1./0.9, help='inverse temperature')
 parser.add_argument('--num_particles', type=int, default=500, help='number of particles')
-parser.add_argument('--rho_lower', type=float, default=1e-3, help='lowest number density')
-parser.add_argument('--rho_upper', type=float, default=9e-3, help='highest number density')
+parser.add_argument('--density_lower', type=float, default=1e-3, help='lowest number density')
+parser.add_argument('--density_upper', type=float, default=9e-3, help='highest number density')
 parser.add_argument('--trials_per_iteration', type=int, default=int(1e5),
     help='like cycles, but not necessary num_particles')
 parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
@@ -55,9 +55,9 @@ params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on que
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
 params['procs_per_sim'] = 1
 params['num_sims'] = params['num_nodes']*params['procs_per_node']
-params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
-params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
-params['rhos'] = params['rhos'].tolist()
+params['densities'] = np.linspace(params['density_lower'], params['density_upper'], num=params['num_sims'])
+params['cubic_box_lengths'] = np.power(params['num_particles']/params['densities'], 1./3.).tolist()
+params['densities'] = params['densities'].tolist()
 def sim_node_dependent_params(params):
     params['cubic_box_length'] = params['cubic_box_lengths'][params['sim']]
 
@@ -112,7 +112,7 @@ def post_process(params):
     ens_srsw = [-9.9165E-03, -2.9787E-02, -4.9771E-02, -6.9805E-02, -8.9936E-02]
     en_stds_srsw = [1.89E-05, 3.21E-05, 3.80E-05, 7.66E-05, 2.44E-05]
     plt.errorbar(rhos_srsw, ens_srsw, en_stds_srsw, fmt='+', label='SRSW')
-    plt.errorbar(params['rhos'], ens[:, 0], ens[:, 1], fmt='x', label='FEASST')
+    plt.errorbar(params['densities'], ens[:, 0], ens[:, 1], fmt='x', label='FEASST')
     plt.xlabel(r'$\rho$', fontsize=16)
     plt.ylabel(r'$U/N$', fontsize=16)
     plt.legend(fontsize=16)
