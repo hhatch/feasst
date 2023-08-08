@@ -4,10 +4,10 @@ Approximately compare with https://doi.org/10.1063/1.476834.
 There are systematic differences in the energy due to different Ewald cutoffs, etc.
 """
 
+import os
 import subprocess
 import argparse
 import random
-from os.path import expanduser
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ from pyfeasst import physical_constants
 
 # Parse arguments from command line or change their default values.
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--feasst_install', type=str, default=expanduser("~")+'/feasst/build/',
+parser.add_argument('--feasst_install', type=str, default=os.path.expanduser("~")+'/feasst/build/',
     help='FEASST install directory (e.g., the path to build)')
 parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/spce.fstprt',
     help='FEASST particle definition')
@@ -118,10 +118,9 @@ def run(sim, params):
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
         with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
             file1.write(str(sim)+'\n')
-        # if all sims are complete, post process or test once (by clearing sim id file)
+        # if all sims are complete, post process or test once (by removing sim id file)
         if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
-            with open(params['sim_id_file'], 'w', encoding='utf-8') as file1:
-                file1.close() # clear file
+            os.remove(params['sim_id_file'])
             post_process(params)
     return syscode
 
