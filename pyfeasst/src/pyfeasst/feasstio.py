@@ -156,7 +156,7 @@ def run_simulations(params, run_function, post_process_function, queue_function,
             subprocess.call(params['queue_command'] + " | awk '{print $4}' >> " + queue_id_file, shell=True, executable='/bin/bash')
             with open(queue_id_file, 'r') as file1:
                 queue_id = file1.read().splitlines()[-1]
-            with open('lj_params'+queue_id+'.json', 'w') as file1:
+            with open(params['prefix']+'_params'+queue_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
     elif run_type == 2: # post process
         post_process_function(params)
