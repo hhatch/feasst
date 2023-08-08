@@ -87,6 +87,15 @@ def slurm_single_node(params):
     which is assumed to output the job id.
     """
     params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
+    if params['scratch'] == '':
+        params['scratch_slurm_preamble'] = ''
+        params['scratch_slurm_postamble'] = ''
+    else:
+        params['scratch_slurm_preamble'] = """original_dir=$PWD; echo $original_dir
+scratch={scratch}/$LOGNAME/${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}}/; mkdir -p $scratch; cd $scratch; echo "scratch:$scratch"
+rsync -au $original_dir/* .
+ls""".format(**params)
+        params['scratch_slurm_postamble'] = 'rsync -au . $original_dir/'
     with open(params['prefix'] + '_slurm.txt', 'w', encoding='utf-8') as myfile:
         myfile.write("""#!/bin/bash
 #SBATCH -n {procs_per_node}
@@ -96,8 +105,10 @@ def slurm_single_node(params):
 #SBATCH -e {prefix}_slurm_%A_%a.txt
 echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
+{scratch_slurm_preamble}
 export OMP_NUM_THREADS={procs_per_sim}
 python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
+{scratch_slurm_postamble}
 if [ $? == 0 ] || [ ! -f {sim_id_file} ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
