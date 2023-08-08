@@ -43,6 +43,8 @@ parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in
 parser.add_argument('--node', type=int, default=0, help='node ID')
 parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
+def sim_node_dependent_params(params):
+    params['cubic_box_length'] = params['cubic_box_lengths'][params['sim']]
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
 # Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
@@ -58,6 +60,8 @@ params['procs_per_sim'] = 1
 params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
 params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()
+def per_sim_params(params):
+    params['cubic_box_length'] = params['cubic_box_lengths'][sim]
 
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -96,13 +100,13 @@ CPUTime trials_per_write {trials_per_iteration} file_name {prefix}{sim}_cpu.txt
 Run until_criteria_complete true
 """.format(**params))
 
-def run(sim, params):
+def run(sim, params, args):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
     if args.queue_task == 0:
-        params['sim'] = sim + params['node']*params['procs_per_node']
-        params['cubic_box_length'] = params['cubic_box_lengths'][sim]
+        params['sim'] = sim
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))
+        sim_node_dependent_params(params)
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
         syscode = subprocess.call(
@@ -148,8 +152,7 @@ def post_process(params):
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
                              run_function=run,
+                             #per_sim_params=per_sim_params,
                              post_process_function=post_process,
                              queue_function=feasstio.slurm_single_node,
-                             run_type=args.run_type,
-                             queue_id=args.queue_id,
-                             queue_task=args.queue_task)
+                             args=args)

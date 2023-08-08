@@ -61,7 +61,8 @@ params['hours_checkpoint'] *= params['procs_per_node']
 params['num_sims'] = params['num_nodes']
 params['procs_per_sim'] = params['procs_per_node']
 params['dccb_cut'] = params['cubic_box_length']/int(params['cubic_box_length']/params['dccb_cut'])
-def per_node_params(params):
+def sim_node_dependent_params(params):
+    """ Define parameters that are dependent on the sim or node. """
     if params['node'] == 0:
         params['min_particles']=0
         params['max_particles']=params['num_particles_first_node']
@@ -132,10 +133,10 @@ CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}
 def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
     if args.queue_task == 0:
-        params['sim'] = sim + params['node']*params['procs_per_node']
+        params['sim'] = sim
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))
-        per_node_params(params)
+        sim_node_dependent_params(params)
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
         syscode = subprocess.call(

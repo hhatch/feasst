@@ -106,7 +106,7 @@ fi
 echo "Time is $(date)"
 """.format(**params))
 
-def run_simulations(params, run_function, post_process_function, queue_function, run_type, queue_id, queue_task):
+def run_simulations(params, run_function, post_process_function, queue_function, args):
     """
     Run a simulation either locally in the shell or queue on HPC nodes
 
@@ -119,28 +119,23 @@ def run_simulations(params, run_function, post_process_function, queue_function,
         procs_per_sim: number of processors per sim,
         num_nodes: number of nodes,
         node: node index.
-    :param function run_function:
-        The name of the function to run that represents a single simulation,
-        and has the first argument that is the integer id of the simulation
-        and the second arguement as the params.
+    :param function per_node_params:
+        The name of the function to run that assigns parameters basked on the node.
+        The only argument is the node index.
     :param function post_process_function:
         The name of the function to post process all simulations once complete,
         and has the only argument as the params.
     :param function queue_function:
         The name of the function to queue one node and has the only argument as the params.
-    :param int run_type:
-        0: run on local shell, 1: submit to queue, 2: post-process.
-    :param int queue_id:
-        Input by queue. If != -1, read args from file.
-    :param int queue_task:
-        Input by queue. If > 0, restart from checkpoint.
+    :param namespace args:
+        Arguments from argparse.
     """
     with open(params['sim_id_file'], 'w') as file1:
         file1.close() # clear file, then append sim id when complete
-    if run_type == 0: # run directly
-        if queue_id != -1: # if run from queue
-            if queue_task == 0: # read param file if not checkpoint
-                with open(params['prefix']+'_params'+str(queue_id)+'.json', 'r') as file1:
+    if args.run_type == 0: # run directly
+        if args.queue_id != -1: # if run from queue
+            if args.queue_task == 0: # read param file if not checkpoint
+                with open(params['prefix']+'_params'+str(args.queue_id)+'.json', 'r') as file1:
                     params = json.load(file1)
         else:
             with open(params['prefix']+'_params.json', 'w') as file1:
@@ -148,10 +143,10 @@ def run_simulations(params, run_function, post_process_function, queue_function,
         sims_per_node = int(params['procs_per_node']/params['procs_per_sim'])
         with Pool(sims_per_node) as pool:
             sims = range(params['node']*sims_per_node, (params['node']+1)*sims_per_node)
-            codes = pool.starmap(run_function, zip(sims, repeat(params)))
+            codes = pool.starmap(run_function, zip(sims, repeat(params), repeat(args)))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
-    elif run_type == 1: # queue
+    elif args.run_type == 1: # queue
         queue_id_file = params['prefix']+ '_queue_ids.txt'
         with open(queue_id_file, 'w') as file1:
             file1.close() # empty file contents
@@ -163,7 +158,7 @@ def run_simulations(params, run_function, post_process_function, queue_function,
                 queue_id = file1.read().splitlines()[-1]
             with open(params['prefix']+'_params'+queue_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
-    elif run_type == 2: # post process
+    elif args.run_type == 2: # post process
         post_process_function(params)
     else:
         assert False  # unrecognized run_type
