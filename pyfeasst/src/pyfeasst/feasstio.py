@@ -2,6 +2,7 @@
 This module provides some utility input / output functions for use with the FEASST simulation program.
 """
 
+import os
 import sys
 import json
 import subprocess
@@ -44,15 +45,20 @@ def read_checkpoint(filename):
 
 def all_sims_complete(filename, num_sims):
     """
-    Read filename and see if all sim ID's from [0, num_sims-1] are present (e.g., complete)
+    Read filename and see if all sim ID's from [0, num_sims-1] are present (e.g., complete).
+    If no file is present, also consider the simulation incomplete.
 
     >>> from pyfeasst import feasstio
     >>> all_sims_complete('../../tests/lj_sim_ids.txt', 8)
     True
     >>> all_sims_complete('../../tests/lj_sim_ids2.txt', 8)
     False
+    >>> all_sims_complete('../../tests/not_a_file.txt', 8)
+    False
     """
-    with open (filename, "r") as file1:
+    if not os.path.isfile(filename):
+        return False
+    with open(filename, 'r') as file1:
         lines = file1.read().splitlines()
     ids = map(str, list(range(num_sims)))
     for line in lines:
@@ -71,6 +77,7 @@ def slurm_single_node(params):
         minutes: maximum number of minutes for job in queue,
         prefix: prefix for all output file names,
         script: script file name,
+        sim_id_file: filename to write simulation id's for later checking of status,
         max_restarts: maximum number of restarts,
         node: node index.
 
@@ -88,7 +95,7 @@ def slurm_single_node(params):
 echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
 python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
-if [ $? == 0 ]; then
+if [ $? == 0 ] || [ ! -f {sim_id_file} ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
 else
