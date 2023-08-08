@@ -45,7 +45,6 @@ parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read arg
 parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
-# Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
 args, unknown_args = parser.parse_known_args()
 assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
 params = vars(args)

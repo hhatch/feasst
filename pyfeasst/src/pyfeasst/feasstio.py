@@ -87,7 +87,7 @@ def slurm_single_node(params):
     which is assumed to output the job id.
     """
     params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
-    if params['scratch'] == '':
+    if params['scratch'] == None:
         params['scratch_slurm_preamble'] = ''
         params['scratch_slurm_postamble'] = ''
     else:
