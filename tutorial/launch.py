@@ -8,55 +8,55 @@ Usage: python /path/to/feasst/tutorial/launch.py --help
 import subprocess
 import argparse
 import random
+from os.path import expanduser
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from pyfeasst import feasstio
-from os.path import expanduser
 
 # Parse arguments from command line or change their default values.
-PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-PARSER.add_argument('--feasst_install', type=str, default=expanduser("~")+'/feasst/build/',
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument('--feasst_install', type=str, default=expanduser("~")+'/feasst/build/',
     help='FEASST install directory (e.g., the path to build)')
-PARSER.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
+parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
     help='FEASST particle definition')
-PARSER.add_argument('--beta', type=float, default=1./0.9, help='inverse temperature')
-PARSER.add_argument('--num_particles', type=int, default=500, help='number of particles')
-PARSER.add_argument('--rho_lower', type=float, default=1e-3, help='lowest number density')
-PARSER.add_argument('--rho_upper', type=float, default=9e-3, help='highest number density')
-PARSER.add_argument('--trials_per_iteration', type=int, default=int(1e5),
+parser.add_argument('--beta', type=float, default=1./0.9, help='inverse temperature')
+parser.add_argument('--num_particles', type=int, default=500, help='number of particles')
+parser.add_argument('--rho_lower', type=float, default=1e-3, help='lowest number density')
+parser.add_argument('--rho_upper', type=float, default=9e-3, help='highest number density')
+parser.add_argument('--trials_per_iteration', type=int, default=int(1e5),
     help='like cycles, but not necessary num_particles')
-PARSER.add_argument('--equilibration_iterations', type=int, default=int(1e1),
+parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
     help='number of iterations for equilibraiton')
-PARSER.add_argument('--production_iterations', type=int, default=int(1e3),
+parser.add_argument('--production_iterations', type=int, default=int(1e3),
     help='number of iterations for production')
-PARSER.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
-PARSER.add_argument('--hours_terminate', type=float, default=0.1, help='hours until termination')
-PARSER.add_argument('--num_procs', type=int, default=5, help='number of processors')
-PARSER.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
-PARSER.add_argument('--run_type', '-r', type=int, default=0,
+parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
+parser.add_argument('--hours_terminate', type=float, default=0.1, help='hours until termination')
+parser.add_argument('--num_procs', type=int, default=5, help='number of processors')
+parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
+parser.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
-PARSER.add_argument('--seed', type=int, default=-1,
+parser.add_argument('--seed', type=int, default=-1,
     help='Random number generator seed. If -1, assign random seed to each sim.')
-PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
-PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
-PARSER.add_argument('--node', type=int, default=0, help='node ID')
-PARSER.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
-PARSER.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
+parser.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
+parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
+parser.add_argument('--node', type=int, default=0, help='node ID')
+parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
+parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
 # Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
-ARGS, UNKNOWN_ARGS = PARSER.parse_known_args()
-assert len(UNKNOWN_ARGS) == 0, 'An unknown argument was included: '+str(UNKNOWN_ARGS)
-PARAMS = vars(ARGS)
-PARAMS['script'] = __file__
-PARAMS['sim_id_file'] = PARAMS['prefix']+ "_sim_ids.txt"
-PARAMS['minutes'] = int(PARAMS['hours_terminate']*60) # minutes allocated on queue
-PARAMS['hours_terminate'] = 0.99*PARAMS['hours_terminate'] - 0.0333 # terminate before queue
-PARAMS['num_sims'] = PARAMS['num_nodes']*PARAMS['num_procs']
-PARAMS['rhos'] = np.linspace(PARAMS['rho_lower'], PARAMS['rho_upper'], num=PARAMS['num_sims'])
-PARAMS['cubic_box_lengths'] = np.power(PARAMS['num_particles']/PARAMS['rhos'], 1./3.).tolist()
-PARAMS['rhos'] = PARAMS['rhos'].tolist()
+args, unknown_args = parser.parse_known_args()
+assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
+params = vars(args)
+params['script'] = __file__
+params['sim_id_file'] = params['prefix']+ "_sim_ids.txt"
+params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
+params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
+params['num_sims'] = params['num_nodes']*params['num_procs']
+params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
+params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
+params['rhos'] = params['rhos'].tolist()
 
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -96,18 +96,20 @@ Run until_criteria_complete true
 
 def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if ARGS.queue_task == 0:
+    if args.queue_task == 0:
         params['sim'] = sim + params['node']*params['num_procs']
         params['cubic_box_length'] = params['cubic_box_lengths'][sim]
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
-        syscode = subprocess.call(ARGS.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
-                                  shell=True, executable='/bin/bash')
+        syscode = subprocess.call(
+            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
+            shell=True, executable='/bin/bash')
     else: # if queue_task < 1, restart from checkpoint
-        syscode = subprocess.call(ARGS.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
-                                  shell=True, executable='/bin/bash')
+        syscode = subprocess.call(
+            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
+            shell=True, executable='/bin/bash')
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
         with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
             file1.write(str(sim)+'\n')
@@ -136,17 +138,17 @@ def post_process(params):
     plt.xlabel(r'$\rho$', fontsize=16)
     plt.ylabel(r'$U/N$', fontsize=16)
     plt.legend(fontsize=16)
-    plt.savefig(params['prefix']+'_en.png', bbox_inches='tight', transparent='True')
+    plt.savefig(params['prefix']+'_energy.png', bbox_inches='tight', transparent='True')
     if len(rhos_srsw) == params['num_sims']: # compare with srsw exactly
         for sim in range(params['num_sims']):
             diff = ens[sim][0] - ens_srsw[sim]
             assert np.abs(diff) < 1.96*np.sqrt(ens[sim][1]**2 + en_stds_srsw[sim]**2)
 
 if __name__ == '__main__':
-    feasstio.run_simulations(params=PARAMS,
+    feasstio.run_simulations(params=params,
                              run_function=run,
                              post_process_function=post_process,
                              queue_function=feasstio.slurm_single_node,
-                             run_type=ARGS.run_type,
-                             queue_id=ARGS.queue_id,
-                             queue_task=ARGS.queue_task)
+                             run_type=args.run_type,
+                             queue_id=args.queue_id,
+                             queue_task=args.queue_task)
