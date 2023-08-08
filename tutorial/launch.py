@@ -16,7 +16,7 @@ from pyfeasst import feasstio
 
 # Parse arguments from command line or change their default values.
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--feasst_install', type=str, default=os.path.expanduser("~")+'/feasst/build/',
+parser.add_argument('--feasst_install', type=str, default=os.path.expanduser('~')+'/feasst/build/',
     help='FEASST install directory (e.g., the path to build)')
 parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
     help='FEASST particle definition')
@@ -32,7 +32,7 @@ parser.add_argument('--production_iterations', type=int, default=int(1e3),
     help='number of iterations for production')
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=0.1, help='hours until termination')
-parser.add_argument('--num_procs', type=int, default=5, help='number of processors')
+parser.add_argument('--procs_per_node', type=int, default=5, help='number of processors')
 parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
@@ -50,10 +50,10 @@ args, unknown_args = parser.parse_known_args()
 assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
 params = vars(args)
 params['script'] = __file__
-params['sim_id_file'] = params['prefix']+ "_sim_ids.txt"
+params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
-params['num_sims'] = params['num_nodes']*params['num_procs']
+params['num_sims'] = params['num_nodes']*params['procs_per_node']
 params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
 params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()
@@ -70,7 +70,7 @@ Potential VisitModel LongRangeCorrections
 ThermoParams beta {beta} chemical_potential -1
 Metropolis
 TrialTranslate tunable_param 2 tunable_target_acceptance 0.2
-Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours 0.1 num_hours_terminate {hours_terminate}
+Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 # grand canonical ensemble initalization
 TrialAdd particle_type 0
@@ -98,7 +98,7 @@ Run until_criteria_complete true
 def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
     if args.queue_task == 0:
-        params['sim'] = sim + params['node']*params['num_procs']
+        params['sim'] = sim + params['node']*params['procs_per_node']
         params['cubic_box_length'] = params['cubic_box_lengths'][sim]
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))

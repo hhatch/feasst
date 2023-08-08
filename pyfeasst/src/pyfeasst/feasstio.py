@@ -73,7 +73,7 @@ def slurm_single_node(params):
 
     :param dict params:
         Must have the following keys:
-        num_procs: number of processors,
+        procs_per_node: number of processors,
         minutes: maximum number of minutes for job in queue,
         prefix: prefix for all output file names,
         script: script file name,
@@ -87,7 +87,7 @@ def slurm_single_node(params):
     params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
     with open(params['prefix'] + '_slurm.txt', 'w', encoding='utf-8') as myfile:
         myfile.write("""#!/bin/bash
-#SBATCH -n {num_procs}
+#SBATCH -n {procs_per_node}
 #SBATCH -N 1
 #SBATCH -t {minutes}:00
 #SBATCH -o {prefix}_slurm_%A_%a.txt
