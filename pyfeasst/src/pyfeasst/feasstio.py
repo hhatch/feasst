@@ -61,6 +61,42 @@ def all_sims_complete(filename, num_sims):
         return True
     return False
 
+def slurm_single_node(params):
+    """
+    Write slurm script to fill one node.
+
+    :param dict params:
+        Must have the following keys:
+        num_procs: number of processors,
+        minutes: maximum number of minutes for job in queue,
+        prefix: prefix for all output file names,
+        script: script file name,
+        max_restarts: maximum number of restarts,
+        node: node index.
+
+    This function also adds the key 'queue_command' to the params dictionary,
+    which is assumed to output the job id.
+    """
+    params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
+    with open(params['prefix'] + '_slurm.txt', 'w', encoding='utf-8') as myfile:
+        myfile.write("""#!/bin/bash
+#SBATCH -n {num_procs}
+#SBATCH -N 1
+#SBATCH -t {minutes}:00
+#SBATCH -o {prefix}_slurm_%A_%a.txt
+#SBATCH -e {prefix}_slurm_%A_%a.txt
+echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
+cd $PWD
+python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
+if [ $? == 0 ]; then
+  echo "Job is done"
+  scancel $SLURM_ARRAY_JOB_ID
+else
+  echo "Job is terminating, to be restarted again"
+fi
+echo "Time is $(date)"
+""".format(**params))
+
 def run_simulations(params, run_function, post_process_function, queue_function, run_type, queue_id, queue_task):
     """
     Run a simulation either locally in the shell or queue on HPC nodes
