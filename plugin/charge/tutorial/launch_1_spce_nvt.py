@@ -38,6 +38,8 @@ parser.add_argument('--seed', type=int, default=-1,
     help='Random number generator seed. If -1, assign random seed to each sim.')
 parser.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
 parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
+parser.add_argument('--scratch', type=str, default=None,
+    help='Optionally write scheduled job to scratch/logname/jobid.')
 parser.add_argument('--node', type=int, default=0, help='node ID')
 parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
