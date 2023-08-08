@@ -61,9 +61,9 @@ def all_sims_complete(filename, num_sims):
         return True
     return False
 
-def run_simulations(params, run_function, post_process_function, queue_function, run_type, slurm_id, slurm_task):
+def run_simulations(params, run_function, post_process_function, queue_function, run_type, queue_id, queue_task):
     """
-    Run a simulation either locally in the shell or queue on slurm
+    Run a simulation either locally in the shell or queue on HPC nodes
 
     :param dict params:
         Must have the following keys:
@@ -83,18 +83,18 @@ def run_simulations(params, run_function, post_process_function, queue_function,
     :param function queue_function:
         The name of the function to queue one node and has the only argument as the params.
     :param int run_type:
-        0: run on local shell, 1: submit to slurm, 2: post-process.
-    :param int slurm_id:
-        Input by slurm scheduler. If != -1, read args from file.
-    :param int slurm_task:
-        Input by slurm scheduler. If > 0, restart from checkpoint.
+        0: run on local shell, 1: submit to queue, 2: post-process.
+    :param int queue_id:
+        Input by queue. If != -1, read args from file.
+    :param int queue_task:
+        Input by queue. If > 0, restart from checkpoint.
     """
     with open(params['sim_id_file'], 'w') as file1:
         file1.close() # clear file, then append sim id when complete
     if run_type == 0: # run directly
-        if slurm_id != -1: # if run from SLURM
-            if slurm_task == 0: # read param file if not checkpoint
-                with open('lj_params'+str(slurm_id)+'.json', 'r') as file1:
+        if queue_id != -1: # if run from queue
+            if queue_task == 0: # read param file if not checkpoint
+                with open('lj_params'+str(queue_id)+'.json', 'r') as file1:
                     params = json.load(file1)
         else:
             with open('lj_params.json', 'w') as file1:
@@ -103,17 +103,17 @@ def run_simulations(params, run_function, post_process_function, queue_function,
             codes = pool.starmap(run_function, zip(range(0, params['num_sims']), repeat(params)))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
-    elif run_type == 1: # queue on SLURM
-        slurm_id_file = params['prefix']+ '_slurm_ids.txt'
-        with open(slurm_id_file, 'w') as file1:
+    elif run_type == 1: # queue
+        queue_id_file = params['prefix']+ '_queue_ids.txt'
+        with open(queue_id_file, 'w') as file1:
             file1.close() # empty file contents
         for node in range(params['num_nodes']):
             params['node'] = node
             queue_function(params)
-            subprocess.call("sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt | awk '{print $4}' >> " + slurm_id_file, shell=True, executable='/bin/bash')
-            with open(slurm_id_file, 'r') as file1:
-                slurm_id = file1.read().splitlines()[-1]
-            with open('lj_params'+slurm_id+'.json', 'w') as file1:
+            subprocess.call(params['queue_command'] + " | awk '{print $4}' >> " + queue_id_file, shell=True, executable='/bin/bash')
+            with open(queue_id_file, 'r') as file1:
+                queue_id = file1.read().splitlines()[-1]
+            with open('lj_params'+queue_id+'.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
     elif run_type == 2: # post process
         post_process_function(params)

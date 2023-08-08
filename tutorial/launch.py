@@ -38,11 +38,11 @@ PARSER.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
 PARSER.add_argument('--seed', type=int, default=-1,
     help='Random number generator seed. If -1, assign random seed to each sim.')
-PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of SLURM restarts')
-PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of SLURM nodes')
+PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
+PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
 PARSER.add_argument('--node', type=int, default=0, help='node ID')
-PARSER.add_argument('--slurm_id', type=int, default=-1, help='If != -1, read args from file')
-PARSER.add_argument('--slurm_task', type=int, default=0, help='If > 0, restart from checkpoint')
+PARSER.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
+PARSER.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
 # Define sim-dependent parameters in run(sim, ...), with sim integer range of [0, num_sims-1].
@@ -51,8 +51,8 @@ assert len(UNKNOWN_ARGS) == 0, 'An unknown argument was included: '+str(UNKNOWN_
 PARAMS = vars(ARGS)
 PARAMS['script'] = __file__
 PARAMS['sim_id_file'] = PARAMS['prefix']+ "_sim_ids.txt"
-PARAMS['minutes'] = int(PARAMS['hours_terminate']*60) # minutes used for SLURM queue time
-PARAMS['hours_terminate'] = 0.99*PARAMS['hours_terminate'] - 0.0333 # terminate before SLURM
+PARAMS['minutes'] = int(PARAMS['hours_terminate']*60) # minutes allocated on queue
+PARAMS['hours_terminate'] = 0.99*PARAMS['hours_terminate'] - 0.0333 # terminate before queue
 PARAMS['num_sims'] = PARAMS['num_nodes']*PARAMS['num_procs']
 PARAMS['rhos'] = np.linspace(PARAMS['rho_lower'], PARAMS['rho_upper'], num=PARAMS['num_sims'])
 PARAMS['cubic_box_lengths'] = np.power(PARAMS['num_particles']/PARAMS['rhos'], 1./3.).tolist()
@@ -60,7 +60,7 @@ PARAMS['rhos'] = PARAMS['rhos'].tolist()
 
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
-    with open(file_name, 'w', encoding="utf-8") as myfile:
+    with open(file_name, 'w', encoding='utf-8') as myfile:
         myfile.write("""
 # high temperature gcmc to generate initial configuration
 MonteCarlo
@@ -96,7 +96,7 @@ Run until_criteria_complete true
 
 def run(sim, params):
     """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if ARGS.slurm_task == 0:
+    if ARGS.queue_task == 0:
         params['sim'] = sim + params['node']*params['num_procs']
         params['cubic_box_length'] = params['cubic_box_lengths'][sim]
         if params['seed'] == -1:
@@ -105,15 +105,15 @@ def run(sim, params):
         write_feasst_script(params, file_name=file_name+'.txt')
         syscode = subprocess.call(ARGS.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
                                   shell=True, executable='/bin/bash')
-    else: # if slurm_task < 1, restart from checkpoint
+    else: # if queue_task < 1, restart from checkpoint
         syscode = subprocess.call(ARGS.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
                                   shell=True, executable='/bin/bash')
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
-        with open(params['sim_id_file'], 'a', encoding="utf-8") as file1:
+        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
             file1.write(str(sim)+'\n')
         # if all sims are complete, post process or test once (by clearing sim id file)
         if feasstio.all_sims_complete(params['sim_id_file'], params['num_sims']):
-            with open(params['sim_id_file'], 'w', encoding="utf-8") as file1:
+            with open(params['sim_id_file'], 'w', encoding='utf-8') as file1:
                 file1.close() # clear file
             post_process(params)
     return syscode
@@ -144,12 +144,13 @@ def post_process(params):
 
 def queue_one_node(params):
     """ Write slurm script to fill one node. """
-    with open(params['prefix'] + '_slurm.txt', 'w') as myfile:
+    params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
+    with open(params['prefix'] + '_slurm.txt', 'w', encoding='utf-8') as myfile:
         myfile.write("""#!/bin/bash
 #SBATCH -n {num_procs} -N 1 -t {minutes}:00 -o {prefix}_slurm_%A_%a.txt -e {prefix}_slurm_%A_%a.txt
 echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
-python {script} --run_type 0 --node {node} --slurm_id $SLURM_ARRAY_JOB_ID --slurm_task $SLURM_ARRAY_TASK_ID
+python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
@@ -165,5 +166,5 @@ if __name__ == '__main__':
                              post_process_function=post_process,
                              queue_function=queue_one_node,
                              run_type=ARGS.run_type,
-                             slurm_id=ARGS.slurm_id,
-                             slurm_task=ARGS.slurm_task)
+                             queue_id=ARGS.queue_id,
+                             queue_task=ARGS.queue_task)
