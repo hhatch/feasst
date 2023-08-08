@@ -54,6 +54,7 @@ params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
 params['num_sims'] = params['num_nodes']*params['procs_per_node']
+params['procs_per_sim'] = 1
 params['rhos'] = np.linspace(params['rho_lower'], params['rho_upper'], num=params['num_sims'])
 params['cubic_box_lengths'] = np.power(params['num_particles']/params['rhos'], 1./3.).tolist()
 params['rhos'] = params['rhos'].tolist()

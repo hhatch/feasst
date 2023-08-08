@@ -54,6 +54,7 @@ params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
 params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
 params['num_sims'] = params['num_nodes']*params['procs_per_node']
+params['procs_per_sim'] = 1
 params['cutoff'] = 0.5*params['cubic_box_length']
 params['alpha'] = 5.6/params['cubic_box_length']
 params['beta'] = 1./(params['temperature']*physical_constants.MolarGasConstant().value()/1e3) # mol/kJ

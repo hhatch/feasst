@@ -43,7 +43,7 @@ parser.add_argument('--run_type', '-r', type=int, default=0,
 parser.add_argument('--seed', type=int, default=-1,
     help='Random number generator seed. If -1, assign random seed to each sim.')
 parser.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
-parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
+parser.add_argument('--num_nodes', type=int, default=2, help='Number of nodes in queue')
 parser.add_argument('--node', type=int, default=0, help='node ID')
 parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
@@ -56,9 +56,32 @@ params = vars(args)
 params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
-params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
+params['hours_terminate'] = 0.99*params['hours_terminate']*params['procs_per_node'] - 0.0333 # terminate before queue
+params['hours_checkpoint'] *= params['procs_per_node']
 params['num_sims'] = params['num_nodes']
+params['procs_per_sim'] = params['procs_per_node']
 params['dccb_cut'] = params['cubic_box_length']/int(params['cubic_box_length']/params['dccb_cut'])
+def per_node_params(params):
+    if params['node'] == 0:
+        params['min_particles']=0
+        params['max_particles']=params['num_particles_first_node']
+        params['gce_trial']='TrialTransfer weight 2 particle_type 0\nTrialTransferAVB weight 0.2 particle_type 0'
+        params['lj_potential']='Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJones'
+        params['ref_potential']=''
+        params['avb_trials']='TrialAVB2 weight 0.1 particle_type 0\nTrialAVB4 weight 0.1 particle_type 0'
+        params['min_sweeps']=2000
+        params['window_alpha']=2
+        params['min_window_size']=5
+    elif params['node'] == 1:
+        params['min_particles']=params['num_particles_first_node']
+        params['max_particles']=params['num_particles']
+        params['gce_trial'] = 'TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 10'
+        params['lj_potential']='Potential Model LennardJones'
+        params['ref_potential']="""RefPotential Model LennardJones cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut}""".format(**params)
+        params['avb_trials']=''
+        params['min_sweeps']=200
+        params['window_alpha']=1
+        params['min_window_size']=3
 
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -83,9 +106,9 @@ Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} n
 CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-4
 
 # gcmc initialization and nvt equilibration
+TrialAdd particle_type 0
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index]_eq.txt
 Tune
-TrialAdd particle_type 0
 Run until_num_particles [soft_macro_min]
 RemoveTrial name TrialAdd
 ThermoParams beta {beta} chemical_potential {mu}
@@ -112,26 +135,7 @@ def run(sim, params):
         params['sim'] = sim + params['node']*params['procs_per_node']
         if params['seed'] == -1:
             params['seed'] = random.randrange(int(1e9))
-        if params['node'] == 0:
-            params['min_particles']=0
-            params['max_particles']=params['num_particles_first_node']
-            params['gce_trial']='TrialTransfer weight 2 particle_type 0\nTrialTransferAVB weight 0.2 particle_type 0'
-            params['lj_potential']='Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJones'
-            params['ref_potential']=''
-            params['avb_trials']='TrialAVB2 weight 0.1 particle_type 0\nTrialAVB4 weight 0.1 particle_type 0'
-            params['min_sweeps']=2000
-            params['window_alpha']=2
-            params['min_window_size']=5
-        elif params['node'] == 1:
-            params['min_particles']=params['num_particles_first_node']
-            params['max_particles']=params['num_particles']
-            params['gce_trial'] = 'TrialTransfer weight 2 particle_type 0 reference_index 0 num_steps 10'
-            params['lj_potential']='Potential Model LennardJones'
-            params['ref_potential']="""RefPotential Model LennardJones cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut}""".format(**params)
-            params['avb_trials']=''
-            params['min_sweeps']=200
-            params['window_alpha']=1
-            params['min_window_size']=3
+        per_node_params(params)
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
         syscode = subprocess.call(

@@ -73,7 +73,8 @@ def slurm_single_node(params):
 
     :param dict params:
         Must have the following keys:
-        procs_per_node: number of processors,
+        procs_per_node: number of processors per node,
+        procs_per_sim: number of processors per simulation,
         minutes: maximum number of minutes for job in queue,
         prefix: prefix for all output file names,
         script: script file name,
@@ -94,6 +95,7 @@ def slurm_single_node(params):
 #SBATCH -e {prefix}_slurm_%A_%a.txt
 echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
+export OMP_NUM_THREADS={procs_per_sim}
 python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
 if [ $? == 0 ] || [ ! -f {sim_id_file} ]; then
   echo "Job is done"
@@ -111,9 +113,10 @@ def run_simulations(params, run_function, post_process_function, queue_function,
     :param dict params:
         Must have the following keys:
         sim_id_file: filename to write simulation id's for later checking of status,
-        num_sims: number of simulations,
         prefix: prefix for all output file names,
         max_restarts: maximum number of restarts,
+        procs_per_node: number of processors per node,
+        procs_per_sim: number of processors per sim,
         num_nodes: number of nodes,
         node: node index.
     :param function run_function:
@@ -142,8 +145,10 @@ def run_simulations(params, run_function, post_process_function, queue_function,
         else:
             with open(params['prefix']+'_params.json', 'w') as file1:
                 file1.write(json.dumps(params, indent=2))
-        with Pool(params['num_sims']) as pool:
-            codes = pool.starmap(run_function, zip(range(0, params['num_sims']), repeat(params)))
+        sims_per_node = int(params['procs_per_node']/params['procs_per_sim'])
+        with Pool(sims_per_node) as pool:
+            sims = range(params['node']*sims_per_node, (params['node']+1)*sims_per_node)
+            codes = pool.starmap(run_function, zip(sims, repeat(params)))
             if np.count_nonzero(codes) > 0:
                 sys.exit(1)
     elif run_type == 1: # queue
