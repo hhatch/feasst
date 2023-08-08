@@ -126,7 +126,7 @@ def run_simulations(params, run_function, post_process_function, run_type, slurm
                     params = json.load(file1)
         else:
             with open('lj_params.json', 'w') as file1:
-                file1.write(json.dumps(params))
+                file1.write(json.dumps(params, indent=2))
         with Pool(params['num_sims']) as pool:
             codes = pool.starmap(run_function, zip(range(0, params['num_sims']), repeat(params)))
             if np.count_nonzero(codes) > 0:
@@ -142,7 +142,7 @@ def run_simulations(params, run_function, post_process_function, run_type, slurm
             with open(slurm_id_file, 'r') as file1:
                 slurm_id = file1.read().splitlines()[-1]
             with open('lj_params'+slurm_id+'.json', 'w') as file1:
-                file1.write(json.dumps(params))
+                file1.write(json.dumps(params, indent=2))
     elif run_type == 2: # post process
         post_process_function(params)
     else:

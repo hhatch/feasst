@@ -12,9 +12,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from pyfeasst import feasstio
+from os.path import expanduser
 
 # Parse arguments from command line or change their default values.
 PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+PARSER.add_argument('--feasst_install', type=str, default=expanduser("~")+'/feasst/build/',
+    help='FEASST install directory (e.g., the path to build)')
 PARSER.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
     help='FEASST particle definition')
 PARSER.add_argument('--beta', type=float, default=1./0.9, help='inverse temperature')
@@ -100,10 +103,10 @@ def run(sim, params):
             params['seed'] = random.randrange(int(1e9))
         file_name = params['prefix']+str(sim)+'_launch_run'
         write_feasst_script(params, file_name=file_name+'.txt')
-        syscode = subprocess.call('../build/bin/fst < '+file_name+'.txt  > '+file_name+'.log',
+        syscode = subprocess.call(ARGS.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
                                   shell=True, executable='/bin/bash')
     else: # if slurm_task < 1, restart from checkpoint
-        syscode = subprocess.call('../build/bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
+        syscode = subprocess.call(ARGS.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
                                   shell=True, executable='/bin/bash')
     if syscode == 0: # if simulation finishes with no errors, write to sim id file
         with open(params['sim_id_file'], 'a', encoding="utf-8") as file1:
