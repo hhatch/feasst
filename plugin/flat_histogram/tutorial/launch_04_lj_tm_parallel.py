@@ -15,32 +15,32 @@ PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 PARSER.add_argument('--feasst_install', type=str, default=os.path.expanduser('~')+'/feasst/build/',
                     help='FEASST install directory (e.g., the path to build)')
 PARSER.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
-    help='FEASST particle definition')
+                    help='FEASST particle definition')
 PARSER.add_argument('--beta', type=float, default=1./1.5, help='inverse temperature')
 PARSER.add_argument('--mu', type=float, default=-2.352321, help='chemical potential')
 PARSER.add_argument('--mu_init', type=float, default=10, help='initial chemical potential')
 PARSER.add_argument('--max_particles', type=int, default=370, help='maximum number of particles')
 PARSER.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
 PARSER.add_argument('--min_sweeps', type=int, default=1e2,
-    help='Minimum number of sweeps as defined in https://dx.doi.org/10.1063/1.4918557')
+                    help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
 PARSER.add_argument('--cubic_box_length', type=float, default=8,
-    help='cubic periodic boundary length')
+                    help='cubic periodic boundary length')
 PARSER.add_argument('--trials_per_iteration', type=int, default=int(1e6),
-    help='like cycles, but not necessary num_particles')
+                    help='like cycles, but not necessary num_particles')
 PARSER.add_argument('--equilibration_iterations', type=int, default=0,
-    help='number of iterations for equilibraiton')
+                    help='number of iterations for equilibraiton')
 PARSER.add_argument('--hours_checkpoint', type=float, default=0.02, help='hours per checkpoint')
 PARSER.add_argument('--hours_terminate', type=float, default=0.2, help='hours until termination')
 PARSER.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
 PARSER.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
 PARSER.add_argument('--run_type', '-r', type=int, default=0,
-    help='0: run, 1: submit to queue, 2: post-process')
+                    help='0: run, 1: submit to queue, 2: post-process')
 PARSER.add_argument('--seed', type=int, default=-1,
-    help='Random number generator seed. If -1, assign random seed to each sim.')
+                    help='Random number generator seed. If -1, assign random seed to each sim.')
 PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
 PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
 PARSER.add_argument('--scratch', type=str, default=None,
-    help='Optionally write scheduled job to scratch/logname/jobid.')
+                    help='Optionally write scheduled job to scratch/logname/jobid.')
 PARSER.add_argument('--node', type=int, default=0, help='node ID')
 PARSER.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 PARSER.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
@@ -102,7 +102,7 @@ CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}
 """.format(**params))
 
 def post_process(params):
-    # skip the following checks if temperature is not 1.5
+    """ Skip the following checks if temperature is not 1.5 """
     if np.abs(params['beta'] - 1./1.5) > 1e-5:
         return
     lnpi=pd.read_csv(params['prefix']+'n0_lnpi.txt')
