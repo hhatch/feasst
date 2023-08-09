@@ -105,10 +105,10 @@ def post_process(params):
     if np.abs(params['beta'] - 1./1.5) > 1e-5:
         return
     lnpi=pd.read_csv(params['prefix']+'n0_lnpi.txt')
-    self.assertAlmostEqual(310.4179421879679, (np.exp(lnpi["ln_prob"]) * lnpi["state"]).sum(), delta=0.5)
-    fst = pd.read_csv(params['prefix']+'_lnpi.csv')
+    gce_av_num_particles = (np.exp(lnpi["ln_prob"]) * lnpi["state"]).sum()
+    assert np.abs(gce_av_num_particles - 310.4179421879679) < 0.5
     srsw = pd.read_csv('../test/data/stat150.csv')
-    plt.plot(fst['state'], fst['ln_prob'], label='FEASST')
+    plt.plot(lnpi['state'], lnpi['ln_prob'], label='FEASST')
     plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')
     plt.xlabel('number of particles', fontsize=16)
     plt.ylabel('ln probability', fontsize=16)
