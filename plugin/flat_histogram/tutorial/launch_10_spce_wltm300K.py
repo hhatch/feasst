@@ -86,6 +86,15 @@ def sim_node_dependent_params(params):
         params['window_alpha'] = 1.25
         params['min_window_size'] = 3
 
+# write TrialGrowFile for SPCE
+with open('spce_grow.txt', 'w') as f:
+    f.write("""TrialGrowFile
+
+particle_type 0 weight 2 transfer true site 0 num_steps 10 reference_index 0
+bond true mobile_site 1 anchor_site 0 reference_index 0
+angle true mobile_site 2 anchor_site 0 anchor_site2 1 reference_index 0
+""")
+
 def write_feasst_script(params, file_name):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(file_name, 'w', encoding='utf-8') as myfile:
