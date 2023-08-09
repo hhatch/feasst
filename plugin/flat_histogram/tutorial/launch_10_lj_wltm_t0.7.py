@@ -30,12 +30,12 @@ parser.add_argument('--dccb_cut', type=float, default=1,
     help='dual-cut configurational bias cutoff')
 parser.add_argument('--trials_per_iteration', type=int, default=int(1e6),
     help='like cycles, but not necessary num_particles')
-parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
+parser.add_argument('--equilibration_iterations', type=int, default=0,
     help='number of iterations for equilibraiton')
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
-parser.add_argument('--prefix', type=str, default='ljlt', help='prefix for all output file names')
+parser.add_argument('--prefix', type=str, default='lj_lowt', help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
 parser.add_argument('--seed', type=int, default=-1,
@@ -55,8 +55,8 @@ params = vars(args)
 params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
-params['hours_terminate'] = 0.99*params['hours_terminate']*params['procs_per_node'] - 0.0333 # terminate before queue
-params['hours_checkpoint'] *= params['procs_per_node']
+params['hours_checkpoint'] *= params['procs_per_node'] # real time -> cpu time
+params['hours_terminate'] = params['procs_per_node']*(0.99*params['hours_terminate'] - 0.0333) # terminate FEASST nicely before SLURM
 params['num_sims'] = params['num_nodes']
 params['procs_per_sim'] = params['procs_per_node']
 params['dccb_cut'] = params['cubic_box_length']/int(params['cubic_box_length']/params['dccb_cut'])
@@ -69,7 +69,7 @@ def sim_node_dependent_params(params):
         params['lj_potential']='Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJones'
         params['ref_potential']=''
         params['avb_trials']='TrialAVB2 weight 0.1 particle_type 0\nTrialAVB4 weight 0.1 particle_type 0'
-        params['min_sweeps']=2000
+        params['min_sweeps']=200
         params['window_alpha']=2
         params['min_window_size']=5
     elif params['node'] == 1:
@@ -79,7 +79,7 @@ def sim_node_dependent_params(params):
         params['lj_potential']='Potential Model LennardJones'
         params['ref_potential']="""RefPotential Model LennardJones cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut}""".format(**params)
         params['avb_trials']=''
-        params['min_sweeps']=200
+        params['min_sweeps']=20
         params['window_alpha']=1
         params['min_window_size']=3
 
@@ -90,7 +90,7 @@ def write_feasst_script(params, file_name):
 # first, initialize multiple clones into windows
 CollectionMatrixSplice hours_per {hours_checkpoint} ln_prob_file {prefix}n{node}_lnpi.txt min_window_size -1
 WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha {window_alpha} min_size {min_window_size}
-Checkpoint file_name {prefix}n{node}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
+Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 RandomMT19937 seed {seed}
 Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt}
@@ -102,7 +102,6 @@ ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
 TrialTranslate weight 1 tunable_param 0.2 tunable_target_acceptance 0.25
 {avb_trials}
-Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-4
 
 # gcmc initialization and nvt equilibration
@@ -119,7 +118,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 20
 {gce_trial}
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz
@@ -187,7 +186,8 @@ def post_process(params):
 
     # check lnpi
     lnpi = macrostate_distribution.splice_files(prefix=params['prefix']+'n', suffix='_lnpi.txt')
-    df=pd.concat([lnpi.dataframe(), pd.read_csv('../test/data/stat070.csv')], axis=1)
+    srsw = pd.read_csv(params['feasst_install']+'../plugin/flat_histogram/test/data/stat070.csv')
+    df=pd.concat([lnpi.dataframe(), srsw], axis=1)
     df['deltalnPI']=df.lnPI-df.lnPI.shift(1)
     df.to_csv(params['prefix']+'_lnpi.csv')
     diverged=df[df.deltalnPI-df.delta_ln_prob > z_factor*df.delta_ln_prob_stdev]
@@ -196,7 +196,6 @@ def post_process(params):
 
     # plot lnpi
     fst = pd.read_csv(params['prefix']+'_lnpi.csv')
-    srsw = pd.read_csv('../test/data/stat070.csv')
     plt.plot(fst['state'], fst['ln_prob'], label='FEASST')
     plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')
     plt.xlabel('number of particles', fontsize=16)

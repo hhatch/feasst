@@ -21,15 +21,16 @@ parser.add_argument('--mu', type=float, default=-2.352321, help='chemical potent
 parser.add_argument('--mu_init', type=float, default=10, help='initial chemical potential')
 parser.add_argument('--max_particles', type=int, default=370, help='maximum number of particles')
 parser.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
-parser.add_argument('--min_sweeps', type=int, default=1e4, help='minimum number of particles')
+parser.add_argument('--min_sweeps', type=int, default=1e2,
+    help='Minimum number of sweeps as defined in https://dx.doi.org/10.1063/1.4918557')
 parser.add_argument('--cubic_box_length', type=float, default=8,
     help='cubic periodic boundary length')
 parser.add_argument('--trials_per_iteration', type=int, default=int(1e6),
     help='like cycles, but not necessary num_particles')
-parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
+parser.add_argument('--equilibration_iterations', type=int, default=0,
     help='number of iterations for equilibraiton')
-parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
-parser.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
+parser.add_argument('--hours_checkpoint', type=float, default=0.02, help='hours per checkpoint')
+parser.add_argument('--hours_terminate', type=float, default=0.2, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
 parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
@@ -51,8 +52,8 @@ params = vars(args)
 params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
-params['hours_terminate'] = 0.99*params['hours_terminate']*params['procs_per_node'] - 0.0333 # terminate before queue
-params['hours_checkpoint'] *= params['procs_per_node']
+params['hours_checkpoint'] *= params['procs_per_node'] # real time -> cpu time
+params['hours_terminate'] = params['procs_per_node']*(0.99*params['hours_terminate'] - 0.0333) # terminate FEASST nicely before SLURM
 params['num_sims'] = params['num_nodes']
 params['procs_per_sim'] = params['procs_per_node']
 
@@ -63,7 +64,7 @@ def write_feasst_script(params, file_name):
 # first, initialize multiple clones into windows
 CollectionMatrixSplice hours_per {hours_checkpoint} ln_prob_file {prefix}n{node}_lnpi.txt min_window_size -1
 WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha 2.25 min_size 5
-Checkpoint file_name {prefix}n{node}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
+Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 RandomMT19937 seed {seed}
 Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt}
@@ -73,7 +74,6 @@ Potential VisitModel LongRangeCorrections
 ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
 TrialTranslate weight 1 tunable_param 0.2 tunable_target_acceptance 0.25
-Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-4
 
 # gcmc initialization and nvt equilibration
@@ -90,7 +90,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias WLTM min_sweeps {min_sweeps} new_sweep 1 min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 20
 TrialTransfer weight 2 particle_type 0
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz
@@ -107,7 +107,7 @@ def post_process(params):
     lnpi=pd.read_csv(params['prefix']+'n0_lnpi.txt')
     gce_av_num_particles = (np.exp(lnpi["ln_prob"]) * lnpi["state"]).sum()
     assert np.abs(gce_av_num_particles - 310.4179421879679) < 0.5
-    srsw = pd.read_csv('../test/data/stat150.csv')
+    srsw = pd.read_csv(params['feasst_install']+'../plugin/flat_histogram/test/data/stat150.csv')
     plt.plot(lnpi['state'], lnpi['ln_prob'], label='FEASST')
     plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')
     plt.xlabel('number of particles', fontsize=16)
