@@ -1,5 +1,6 @@
 """
 Flat-histogram simulation of single-site Lennard Jones particles in the grand canonical ensemble.
+The default temperature is above the critical point.
 """
 
 import os
@@ -27,7 +28,7 @@ parser.add_argument('--trials_per_iteration', type=int, default=int(1e6),
     help='like cycles, but not necessary num_particles')
 parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
     help='number of iterations for equilibraiton')
-parser.add_argument('--hours_checkpoint', type=float, default=1, help='hours per checkpoint')
+parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
 parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
@@ -100,10 +101,19 @@ CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}
 """.format(**params))
 
 def post_process(params):
-    import numpy as np
-    import pandas as pd
-    lnpi=pd.read_csv('ljn0_lnpi.txt')
+    # skip the following checks if temperature is not 1.5
+    if np.abs(params['beta'] - 1./1.5) > 1e-5:
+        return
+    lnpi=pd.read_csv(params['prefix']+'n0_lnpi.txt')
     self.assertAlmostEqual(310.4179421879679, (np.exp(lnpi["ln_prob"]) * lnpi["state"]).sum(), delta=0.5)
+    fst = pd.read_csv(params['prefix']+'_lnpi.csv')
+    srsw = pd.read_csv('../test/data/stat150.csv')
+    plt.plot(fst['state'], fst['ln_prob'], label='FEASST')
+    plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')
+    plt.xlabel('number of particles', fontsize=16)
+    plt.ylabel('ln probability', fontsize=16)
+    plt.legend(fontsize=16)
+    plt.savefig(params['prefix']+'_lnpi.png', bbox_inches='tight', transparent='True')
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,

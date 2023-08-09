@@ -32,7 +32,7 @@ parser.add_argument('--trials_per_iteration', type=int, default=int(1e6),
     help='like cycles, but not necessary num_particles')
 parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
     help='number of iterations for equilibraiton')
-parser.add_argument('--hours_checkpoint', type=float, default=1, help='hours per checkpoint')
+parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
 parser.add_argument('--prefix', type=str, default='ljlt', help='prefix for all output file names')
@@ -168,9 +168,13 @@ def post_process(params):
                 rho_liquid.append(rho)
                 en_liquid.append(en)
     data = pd.DataFrame(data={'rho_vapor': rho_vapor, 'rho_liquid': rho_liquid, 'pressure': pressure, 'en_vapor': en_vapor, 'en_liquid': en_liquid, 'beta_mu_eq': beta_mu_eq})
-    data.to_csv('launch_10_lj_wltm_t0.7.csv')
+    data.to_csv(params['script']+'.csv')
     for col in data.columns:
         print(col, data[col][0], '+/-', data[col][1:].std()/np.sqrt(len(data[col][1:])), data[col][1:].mean())
+
+    # skip the following checks if temperature is not 0.7
+    if np.abs(params['beta'] - 1./0.7) > 1e-5:
+        return
 
     # check equilibrium properties from https://www.nist.gov/mml/csd/chemical-informatics-group/sat-tmmc-liquid-vapor-coexistence-properties-long-range
     z_factor = 6
@@ -185,13 +189,13 @@ def post_process(params):
     lnpi = macrostate_distribution.splice_files(prefix=params['prefix']+'n', suffix='_lnpi.txt')
     df=pd.concat([lnpi.dataframe(), pd.read_csv('../test/data/stat070.csv')], axis=1)
     df['deltalnPI']=df.lnPI-df.lnPI.shift(1)
-    df.to_csv('lj_lnpi.csv')
+    df.to_csv(params['prefix']+'_lnpi.csv')
     diverged=df[df.deltalnPI-df.delta_ln_prob > z_factor*df.delta_ln_prob_stdev]
     print(diverged)
     assert len(diverged) == 0
 
     # plot lnpi
-    fst = pd.read_csv('lj_lnpi.csv')
+    fst = pd.read_csv(params['prefix']+'_lnpi.csv')
     srsw = pd.read_csv('../test/data/stat070.csv')
     plt.plot(fst['state'], fst['ln_prob'], label='FEASST')
     plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')

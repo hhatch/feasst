@@ -109,7 +109,7 @@ cd $PWD
 export OMP_NUM_THREADS={procs_per_sim}
 python {script} --run_type 0 --node {node} --queue_id $SLURM_ARRAY_JOB_ID --queue_task $SLURM_ARRAY_TASK_ID
 {scratch_slurm_postamble}
-if [ $? == 0 ] || [ ! -f {sim_id_file} ]; then
+if [ $? == 0 ] && [ ! -f {sim_id_file} ]; then
   echo "Job is done"
   scancel $SLURM_ARRAY_JOB_ID
 else
