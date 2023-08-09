@@ -29,7 +29,7 @@ parser.add_argument('--production_iterations', type=int, default=int(1e3),
 parser.add_argument('--hours_checkpoint', type=float, default=0.1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=0.1, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=1, help='number of processors')
-parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
+parser.add_argument('--prefix', type=str, default='fh', help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
 parser.add_argument('--seed', type=int, default=-1,

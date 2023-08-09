@@ -35,7 +35,7 @@ parser.add_argument('--equilibration_iterations', type=int, default=int(1e1),
 parser.add_argument('--hours_checkpoint', type=float, default=1, help='hours per checkpoint')
 parser.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
 parser.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
-parser.add_argument('--prefix', type=str, default='lj', help='prefix for all output file names')
+parser.add_argument('--prefix', type=str, default='ljlt', help='prefix for all output file names')
 parser.add_argument('--run_type', '-r', type=int, default=0,
     help='0: run, 1: submit to queue, 2: post-process')
 parser.add_argument('--seed', type=int, default=-1,
@@ -190,6 +190,15 @@ def post_process(params):
     print(diverged)
     assert len(diverged) == 0
 
+    # plot lnpi
+    fst = pd.read_csv('lj_lnpi.csv')
+    srsw = pd.read_csv('../test/data/stat070.csv')
+    plt.plot(fst['state'], fst['ln_prob'], label='FEASST')
+    plt.plot(srsw['N'], srsw['lnPI'], linestyle='dashed', label='SRSW')
+    plt.xlabel('number of particles', fontsize=16)
+    plt.ylabel('ln probability', fontsize=16)
+    plt.legend(fontsize=16)
+    plt.savefig(params['prefix']+'_lnpi.png', bbox_inches='tight', transparent='True')
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=params,
