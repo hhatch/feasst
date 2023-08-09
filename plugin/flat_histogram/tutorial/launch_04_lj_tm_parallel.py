@@ -13,7 +13,7 @@ from pyfeasst import feasstio
 # Parse arguments from command line or change their default values.
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--feasst_install', type=str, default=os.path.expanduser('~')+'/feasst/build/',
-    help='FEASST install directory (e.g., the path to build)')
+                    help='FEASST install directory (e.g., the path to build)')
 parser.add_argument('--fstprt', type=str, default='/feasst/forcefield/lj.fstprt',
     help='FEASST particle definition')
 parser.add_argument('--beta', type=float, default=1./1.5, help='inverse temperature')
@@ -52,8 +52,9 @@ params = vars(args)
 params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
-params['hours_checkpoint'] *= params['procs_per_node'] # real time -> cpu time
-params['hours_terminate'] = params['procs_per_node']*(0.99*params['hours_terminate'] - 0.0333) # terminate FEASST nicely before SLURM
+params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate FEASST before SLURM
+params['hours_terminate'] *= params['procs_per_node'] # real time -> cpu time
+params['hours_checkpoint'] *= params['procs_per_node']
 params['num_sims'] = params['num_nodes']
 params['procs_per_sim'] = params['procs_per_node']
 
