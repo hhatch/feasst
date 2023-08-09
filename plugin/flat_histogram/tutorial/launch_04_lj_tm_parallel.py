@@ -69,7 +69,6 @@ Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} n
 
 RandomMT19937 seed {seed}
 Configuration cubic_box_length {cubic_box_length} particle_type0 {fstprt}
-NeighborCriteria maximum_distance 1.375 minimum_distance 0.9
 Potential Model LennardJones
 Potential VisitModel LongRangeCorrections
 ThermoParams beta {beta} chemical_potential {mu_init}

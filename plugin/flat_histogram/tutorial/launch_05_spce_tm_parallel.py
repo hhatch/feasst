@@ -98,7 +98,6 @@ RefPotential Model HardSphere group oxygen cutoff {dccb_cut} VisitModel VisitMod
 Potential Model ChargeScreenedIntra VisitModel VisitModelBond
 Potential Model ChargeSelf
 Potential VisitModel LongRangeCorrections
-NeighborCriteria maximum_distance 1.375 minimum_distance 0.9
 ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
 TrialTranslate weight 1 tunable_param 0.2 tunable_target_acceptance 0.25
