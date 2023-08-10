@@ -16,7 +16,6 @@ PARSER.add_argument('--feasst_install', type=str, default=os.path.expanduser('~'
                     help='FEASST install directory (e.g., the path to build)')
 PARSER.add_argument('--fstprt', type=str, default='/feasst/plugin/chain/forcefield/cg7mab2.fstprt',
                     help='FEASST particle definition')
-PARSER.add_argument('--num_particles', type=int, default=500, help='number of particles')
 PARSER.add_argument('--cubic_box_length', type=float, default=90,
                     help='cubic periodic boundary conditions')
 PARSER.add_argument('--trials_per_iteration', type=int, default=int(1e5),
