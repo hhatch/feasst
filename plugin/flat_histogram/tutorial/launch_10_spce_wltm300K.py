@@ -132,7 +132,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 1
 {gce_trial}
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz

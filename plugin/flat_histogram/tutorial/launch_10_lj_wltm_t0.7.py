@@ -72,7 +72,7 @@ def sim_node_dependent_params(params):
         params['lj_potential'] = 'Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJones'
         params['ref_potential'] = ''
         params['avb_trials'] = 'TrialAVB2 weight 0.1 particle_type 0\nTrialAVB4 weight 0.1 particle_type 0'
-        params['min_sweeps'] = 200
+        params['min_sweeps'] = 100
         params['window_alpha'] = 2
         params['min_window_size'] = 5
     elif params['node'] == 1:
@@ -82,7 +82,7 @@ def sim_node_dependent_params(params):
         params['lj_potential'] = 'Potential Model LennardJones'
         params['ref_potential'] = """RefPotential Model LennardJones cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut}""".format(**params)
         params['avb_trials'] = ''
-        params['min_sweeps'] = 20
+        params['min_sweeps'] = 2
         params['window_alpha'] = 1
         params['min_window_size'] = 3
 
@@ -121,7 +121,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 1
 {gce_trial}
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz

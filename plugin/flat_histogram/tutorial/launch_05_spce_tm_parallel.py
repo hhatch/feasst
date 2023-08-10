@@ -87,7 +87,7 @@ def write_feasst_script(params, file_name):
         myfile.write("""
 # first, initialize multiple clones into windows
 CollectionMatrixSplice hours_per {hours_checkpoint} ln_prob_file {prefix}n{node}_lnpi.txt min_window_size -1
-WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha 2.25 min_size 5
+WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha 1.5 min_size 5
 Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 RandomMT19937 seed {seed}
@@ -118,7 +118,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 20
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 1
 TrialTransfer weight 2 particle_type 0
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz
