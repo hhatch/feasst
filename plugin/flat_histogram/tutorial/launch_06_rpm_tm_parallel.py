@@ -120,7 +120,7 @@ def post_process(params):
     diverged = lnpi[lnpi.ln_prob-lnpi.ln_prob_prev > 5*lnpi.ln_prob_prev_stdev]
     print(diverged)
     assert len(diverged) == 0
-    energy = pd.read_csv(params['prefix']+'n0s00_en.txt')
+    energy = pd.read_csv(params['prefix']+'n0s0_en.txt')
     energy = energy[:3]
     energy['prev'] = [0, -0.939408, -2.02625]
     energy['prev_stdev'] = [1e-14, 0.02, 0.04]
