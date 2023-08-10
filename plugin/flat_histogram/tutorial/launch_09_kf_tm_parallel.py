@@ -114,9 +114,9 @@ def post_process(params):
     diverged = lnpi[lnpi.ln_prob-lnpi.ln_prob_prev > 6*lnpi.ln_prob_prev_stdev]
     print(diverged)
     assert len(diverged) == 0
-    energy = pd.read_csv(params['prefix']+'n0s00_en00.txt')
+    energy = pd.read_csv(params['prefix']+'n0s00_en.txt')
     energy = energy[:6]
-    en['prev'] = [0, 0, -0.038758392176564, -0.116517384264731, -0.232665619265520, -0.387804181572135]
+    energy['prev'] = [0, 0, -0.038758392176564, -0.116517384264731, -0.232665619265520, -0.387804181572135]
     diverged = energy[energy.average - energy.prev > 10*energy.block_stdev]
     print(diverged)
     assert len(diverged) == 0

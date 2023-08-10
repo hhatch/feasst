@@ -20,9 +20,9 @@ PARSER.add_argument('--plus', type=str, default='/feasst/plugin/charge/forcefiel
                     help='FEASST particle definition of the positive charge RPM')
 PARSER.add_argument('--minus', type=str, default='/feasst/plugin/charge/forcefield/rpm_minus.fstprt',
                     help='FEASST particle definition of the negative charge RPM')
-PARSER.add_argument('--beta', type=float, default=0.047899460618081, help='inverse temperature')
+PARSER.add_argument('--beta', type=float, default=1./0.047899460618081, help='inverse temperature')
 PARSER.add_argument('--beta_mu', type=float, default=-13.94, help='beta times chemical potential')
-PARSER.add_argument('--max_particles', type=int, default=100, help='maximum number of particles')
+PARSER.add_argument('--max_particles', type=int, default=10, help='maximum number of particles')
 PARSER.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
 PARSER.add_argument('--min_sweeps', type=int, default=1e2,
                     help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
@@ -36,7 +36,7 @@ PARSER.add_argument('--equilibration_iterations', type=int, default=0,
                     help='number of iterations for equilibraiton')
 PARSER.add_argument('--hours_checkpoint', type=float, default=0.02, help='hours per checkpoint')
 PARSER.add_argument('--hours_terminate', type=float, default=0.2, help='hours until termination')
-PARSER.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
+PARSER.add_argument('--procs_per_node', type=int, default=2, help='number of processors')
 PARSER.add_argument('--prefix', type=str, default='rpm', help='prefix for all output file names')
 PARSER.add_argument('--run_type', '-r', type=int, default=0,
                     help='0: run, 1: submit to queue, 2: post-process')
@@ -101,7 +101,7 @@ RemoveAnalyze name Log
 
 # gcmc tm production
 FlatHistogram Macrostate MacrostateNumParticles width 1 max {max_particles} min {min_particles} particle_type 0 soft_macro_max [soft_macro_max] soft_macro_min [soft_macro_min] \
-Bias TransitionMatrix min_sweeps {min_sweeps}
+Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collect_sweeps 1
 TrialTransferMultiple weight 2 particle_type0 0 particle_type1 1 reference_index 0 num_steps 8
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
 Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz
@@ -118,12 +118,14 @@ def post_process(params):
     lnpi['ln_prob_prev'] = [-1.2994315780357, -1.08646312498868, -0.941850889679828]
     lnpi['ln_prob_prev_stdev'] = [0.07, 0.05, 0.05]
     diverged = lnpi[lnpi.ln_prob-lnpi.ln_prob_prev > 5*lnpi.ln_prob_prev_stdev]
+    print(diverged)
     assert len(diverged) == 0
     energy = pd.read_csv(params['prefix']+'n0s00_en.txt')
     energy = energy[:3]
     energy['prev'] = [0, -0.939408, -2.02625]
     energy['prev_stdev'] = [1e-14, 0.02, 0.04]
-    diverged=en[energy.average-energy.prev > 10*energy.prev_stdev]
+    diverged = energy[energy.average-energy.prev > 10*energy.prev_stdev]
+    print(diverged)
     assert len(diverged) == 0
 
 if __name__ == '__main__':
