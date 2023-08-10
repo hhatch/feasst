@@ -74,7 +74,7 @@ def sim_node_dependent_params(params):
         params['max_particles'] = params['num_particles_first_node']
         params['gce_trial'] = 'TrialTransfer weight 2 particle_type 0'
         params['ref_potential'] = ''
-        params['min_sweeps'] = 100
+        params['min_sweeps'] = 20
         params['window_alpha'] = 1.1
         params['min_window_size'] = 5
     elif params['node'] == 1:
