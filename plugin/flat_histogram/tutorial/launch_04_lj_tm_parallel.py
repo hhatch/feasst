@@ -5,6 +5,11 @@ The default temperature is above the critical point.
 A common question is "how long does a flat histogram simulation take to finish?"
 This tutorially usually finishes in less than an hour with the default parameters.
 Because flat histogram is an iterative convergence process, the best way we have to measure its completion is the number of "sweeps" as defined in https://dx.doi.org/10.1063/1.4918557 .
+
+One way to periodically check on the progress of flat histogram simulations is to see the number of sweeps in each window with the following BASH command:
+grep num_sweeps lj*_crit.txt
+
+The convergence of the macrostate distrubtion function in the ljn0_lnpi.txt files is also a way to monitor the simulations.
 """
 
 import os
