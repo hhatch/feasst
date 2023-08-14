@@ -118,7 +118,7 @@ def post_process(params):
     plt.xlabel(r'$\rho$', fontsize=16)
     plt.ylabel(r'$U/N$', fontsize=16)
     plt.legend(fontsize=16)
-    plt.savefig(params['prefix']+'_energy.png', bbox_inches='tight', transparent='True')
+    #plt.savefig(params['prefix']+'_energy.png', bbox_inches='tight', transparent='True')
     if len(rhos_srsw) == params['num_sims']: # compare with srsw exactly
         for sim in range(params['num_sims']):
             diff = ens[sim][0] - ens_srsw[sim]

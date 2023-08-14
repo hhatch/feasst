@@ -106,7 +106,7 @@ def post_process(params):
     plt.ylabel('S', fontsize=16)
     plt.xlabel('q(1/nm)', fontsize=16)
     plt.legend()
-    plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
+    #plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
     assert np.abs(grp30.mean()['i'][0]/grp3.mean()['i'][0] - 0.82777) < 0.05
     assert np.abs(iq30rdfft['iq'][0]/iq3rdfft['iq'][0] - 0.7784) < 0.05
 

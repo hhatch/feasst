@@ -205,7 +205,7 @@ def post_process(params):
     plt.xlabel('number of particles', fontsize=16)
     plt.ylabel('ln probability', fontsize=16)
     plt.legend(fontsize=16)
-    plt.savefig(params['prefix']+'_lnpi.png', bbox_inches='tight', transparent='True')
+    #plt.savefig(params['prefix']+'_lnpi.png', bbox_inches='tight', transparent='True')
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=PARAMS,

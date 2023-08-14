@@ -70,7 +70,7 @@ def post_process(params):
     plt.scatter(iq['q'], iq['i']/iq['p0']**2, label='sq_all')
     plt.plot(grp.mean()['q'], grp.mean()['i']/grp.mean()['p0']**2, label='sq_av')
     plt.legend()
-    plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
+    #plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=PARAMS,

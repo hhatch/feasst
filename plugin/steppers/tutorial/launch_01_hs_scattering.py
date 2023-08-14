@@ -110,7 +110,7 @@ def post_process(params):
         sq.append(scattering.structure_factor(gr['r'], gr['g0-0'], frequency=q, number_density=number_density))
     plt.plot(qs, sq, label='sq_from_gr')
     plt.plot(qs, sqs, label='sq_from_scaled_gr')
-    plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
+    #plt.savefig(params['prefix']+'.png', bbox_inches='tight', transparent='True')
     #plt.show()
 
 if __name__ == '__main__':
