@@ -36,6 +36,7 @@ PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of rest
 PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
 PARSER.add_argument('--scratch', type=str, default=None,
                     help='Optionally write scheduled job to scratch/logname/jobid.')
+PARSER.add_argument('--queue_flags', type=str, default="", help='extra flags for queue (e.g., for slurm, "-p queue")')
 PARSER.add_argument('--node', type=int, default=0, help='node ID')
 PARSER.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
 PARSER.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')

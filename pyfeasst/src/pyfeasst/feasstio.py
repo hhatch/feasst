@@ -103,6 +103,7 @@ ls""".format(**params)
 #SBATCH -t {minutes}:00
 #SBATCH -o {prefix}_slurm_%A_%a.txt
 #SBATCH -e {prefix}_slurm_%A_%a.txt
+#SBATCH {queue_flags}
 echo "Running ID ${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}} on $(hostname) at $(date) in $PWD"
 cd $PWD
 {scratch_slurm_preamble}
