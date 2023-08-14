@@ -74,7 +74,7 @@ def sim_node_dependent_params(params):
         params['max_particles'] = params['num_particles_first_node']
         params['gce_trial'] = 'TrialTransfer weight 2 particle_type 0'
         params['ref_potential'] = ''
-        params['min_sweeps'] = 20
+        params['min_sweeps'] = 10
         params['window_alpha'] = 1.1
         params['min_window_size'] = 5
     elif params['node'] == 1:
@@ -82,7 +82,7 @@ def sim_node_dependent_params(params):
         params['max_particles'] = params['num_particles']
         params["gce_trial"]="TrialGrowFile file_name spce_grow.txt"
         params["ref_potential"]="""RefPotential Model HardSphere group oxygen cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut} cell_group oxygen""".format(**params)
-        params['min_sweeps'] = 2
+        params['min_sweeps'] = 1
         params['window_alpha'] = 1.25
         params['min_window_size'] = 3
 

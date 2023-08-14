@@ -22,7 +22,7 @@ for col in plugins.columns:
 
 # put all ids in nums list
 nums=list()
-for filename in Path('../').rglob('_queue_ids.txt'):
+for filename in Path('../').rglob('*_queue_ids.txt'):
     print(filename, filename.name, filename.parent)
     with open(filename) as f:
         nums.append(f.read().splitlines())
@@ -46,7 +46,7 @@ while not finished:
     time.sleep(60)
 
 # scrap job output for errors
-for filename in Path('../').rglob('_slurm_*.txt'):
+for filename in Path('../').rglob('*_slurm_*.txt'):
     with cd.cd(filename.parent):
         subprocess.call("grep \"Err\" " + str(filename.name) + " >> launch_failures.txt", shell=True, executable='/bin/bash')
         subprocess.call("grep \"Throw\" " + str(filename.name) + " | grep -v 'Terminating because Checkpoint has reached the user input' >> launch_failures.txt", shell=True, executable='/bin/bash')
@@ -55,7 +55,7 @@ for filename in Path('../').rglob('_slurm_*.txt'):
     subprocess.call("grep \"Throw\" " + str(filename) + " >> launch_failures.txt", shell=True, executable='/bin/bash')
     subprocess.call("grep \"No such file or directory\" " + str(filename) + " >> launch_failures.txt", shell=True, executable='/bin/bash')
 
-for filename in Path('../').rglob('_run.log'):
+for filename in Path('../').rglob('*_run.log'):
     with cd.cd(filename.parent):
         subprocess.call("grep \"Err\" " + str(filename.name) + " >> launch_failures.txt", shell=True, executable='/bin/bash')
         subprocess.call("grep \"FAILED\" " + str(filename.name) + " >> launch_failures.txt", shell=True, executable='/bin/bash')
