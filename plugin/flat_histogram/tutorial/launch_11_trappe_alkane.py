@@ -1,5 +1,6 @@
 """
 Flat-histogram simulation of TraPPE alkanes in the grand canonical ensemble.
+https://www.nist.gov/mml/csd/chemical-informatics-group/sat-tmmc-liquid-vapor-coexistence-properties-trappe-ua-n-butane
 """
 
 import os
@@ -53,7 +54,7 @@ PARAMS = vars(ARGS)
 PARAMS['script'] = __file__
 PARAMS['sim_id_file'] = PARAMS['prefix']+ '_sim_ids.txt'
 PARAMS['minutes'] = int(PARAMS['hours_terminate']*60) # minutes allocated on queue
-PARAMS['hours_terminate'] = 0.99*PARAMS['hours_terminate'] - 0.0333 # terminate FEASST before SLURM
+PARAMS['hours_terminate'] = 0.95*PARAMS['hours_terminate'] - 0.05 # terminate FEASST before SLURM
 PARAMS['hours_terminate'] *= PARAMS['procs_per_node'] # real time -> cpu time
 PARAMS['hours_checkpoint'] *= PARAMS['procs_per_node']
 PARAMS['num_sims'] = PARAMS['num_nodes']
