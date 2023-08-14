@@ -109,8 +109,7 @@ CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}
 
 def post_process(params):
     lnpi = macrostate_distribution.MacrostateDistribution(file_name=params['prefix']+'n0_lnpi.txt')
-    #lnpi.plot()
-    #plt.show()
+    #lnpi.plot(show=True)
     assert np.abs(9.327631384282558 - lnpi.average_macrostate()) < 0.5
 
 if __name__ == '__main__':

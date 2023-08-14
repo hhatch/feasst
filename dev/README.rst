@@ -365,4 +365,4 @@ To Do List
 * Clean up the To Do list
 * add netcdf support http://unidata.github.io/netcdf-cxx4/index.html , https://gerasimosmichalitsianos.wordpress.com/2017/12/13/usingcppwithnetcdf/ https://support.scinet.utoronto.ca/education/staticpublic/course177content327.html
 * Add a logger, to output model params, ewald params, etc, to help users catch mistakes. Or maybe, output these parameters as the commented header in Log, maybe in json format.
-* refactor tutorials like tutorial/launch.py
+* Implement Jeff's parallel method via CollectionMatrixSplice that allows exchange of window ranges with overlapping simulations

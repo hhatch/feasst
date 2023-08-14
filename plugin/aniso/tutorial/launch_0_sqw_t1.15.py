@@ -23,7 +23,7 @@ PARSER.add_argument('--fstprt', type=str, default='/feasst/plugin/aniso/forcefie
                     help='FEASST particle definition')
 PARSER.add_argument('--cutoff', type=float, default=1.5, help='square well cutoff')
 PARSER.add_argument('--dccb_cut', type=float, default=1, help='DCCB cutoff')
-PARSER.add_argument('--num_orientations_per_pi', type=int, default=3, 
+PARSER.add_argument('--num_orientations_per_pi', type=int, default=3,
                     help='number of orientations per 90 degrees in each table angle')
 PARSER.add_argument('--num_z', type=int, default=2, help='number of distances in table')
 PARSER.add_argument('--table_file', type=str, default='dat.txt', help='table file name')
