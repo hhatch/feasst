@@ -20,9 +20,9 @@ PARSER.add_argument('--fstprt', type=str, default='/feasst/forcefield/n-butane.f
 PARSER.add_argument('--temperature', type=float, default=350, help='temperature in Kelvin')
 PARSER.add_argument('--beta_mu', type=float, default=-6, help='beta time chemical potential')
 PARSER.add_argument('--cutoff', type=float, default=12, help='real space cutoff distance')
-PARSER.add_argument('--max_particles', type=int, default=128, help='maximum number of particles')
+PARSER.add_argument('--max_particles', type=int, default=485, help='maximum number of particles')
 PARSER.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
-PARSER.add_argument('--min_sweeps', type=int, default=1e1,
+PARSER.add_argument('--min_sweeps', type=int, default=2,
                     help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
 PARSER.add_argument('--cubic_box_length', type=float, default=45,
                     help='cubic periodic boundary length')
@@ -136,7 +136,7 @@ def write_feasst_script(params, file_name):
         myfile.write("""
 # first, initialize multiple clones into windows
 CollectionMatrixSplice hours_per {hours_checkpoint} ln_prob_file {prefix}n{node}_lnpi.txt min_window_size -1
-WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha 1.15 min_size 3
+WindowExponential maximum {max_particles} minimum {min_particles} num {procs_per_node} overlap 0 alpha 2.15 min_size 3
 Checkpoint file_name {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 RandomMT19937 seed {seed}
@@ -184,6 +184,7 @@ CriteriaWriter trials_per_write {trials_per_iteration} file_name {prefix}n{node}
 def post_process(params):
     lnp = macrostate_distribution.splice_collection_matrix(prefix='trappen0s', suffix='_crit.txt', use_soft=True)
     lnp.equilibrium()
+    #lnp.plot(show=True)
     vapor, liquid = lnp.split()
     volume = params['cubic_box_length']**3
     na = physical_constants.AvogadroConstant().value()
