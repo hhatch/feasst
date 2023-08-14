@@ -18,7 +18,7 @@ PARSER.add_argument('--fstprt0', type=str, default='/feasst/forcefield/atom.fstp
                     help='FEASST particle definition of the first particle.')
 PARSER.add_argument('--fstprt1', type=str, default='/feasst/forcefield/lj.fstprt',
                     help='FEASST particle definition of the second particle.')
-PARSER.add_argument('--beta', type=float, default=1./1.5, help='inverse temperature')
+PARSER.add_argument('--beta', type=float, default=0.8, help='inverse temperature')
 PARSER.add_argument('--mu0', type=float, default=-5.4, help='chemical potential')
 PARSER.add_argument('--mu1', type=float, default=-5.5, help='chemical potential')
 PARSER.add_argument('--mu_init', type=float, default=10, help='initial chemical potential')
