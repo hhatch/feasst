@@ -1,6 +1,10 @@
 """
 Flat-histogram simulation of single-site Lennard Jones particles in the grand canonical ensemble.
 The default temperature is above the critical point.
+
+A common question is "how long does a flat histogram simulation take to finish?"
+This tutorially usually finishes in less than an hour with the default parameters.
+Because flat histogram is an iterative convergence process, the best way we have to measure its completion is the number of "sweeps" as defined in https://dx.doi.org/10.1063/1.4918557 .
 """
 
 import os
