@@ -72,7 +72,7 @@ def sim_node_dependent_params(params):
         params['lj_potential'] = 'Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJones'
         params['ref_potential'] = ''
         params['avb_trials'] = 'TrialAVB2 weight 0.1 particle_type 0\nTrialAVB4 weight 0.1 particle_type 0'
-        params['min_sweeps'] = 100
+        params['min_sweeps'] = 20
         params['window_alpha'] = 2
         params['min_window_size'] = 5
     elif params['node'] == 1:

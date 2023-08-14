@@ -21,7 +21,7 @@ PARSER.add_argument('--mu', type=float, default=-1.375, help='chemical potential
 PARSER.add_argument('--mu_init', type=float, default=10, help='initial chemical potential')
 PARSER.add_argument('--max_particles', type=int, default=100, help='maximum number of particles')
 PARSER.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
-PARSER.add_argument('--min_sweeps', type=int, default=1e2,
+PARSER.add_argument('--min_sweeps', type=int, default=20,
                     help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
 PARSER.add_argument('--cubic_box_length', type=float, default=8,
                     help='cubic periodic boundary length')
