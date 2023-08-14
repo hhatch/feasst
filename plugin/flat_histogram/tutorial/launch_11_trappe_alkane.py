@@ -23,7 +23,7 @@ PARSER.add_argument('--beta_mu', type=float, default=-6, help='beta time chemica
 PARSER.add_argument('--cutoff', type=float, default=12, help='real space cutoff distance')
 PARSER.add_argument('--max_particles', type=int, default=485, help='maximum number of particles')
 PARSER.add_argument('--min_particles', type=int, default=0, help='minimum number of particles')
-PARSER.add_argument('--min_particles_second_window', type=int, default=30, help='minimum number of particles in the second window')
+PARSER.add_argument('--min_particles_second_window', type=int, default=40, help='minimum number of particles in the second window')
 PARSER.add_argument('--min_sweeps', type=int, default=2,
                     help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
 PARSER.add_argument('--cubic_box_length', type=float, default=45,
