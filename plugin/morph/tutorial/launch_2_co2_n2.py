@@ -107,7 +107,8 @@ Bias WLTM min_sweeps {min_sweeps} min_flatness 25 collect_flatness 20 min_collec
 TrialMorph particle_type0 0 particle_type_morph0 1
 TrialMorph particle_type0 1 particle_type_morph0 0
 Log trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].txt
-Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz
+Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index]_eq.xyz stop_after_iteration 1
+Movie trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index].xyz start_after_iteration 1
 Tune trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index]_tune.txt multistate true stop_after_iteration 1
 Energy trials_per_write {trials_per_iteration} file_name {prefix}n{node}s[sim_index]_en.txt multistate true start_after_iteration 1
 CriteriaUpdater trials_per_update 1e5
