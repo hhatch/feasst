@@ -192,7 +192,6 @@ def post_process(params):
     # https://www.nist.gov/mml/csd/chemical-informatics-research-group/sat-tmmc-liquid-vapor-coexistence-properties-trappe-ua-n
     assert np.abs(30.6 - vapor.average_macrostate()*dens_conv) < 1
     assert np.abs(508 - liquid.average_macrostate()*dens_conv) < 30
-    #lnp.plot(show=True)
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=PARAMS,

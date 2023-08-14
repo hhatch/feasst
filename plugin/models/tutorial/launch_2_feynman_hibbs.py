@@ -53,7 +53,7 @@ params['cubic_box_length'] = (params['num_particles']/params['density'])**(1./3.
 params['script'] = __file__
 params['sim_id_file'] = params['prefix']+ '_sim_ids.txt'
 params['minutes'] = int(params['hours_terminate']*60) # minutes allocated on queue
-params['hours_terminate'] = 0.99*params['hours_terminate'] - 0.0333 # terminate before queue
+params['hours_terminate'] = 0.95*params['hours_terminate'] - 0.05 # terminate before queue
 params['procs_per_sim'] = 1
 params['num_sims'] = params['num_nodes']*params['procs_per_node']
 
