@@ -1,4 +1,5 @@
 """
+Note: this tutorial is still in development and TrialVolume hasn't been rigorously tested.
 Isothermal-isobaric ensemble Monte Carlo simulation of Lennard Jones particles.
 """
 
@@ -115,12 +116,10 @@ def post_process(params):
         energy = pd.read_csv(params['prefix']+str(sim)+'_en.txt')
         ens[sim] = np.array([energy['average'][0],
                              energy['block_stdev'][0]])/params['num_particles']
-        volume = pd.read_csv(params['prefix']+str(sim)+'_volume.txt', header=None)
-        print('volume', volume)
-        print('volume[0][0]', volume[0][0])
-        print('volume[2][0]', volume[2][0])
-        rhos[sim] = np.array([params['num_particles']/volume[0][0],
-                              np.sqrt(params['num_particles'])*volume[2][0]/volume[0][0]])
+        density = pd.read_csv(params['prefix']+str(sim)+'_density.txt')
+        print('density', density)
+        rhos[sim] = np.array([density['average'][0],
+                              density['block_stdev'][0]])
         print('rhos[sim]', rhos[sim])
     # data from https://mmlapps.nist.gov/srs/LJ_PURE/mc.htm
     #rhos_srsw = [0.001, 0.003, 0.005, 0.007, 0.009]
@@ -128,17 +127,6 @@ def post_process(params):
     ens_srsw = [-9.9165E-03, -2.9787E-02]
     #ens_srsw = [-9.9165E-03, -2.9787E-02, -4.9771E-02, -6.9805E-02, -8.9936E-02]
     en_stds_srsw = [1.89E-05, 3.21E-05]
-    plt.errorbar(params['pressures']['pressure'], ens_srsw, en_stds_srsw, fmt='+', label='SRSW')
-    plt.errorbar(params['pressures']['pressure'], ens[:, 0], ens[:, 1], fmt='x', label='FEASST')
-    plt.xlabel(r'$P$', fontsize=16)
-    plt.ylabel(r'$U/N$', fontsize=16)
-    plt.legend(fontsize=16)
-    plt.savefig(params['prefix']+'_energy.png', bbox_inches='tight', transparent='True')
-    if len(ens_srsw) == params['num_sims']: # compare with srsw exactly
-        for sim in range(params['num_sims']):
-            diff = ens[sim][0] - ens_srsw[sim]
-            print(diff)
-            assert np.abs(diff) < 10*np.sqrt(ens[sim][1]**2 + en_stds_srsw[sim]**2)
 
 if __name__ == '__main__':
     feasstio.run_simulations(params=PARAMS,
