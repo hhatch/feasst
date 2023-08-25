@@ -369,3 +369,4 @@ To Do List
 * Similarly, implement a non-OMP fh parallelization. Maybe that should be the first example before OMP communication? Only problem, keep windows running until last one converges?
 * Implement a class-specific debug output setting
 * Update Translate tunable maximum when volume changes..?
+* Log includes instantaneous energies for Dihedral, Angle, Bond, etc potentials.

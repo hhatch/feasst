@@ -7,8 +7,8 @@
 namespace feasst {
 
 /**
-  Periodically print the status of the Criteria and Trials in a one-line comma
-  separated value format with headers.
+  Periodically print the status of the Syste, Criteria and Trials in a one-line
+  comma separated value format with headers.
 
   This log file is designed more for checking status than computing ensemble
   averages.
