@@ -2,6 +2,7 @@
 #ifndef FEASST_STEPPERS_LOG_H_
 #define FEASST_STEPPERS_LOG_H_
 
+#include "system/include/bond_visitor.h"
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
@@ -27,6 +28,7 @@ class Log : public AnalyzeWriteOnly {
   /**
     args:
     - max_precision: use maximum precision if true (default: false).
+    - include_bonds: if true, print bond energies (default:false).
    */
   explicit Log(argtype args = argtype());
   explicit Log(argtype * args);
@@ -54,6 +56,8 @@ class Log : public AnalyzeWriteOnly {
 
  private:
   bool max_precision_;
+  bool include_bonds_;
+  BondVisitor bond_visitor_;
 };
 
 inline std::shared_ptr<Log> MakeLog(argtype args = argtype()) {
