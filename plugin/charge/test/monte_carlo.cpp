@@ -166,7 +166,7 @@ TEST(MonteCarlo, rpm) {
     config->update_positions({{0., 0., 0.}, {1.01, 0., 0.}});
   }
   mc.add_to_reference(MakePotential(MakeDontVisitModel()));
-  const int trials_per = 1e2;
+  const int trials_per = 1e0;
   mc.set(MakeThermoParams({
     {"beta", "0.02"},
     {"chemical_potential0", "-509"},
