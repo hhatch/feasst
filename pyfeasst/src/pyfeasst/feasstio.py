@@ -87,7 +87,7 @@ def slurm_single_node(params):
     which is assumed to output the job id.
     """
     params['queue_command'] = "sbatch --array=0-" + str(params['max_restarts']) + "%1 " + params['prefix'] + "_slurm.txt"
-    params['print_queue_id'] = "squeue -u $USER | tail -1| awk '{print $1}' | awk -F '_' '{print $1}'"
+    params['print_queue_id'] = "sleep 1; squeue -u $USER | tail -1| awk '{print $1}' | awk -F '_' '{print $1}'"
     if params['scratch'] == None:
         params['scratch_slurm_preamble'] = ''
         params['scratch_slurm_postamble'] = ''
