@@ -30,10 +30,18 @@ class Perturb {
  public:
   /**
     args:
+    - configuration_index: index of configuration (default: 0).
     - Tunable arguments
    */
   explicit Perturb(argtype args = argtype());
   explicit Perturb(argtype * args);
+
+  /// Return the index of the configuration.
+  int configuration_index() const { return configuration_index_; }
+
+  /// Given the system, return the configuration.
+  const Configuration& configuration(const System& system) const {
+    return system.configuration(configuration_index_); }
 
   /// Return the tunable parameter.
   const Tunable& tunable() const { return tunable_; }
@@ -116,6 +124,7 @@ class Perturb {
   Perturb(std::istream& istr);
 
  private:
+  int configuration_index_;
   Tunable tunable_;
 
   // optimzation or temporary object
