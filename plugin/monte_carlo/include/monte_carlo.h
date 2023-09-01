@@ -108,8 +108,9 @@ class MonteCarlo {
     system_.add_to_reference(potential, index); }
 
   /// Add NeighborCriteria.
-  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria) {
-    system_.add(neighbor_criteria); }
+  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
+      const int config = 0) {
+    system_.add(neighbor_criteria, config); }
 
   /// The third action is to set the ThermoParams.
   void set(std::shared_ptr<ThermoParams> thermo_params);

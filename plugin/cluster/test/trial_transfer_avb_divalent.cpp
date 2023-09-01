@@ -34,7 +34,7 @@ TEST(TrialTransferAVBDivalent, add_remove) {
     {"site_type0", "0"},
     {"site_type1", "1"},
     {"potential_index", "0"}}));
-  const double vol_av = system.neighbor_criteria(0).volume(config.dimension());
+  const double vol_av = system.neighbor_criteria(0, 0).volume(config.dimension());
 
   auto add = MakeTrialAddAVBDivalent({
     {"neighbor_index", "0"},

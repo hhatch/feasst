@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "configuration/include/configuration.h"
+#include "configuration/include/neighbor_criteria.h"
 #include "system/include/potential_factory.h"
 #include "system/include/thermo_params.h"
 #include "system/include/bond_visitor.h"
@@ -69,8 +70,8 @@ class System {
   //@{
 
   /// Add a potential. By default, the potential is considered unoptimized.
-  void add(std::shared_ptr<Potential> potential) {
-    add_to_unoptimized(potential); }
+  void add(std::shared_ptr<Potential> potential, const int config = 0) {
+    add_to_unoptimized(potential, config); }
 
   /// Set an unoptimized potential.
   void set_unoptimized(const int index, std::shared_ptr<Potential> potential,
@@ -128,20 +129,21 @@ class System {
   //@{
 
   /// Add a NeighborCriteria.
-  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria) {
-    configurations_[0].add(neighbor_criteria); }
+  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
+    const int config = 0) {
+    configurations_[config].add(neighbor_criteria); }
 
   /// Return a NeighborCriteria by index in order added.
-  const NeighborCriteria& neighbor_criteria(const int index) const {
-    return configurations_[0].neighbor_criteria(index); }
+  const NeighborCriteria& neighbor_criteria(const int index,
+    const int config) const;
 
   /// Return a NeighborCriteria by index in order added.
-  const std::vector<NeighborCriteria>& neighbor_criteria() const {
-    return configurations_[0].neighbor_criteria(); }
+  const std::vector<NeighborCriteria>& neighbor_criteria(
+    const int config) const;
 
   // Return a NeighborCriteria by index in order added.
-  NeighborCriteria * get_neighbor_criteria(const int index) {
-    return configurations_[0].get_neighbor_criteria(index); }
+  NeighborCriteria * get_neighbor_criteria(const int index,
+                                           const int config);
 
   //@}
   /** @name Energy
@@ -167,12 +169,12 @@ class System {
   double perturbed_energy(const Select& select, const int config = 0);
 
   /// Return the last computed energy.
-  double stored_energy() const {
-    return potentials().stored_energy(); }
+  double stored_energy(const int config = 0) const {
+    return potentials(config).stored_energy(); }
 
   /// Return the profile of energies that were last computed.
-  std::vector<double> stored_energy_profile() const {
-    return potentials().stored_energy_profile(); }
+  std::vector<double> stored_energy_profile(const int config = 0) const {
+    return potentials(config).stored_energy_profile(); }
 
   /// Return the reference energy.
   double reference_energy(const int ref = 0, const int config = 0);
@@ -247,7 +249,6 @@ class System {
 
  private:
   std::vector<Configuration> configurations_;
-  // HWH should each config have its own set of the three potential factories, and BondVisitor?
   std::vector<BondVisitor> bonds_;
   std::vector<PotentialFactory> unoptimized_;
   std::vector<PotentialFactory> optimized_;
@@ -260,8 +261,8 @@ class System {
   // in a trial, this temporarily stores that reference potential index.
   int ref_used_last_ = -1;
 
-  PotentialFactory * reference_(const int index, const int config = 0);
-  PotentialFactory * potentials_(const int config = 0);
+  PotentialFactory * reference_(const int index, const int config);
+  PotentialFactory * potentials_(const int config);
 };
 
 inline std::shared_ptr<System> MakeSystem() {

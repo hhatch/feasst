@@ -124,7 +124,7 @@ PotentialFactory * System::potentials_(const int config) {
 }
 
 double System::energy(const int config) {
-  const double en = potentials_()->energy(&configurations_[config]);
+  const double en = potentials_(config)->energy(&configurations_[config]);
   finalize(config);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
@@ -136,7 +136,7 @@ double System::energy(const int config) {
 double System::perturbed_energy(const Select& select, const int config) {
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  double en = potentials_()->select_energy(select, &configurations_[config]);
+  double en = potentials_(config)->select_energy(select, &configurations_[config]);
   bonds_[config].compute_all(select, configurations_[config]);
   const double bond_en = bonds_[config].energy();
   DEBUG("bond en " << bonds_[config].energy());
@@ -247,7 +247,7 @@ void System::revert(const Select& select, const int config) {
   if (ref_used_last_ != -1) {
     references_[config][ref_used_last_].revert(select);
   } else {
-    potentials_()->revert(select);
+    potentials_(config)->revert(select);
   }
 }
 
@@ -338,6 +338,21 @@ void System::remove_opt_overlap() {
       }
     }
   }
+}
+
+const NeighborCriteria& System::neighbor_criteria(const int index,
+    const int config) const {
+  return configurations_[config].neighbor_criteria(index);
+}
+
+const std::vector<NeighborCriteria>& System::neighbor_criteria(
+    const int config) const {
+  return configurations_[config].neighbor_criteria();
+}
+
+NeighborCriteria * System::get_neighbor_criteria(const int index,
+                                                 const int config) {
+  return configurations_[config].get_neighbor_criteria(index);
 }
 
 }  // namespace feasst

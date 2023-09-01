@@ -201,7 +201,7 @@ TEST(TrialGrow, transfer_avb_spce) {
     {"beta", "0.1"},
     {"chemical_potential", "1"}}));
   system.add(ncrit);
-  const double vol_av = system.neighbor_criteria(0).volume(config.dimension());
+  const double vol_av = system.neighbor_criteria(0, 0).volume(config.dimension());
 
   DEBUG("vol_av: " << vol_av);
   auto grow = MakeTrialGrow({
