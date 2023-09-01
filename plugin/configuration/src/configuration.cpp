@@ -713,11 +713,11 @@ void Configuration::set_side_lengths(const Position& sides) {
   }
 }
 
-std::string Configuration::status_header() const {
+std::string Configuration::status_header(const std::string append) const {
   std::stringstream ss;
-  ss << domain().status_header();
+  ss << domain().status_header(append);
   for (int type = 0; type < num_particle_types(); ++type) {
-    ss << ",num_particles_of_type" << type;
+    ss << ",num_particles_of_type" << type << append;
   }
   return ss.str();
 }

@@ -265,8 +265,13 @@ void System::check(const int config) const {
 
 std::string System::status_header() const {
   std::stringstream ss;
-  for (const Configuration& config : configurations_) {
-    ss << config.status_header();
+  if (num_configurations() == 1) {
+    ss << configuration(0).status_header();
+  } else {
+    for (int iconf = 0; iconf < num_configurations(); ++iconf) {
+      const Configuration& config = configurations_[iconf];
+      ss << config.status_header("_config" + str(iconf));
+    }
   }
   ss << ",beta";
   return ss.str();
