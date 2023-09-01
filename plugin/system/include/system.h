@@ -239,8 +239,8 @@ class System {
 
  private:
   std::vector<Configuration> configurations_;
-  BondVisitor bonds_;
-  // HWH should each config have its own set of the three potential factories?
+  // HWH should each config have its own set of the three potential factories, and BondVisitor?
+  std::vector<BondVisitor> bonds_;
   PotentialFactory unoptimized_;
   PotentialFactory optimized_;
   bool is_optimized_ = false;

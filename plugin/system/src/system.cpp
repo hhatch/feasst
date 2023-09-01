@@ -6,11 +6,13 @@
 namespace feasst {
 
 void System::add(std::shared_ptr<Configuration> configuration) {
-  configurations_.push_back(*configuration);
+  add(*configuration);
 }
 
 void System::add(const Configuration& configuration) {
   configurations_.push_back(configuration);
+  BondVisitor bond;
+  bonds_.push_back(bond);
 }
 
 const Configuration& System::configuration(const int config) const {
@@ -96,8 +98,8 @@ double System::unoptimized_energy(const int config) {
     &configurations_[config]);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  bonds_.compute_all(configurations_[config]);
-  return en + bonds_.energy();
+  bonds_[config].compute_all(configurations_[config]);
+  return en + bonds_[config].energy();
 }
 
 PotentialFactory * System::potentials_() {
@@ -112,18 +114,18 @@ double System::energy(const int config) {
   finalize(config);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  bonds_.compute_all(configurations_[config]);
-  DEBUG("bond en " << bonds_.energy());
-  return en + bonds_.energy();
+  bonds_[config].compute_all(configurations_[config]);
+  DEBUG("bond en " << bonds_[config].energy());
+  return en + bonds_[config].energy();
 }
 
 double System::perturbed_energy(const Select& select, const int config) {
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
   double en = potentials_()->select_energy(select, &configurations_[config]);
-  bonds_.compute_all(select, configurations_[config]);
-  const double bond_en = bonds_.energy();
-  DEBUG("bond en " << bonds_.energy());
+  bonds_[config].compute_all(select, configurations_[config]);
+  const double bond_en = bonds_[config].energy();
+  DEBUG("bond en " << bonds_[config].energy());
   ASSERT(!std::isinf(en), "en: " << en << " is inf.");
   ASSERT(!std::isnan(en), "en: " << en << " is nan.");
   ASSERT(!std::isinf(bond_en), "bond_en: " << bond_en << " is inf.");
