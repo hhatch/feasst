@@ -5,7 +5,6 @@ namespace feasst {
 
 Perturb::Perturb(argtype args) : Perturb(&args) { FEASST_CHECK_ALL_USED(args); }
 Perturb::Perturb(argtype * args) {
-  configuration_index_ = integer("configuration_index_", args, 0);
   tunable_ = Tunable(args);
 }
 
@@ -77,18 +76,14 @@ std::shared_ptr<Perturb> Perturb::deserialize(std::istream& istr) {
 }
 
 void Perturb::serialize_perturb_(std::ostream& ostr) const {
-  feasst_serialize_version(903, ostr);
-  feasst_serialize(configuration_index_, ostr);
+  feasst_serialize_version(902, ostr);
   feasst_serialize_fstobj(tunable_, ostr);
 }
 
 Perturb::Perturb(std::istream& istr) {
   istr >> class_name_;
   const int version = feasst_deserialize_version(istr);
-  ASSERT(version >= 902 && version <= 903, "mismatch version: " << version);
-  if (version >= 274) {
-    feasst_deserialize(&configuration_index_, istr);
-  }
+  ASSERT(902 == version, "mismatch version: " << version);
   feasst_deserialize_fstobj(&tunable_, istr);
 }
 
