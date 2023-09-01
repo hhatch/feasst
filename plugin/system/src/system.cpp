@@ -11,9 +11,9 @@ void System::add(std::shared_ptr<Configuration> configuration) {
 
 void System::add(const Configuration& configuration) {
   configurations_.push_back(configuration);
-  BondVisitor bond;
-  bonds_.push_back(bond);
+  bonds_.push_back(BondVisitor());
   unoptimized_.push_back(PotentialFactory());
+  optimized_.push_back(PotentialFactory());
 }
 
 const Configuration& System::configuration(const int config) const {
@@ -45,11 +45,12 @@ void System::set_unoptimized(const int index,
   unoptimized_[config].precompute(index, &configurations_[0]);
 }
 
-void System::add_to_optimized(std::shared_ptr<Potential> potential) {
+void System::add_to_optimized(std::shared_ptr<Potential> potential,
+    const int config) {
   is_optimized_ = true;
-  // HWH assume one config
-  optimized_.add(potential);
-  optimized_.precompute(optimized_.num() - 1, &configurations_[0]);
+  optimized_[config].add(potential);
+  optimized_[config].precompute(optimized_[config].num() - 1,
+                                &configurations_[config]);
 }
 
 PotentialFactory * System::reference_(const int index) {
@@ -84,10 +85,10 @@ void System::precompute() {
   for (int config_index = 0; config_index < num_configurations(); ++config_index) {
     Configuration * config = &configurations_[config_index];
     unoptimized_[config_index].precompute(config);
-    // HWH optimized and ref assumes 1 config
     if (is_optimized_) {
-      optimized_.precompute(config);
+      optimized_[config_index].precompute(config);
     }
+    // HWH optimized and ref assumes 1 config
     for (PotentialFactory& ref : references_) {
       ref.precompute(config);
     }
@@ -109,8 +110,7 @@ double System::unoptimized_energy(const int config) {
 
 PotentialFactory * System::potentials_(const int config) {
   if (is_optimized_) {
-    // HWH assumes 1 config
-    return &optimized_;
+    return &optimized_[config];
   }
   return &unoptimized_[config];
 }
@@ -158,8 +158,7 @@ void System::serialize(std::ostream& sstr) const {
   feasst_serialize_fstobj(configurations_, sstr);
   feasst_serialize_fstobj(bonds_, sstr);
   feasst_serialize_fstobj(unoptimized_, sstr);
-  //unoptimized_.serialize(sstr);
-  optimized_.serialize(sstr);
+  feasst_serialize_fstobj(optimized_, sstr);
   feasst_serialize(is_optimized_, sstr);
   feasst_serialize_fstobj(references_, sstr);
   feasst_serialize(thermo_params_, sstr);
@@ -173,8 +172,7 @@ System::System(std::istream& sstr) {
   feasst_deserialize_fstobj(&configurations_, sstr);
   feasst_deserialize_fstobj(&bonds_, sstr);
   feasst_deserialize_fstobj(&unoptimized_, sstr);
-  //unoptimized_ = PotentialFactory(sstr);
-  optimized_ = PotentialFactory(sstr);
+  feasst_deserialize_fstobj(&optimized_, sstr);
   feasst_deserialize(&is_optimized_, sstr);
   feasst_deserialize_fstobj(&references_, sstr);
   // HWH for unknown reasons, this function template does not work.
@@ -190,8 +188,7 @@ System::System(std::istream& sstr) {
 
 const PotentialFactory& System::potentials(const int config) const {
   if (is_optimized_) {
-    // HWH assumes 1 config
-    return optimized_;
+    return optimized_[config];
   }
   return unoptimized_[config];
 }
@@ -199,8 +196,8 @@ const PotentialFactory& System::potentials(const int config) const {
 void System::load_cache(const bool load) {
   for (int config = 0; config < num_configurations(); ++config) {
     unoptimized_[config].load_cache(load);
+    optimized_[config].load_cache(load);
     // HWH assumes 1 config
-    optimized_.load_cache(load);
     for (PotentialFactory& ref : references_) {
       ref.load_cache(load);
     }
@@ -210,8 +207,8 @@ void System::load_cache(const bool load) {
 void System::unload_cache(const System& system) {
   for (int config = 0; config < num_configurations(); ++config) {
     unoptimized_[config].unload_cache(system.unoptimized_[config]);
+    optimized_[config].unload_cache(system.optimized_[config]);
     // HWH assumes 1 config
-    optimized_.unload_cache(system.optimized_);
     ASSERT(references_.size() == system.references_.size(), "size mismatch");
     for (int iref = 0; iref < static_cast<int>(references_.size()); ++iref) {
       references_[iref].unload_cache(system.references_[iref]);
@@ -225,7 +222,7 @@ void System::finalize(const Select& select, const int config) {
     configurations_[config].remove_particles(select);
   }
   unoptimized_[config].finalize(select, &configurations_[config]);
-  optimized_.finalize(select, &configurations_[config]);
+  optimized_[config].finalize(select, &configurations_[config]);
   for (PotentialFactory& ref : references_) {
     ref.finalize(select, &configurations_[config]);
   }
@@ -242,7 +239,7 @@ void System::revert(const Select& select, const int config) {
 
 void System::check(const int config) const {
   unoptimized_[config].check(configurations_[config]);
-  optimized_.check(configurations_[config]);
+  optimized_[config].check(configurations_[config]);
   for (const PotentialFactory& ref : references_) {
     ref.check(configurations_[config]);
   }
@@ -272,9 +269,9 @@ void System::synchronize_(const System& system, const Select& perturbed) {
       perturbed);
     ASSERT(config == 0, "perturb not implemented for multiple configs");
     unoptimized_[config].synchronize_(system.unoptimized(), perturbed);
+    optimized_[config].synchronize_(system.optimized(), perturbed);
   }
   // HWH suggest: make perturb a vector, one for each config?
-  optimized_.synchronize_(system.optimized(), perturbed);
   for (int ref = 0; ref < num_references(); ++ref) {
     references_[ref].synchronize_(system.references()[ref], perturbed);
   }
@@ -291,7 +288,7 @@ void System::change_volume(const double delta_volume, argtype * args) {
   args->insert({"dimension", str(dimen)});
   configurations_[config].change_volume(delta_volume, args);
   unoptimized_[config].change_volume(delta_volume, dimen);
-  optimized_.change_volume(delta_volume, dimen);
+  optimized_[config].change_volume(delta_volume, dimen);
   for (PotentialFactory& ref : references_) {
     ref.change_volume(delta_volume, dimen);
   }
@@ -309,8 +306,8 @@ const ThermoParams& System::thermo_params() const {
 void System::remove_opt_overlap() {
   for (int config = 0; config < num_configurations(); ++config) {
     unoptimized_[config].remove_opt_overlap();
+    optimized_[config].remove_opt_overlap();
   }
-  optimized_.remove_opt_overlap();
   for (PotentialFactory& ref : references_) {
     ref.remove_opt_overlap();
   }

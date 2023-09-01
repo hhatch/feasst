@@ -93,10 +93,12 @@ class System {
     return unoptimized_[config].get_potential(index); }
 
   /// Add an optimized potential.
-  void add_to_optimized(std::shared_ptr<Potential> potential);
+  void add_to_optimized(std::shared_ptr<Potential> potential,
+    const int config = 0);
 
   /// Return the optimized potentials.
-  const PotentialFactory& optimized() const { return optimized_; }
+  const PotentialFactory& optimized(const int config = 0) const {
+    return optimized_[config]; }
 
   /// Add a reference potential.
   void add_to_reference(std::shared_ptr<Potential> ref,
@@ -246,7 +248,7 @@ class System {
   // HWH should each config have its own set of the three potential factories, and BondVisitor?
   std::vector<BondVisitor> bonds_;
   std::vector<PotentialFactory> unoptimized_;
-  PotentialFactory optimized_;
+  std::vector<PotentialFactory> optimized_;
   bool is_optimized_ = false;
   std::vector<PotentialFactory> references_;
   std::shared_ptr<ThermoParams> thermo_params_;
