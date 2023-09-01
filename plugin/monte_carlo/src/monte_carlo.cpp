@@ -605,8 +605,6 @@ void MonteCarlo::initialize_criteria() {
       criteria_->set_current_energy(en, iconf);
       criteria_->set_current_energy_profile(system_.stored_energy_profile(iconf), iconf);
     }
-    INFO("iconf " << iconf << " en " << en);
-    INFO("iconf " << criteria_->current_energy(iconf));
   }
   if (criteria_) {
     criteria_->precompute(&system_);
