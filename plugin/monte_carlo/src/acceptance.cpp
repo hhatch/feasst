@@ -15,6 +15,7 @@ void Acceptance::reset() {
   set_endpoint();
   energy_new_ = 0.;
   energy_old_ = 0.;
+  configuration_index_ = 0.;
   std::fill(energy_profile_new_.begin(), energy_profile_new_.end(), 0.);
   std::fill(energy_profile_old_.begin(), energy_profile_old_.end(), 0.);
   macrostate_shift_ = 0;
