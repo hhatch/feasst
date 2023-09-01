@@ -41,6 +41,10 @@ class TrialSelect {
   const Configuration& configuration(const System& system) const {
     return system.configuration(configuration_index_); }
 
+  /// Given the system pointer, return the configuration pointer.
+  Configuration * get_configuration(System * system) const {
+    return system->get_configuration(configuration_index_); }
+
   /// Perform upkeep before select.
   void before_select();
 

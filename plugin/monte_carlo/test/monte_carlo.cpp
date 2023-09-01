@@ -709,6 +709,12 @@ TEST(MonteCarlo, two_configs) {
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
+    {"Potential", {{"Model", "LennardJones"}}},
+    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "1."}}},
+    {"Metropolis", {{}}},
+    {"TrialTranslate", {{"configuration_index", "0"}}},
+    {"TrialTranslate", {{"configuration_index", "1"}}},
+    {"Run", {{"num_trials", "1e2"}}},
   }});
   EXPECT_EQ(2, mc->system().num_configurations());
   //EXPECT_NEAR(-2.060346185437E+00, mc->configuration().particle(2).site(0).position().coord(0), NEAR_ZERO);

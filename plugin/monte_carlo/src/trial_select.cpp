@@ -13,7 +13,7 @@ TrialSelect::TrialSelect(argtype * args) {
 
   // parse particle type and group index from args.
   particle_type_ = -1;
-  configuration_index_ = integer("configuration_index_", args, 0);
+  configuration_index_ = integer("configuration_index", args, 0);
   group_index_ = 0;
   if (used("particle_type", *args)) {
     is_particle_type_set_ = true;
