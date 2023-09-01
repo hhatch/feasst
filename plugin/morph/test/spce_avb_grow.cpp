@@ -197,6 +197,8 @@ TEST(TrialGrow, transfer_avb_spce) {
   //ran = MakeRandomMT19937({{"seed", "1628624844"}});
   //ran = MakeRandomMT19937({{"seed", "1628878165"}});
   auto metropolis = MakeMetropolis();
+  metropolis->set_current_energy(system.energy());
+  metropolis->set_current_energy_profile({0.});
   system.set(MakeThermoParams({
     {"beta", "0.1"},
     {"chemical_potential", "1"}}));

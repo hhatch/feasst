@@ -24,6 +24,8 @@ TEST(TrialTransferAVBDivalent, add_remove) {
   //ran = MakeRandomMT19937({{"seed", "1580154124"}});
   //ran = MakeRandomMT19937({{"seed", "1607546467"}});
   auto metropolis = MakeMetropolis();
+  metropolis->set_current_energy(system.energy());
+  metropolis->set_current_energy_profile({0.});
   system.set(MakeThermoParams({
     {"beta", str(1e-6)},
     {"chemical_potential0", "2"},

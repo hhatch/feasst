@@ -61,10 +61,10 @@ void CheckEnergy::update(Criteria * criteria,
     ASSERT(std::abs(energy - current_energy) < tolerance_,
       MAX_PRECISION <<
       "Energy check failure. There is a problem with the potentials. " <<
-      "The unoptimized energy of the entire configuration was computed as " <<
-      energy << " but the running energy from criteria " <<
-      "(the accumulation of a change in energy over a series of steps) is " <<
-      current_energy <<
+      "The unoptimized energy of configuration " << config <<
+      " was computed as " << energy << " but the running energy from criteria "
+      << "(the accumulation of a change in energy over a series of steps) is "
+      << current_energy <<
       ". The difference(" << std::abs(energy - current_energy) << ") is " <<
       "greater than the tolerance(" << tolerance_ << "). "
       << system->unoptimized().str());

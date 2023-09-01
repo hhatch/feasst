@@ -705,13 +705,14 @@ TEST(MonteCarlo, group_in_arglist) {
 
 TEST(MonteCarlo, two_configs) {
   auto mc = MakeMonteCarlo({{
+    {"RandomMT19937", {{"seed", "1234"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Potential", {{"Model", "LennardJones"}, {"configuration_index", "0"}}},
     {"Potential", {{"Model", "LennardJones"}, {"configuration_index", "1"}}},
-    {"ThermoParams", {{"beta", "1.2"}, {"chemical_potential", "1."}}},
+    {"ThermoParams", {{"beta", "100.2"}, {"chemical_potential", "1."}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"configuration_index", "0"}}},
     {"TrialTranslate", {{"configuration_index", "1"}}},
