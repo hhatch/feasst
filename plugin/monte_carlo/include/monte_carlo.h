@@ -127,7 +127,7 @@ class MonteCarlo {
   const System& system() const { return system_; }
 
   /// Reinitialize the system. Return total energy.
-  double initialize_system();
+  double initialize_system(const int config);
 
   // HWH depreciate: only in rare cases should the system be modified directly.
   System * get_system() { return &system_; }

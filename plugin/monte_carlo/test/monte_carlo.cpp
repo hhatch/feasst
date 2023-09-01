@@ -206,7 +206,7 @@ TEST(MonteCarlo, NVT_cells_BENCHMARK_LONG) {
   mc.add(MakeCheckEnergy({{"trials_per_update", str(1e4)}, {"tolerance", str(1e-9)}}));
   mc.add(MakeTune());
   mc.add_to_optimized(MakePotential(MakeLennardJones(), MakeVisitModelCell({{"min_length", "3"}})));
-  mc.initialize_system();
+  mc.initialize_system(0);
   mc.attempt(1e5);
 }
 
@@ -231,7 +231,7 @@ TEST(MonteCarlo, NVT_cells2_BENCHMARK_LONG) {
     {"Tune", {{}}},
     {"OptimizedPotential", {{"Model", "LennardJones"}, {"VisitModel", "VisitModelCell"}, {"min_length", "3"}}}
   }});
-  mc->initialize_system();
+  mc->initialize_system(0);
   mc->attempt(1e5);
 }
 
