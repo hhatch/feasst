@@ -714,6 +714,9 @@ TEST(MonteCarlo, two_configs) {
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"configuration_index", "0"}}},
     {"TrialTranslate", {{"configuration_index", "1"}}},
+    {"Log", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj.txt"}}},
+    {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj0.xyz"}, {"configuration_index", "0"}}},
+    {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj1.xyz"}, {"configuration_index", "1"}}},
     {"Run", {{"num_trials", "1e2"}}},
   }});
   EXPECT_EQ(2, mc->system().num_configurations());
