@@ -76,7 +76,8 @@ void TrialCompute::compute_rosenbluth(
     ASSERT(acceptance->perturbed().num_sites() > 0, "error");
     DEBUG(acceptance->perturbed().str());
     DEBUG("state " << acceptance->perturbed().trial_state());
-    const double en_full = system->perturbed_energy(acceptance->perturbed());
+    // HWH configuration_index_
+    const double en_full = system->perturbed_energy(acceptance->perturbed(), 0);
     const std::vector<double>& en_profile_full = system->stored_energy_profile();
     DEBUG("en_full: " << en_full);
     DEBUG("energy ref: " << energy_change);
