@@ -155,7 +155,7 @@ class System {
   void precompute();
 
   /// Return the unoptimized energy. The following use optimized if available.
-  double unoptimized_energy(const int config = 0);
+  double unoptimized_energy(const int config);
 
   /// Return the energy of all.
   double energy(const int config = 0);

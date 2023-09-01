@@ -583,10 +583,13 @@ void MonteCarlo::imitate_trial_rejection_(const int trial_index,
 
 double MonteCarlo::initialize_system() {
   system_.precompute();
-  const double en = system_.unoptimized_energy();
-  system_.energy();
-  for (int ref = 0; ref < system_.num_references(); ++ref) {
-    system_.reference_energy(ref);
+  double en = 0.;
+  for (int config = 0; config < system_.num_configurations(); ++config) {
+    en += system_.unoptimized_energy(config);
+    system_.energy(config);
+    for (int ref = 0; ref < system_.num_references(config); ++ref) {
+      system_.reference_energy(ref, config);
+    }
   }
   return en;
 }

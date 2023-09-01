@@ -726,6 +726,7 @@ TEST(MonteCarlo, two_configs) {
   INFO(mc->system().potential(0, 0).stored_energy() << " " <<
        mc->system().potential(0, 1).stored_energy());
   EXPECT_NE(mc->system().potential(0, 1).stored_energy(), 0);
+  EXPECT_GT(std::abs(mc->system().potential(0, 1).stored_energy() + 16.7903), 0.0001);
 }
 
 }  // namespace feasst
