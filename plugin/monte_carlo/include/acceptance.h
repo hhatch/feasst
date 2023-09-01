@@ -50,6 +50,13 @@ class Acceptance {
   /// Add to the above quantity.
   void add_to_energy_new(const double energy) { energy_new_ += energy; }
 
+  /// Set the configuration index.
+  void set_configuration_index(const int config) {
+    configuration_index_ = config; }
+
+  /// Return the configuration index.
+  int configuration_index() const { return configuration_index_; }
+
   /// Return the energy profile of the new configuration.
   const std::vector<double>& energy_profile_new() const {
     return energy_profile_new_; }
@@ -117,6 +124,7 @@ class Acceptance {
   double energy_new_;
   double energy_old_;
   double energy_ref_;
+  int configuration_index_;
   int macrostate_shift_;
   int macrostate_shift_type_;
   bool reject_;

@@ -26,23 +26,29 @@ void TrialComputeMove::perturb_and_acceptance(
     Acceptance * acceptance,
     std::vector<TrialStage*> * stages,
     Random * random) {
-  DEBUG("TrialComputeMove");
+  INFO("TrialComputeMove");
   compute_rosenbluth(1, criteria, system, acceptance, stages, random);
   for (TrialStage * stage : *stages) stage->mid_stage(system);
-  DEBUG("New");
+  INFO("New");
   compute_rosenbluth(0, criteria, system, acceptance, stages, random);
   const int config = stages->front()->select().configuration_index();
-  DEBUG("current en: " << criteria->current_energy(config));
-  DEBUG("old en: " << acceptance->energy_old());
-  DEBUG("new en: " << acceptance->energy_new());
-  DEBUG("energy change: " << acceptance->energy_new() - acceptance->energy_old());
+  INFO("config " << config);
+  acceptance->set_configuration_index(config);
+  INFO("current en: " << criteria->current_energy(config));
+  INFO("old en: " << acceptance->energy_old());
+  INFO("new en: " << acceptance->energy_new());
+  INFO("energy change: " << acceptance->energy_new() - acceptance->energy_old());
+  INFO("acceptance energy profile old " << feasst_str(acceptance->energy_profile_old()));
   if ((*stages)[0]->is_new_only()) {
     //acceptance->set_energy_new(acceptance->energy_new());
   } else {
     const double delta_energy = acceptance->energy_new() - acceptance->energy_old();
     acceptance->set_energy_new(criteria->current_energy(config) + delta_energy);
+    INFO("new profile bf " << feasst_str(acceptance->energy_profile_new()));
     acceptance->add_to_energy_profile_new(criteria->current_energy_profile(config));
+    INFO("new profile af " << feasst_str(acceptance->energy_profile_new()));
     acceptance->subtract_from_energy_profile_new(acceptance->energy_profile_old());
+    INFO("new profile af2 " << feasst_str(acceptance->energy_profile_new()));
   }
 }
 

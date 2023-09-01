@@ -48,6 +48,7 @@ void TrialCompute::compute_rosenbluth(
     if (old == 1) {
       energy = stage->rosenbluth().energy(0);
       acceptance->add_to_energy_old(energy);
+      INFO("setting old en prof " << feasst_str(stage->rosenbluth().energy_profile(0)));
       acceptance->add_to_energy_profile_old(stage->rosenbluth().energy_profile(0));
       ln_rosenbluth -= stage->rosenbluth().ln_total_rosenbluth();
       DEBUG("adding to old energy " << energy);

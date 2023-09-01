@@ -287,6 +287,12 @@ void MonteCarlo::add(std::shared_ptr<Trial> trial) {
     }
   }
 
+  // Need to implement some way to handle profiles when config is only in the first select
+  if (trial->num_stages() > 1) {
+    ASSERT(system_.num_configurations() == 1,
+      "not implemented. Fix TrialStage::set_rosenbluth_energy_");
+  }
+
   // flatten TrialFactory by adding the individual trials instead.
   if (trial->class_name() == "TrialFactory") {
     DEBUG("flattening");
@@ -599,6 +605,8 @@ void MonteCarlo::initialize_criteria() {
       criteria_->set_current_energy(en, iconf);
       criteria_->set_current_energy_profile(system_.stored_energy_profile(iconf), iconf);
     }
+    INFO("iconf " << iconf << " en " << en);
+    INFO("iconf " << criteria_->current_energy(iconf));
   }
   if (criteria_) {
     criteria_->precompute(&system_);

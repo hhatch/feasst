@@ -25,14 +25,14 @@ void CheckEnergy::update(Criteria * criteria,
     System * system,
     TrialFactory * trial_factory) {
   check_->update(*criteria, *system, *trial_factory);
-  DEBUG("computing unoptimized energy for check");
+  INFO("computing unoptimized energy for check");
 
   for (int config = 0; config < system->num_configurations(); ++config) {
-    DEBUG("config " << config);
+    INFO("config " << config);
     const double energy = system->unoptimized_energy(config);
     // HWH configuration_index_
     const double current_energy = criteria->current_energy(config);
-    DEBUG("energy:" << energy << " "
+    INFO("energy:" << energy << " "
        << "current_energy: " << current_energy << " "
        << "diff: " << energy - current_energy
     );
@@ -43,8 +43,8 @@ void CheckEnergy::update(Criteria * criteria,
     const std::vector<double>& energy_profile = system->unoptimized(config).stored_energy_profile();
     // HWH configuration_index_
     const std::vector<double>& current_energy_profile = criteria->current_energy_profile(config);
-    DEBUG("energy_profile " << feasst_str(energy_profile));
-    DEBUG("current_energy_profile " << feasst_str(current_energy_profile));
+    INFO("energy_profile " << feasst_str(energy_profile));
+    INFO("current_energy_profile " << feasst_str(current_energy_profile));
     for (int i = 0; i < static_cast<int>(energy_profile.size()); ++i) {
       ASSERT(std::abs(energy_profile[i] - current_energy_profile[i]) < tolerance_,
         MAX_PRECISION <<
