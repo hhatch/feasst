@@ -69,24 +69,28 @@ class System {
   //@{
 
   /// Add a potential. By default, the potential is considered unoptimized.
-  void add(std::shared_ptr<Potential> potential) { add_to_unoptimized(potential); }
+  void add(std::shared_ptr<Potential> potential) {
+    add_to_unoptimized(potential); }
 
   /// Set an unoptimized potential.
-  void set_unoptimized(const int index, std::shared_ptr<Potential> potential);
+  void set_unoptimized(const int index, std::shared_ptr<Potential> potential,
+    const int config = 0);
 
   /// Add an unoptimized potential.
-  void add_to_unoptimized(std::shared_ptr<Potential> potential);
+  void add_to_unoptimized(std::shared_ptr<Potential> potential,
+    const int config = 0);
 
   /// Return the unoptimized potentials.
-  const PotentialFactory& unoptimized() const { return unoptimized_; }
+  const PotentialFactory& unoptimized(const int config = 0) const {
+    return unoptimized_[config]; }
 
   /// Return an unoptimized potential.
-  const Potential& potential(const int index) const {
-    return unoptimized_.potential(index); }
+  const Potential& potential(const int index, const int config = 0) const {
+    return unoptimized_[config].potential(index); }
 
   // Return an unoptimized potential.
-  Potential * get_potential(const int index) {
-    return unoptimized_.get_potential(index); }
+  Potential * get_potential(const int index, const int config = 0) {
+    return unoptimized_[config].get_potential(index); }
 
   /// Add an optimized potential.
   void add_to_optimized(std::shared_ptr<Potential> potential);
@@ -108,7 +112,7 @@ class System {
   const std::vector<PotentialFactory> references() const { return references_; }
 
   /// Return a constant reference to the full potentials.
-  const PotentialFactory& potentials() const;
+  const PotentialFactory& potentials(const int config = 0) const;
 
   /// Remove optimization when overlap is detected, which is default.
   void remove_opt_overlap();
@@ -241,7 +245,7 @@ class System {
   std::vector<Configuration> configurations_;
   // HWH should each config have its own set of the three potential factories, and BondVisitor?
   std::vector<BondVisitor> bonds_;
-  PotentialFactory unoptimized_;
+  std::vector<PotentialFactory> unoptimized_;
   PotentialFactory optimized_;
   bool is_optimized_ = false;
   std::vector<PotentialFactory> references_;
@@ -253,7 +257,7 @@ class System {
   int ref_used_last_ = -1;
 
   PotentialFactory * reference_(const int index);
-  PotentialFactory * potentials_();
+  PotentialFactory * potentials_(const int config = 0);
 };
 
 inline std::shared_ptr<System> MakeSystem() {

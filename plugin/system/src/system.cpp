@@ -13,6 +13,7 @@ void System::add(const Configuration& configuration) {
   configurations_.push_back(configuration);
   BondVisitor bond;
   bonds_.push_back(bond);
+  unoptimized_.push_back(PotentialFactory());
 }
 
 const Configuration& System::configuration(const int config) const {
@@ -31,17 +32,17 @@ int System::dimension(const int config) const {
   return dim;
 }
 
-void System::add_to_unoptimized(std::shared_ptr<Potential> potential) {
-  // HWH assume one config
-  unoptimized_.add(potential);
-  unoptimized_.precompute(unoptimized_.num() - 1, &configurations_[0]);
+void System::add_to_unoptimized(std::shared_ptr<Potential> potential,
+    const int config) {
+  unoptimized_[config].add(potential);
+  unoptimized_[config].precompute(unoptimized_[config].num() - 1, &configurations_[0]);
 }
 
 void System::set_unoptimized(const int index,
-    std::shared_ptr<Potential> potential) {
-  // HWH assume one config
-  unoptimized_.set(index, potential);
-  unoptimized_.precompute(index, &configurations_[0]);
+    std::shared_ptr<Potential> potential,
+    const int config) {
+  unoptimized_[config].set(index, potential);
+  unoptimized_[config].precompute(index, &configurations_[0]);
 }
 
 void System::add_to_optimized(std::shared_ptr<Potential> potential) {
@@ -80,21 +81,25 @@ const Potential& System::reference(const int ref,
 }
 
 void System::precompute() {
-  unoptimized_.precompute(&configurations_.front());
-  if (is_optimized_) {
-    optimized_.precompute(&configurations_.front());
-  }
-  for (PotentialFactory& ref : references_) {
-    ref.precompute(&configurations_.front());
+  for (int config_index = 0; config_index < num_configurations(); ++config_index) {
+    Configuration * config = &configurations_[config_index];
+    unoptimized_[config_index].precompute(config);
+    // HWH optimized and ref assumes 1 config
+    if (is_optimized_) {
+      optimized_.precompute(config);
+    }
+    for (PotentialFactory& ref : references_) {
+      ref.precompute(config);
+    }
   }
 }
 
 double System::unoptimized_energy(const int config) {
-  const double en = unoptimized_.energy(&configurations_[config]);
+  const double en = unoptimized_[config].energy(&configurations_[config]);
   ASSERT(!std::isinf(en) && !std::isnan(en),
     "Energy(" << en << ") is infinite or not "
     << "a number. Are particles on top of each other?");
-  unoptimized_.finalize(configurations_[config].selection_of_all(),
+  unoptimized_[config].finalize(configurations_[config].selection_of_all(),
     &configurations_[config]);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
@@ -102,11 +107,12 @@ double System::unoptimized_energy(const int config) {
   return en + bonds_[config].energy();
 }
 
-PotentialFactory * System::potentials_() {
+PotentialFactory * System::potentials_(const int config) {
   if (is_optimized_) {
+    // HWH assumes 1 config
     return &optimized_;
   }
-  return &unoptimized_;
+  return &unoptimized_[config];
 }
 
 double System::energy(const int config) {
@@ -151,7 +157,8 @@ void System::serialize(std::ostream& sstr) const {
   feasst_serialize_version(7349, sstr);
   feasst_serialize_fstobj(configurations_, sstr);
   feasst_serialize_fstobj(bonds_, sstr);
-  unoptimized_.serialize(sstr);
+  feasst_serialize_fstobj(unoptimized_, sstr);
+  //unoptimized_.serialize(sstr);
   optimized_.serialize(sstr);
   feasst_serialize(is_optimized_, sstr);
   feasst_serialize_fstobj(references_, sstr);
@@ -165,7 +172,8 @@ System::System(std::istream& sstr) {
   ASSERT(version == 7349, "unrecognized verison: " << version);
   feasst_deserialize_fstobj(&configurations_, sstr);
   feasst_deserialize_fstobj(&bonds_, sstr);
-  unoptimized_ = PotentialFactory(sstr);
+  feasst_deserialize_fstobj(&unoptimized_, sstr);
+  //unoptimized_ = PotentialFactory(sstr);
   optimized_ = PotentialFactory(sstr);
   feasst_deserialize(&is_optimized_, sstr);
   feasst_deserialize_fstobj(&references_, sstr);
@@ -180,27 +188,34 @@ System::System(std::istream& sstr) {
   feasst_deserialize_endcap("System", sstr);
 }
 
-const PotentialFactory& System::potentials() const {
+const PotentialFactory& System::potentials(const int config) const {
   if (is_optimized_) {
+    // HWH assumes 1 config
     return optimized_;
   }
-  return unoptimized_;
+  return unoptimized_[config];
 }
 
 void System::load_cache(const bool load) {
-  unoptimized_.load_cache(load);
-  optimized_.load_cache(load);
-  for (PotentialFactory& ref : references_) {
-    ref.load_cache(load);
+  for (int config = 0; config < num_configurations(); ++config) {
+    unoptimized_[config].load_cache(load);
+    // HWH assumes 1 config
+    optimized_.load_cache(load);
+    for (PotentialFactory& ref : references_) {
+      ref.load_cache(load);
+    }
   }
 }
 
 void System::unload_cache(const System& system) {
-  unoptimized_.unload_cache(system.unoptimized_);
-  optimized_.unload_cache(system.optimized_);
-  ASSERT(references_.size() == system.references_.size(), "size mismatch");
-  for (int iref = 0; iref < static_cast<int>(references_.size()); ++iref) {
-    references_[iref].unload_cache(system.references_[iref]);
+  for (int config = 0; config < num_configurations(); ++config) {
+    unoptimized_[config].unload_cache(system.unoptimized_[config]);
+    // HWH assumes 1 config
+    optimized_.unload_cache(system.optimized_);
+    ASSERT(references_.size() == system.references_.size(), "size mismatch");
+    for (int iref = 0; iref < static_cast<int>(references_.size()); ++iref) {
+      references_[iref].unload_cache(system.references_[iref]);
+    }
   }
 }
 
@@ -209,7 +224,7 @@ void System::finalize(const Select& select, const int config) {
     // finalize removal
     configurations_[config].remove_particles(select);
   }
-  unoptimized_.finalize(select, &configurations_[config]);
+  unoptimized_[config].finalize(select, &configurations_[config]);
   optimized_.finalize(select, &configurations_[config]);
   for (PotentialFactory& ref : references_) {
     ref.finalize(select, &configurations_[config]);
@@ -226,7 +241,7 @@ void System::revert(const Select& select, const int config) {
 }
 
 void System::check(const int config) const {
-  unoptimized_.check(configurations_[config]);
+  unoptimized_[config].check(configurations_[config]);
   optimized_.check(configurations_[config]);
   for (const PotentialFactory& ref : references_) {
     ref.check(configurations_[config]);
@@ -256,9 +271,9 @@ void System::synchronize_(const System& system, const Select& perturbed) {
     configurations_[config].synchronize_(system.configuration(config),
       perturbed);
     ASSERT(config == 0, "perturb not implemented for multiple configs");
-    // HWH suggest: make perturb a vector, one for each config?
+    unoptimized_[config].synchronize_(system.unoptimized(), perturbed);
   }
-  unoptimized_.synchronize_(system.unoptimized(), perturbed);
+  // HWH suggest: make perturb a vector, one for each config?
   optimized_.synchronize_(system.optimized(), perturbed);
   for (int ref = 0; ref < num_references(); ++ref) {
     references_[ref].synchronize_(system.references()[ref], perturbed);
@@ -275,7 +290,7 @@ void System::change_volume(const double delta_volume, argtype * args) {
   const int dimen = integer("dimension", args, -1);
   args->insert({"dimension", str(dimen)});
   configurations_[config].change_volume(delta_volume, args);
-  unoptimized_.change_volume(delta_volume, dimen);
+  unoptimized_[config].change_volume(delta_volume, dimen);
   optimized_.change_volume(delta_volume, dimen);
   for (PotentialFactory& ref : references_) {
     ref.change_volume(delta_volume, dimen);
@@ -292,7 +307,9 @@ const ThermoParams& System::thermo_params() const {
 }
 
 void System::remove_opt_overlap() {
-  unoptimized_.remove_opt_overlap();
+  for (int config = 0; config < num_configurations(); ++config) {
+    unoptimized_[config].remove_opt_overlap();
+  }
   optimized_.remove_opt_overlap();
   for (PotentialFactory& ref : references_) {
     ref.remove_opt_overlap();
