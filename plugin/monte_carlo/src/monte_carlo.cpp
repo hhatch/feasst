@@ -63,7 +63,8 @@ void MonteCarlo::parse_(arglist * args) {
   // parse Potential
   if (args->begin()->first == "Potential") {
     DEBUG("parsing Potential");
-    add(MakePotential(args->begin()->second));
+    const int config = integer("configuration_index", &(args->begin()->second), 0);
+    add(MakePotential(args->begin()->second), config);
     args->erase(args->begin());
     return;
   }
@@ -202,11 +203,11 @@ void MonteCarlo::add(const Configuration& config) {
   ASSERT(!criteria_set_, "add config before criteria");
 }
 
-void MonteCarlo::add(std::shared_ptr<Potential> potential) {
+void MonteCarlo::add(std::shared_ptr<Potential> potential, const int config) {
   ASSERT(!criteria_set_, "add potential before criteria");
   ASSERT(config_set_ || system_set_, "config:" << config_set_ <<
     " or system:" << system_set_ << " must be set before adding a potential");
-  system_.add(potential);
+  system_.add(potential, config);
   system_.precompute();
   potential_set_ = true;
 }

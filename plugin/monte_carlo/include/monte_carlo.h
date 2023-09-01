@@ -39,7 +39,7 @@ class MonteCarlo {
     Objects are processed with the following (derived-)names and arguments.
     - Random (default: RandomMT19937).
     - Configuration (multiple)
-    - Potential (multiple)
+    - Potential (multiple; with configuration_index)
     - ThermoParams
     - Criteria
     - Trial (multiple)
@@ -89,7 +89,7 @@ class MonteCarlo {
     return system_.configuration(index); }
 
   /// The second action is to add Potentials.
-  void add(std::shared_ptr<Potential> potential);
+  void add(std::shared_ptr<Potential> potential, const int config = 0);
 
   /// Warning for depreciated use.
   void add(const Potential& potential);
