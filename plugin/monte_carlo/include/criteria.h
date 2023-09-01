@@ -199,6 +199,7 @@ class Criteria {
   std::vector<std::shared_ptr<Constraint> > constraints_;
 
   std::vector<double> * current_energy_() { return &((*data_.get_dble_2D())[0]); }
+  const std::vector<double>& const_current_energy_() const { return data_.dble_2D()[0]; }
   std::vector<std::vector<double> > * current_energy_profile_() { return &((*data_.get_dble_3D())[0]); }
   const std::vector<std::vector<double> >& const_current_energy_profile_() const { return data_.dble_3D()[0]; }
   int * num_attempt_since_last_iteration_() { return &((*data_.get_int_1D())[0]); }
