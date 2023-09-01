@@ -195,7 +195,7 @@ void Criteria::set_current_energy(const double energy, const int config) {
     current_energy_()->resize(config + 1);
   }
   previous_energy_ = current_energy(config);
-  (*current_energy_())[0] = energy;
+  (*current_energy_())[config] = energy;
   DEBUG("setting current energy: " << current_energy(config));
   DEBUG("previous " << previous_energy_);
 }

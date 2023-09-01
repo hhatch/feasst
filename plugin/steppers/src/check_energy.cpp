@@ -28,9 +28,10 @@ void CheckEnergy::update(Criteria * criteria,
   DEBUG("computing unoptimized energy for check");
 
   for (int config = 0; config < system->num_configurations(); ++config) {
+    DEBUG("config " << config);
     const double energy = system->unoptimized_energy(config);
     // HWH configuration_index_
-    const double current_energy = criteria->current_energy();
+    const double current_energy = criteria->current_energy(config);
     DEBUG("energy:" << energy << " "
        << "current_energy: " << current_energy << " "
        << "diff: " << energy - current_energy
@@ -41,21 +42,22 @@ void CheckEnergy::update(Criteria * criteria,
     // loop over each profile and perform the energy check
     const std::vector<double>& energy_profile = system->unoptimized(config).stored_energy_profile();
     // HWH configuration_index_
-    const std::vector<double>& current_energy_profile = criteria->current_energy_profile();
+    const std::vector<double>& current_energy_profile = criteria->current_energy_profile(config);
     DEBUG("energy_profile " << feasst_str(energy_profile));
     DEBUG("current_energy_profile " << feasst_str(current_energy_profile));
     for (int i = 0; i < static_cast<int>(energy_profile.size()); ++i) {
       ASSERT(std::abs(energy_profile[i] - current_energy_profile[i]) < tolerance_,
         MAX_PRECISION <<
         "Energy check failure. There is a problem with the potentials. " <<
-        "The unoptimized energy of potential " << i << " was computed as " <<
+        "The unoptimized energy of potential " << i << " in configuration " <<
+        config << " was computed as " <<
         energy_profile[i] << " but the running energy from criteria " <<
         "(the accumulation of a change in energy over a series of steps) is " <<
         current_energy_profile[i] <<
         ". The difference(" << std::abs(energy_profile[i] - current_energy_profile[i]) << ") is " <<
         "greater than the tolerance(" << tolerance_ << "). ");
     }
-    criteria->set_current_energy_profile(energy_profile);
+    criteria->set_current_energy_profile(energy_profile, config);
 
     // perform same energy check for entire system
     ASSERT(std::abs(energy - current_energy) < tolerance_,
@@ -68,7 +70,7 @@ void CheckEnergy::update(Criteria * criteria,
       ". The difference(" << std::abs(energy - current_energy) << ") is " <<
       "greater than the tolerance(" << tolerance_ << "). "
       << system->unoptimized().str());
-    criteria->set_current_energy(energy);
+    criteria->set_current_energy(energy, config);
 
     // loop over all queryable maps and check those as well.
   }
