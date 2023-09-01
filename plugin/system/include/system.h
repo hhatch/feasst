@@ -103,15 +103,17 @@ class System {
   /// Add a reference potential.
   void add_to_reference(std::shared_ptr<Potential> ref,
     /// Store different references by index.
-    const int index = 0);
+    const int index = 0,
+    const int config = 0);
 
-  int num_references() const { return static_cast<int>(references_.size()); }
+  int num_references(const int config = 0) const;
 
   /// Return a reference potential.
-  const Potential& reference(const int ref, const int potential) const;
+  const Potential& reference(const int ref, const int potential,
+    const int config = 0) const;
 
   /// Return the list of reference potentials.
-  const std::vector<PotentialFactory> references() const { return references_; }
+  const std::vector<std::vector<PotentialFactory> > references() const { return references_; }
 
   /// Return a constant reference to the full potentials.
   const PotentialFactory& potentials(const int config = 0) const;
@@ -250,7 +252,7 @@ class System {
   std::vector<PotentialFactory> unoptimized_;
   std::vector<PotentialFactory> optimized_;
   bool is_optimized_ = false;
-  std::vector<PotentialFactory> references_;
+  std::vector<std::vector<PotentialFactory> > references_;
   std::shared_ptr<ThermoParams> thermo_params_;
 
   // temporary variable, not needed for serialization
@@ -258,7 +260,7 @@ class System {
   // in a trial, this temporarily stores that reference potential index.
   int ref_used_last_ = -1;
 
-  PotentialFactory * reference_(const int index);
+  PotentialFactory * reference_(const int index, const int config = 0);
   PotentialFactory * potentials_(const int config = 0);
 };
 
