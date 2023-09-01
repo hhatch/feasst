@@ -27,7 +27,7 @@ void CheckEnergy::update(Criteria * criteria,
   check_->update(*criteria, *system, *trial_factory);
   DEBUG("computing unoptimized energy for check");
 
-  for (int config = 0; config = system->num_configurations(); ++config) {
+  for (int config = 0; config < system->num_configurations(); ++config) {
     const double energy = system->unoptimized_energy(config);
     // HWH configuration_index_
     const double current_energy = criteria->current_energy();

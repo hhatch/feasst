@@ -104,6 +104,8 @@ void System::precompute() {
 }
 
 double System::unoptimized_energy(const int config) {
+  ASSERT(config < num_configurations(),
+    "config: " << config << " >= num_configurations: " << num_configurations());
   const double en = unoptimized_[config].energy(&configurations_[config]);
   ASSERT(!std::isinf(en) && !std::isnan(en),
     "Energy(" << en << ") is infinite or not "

@@ -55,8 +55,7 @@ void TrialStage::set_rosenbluth_energy_(const int step, System * system) {
   DEBUG("select " << select_->mobile().str());
   double energy;
   if (reference_ == -1) {
-    // HWH configuration_index_
-    energy = system->perturbed_energy(select_->mobile(), 0);
+    energy = system->perturbed_energy(select_->mobile(), select_->configuration_index());
   } else {
     energy = system->reference_energy(select_->mobile(), reference_);
   }

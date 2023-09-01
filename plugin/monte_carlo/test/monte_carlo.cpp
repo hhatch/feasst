@@ -694,7 +694,7 @@ TEST(MonteCarlo, group_in_arglist) {
     {"Checkpoint", {{"num_hours", "0.0001"}, {"file_name", "tmp/ljrst"}}},
     {"Log", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj.xyz"}}},
-    {"CheckEnergy", {{"trials_per_update", str(1e4)}, {"tolerance", str(1e-9)}}},
+    {"CheckEnergy", {{"trials_per_update", str(1e0)}, {"tolerance", str(1e-9)}}},
     {"Tune", {{}}},
     {"Run", {{"num_trials", "1e2"}}},
   }});
@@ -718,6 +718,7 @@ TEST(MonteCarlo, two_configs) {
     {"Log", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj0.xyz"}, {"configuration_index", "0"}}},
     {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj1.xyz"}, {"configuration_index", "1"}}},
+    {"CheckEnergy", {{"trials_per_update", str(1e0)}, {"tolerance", str(1e-9)}}},
     {"Run", {{"num_trials", "1e2"}}},
   }});
   EXPECT_EQ(2, mc->system().num_configurations());
