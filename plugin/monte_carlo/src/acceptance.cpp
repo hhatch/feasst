@@ -21,15 +21,29 @@ void Acceptance::reset() {
   macrostate_shift_ = 0;
   macrostate_shift_type_ = 0;
   perturbed_.clear();
+  perturbed_.resize(2); // maximum number of configs
 }
 
-void Acceptance::add_to_perturbed(const Select& select) {
-  perturbed_.add(select);
+void Acceptance::add_to_perturbed(const Select& select, const int config) {
+  if (config >= static_cast<int>(perturbed_.size())) {
+    perturbed_.resize(config + 1);
+  }
+  perturbed_[config].add(select);
 }
 
-void Acceptance::set_perturbed_state(const int state) {
+void Acceptance::set_perturbed_state(const int state, const int config) {
+  if (config >= static_cast<int>(perturbed_.size())) {
+    perturbed_.resize(config + 1);
+  }
   DEBUG("state " << state);
-  perturbed_.set_trial_state(state);
+  perturbed_[config].set_trial_state(state);
+}
+
+const Select& Acceptance::perturbed(const int config) const {
+  ASSERT(config < static_cast<int>(perturbed_.size()),
+    "config: " << config << " >= size:" << perturbed_.size() <<
+    "Consider increasing max num config in reset()");
+  return perturbed_[config];
 }
 
 void Acceptance::add_to_energy_profile_new(const std::vector<double>& energy) {

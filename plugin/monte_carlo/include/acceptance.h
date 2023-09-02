@@ -111,13 +111,13 @@ class Acceptance {
     macrostate_shift_type_ += type; }
 
   /// Add to perturbed selection and equate trial state.
-  void add_to_perturbed(const Select& select);
+  void add_to_perturbed(const Select& select, const int config = 0);
 
   /// Set perturbed trial state.
-  void set_perturbed_state(const int state);
+  void set_perturbed_state(const int state, const int config = 0);
 
   /// Return the perturbed selection.
-  const Select& perturbed() const { return perturbed_; }
+  const Select& perturbed(const int config = 0) const;
 
  private:
   double ln_metropolis_prob_;
@@ -131,7 +131,7 @@ class Acceptance {
   bool endpoint_;
   std::vector<double> energy_profile_new_;
   std::vector<double> energy_profile_old_;
-  Select perturbed_;
+  std::vector<Select> perturbed_;
 };
 
 }  // namespace feasst
