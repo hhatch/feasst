@@ -34,7 +34,8 @@ bool TrialStage::select(System * system,
                                            system, random);
   DEBUG("is_selected " << is_selected);
   if (is_selected) {
-    acceptance->add_to_perturbed(select_->mobile());
+    acceptance->add_to_perturbed(select_->mobile(),
+                                 select_->configuration_index());
 //    set_mobile_physical(false, system);
     DEBUG("select: " << select_->mobile().str());
     DEBUG("perturbed: " << acceptance->perturbed().str());

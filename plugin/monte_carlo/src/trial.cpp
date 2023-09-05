@@ -122,7 +122,11 @@ void Trial::finalize(System * system, Criteria * criteria) {
     stages_[index]->finalize(system);
   }
   DEBUG("finalize perturbed");
-  system->finalize(acceptance_.perturbed());
+  for (int iconf = 0; iconf < acceptance_.num_configurations(); ++iconf) {
+    if (acceptance_.updated(iconf) == 1) {
+      system->finalize(acceptance_.perturbed(iconf), iconf);
+    }
+  }
   DEBUG("done finalizing perturbed");
   criteria->finalize(acceptance_);
 }

@@ -66,11 +66,13 @@ void TrialCompute::compute_rosenbluth(
     if (stage->reference() >= 0) reference_used = true;
   }
 
+  // HWH update this for multiple configs
   // update the trial state of the perturbed selection
   int trial_state = (*stages)[0]->trial_select().mobile().trial_state();
   // set the trial state if old configuration and is a move type (1)
   if (trial_state == 1 && old == 1) trial_state = 0;
-  acceptance->set_perturbed_state(trial_state);
+  const int config = (*stages)[0]->trial_select().configuration_index();
+  acceptance->set_perturbed_state(trial_state, config);
 
   DEBUG("reference used? " << reference_used);
   if (reference_used) {
