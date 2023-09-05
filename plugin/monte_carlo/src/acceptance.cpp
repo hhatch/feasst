@@ -20,8 +20,8 @@ void Acceptance::reset() {
   energy_old_[0] = 0.;
   energy_ref_.resize(1);
   energy_ref_[0] = 0.;
-  configuration_indices_.resize(1);
-  configuration_indices_[0] = 0;
+  updated_.resize(1);
+  updated_[0] = 0;
   resize(1, 0, &energy_profile_new_);
   fill(0., &energy_profile_new_);
   resize(1, 0, &energy_profile_old_);
@@ -35,16 +35,12 @@ void Acceptance::reset() {
 }
 
 void Acceptance::add_to_perturbed(const Select& select, const int config) {
-  if (config >= static_cast<int>(perturbed_.size())) {
-    perturbed_.resize(config + 1);
-  }
+  resize_(config, &perturbed_);
   perturbed_[config].add(select);
 }
 
 void Acceptance::set_perturbed_state(const int state, const int config) {
-  if (config >= static_cast<int>(perturbed_.size())) {
-    perturbed_.resize(config + 1);
-  }
+  resize_(config, &perturbed_);
   DEBUG("state " << state);
   perturbed_[config].set_trial_state(state);
 }
@@ -66,15 +62,14 @@ void Acceptance::set_energy_profile_new(const std::vector<double>& energy, const
   if (config == static_cast<int>(energy_profile_new_.size())) {
     energy_profile_new_.resize(energy_profile_new_.size()+1);
   }
+  resize_(config, &energy_profile_new_);
   energy_profile_new_[config] = energy;
 }
 
 void Acceptance::add_to_energy_profile_new(const std::vector<double>& energy,
     const int config) {
   DEBUG("config " << config);
-  if (config == static_cast<int>(energy_profile_new_.size())) {
-    energy_profile_new_.resize(energy_profile_new_.size()+1);
-  }
+  resize_(config, &energy_profile_new_);
   const int current_size = static_cast<int>(energy_profile_new_[config].size());
   DEBUG("current_size " << current_size);
   const int new_size = static_cast<int>(energy.size());
@@ -91,6 +86,7 @@ void Acceptance::add_to_energy_profile_new(const std::vector<double>& energy,
 
 void Acceptance::subtract_from_energy_profile_new(const std::vector<double>& energy,
     const int config) {
+  resize_(config, &energy_profile_new_);
   DEBUG("config " << config);
   const int current_size = static_cast<int>(energy_profile_new_[config].size());
   DEBUG("current_size " << current_size);
@@ -113,14 +109,13 @@ const std::vector<double>& Acceptance::energy_profile_old(const int config) cons
 }
 
 void Acceptance::set_energy_profile_old(const std::vector<double>& energy, const int config) {
+  resize_(config, &energy_profile_old_);
   energy_profile_old_[config] = energy;
 }
 
 void Acceptance::add_to_energy_profile_old(const std::vector<double>& energy,
     const int config) {
-  if (config == static_cast<int>(energy_profile_old_.size())) {
-    energy_profile_old_.resize(energy_profile_old_.size()+1);
-  }
+  resize_(config, &energy_profile_old_);
   const int current_size = static_cast<int>(energy_profile_old_[config].size());
   const int old_size = static_cast<int>(energy.size());
   if (current_size < old_size) {
@@ -138,27 +133,49 @@ void Acceptance::set_reject(const bool reject) {
 }
 
 double Acceptance::energy_new(const int config) const {
+  ASSERT(config < static_cast<int>(energy_new_.size()),
+    "config:" << config << " >= size:" << energy_new_.size());
   return energy_new_[config];
 }
 
 void Acceptance::set_energy_new(const double energy, const int config) {
+  resize_(config, &energy_new_);
   energy_new_[config] = energy;
+  resize_(config, &updated_);
+  updated_[config] = 1;
 }
 
 void Acceptance::add_to_energy_new(const double energy, const int config) {
+  resize_(config, &energy_new_);
   energy_new_[config] += energy;
+  resize_(config, &updated_);
+  updated_[config] = 1;
 }
 
 double Acceptance::energy_old(const int config) const {
+  ASSERT(config < static_cast<int>(energy_old_.size()),
+    "config:" << config << " >= size:" << energy_old_.size());
   return energy_old_[config];
 }
 
 void Acceptance::set_energy_old(const double energy, const int config) {
+  resize_(config, &energy_old_);
   energy_old_[config] = energy;
+  resize_(config, &updated_);
+  updated_[config] = 1;
 }
 
 void Acceptance::add_to_energy_old(const double energy, const int config) {
+  resize_(config, &energy_old_);
   energy_old_[config] += energy;
+  resize_(config, &updated_);
+  updated_[config] = 1;
+}
+
+int Acceptance::updated(const int config) const {
+  ASSERT(config < static_cast<int>(updated_.size()),
+    "config:" << config << " >= size:" << updated_.size());
+  return updated_[config];
 }
 
 }  // namespace feasst

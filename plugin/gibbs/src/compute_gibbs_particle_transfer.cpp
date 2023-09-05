@@ -31,13 +31,25 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
   compute_rosenbluth(0, criteria, system, acceptance, stages, random);
   INFO("lnmet " << acceptance->ln_metropolis_prob());
   int config_add = 0;
+  int config_del = 1;
   if ((*stages)[0]->trial_select().configuration_index() == 0) {
+    config_del = 0;
     config_add = 1;
   }
-  acceptance->add_to_energy_new(criteria->current_energy());
-  //acceptance->set_energy_new(criteria->current_energy() + acceptance->energy_new());
-  acceptance->add_to_energy_profile_new(criteria->current_energy_profile());
-  acceptance->add_to_macrostate_shift(1);
+  INFO("config_add " << config_add);
+  INFO("config_del " << config_del);
+
+  // add
+  acceptance->add_to_energy_new(criteria->current_energy(config_add), config_add);
+  acceptance->add_to_energy_profile_new(criteria->current_energy_profile(config_add), config_add);
+  acceptance->add_to_macrostate_shift(1, config_add);
+
+  // del
+  acceptance->set_energy_new(criteria->current_energy(config_del) - acceptance->energy_old(config_del));
+  acceptance->set_energy_profile_new(criteria->current_energy_profile(config_del), config_del);
+  acceptance->subtract_from_energy_profile_new(acceptance->energy_profile_old(config_del), config_del);
+  acceptance->add_to_macrostate_shift(-1, config_del);
+
   INFO("lnmet " << acceptance->ln_metropolis_prob());
   INFO("old en " << criteria->current_energy());
   INFO("new en " << MAX_PRECISION << acceptance->energy_new());

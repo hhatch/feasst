@@ -128,14 +128,14 @@ void Trial::finalize(System * system, Criteria * criteria) {
 }
 
 bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
-  DEBUG("**********************************************************");
-  DEBUG("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
-  DEBUG("**********************************************************");
-  DEBUG("config index: " << stages_[0]->trial_select().configuration_index());
+  INFO("**********************************************************");
+  INFO("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
+  INFO("**********************************************************");
+  INFO("config index: " << stages_[0]->trial_select().configuration_index());
   for (int iconf = 0; iconf < system->num_configurations(); ++iconf) {
-    DEBUG("config " << iconf);
+    INFO("config " << iconf);
     const Configuration& config = system->configuration(iconf);
-    DEBUG("num particles: " << config.num_particles());
+    INFO("num particles: " << config.num_particles());
     DEBUG("num ghosts: " << config.particles().num() -
                            config.num_particles());
     DEBUG("existing: " << config.group_select(0).str());

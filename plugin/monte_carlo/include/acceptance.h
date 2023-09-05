@@ -41,6 +41,9 @@ class Acceptance {
   /// Reset all stored quantities before each trial.
   void reset();
 
+  /// Return 1 if this conf has updated energy.
+  int updated(const int conf = 0) const;
+
   /// Return the energy of the new configuration.
   double energy_new(const int config = 0) const;
 
@@ -50,18 +53,8 @@ class Acceptance {
   /// Add to the above quantity.
   void add_to_energy_new(const double energy, const int config = 0);
 
-  /// Set the configuration index.
-  void set_configuration_indices(const int index, const int config) {
-    configuration_indices_[index] = config; }
-
-  /// Return the configuration index.
-  int configuration_index(const int index = 0) const { return configuration_indices_[index]; }
-
   /// Return the configuration indices.
-  const std::vector<int>& configuration_indices() const { return configuration_indices_; }
-
-  /// Return the configuration indices.
-  int num_configurations() const { return static_cast<int>(configuration_indices_.size()); }
+  int num_configurations() const { return static_cast<int>(energy_new_.size()); }
 
   /// Return the energy profile of the new configuration.
   const std::vector<double>& energy_profile_new(const int config = 0) const;
@@ -129,7 +122,6 @@ class Acceptance {
   std::vector<double> energy_new_;
   std::vector<double> energy_old_;
   std::vector<double> energy_ref_;
-  std::vector<int> configuration_indices_;
   std::vector<int> macrostate_shift_;
   std::vector<int> macrostate_shift_type_;
   bool reject_;
@@ -137,6 +129,14 @@ class Acceptance {
   std::vector<std::vector<double> > energy_profile_new_;
   std::vector<std::vector<double> > energy_profile_old_;
   std::vector<Select> perturbed_;
+  std::vector<int> updated_;
+
+  template <typename T>
+  void resize_(const int config, std::vector<T> * vec) {
+    if (config >= static_cast<int>(vec->size())) {
+      vec->resize(config + 1);
+    }
+  }
 };
 
 }  // namespace feasst

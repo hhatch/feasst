@@ -45,18 +45,19 @@ void TrialCompute::compute_rosenbluth(
       //acceptance->set_reject(true);
     }
     double energy;
+    const int config = stage->trial_select().configuration_index();
     if (old == 1) {
       energy = stage->rosenbluth().energy(0);
-      acceptance->add_to_energy_old(energy);
-      acceptance->add_to_energy_profile_old(stage->rosenbluth().energy_profile(0));
+      acceptance->add_to_energy_old(energy, config);
+      acceptance->add_to_energy_profile_old(stage->rosenbluth().energy_profile(0), config);
       ln_rosenbluth -= stage->rosenbluth().ln_total_rosenbluth();
       DEBUG("adding to old energy " << energy);
     } else {
       energy = stage->rosenbluth().chosen_energy();
       DEBUG("energy new " << acceptance->energy_new());
       DEBUG("energy " << energy);
-      acceptance->add_to_energy_new(energy);
-      acceptance->add_to_energy_profile_new(stage->rosenbluth().chosen_energy_profile());
+      acceptance->add_to_energy_new(energy, config);
+      acceptance->add_to_energy_profile_new(stage->rosenbluth().chosen_energy_profile(), config);
       DEBUG("energy new updated " << acceptance->energy_new());
       ln_rosenbluth += stage->rosenbluth().ln_total_rosenbluth();
       DEBUG("adding to new energy " << energy);

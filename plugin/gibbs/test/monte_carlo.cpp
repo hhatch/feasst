@@ -37,7 +37,7 @@ namespace feasst {
 TEST(MonteCarlo, gibbs_ensemble) {
   auto trial = MakeTrialGibbsParticleTransfer();
   auto mc = MakeMonteCarlo({{
-    //{"RandomMT19937", {{"seed", "1234"}}},
+    {"RandomMT19937", {{"seed", "1234"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
