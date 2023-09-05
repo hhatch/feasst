@@ -44,7 +44,9 @@ TEST(MonteCarlo, gibbs_ensemble) {
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Potential", {{"Model", "LennardJones"}, {"configuration_index", "0"}}},
+    {"Potential", {{"VisitModel", "LongRangeCorrections"}, {"configuration_index", "0"}}},
     {"Potential", {{"Model", "LennardJones"}, {"configuration_index", "1"}}},
+    {"Potential", {{"VisitModel", "LongRangeCorrections"}, {"configuration_index", "1"}}},
     {"ThermoParams", {{"beta", "100.2"}, {"chemical_potential", "1."}}},
     {"Metropolis", {{}}},
     {"TrialTranslate", {{"configuration_index", "0"}}},
@@ -60,8 +62,8 @@ TEST(MonteCarlo, gibbs_ensemble) {
   EXPECT_EQ(2, mc->system().num_configurations());
   EXPECT_NE(mc->system().potential(0, 0).stored_energy(),
             mc->system().potential(0, 1).stored_energy());
-  EXPECT_EQ(mc->system().configuration(0).num_particles() + 
-            mc->system().configuration(1).num_particles(), 60); 
+  EXPECT_EQ(mc->system().configuration(0).num_particles() +
+            mc->system().configuration(1).num_particles(), 60);
 }
 
 }  // namespace feasst
