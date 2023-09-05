@@ -57,6 +57,15 @@ Thus, most users will want to search the documentation for these classes.
 Documentation for a particular class can be found by searching the `list of all capabilities <../plugin/README.html>`_ (typically, using ctrl-f).
 All available arguments for that class can then be found in the list of "args" of that class, or its base classes.
 
+For developers, the bash command "grep" is also an option to search for more information on classes and their arguments.
+For example, if you would like more information on `RandomMT19937 <plugin/math/doc/RandomMT19937.html>`_ but are not sure where to find it, you could search headers files
+
+.. code-block:: bash
+
+   grep -r --include=*.h RandomMT19937
+
+And find that the class is part of the `Math <plugin/math/README.html>`_ plugin.
+
 Python and C++ interface
 ===============================
 
