@@ -167,7 +167,7 @@ bool TrialSelectParticle::select(const Select& perturbed,
                                  System* system,
                                  Random * random) {
   DEBUG("is_ghost " << is_ghost());
-  INFO("selection from configuration " << configuration_index());
+  DEBUG("selection from configuration " << configuration_index());
   Configuration * config = system->get_configuration(configuration_index());
   if (is_ghost()) {
     if (exclude_perturbed_) {
@@ -192,7 +192,7 @@ bool TrialSelectParticle::select(const Select& perturbed,
   remove_unphysical_sites(*config);
   ASSERT(mobile_.num_particles() > 0, "all sites shouldn't be unphysical");
   set_mobile_original(system);
-  INFO("selected " << mobile_.str());
+  DEBUG("selected " << mobile_.str());
   return true;
 }
 

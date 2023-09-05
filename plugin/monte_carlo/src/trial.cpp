@@ -117,13 +117,13 @@ void Trial::revert(const int index,
 }
 
 void Trial::finalize(System * system, Criteria * criteria) {
-  INFO("finalizing");
+  DEBUG("finalizing");
   for (int index = num_stages() - 1; index >= 0; --index) {
     stages_[index]->finalize(system);
   }
-  INFO("finalize perturbed. Num configs? " << acceptance_.num_configurations());
+  DEBUG("finalize perturbed. Num configs? " << acceptance_.num_configurations());
   for (int iconf = 0; iconf < acceptance_.num_configurations(); ++iconf) {
-    INFO("iconf:" << iconf << " updated? " << acceptance_.updated(iconf));
+    DEBUG("iconf:" << iconf << " updated? " << acceptance_.updated(iconf));
     if (acceptance_.updated(iconf) == 1) {
       system->finalize(acceptance_.perturbed(iconf), iconf);
     }
@@ -133,19 +133,19 @@ void Trial::finalize(System * system, Criteria * criteria) {
 }
 
 bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
-  INFO("**********************************************************");
-  INFO("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
-  INFO("**********************************************************");
-  INFO("config index: " << stages_[0]->trial_select().configuration_index());
+  DEBUG("**********************************************************");
+  DEBUG("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
+  DEBUG("**********************************************************");
+  DEBUG("config index: " << stages_[0]->trial_select().configuration_index());
   for (int iconf = 0; iconf < system->num_configurations(); ++iconf) {
-    INFO("config " << iconf);
+    DEBUG("config " << iconf);
     const Configuration& config = system->configuration(iconf);
-    INFO("num particles: " << config.num_particles());
-    INFO("num ghosts: " << config.particles().num() -
+    DEBUG("num particles: " << config.num_particles());
+    DEBUG("num ghosts: " << config.particles().num() -
                            config.num_particles());
-    //INFO("existing: " << config.group_select(0).str());
-    INFO("num of type 0: " << config.num_particles_of_type(0));
-    INFO("current_energy: " << criteria->current_energy(iconf));
+    //DEBUG("existing: " << config.group_select(0).str());
+    DEBUG("num of type 0: " << config.num_particles_of_type(0));
+    DEBUG("current_energy: " << criteria->current_energy(iconf));
     DEBUG("all: " << system->configuration(iconf).selection_of_all().str());
   }
   increment_num_attempts();
@@ -178,7 +178,7 @@ bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
   if (criteria->is_accepted(*system, &acceptance_, random)) {
     DEBUG("accepted");
     increment_num_success_();
-    INFO("is_finalize_delayed_ " << is_finalize_delayed_);
+    DEBUG("is_finalize_delayed_ " << is_finalize_delayed_);
     if (!is_finalize_delayed_) {
       finalize(system, criteria);
     }
