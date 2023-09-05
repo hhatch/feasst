@@ -231,7 +231,7 @@ void System::unload_cache(const System& system) {
 }
 
 void System::finalize(const Select& select, const int config) {
-  INFO("finalizing removal of " << select.str() << " in config:" << config);
+  DEBUG("finalizing removal of " << select.str() << " in config:" << config);
   if (select.trial_state() == 2) {
     // finalize removal
     configurations_[config].remove_particles(select);

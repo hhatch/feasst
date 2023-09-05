@@ -167,7 +167,7 @@ bool TrialSelectParticle::select(const Select& perturbed,
                                  System* system,
                                  Random * random) {
   DEBUG("is_ghost " << is_ghost());
-  INFO("selection from configuration " << configuration_index());
+  DEBUG("selection from configuration " << configuration_index());
   Configuration * config = system->get_configuration(configuration_index());
   if (is_ghost()) {
     if (exclude_perturbed_) {
