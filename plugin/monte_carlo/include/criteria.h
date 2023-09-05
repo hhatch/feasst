@@ -78,6 +78,9 @@ class Criteria {
   /// Return the current energy profile based on energy changes per trial.
   const std::vector<double>& current_energy_profile(const int config = 0) const;
 
+  /// Update the current energy.
+  void update_current_energy(const Acceptance& acceptance);
+
   /// Return the header of the status for periodic output.
   std::string status_header(const System& system) const;
 

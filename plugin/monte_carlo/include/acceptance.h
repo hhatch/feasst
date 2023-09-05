@@ -60,6 +60,9 @@ class Acceptance {
   /// Return the configuration indices.
   const std::vector<int>& configuration_indices() const { return configuration_indices_; }
 
+  /// Return the configuration indices.
+  int num_configurations() const { return static_cast<int>(configuration_indices_.size()); }
+
   /// Return the energy profile of the new configuration.
   const std::vector<double>& energy_profile_new(const int config = 0) const;
 

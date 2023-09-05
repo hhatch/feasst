@@ -48,6 +48,14 @@ const std::vector<double>& Criteria::current_energy_profile(const int config) co
   return data_.dble_3D()[0][config];
 }
 
+void Criteria::update_current_energy(const Acceptance& acceptance) {
+  for (int index = 0; index < acceptance.num_configurations(); ++index) {
+    const int config = acceptance.configuration_index(index);
+    set_current_energy(acceptance.energy_new(index), config);
+    set_current_energy_profile(acceptance.energy_profile_new(index), config);
+  }
+}
+
 std::string Criteria::status_header(const System& system) const {
   std::stringstream ss;
   if (num_states() > 1) {
