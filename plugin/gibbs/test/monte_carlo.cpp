@@ -37,7 +37,8 @@ namespace feasst {
 TEST(MonteCarlo, gibbs_ensemble) {
   auto trial = MakeTrialGibbsParticleTransfer();
   auto mc = MakeMonteCarlo({{
-    {"RandomMT19937", {{"seed", "1234"}}},
+    //{"RandomMT19937", {{"seed", "1234"}}},
+    //{"RandomMT19937", {{"seed", "1693947707"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
       {"particle_type0", "../particle/lj.fstprt"}, {"group0", "first"}, {"first_particle_index", "0"}}},
     {"Configuration", {{"xyz_file", "../plugin/configuration/test/data/lj_sample_config_periodic4.xyz"},
@@ -59,6 +60,8 @@ TEST(MonteCarlo, gibbs_ensemble) {
   EXPECT_EQ(2, mc->system().num_configurations());
   EXPECT_NE(mc->system().potential(0, 0).stored_energy(),
             mc->system().potential(0, 1).stored_energy());
+  EXPECT_EQ(mc->system().configuration(0).num_particles() + 
+            mc->system().configuration(1).num_particles(), 60); 
 }
 
 }  // namespace feasst

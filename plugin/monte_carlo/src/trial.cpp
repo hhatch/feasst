@@ -117,12 +117,13 @@ void Trial::revert(const int index,
 }
 
 void Trial::finalize(System * system, Criteria * criteria) {
-  DEBUG("finalizing");
+  INFO("finalizing");
   for (int index = num_stages() - 1; index >= 0; --index) {
     stages_[index]->finalize(system);
   }
-  DEBUG("finalize perturbed");
+  INFO("finalize perturbed. Num configs? " << acceptance_.num_configurations());
   for (int iconf = 0; iconf < acceptance_.num_configurations(); ++iconf) {
+    INFO("iconf:" << iconf << " updated? " << acceptance_.updated(iconf));
     if (acceptance_.updated(iconf) == 1) {
       system->finalize(acceptance_.perturbed(iconf), iconf);
     }
@@ -177,7 +178,7 @@ bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
   if (criteria->is_accepted(*system, &acceptance_, random)) {
     DEBUG("accepted");
     increment_num_success_();
-    DEBUG("is_finalize_delayed_ " << is_finalize_delayed_);
+    INFO("is_finalize_delayed_ " << is_finalize_delayed_);
     if (!is_finalize_delayed_) {
       finalize(system, criteria);
     }

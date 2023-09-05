@@ -54,7 +54,7 @@ class Acceptance {
   void add_to_energy_new(const double energy, const int config = 0);
 
   /// Return the configuration indices.
-  int num_configurations() const { return static_cast<int>(energy_new_.size()); }
+  int num_configurations() const;
 
   /// Return the energy profile of the new configuration.
   const std::vector<double>& energy_profile_new(const int config = 0) const;

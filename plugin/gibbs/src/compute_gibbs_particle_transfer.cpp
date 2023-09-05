@@ -27,45 +27,52 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
     Random * random) {
   INFO("ComputeGibbsParticleTransfer");
   INFO("lnmet " << acceptance->ln_metropolis_prob());
-  compute_rosenbluth(1, criteria, system, acceptance, stages, random);
 
-  int config_add = 0;
-  int config_del = 1;
+  // del
+  std::vector<TrialStage*> del_stages = {(*stages)[1]};
+  compute_rosenbluth(1, criteria, system, acceptance, &del_stages, random);
+  int config_del = 0;
+  int config_add = 1;
   if ((*stages)[0]->trial_select().configuration_index() == 0) {
-    config_del = 0;
-    config_add = 1;
+    config_add = 0;
+    config_del = 1;
   }
   INFO("config_add " << config_add);
   INFO("config_del " << config_del);
-
-  // del
-  acceptance->set_energy_new(criteria->current_energy(config_del) - acceptance->energy_old(config_del));
+  acceptance->set_energy_new(criteria->current_energy(config_del) - acceptance->energy_old(config_del), config_del);
   acceptance->set_energy_profile_new(criteria->current_energy_profile(config_del), config_del);
   acceptance->subtract_from_energy_profile_new(acceptance->energy_profile_old(config_del), config_del);
   acceptance->add_to_macrostate_shift(-1, config_del);
 
-  compute_rosenbluth(0, criteria, system, acceptance, stages, random);
+  INFO("energy contribution of config " << config_del << " particle to be deleted: " << acceptance->energy_old(config_del));
+
+  INFO("en 0 old " << criteria->current_energy(0));
+  INFO("en 0 new " << MAX_PRECISION << acceptance->energy_new(0));
+  INFO("en 0 old acc " << MAX_PRECISION << acceptance->energy_old(0));
 
   // add
+  std::vector<TrialStage*> add_stages = {(*stages)[0]};
+  compute_rosenbluth(0, criteria, system, acceptance, &add_stages, random);
   acceptance->add_to_energy_new(criteria->current_energy(config_add), config_add);
   acceptance->add_to_energy_profile_new(criteria->current_energy_profile(config_add), config_add);
   acceptance->add_to_macrostate_shift(1, config_add);
 
+  INFO("energy contribution of config " << config_add << " particle to be added: " << acceptance->energy_new(config_add));
+
   INFO("lnmet " << acceptance->ln_metropolis_prob());
-  INFO("old en of config 0 " << criteria->current_energy(0));
-  INFO("new en of config 0" << MAX_PRECISION << acceptance->energy_new(0));
-  INFO("old en of config 0" << MAX_PRECISION << acceptance->energy_old(0));
-  INFO("old en of config 1 " << criteria->current_energy(1));
-  INFO("new en of config 1" << MAX_PRECISION << acceptance->energy_new(1));
-  INFO("old en of config 1" << MAX_PRECISION << acceptance->energy_old(1));
+//  INFO("en 0 old " << criteria->current_energy(0));
+//  INFO("en 0 new " << MAX_PRECISION << acceptance->energy_new(0));
+//  INFO("en 0 old acc " << MAX_PRECISION << acceptance->energy_old(0));
+//  INFO("en 1 old " << criteria->current_energy(1));
+//  INFO("en 1 new " << MAX_PRECISION << acceptance->energy_new(1));
+//  INFO("en 1 old acc " << MAX_PRECISION << acceptance->energy_old(1));
   { // Metropolis
     const Configuration& config = system->configuration();
     const TrialSelect& select = (*stages)[0]->trial_select();
     const int particle_index = select.mobile().particle_index(0);
     const int particle_type = config.select_particle(particle_index).type();
-    acceptance->set_macrostate_shift_type(particle_type);
-    const ThermoParams& params = system->thermo_params();
-    INFO("selprob " << select.probability() << " betamu " << params.beta_mu(particle_type));
+    acceptance->set_macrostate_shift_type(particle_type, config_add);
+    acceptance->set_macrostate_shift_type(particle_type, config_del);
     INFO("lnselprob " << std::log(select.probability()));
     INFO("lnmet " << acceptance->ln_metropolis_prob());
     acceptance->add_to_ln_metropolis_prob(

@@ -231,7 +231,7 @@ void System::unload_cache(const System& system) {
 }
 
 void System::finalize(const Select& select, const int config) {
-  INFO("finalizing removal of " << select.str() << " in config:" << config);
+  INFO("finalizing " << select.str() << " in config:" << config);
   if (select.trial_state() == 2) {
     // finalize removal
     configurations_[config].remove_particles(select);
@@ -242,6 +242,9 @@ void System::finalize(const Select& select, const int config) {
     for (PotentialFactory& ref : references_[config]) {
       ref.finalize(select, &configurations_[config]);
     }
+  }
+  for (int iconf = 0; iconf < num_configurations(); ++iconf) {
+    INFO("number particles in conf " << iconf << ": " << configuration(iconf).num_particles());
   }
 }
 

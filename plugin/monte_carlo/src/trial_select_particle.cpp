@@ -192,7 +192,7 @@ bool TrialSelectParticle::select(const Select& perturbed,
   remove_unphysical_sites(*config);
   ASSERT(mobile_.num_particles() > 0, "all sites shouldn't be unphysical");
   set_mobile_original(system);
-  DEBUG("selected " << mobile_.str());
+  INFO("selected " << mobile_.str());
   return true;
 }
 

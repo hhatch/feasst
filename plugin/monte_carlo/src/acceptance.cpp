@@ -178,4 +178,12 @@ int Acceptance::updated(const int config) const {
   return updated_[config];
 }
 
+int Acceptance::num_configurations() const {
+//  INFO("energy_new_ " << energy_new_.size());
+//  INFO("energy_old_ " << energy_old_.size());
+//  INFO("updated_ " << updated_.size());
+  //return static_cast<int>(energy_new_.size());
+  return static_cast<int>(updated_.size());
+}
+
 }  // namespace feasst

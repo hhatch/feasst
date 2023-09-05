@@ -220,6 +220,7 @@ void VisitModel::compute(
     compute_between_selection(model, model_params, selection,
       config, is_old_config, &relative_, &pbc_);
   }
+  INFO("visit energy " << inner().energy());
   set_energy(inner().energy());
 }
 
