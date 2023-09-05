@@ -33,7 +33,7 @@ void TrialComputeMove::perturb_and_acceptance(
   compute_rosenbluth(0, criteria, system, acceptance, stages, random);
   const int config = stages->front()->select().configuration_index();
   DEBUG("config " << config);
-  acceptance->set_configuration_index(config);
+  acceptance->set_configuration_indices(0, config);
   DEBUG("current en: " << criteria->current_energy(config));
   DEBUG("old en: " << acceptance->energy_old());
   DEBUG("new en: " << acceptance->energy_new());

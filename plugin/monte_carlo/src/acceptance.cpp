@@ -18,13 +18,18 @@ void Acceptance::reset() {
   energy_new_[0] = 0.;
   energy_old_.resize(1);
   energy_old_[0] = 0.;
-  configuration_index_ = 0.;
+  energy_ref_.resize(1);
+  energy_ref_[0] = 0.;
+  configuration_indices_.resize(1);
+  configuration_indices_[0] = 0;
   resize(1, 0, &energy_profile_new_);
   fill(0., &energy_profile_new_);
   resize(1, 0, &energy_profile_old_);
   fill(0., &energy_profile_old_);
-  macrostate_shift_ = 0;
-  macrostate_shift_type_ = 0;
+  macrostate_shift_.resize(1);
+  macrostate_shift_[0] = 0;
+  macrostate_shift_type_.resize(1);
+  macrostate_shift_type_[0] = 0.;
   perturbed_.clear();
   perturbed_.resize(2); // maximum number of configs
 }

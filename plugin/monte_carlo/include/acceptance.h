@@ -51,11 +51,14 @@ class Acceptance {
   void add_to_energy_new(const double energy, const int config = 0) { energy_new_[config] += energy; }
 
   /// Set the configuration index.
-  void set_configuration_index(const int config) {
-    configuration_index_ = config; }
+  void set_configuration_indices(const int index, const int config) {
+    configuration_indices_[index] = config; }
 
   /// Return the configuration index.
-  int configuration_index() const { return configuration_index_; }
+  int configuration_index(const int index = 0) const { return configuration_indices_[index]; }
+
+  /// Return the configuration indices.
+  const std::vector<int>& configuration_indices() const { return configuration_indices_; }
 
   /// Return the energy profile of the new configuration.
   const std::vector<double>& energy_profile_new(const int config = 0) const;
@@ -91,23 +94,23 @@ class Acceptance {
                                  const int config = 0);
 
   /// Return the energy of the reference.
-  double energy_ref() const { return energy_ref_; }
+  double energy_ref(const int config = 0) const { return energy_ref_[config]; }
 
   /// Set the above quantity.
-  void set_energy_ref(const double energy) { energy_ref_ = energy; }
+  void set_energy_ref(const double energy, const int config = 0) { energy_ref_[config] = energy; }
 
   /// Return the shift in the macrostate due to an optimization where
   /// Perturb does not completely update system until finalize.
   /// This assumes a particular macrostate is used for the given trial.
   // HWH refactor this so that perturb_remove shows deleted particle but
   // cell lists, etc are only updated upon finalization (optimization).
-  int macrostate_shift() const { return macrostate_shift_; }
-  int macrostate_shift_type() const { return macrostate_shift_type_; }
+  int macrostate_shift(const int config = 0) const { return macrostate_shift_[config]; }
+  int macrostate_shift_type(const int config = 0) const { return macrostate_shift_type_[config]; }
 
   /// Add to the above.
-  void add_to_macrostate_shift(const int shift) { macrostate_shift_ += shift; }
-  void set_macrostate_shift_type(const int type) {
-    macrostate_shift_type_ += type; }
+  void add_to_macrostate_shift(const int shift, const int config = 0) { macrostate_shift_[config] += shift; }
+  void set_macrostate_shift_type(const int type, const int config = 0) {
+    macrostate_shift_type_[config] += type; }
 
   /// Add to perturbed selection and equate trial state.
   void add_to_perturbed(const Select& select, const int config = 0);
@@ -122,10 +125,10 @@ class Acceptance {
   double ln_metropolis_prob_;
   std::vector<double> energy_new_;
   std::vector<double> energy_old_;
-  double energy_ref_;
-  int configuration_index_;
-  int macrostate_shift_;
-  int macrostate_shift_type_;
+  std::vector<double> energy_ref_;
+  std::vector<int> configuration_indices_;
+  std::vector<int> macrostate_shift_;
+  std::vector<int> macrostate_shift_type_;
   bool reject_;
   bool endpoint_;
   std::vector<std::vector<double> > energy_profile_new_;
