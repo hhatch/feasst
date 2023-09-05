@@ -42,13 +42,13 @@ class Acceptance {
   void reset();
 
   /// Return the energy of the new configuration.
-  double energy_new() const { return energy_new_; }
+  double energy_new(const int config = 0) const { return energy_new_[config]; }
 
   /// Set the above quantity.
-  void set_energy_new(const double energy) { energy_new_ = energy; }
+  void set_energy_new(const double energy, const int config = 0) { energy_new_[config] = energy; }
 
   /// Add to the above quantity.
-  void add_to_energy_new(const double energy) { energy_new_ += energy; }
+  void add_to_energy_new(const double energy, const int config = 0) { energy_new_[config] += energy; }
 
   /// Set the configuration index.
   void set_configuration_index(const int config) {
@@ -58,38 +58,37 @@ class Acceptance {
   int configuration_index() const { return configuration_index_; }
 
   /// Return the energy profile of the new configuration.
-  const std::vector<double>& energy_profile_new() const {
-    return energy_profile_new_; }
+  const std::vector<double>& energy_profile_new(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_profile_new(const std::vector<double>& energy) {
-    energy_profile_new_ = energy; }
+  void set_energy_profile_new(const std::vector<double>& energy, const int config = 0);
 
   /// Add to the above quantity.
-  void add_to_energy_profile_new(const std::vector<double>& energy);
+  void add_to_energy_profile_new(const std::vector<double>& energy,
+                                 const int config = 0);
 
   /// Subtract from the above quantity.
-  void subtract_from_energy_profile_new(const std::vector<double>& energy);
+  void subtract_from_energy_profile_new(const std::vector<double>& energy,
+                                        const int config = 0);
 
   /// Return the energy of the old configuration.
-  double energy_old() const { return energy_old_; }
+  double energy_old(const int config = 0) const { return energy_old_[config]; }
 
   /// Set the above quantity.
-  void set_energy_old(const double energy) { energy_old_ = energy; }
+  void set_energy_old(const double energy, const int config = 0) { energy_old_[config] = energy; }
 
   /// Add to the above quantity.
-  void add_to_energy_old(const double energy) { energy_old_ += energy; }
+  void add_to_energy_old(const double energy, const int config = 0) { energy_old_[config] += energy; }
 
   /// Return the energy profile of the old configuration.
-  const std::vector<double>& energy_profile_old() const {
-    return energy_profile_old_; }
+  const std::vector<double>& energy_profile_old(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_profile_old(const std::vector<double>& energy) {
-    energy_profile_old_ = energy; }
+  void set_energy_profile_old(const std::vector<double>& energy, const int config = 0);
 
   /// Add to the above quantity.
-  void add_to_energy_profile_old(const std::vector<double>& energy);
+  void add_to_energy_profile_old(const std::vector<double>& energy,
+                                 const int config = 0);
 
   /// Return the energy of the reference.
   double energy_ref() const { return energy_ref_; }
@@ -121,16 +120,16 @@ class Acceptance {
 
  private:
   double ln_metropolis_prob_;
-  double energy_new_;
-  double energy_old_;
+  std::vector<double> energy_new_;
+  std::vector<double> energy_old_;
   double energy_ref_;
   int configuration_index_;
   int macrostate_shift_;
   int macrostate_shift_type_;
   bool reject_;
   bool endpoint_;
-  std::vector<double> energy_profile_new_;
-  std::vector<double> energy_profile_old_;
+  std::vector<std::vector<double> > energy_profile_new_;
+  std::vector<std::vector<double> > energy_profile_old_;
   std::vector<Select> perturbed_;
 };
 

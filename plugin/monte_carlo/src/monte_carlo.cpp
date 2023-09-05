@@ -287,11 +287,11 @@ void MonteCarlo::add(std::shared_ptr<Trial> trial) {
     }
   }
 
-  // Need to implement some way to handle profiles when config is only in the first select
-  if (trial->num_stages() > 1) {
-    ASSERT(system_.num_configurations() == 1,
-      "not implemented. Fix TrialStage::set_rosenbluth_energy_");
-  }
+//  // Need to implement some way to handle profiles when config is only in the first select
+//  if (trial->num_stages() > 1) {
+//    ASSERT(system_.num_configurations() == 1,
+//      "not implemented. Fix TrialStage::set_rosenbluth_energy_");
+//  }
 
   // flatten TrialFactory by adding the individual trials instead.
   if (trial->class_name() == "TrialFactory") {

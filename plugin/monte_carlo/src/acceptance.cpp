@@ -1,5 +1,6 @@
 #include <cmath>
 #include "utils/include/debug.h"
+#include "utils/include/utils.h"
 #include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
@@ -13,11 +14,15 @@ void Acceptance::reset() {
   set_ln_metropolis_prob();
   set_reject();
   set_endpoint();
-  energy_new_ = 0.;
-  energy_old_ = 0.;
+  energy_new_.resize(1);
+  energy_new_[0] = 0.;
+  energy_old_.resize(1);
+  energy_old_[0] = 0.;
   configuration_index_ = 0.;
-  std::fill(energy_profile_new_.begin(), energy_profile_new_.end(), 0.);
-  std::fill(energy_profile_old_.begin(), energy_profile_old_.end(), 0.);
+  resize(1, 0, &energy_profile_new_);
+  fill(0., &energy_profile_new_);
+  resize(1, 0, &energy_profile_old_);
+  fill(0., &energy_profile_old_);
   macrostate_shift_ = 0;
   macrostate_shift_type_ = 0;
   perturbed_.clear();
@@ -46,42 +51,61 @@ const Select& Acceptance::perturbed(const int config) const {
   return perturbed_[config];
 }
 
-void Acceptance::add_to_energy_profile_new(const std::vector<double>& energy) {
-  const int current_size = static_cast<int>(energy_profile_new_.size());
+const std::vector<double>& Acceptance::energy_profile_new(const int config) const {
+  return energy_profile_new_[config];
+}
+
+void Acceptance::set_energy_profile_new(const std::vector<double>& energy, const int config) {
+  energy_profile_new_[config] = energy;
+}
+
+void Acceptance::add_to_energy_profile_new(const std::vector<double>& energy,
+    const int config) {
+  const int current_size = static_cast<int>(energy_profile_new_[config].size());
   const int new_size = static_cast<int>(energy.size());
   if (current_size < new_size) {
-    energy_profile_new_.resize(new_size);
+    energy_profile_new_[config].resize(new_size);
 //  } else {
 //    ASSERT(current_size == new_size, "err");
   }
   for (int i = 0; i < new_size; ++i) {
-    energy_profile_new_[i] += energy[i];
+    energy_profile_new_[config][i] += energy[i];
   }
 }
 
-void Acceptance::subtract_from_energy_profile_new(const std::vector<double>& energy) {
-  const int current_size = static_cast<int>(energy_profile_new_.size());
+void Acceptance::subtract_from_energy_profile_new(const std::vector<double>& energy,
+    const int config) {
+  const int current_size = static_cast<int>(energy_profile_new_[config].size());
   const int new_size = static_cast<int>(energy.size());
   if (current_size < new_size) {
-    energy_profile_new_.resize(new_size);
+    energy_profile_new_[config].resize(new_size);
 //  } else {
 //    ASSERT(current_size == new_size, "err");
   }
   for (int i = 0; i < new_size; ++i) {
-    energy_profile_new_[i] -= energy[i];
+    energy_profile_new_[config][i] -= energy[i];
   }
 }
 
-void Acceptance::add_to_energy_profile_old(const std::vector<double>& energy) {
-  const int current_size = static_cast<int>(energy_profile_old_.size());
-  const int new_size = static_cast<int>(energy.size());
-  if (current_size < new_size) {
-    energy_profile_old_.resize(new_size);
-  } else {
-    ASSERT(current_size == new_size, "err");
+const std::vector<double>& Acceptance::energy_profile_old(const int config) const {
+  return energy_profile_old_[config];
+}
+
+void Acceptance::set_energy_profile_old(const std::vector<double>& energy, const int config) {
+  energy_profile_old_[config] = energy;
+}
+
+void Acceptance::add_to_energy_profile_old(const std::vector<double>& energy,
+    const int config) {
+  const int current_size = static_cast<int>(energy_profile_old_[config].size());
+  const int old_size = static_cast<int>(energy.size());
+  if (current_size < old_size) {
+    energy_profile_old_[config].resize(old_size);
+//  } else {
+//    ASSERT(current_size == old_size, "err");
   }
-  for (int i = 0; i < new_size; ++i) {
-    energy_profile_old_[i] += energy[i];
+  for (int i = 0; i < old_size; ++i) {
+    energy_profile_old_[config][i] += energy[i];
   }
 }
 

@@ -25,18 +25,22 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
     Acceptance * acceptance,
     std::vector<TrialStage*> * stages,
     Random * random) {
-  DEBUG("ComputeGibbsParticleTransfer");
-  DEBUG("lnmet " << acceptance->ln_metropolis_prob());
+  INFO("ComputeGibbsParticleTransfer");
+  INFO("lnmet " << acceptance->ln_metropolis_prob());
   compute_rosenbluth(1, criteria, system, acceptance, stages, random);
   compute_rosenbluth(0, criteria, system, acceptance, stages, random);
-  DEBUG("lnmet " << acceptance->ln_metropolis_prob());
+  INFO("lnmet " << acceptance->ln_metropolis_prob());
+  int config_add = 0;
+  if ((*stages)[0]->trial_select().configuration_index() == 0) {
+    config_add = 1;
+  }
   acceptance->add_to_energy_new(criteria->current_energy());
   //acceptance->set_energy_new(criteria->current_energy() + acceptance->energy_new());
   acceptance->add_to_energy_profile_new(criteria->current_energy_profile());
   acceptance->add_to_macrostate_shift(1);
-  DEBUG("lnmet " << acceptance->ln_metropolis_prob());
-  DEBUG("old en " << criteria->current_energy());
-  DEBUG("new en " << MAX_PRECISION << acceptance->energy_new());
+  INFO("lnmet " << acceptance->ln_metropolis_prob());
+  INFO("old en " << criteria->current_energy());
+  INFO("new en " << MAX_PRECISION << acceptance->energy_new());
   { // Metropolis
     const Configuration& config = system->configuration();
     const TrialSelect& select = (*stages)[0]->trial_select();
@@ -44,14 +48,13 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
     const int particle_type = config.select_particle(particle_index).type();
     acceptance->set_macrostate_shift_type(particle_type);
     const ThermoParams& params = system->thermo_params();
-    DEBUG("selprob " << select.probability() << " betamu " << params.beta_mu(particle_type));
-    DEBUG("lnselprob " << std::log(select.probability()));
-    DEBUG("lnmet " << acceptance->ln_metropolis_prob());
+    INFO("selprob " << select.probability() << " betamu " << params.beta_mu(particle_type));
+    INFO("lnselprob " << std::log(select.probability()));
+    INFO("lnmet " << acceptance->ln_metropolis_prob());
     acceptance->add_to_ln_metropolis_prob(
       std::log(select.probability())
-      + params.beta_mu(particle_type)
     );
-    DEBUG("lnmet " << acceptance->ln_metropolis_prob());
+    INFO("lnmet " << acceptance->ln_metropolis_prob());
   }
 }
 
