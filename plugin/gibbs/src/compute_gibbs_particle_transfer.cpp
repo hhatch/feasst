@@ -67,17 +67,17 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
 //  INFO("en 1 new " << MAX_PRECISION << acceptance->energy_new(1));
 //  INFO("en 1 old acc " << MAX_PRECISION << acceptance->energy_old(1));
   { // Metropolis
-    const Configuration& config = system->configuration();
-    const TrialSelect& select = (*stages)[0]->trial_select();
-    const int particle_index = select.mobile().particle_index(0);
-    const int particle_type = config.select_particle(particle_index).type();
-    acceptance->set_macrostate_shift_type(particle_type, config_add);
-    acceptance->set_macrostate_shift_type(particle_type, config_del);
-    INFO("lnselprob " << std::log(select.probability()));
-    INFO("lnmet " << acceptance->ln_metropolis_prob());
-    acceptance->add_to_ln_metropolis_prob(
-      std::log(select.probability())
-    );
+//    const Configuration& config = system->configuration();
+//    const TrialSelect& select = (*stages)[0]->trial_select();
+//    const int particle_index = select.mobile().particle_index(0);
+//    const int particle_type = config.select_particle(particle_index).type();
+//    acceptance->set_macrostate_shift_type(particle_type, config_add);
+//    acceptance->set_macrostate_shift_type(particle_type, config_del);
+//    INFO("lnselprob " << std::log(select.probability()));
+//    INFO("lnmet " << acceptance->ln_metropolis_prob());
+//    acceptance->add_to_ln_metropolis_prob(
+//      std::log(select.probability())
+//    );
     INFO("lnmet " << acceptance->ln_metropolis_prob());
   }
 }

@@ -185,5 +185,15 @@ int Acceptance::num_configurations() const {
   //return static_cast<int>(energy_new_.size());
   return static_cast<int>(updated_.size());
 }
+  
+void Acceptance::add_to_macrostate_shift(const int shift, const int config) {
+  resize_(config, &macrostate_shift_);
+  macrostate_shift_[config] += shift;
+}
+
+void Acceptance::set_macrostate_shift_type(const int type, const int config) {
+  resize_(config, &macrostate_shift_type_);
+  macrostate_shift_type_[config] += type;
+}
 
 }  // namespace feasst

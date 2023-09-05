@@ -104,9 +104,8 @@ class Acceptance {
   int macrostate_shift_type(const int config = 0) const { return macrostate_shift_type_[config]; }
 
   /// Add to the above.
-  void add_to_macrostate_shift(const int shift, const int config = 0) { macrostate_shift_[config] += shift; }
-  void set_macrostate_shift_type(const int type, const int config = 0) {
-    macrostate_shift_type_[config] += type; }
+  void add_to_macrostate_shift(const int shift, const int config = 0);
+  void set_macrostate_shift_type(const int type, const int config = 0);
 
   /// Add to perturbed selection and equate trial state.
   void add_to_perturbed(const Select& select, const int config = 0);
