@@ -132,11 +132,15 @@ bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
   DEBUG("* " << class_name() << " " << description() << " attempt " << num_attempts() << " *");
   DEBUG("**********************************************************");
   DEBUG("config index: " << stages_[0]->trial_select().configuration_index());
-  DEBUG("num particles: " << system->configuration().num_particles());
-  DEBUG("num ghosts: " << system->configuration().particles().num() -
-                         system->configuration().num_particles());
-  DEBUG("existing: " << system->configuration().group_select(0).str());
-  DEBUG("num of type 0: " << system->configuration().num_particles_of_type(0));
+  for (int iconf = 0; iconf < system->num_configurations(); ++iconf) {
+    DEBUG("config " << iconf);
+    const Configuration& config = system->configuration(iconf);
+    DEBUG("num particles: " << config.num_particles());
+    DEBUG("num ghosts: " << config.particles().num() -
+                           config.num_particles());
+    DEBUG("existing: " << config.group_select(0).str());
+    DEBUG("num of type 0: " << config.num_particles_of_type(0));
+  }
   DEBUG("current_energy: " << criteria->current_energy());
   DEBUG("all: " << system->configuration().selection_of_all().str());
   increment_num_attempts();

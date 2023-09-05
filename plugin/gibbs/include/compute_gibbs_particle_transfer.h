@@ -12,6 +12,7 @@
 
 namespace feasst {
 
+// HWH update following next publication.
 /**
   Attempt to transfer a particle from one configuration to another,
   and vice versa.

@@ -57,7 +57,7 @@ void TrialStage::set_rosenbluth_energy_(const int step, System * system) {
   if (reference_ == -1) {
     energy = system->perturbed_energy(select_->mobile(), select_->configuration_index());
   } else {
-    energy = system->reference_energy(select_->mobile(), reference_);
+    energy = system->reference_energy(select_->mobile(), reference_, select_->configuration_index());
   }
   const double excluded = select().exclude_energy();
   ASSERT(!std::isinf(energy), "energy: " << energy << " is inf.");
