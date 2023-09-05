@@ -42,13 +42,13 @@ class Acceptance {
   void reset();
 
   /// Return the energy of the new configuration.
-  double energy_new(const int config = 0) const { return energy_new_[config]; }
+  double energy_new(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_new(const double energy, const int config = 0) { energy_new_[config] = energy; }
+  void set_energy_new(const double energy, const int config = 0);
 
   /// Add to the above quantity.
-  void add_to_energy_new(const double energy, const int config = 0) { energy_new_[config] += energy; }
+  void add_to_energy_new(const double energy, const int config = 0);
 
   /// Set the configuration index.
   void set_configuration_indices(const int index, const int config) {
@@ -78,13 +78,13 @@ class Acceptance {
                                         const int config = 0);
 
   /// Return the energy of the old configuration.
-  double energy_old(const int config = 0) const { return energy_old_[config]; }
+  double energy_old(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_old(const double energy, const int config = 0) { energy_old_[config] = energy; }
+  void set_energy_old(const double energy, const int config = 0);
 
   /// Add to the above quantity.
-  void add_to_energy_old(const double energy, const int config = 0) { energy_old_[config] += energy; }
+  void add_to_energy_old(const double energy, const int config = 0);
 
   /// Return the energy profile of the old configuration.
   const std::vector<double>& energy_profile_old(const int config = 0) const;
