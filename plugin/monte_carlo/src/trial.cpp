@@ -136,13 +136,13 @@ bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
     INFO("config " << iconf);
     const Configuration& config = system->configuration(iconf);
     INFO("num particles: " << config.num_particles());
-    DEBUG("num ghosts: " << config.particles().num() -
+    INFO("num ghosts: " << config.particles().num() -
                            config.num_particles());
-    DEBUG("existing: " << config.group_select(0).str());
-    DEBUG("num of type 0: " << config.num_particles_of_type(0));
+    //INFO("existing: " << config.group_select(0).str());
+    INFO("num of type 0: " << config.num_particles_of_type(0));
+    INFO("current_energy: " << criteria->current_energy(iconf));
+    DEBUG("all: " << system->configuration(iconf).selection_of_all().str());
   }
-  DEBUG("current_energy: " << criteria->current_energy());
-  DEBUG("all: " << system->configuration().selection_of_all().str());
   increment_num_attempts();
   acceptance_.reset();
   criteria->before_attempt(*system);

@@ -28,8 +28,7 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
   INFO("ComputeGibbsParticleTransfer");
   INFO("lnmet " << acceptance->ln_metropolis_prob());
   compute_rosenbluth(1, criteria, system, acceptance, stages, random);
-  compute_rosenbluth(0, criteria, system, acceptance, stages, random);
-  INFO("lnmet " << acceptance->ln_metropolis_prob());
+
   int config_add = 0;
   int config_del = 1;
   if ((*stages)[0]->trial_select().configuration_index() == 0) {
@@ -39,20 +38,26 @@ void ComputeGibbsParticleTransfer::perturb_and_acceptance(
   INFO("config_add " << config_add);
   INFO("config_del " << config_del);
 
-  // add
-  acceptance->add_to_energy_new(criteria->current_energy(config_add), config_add);
-  acceptance->add_to_energy_profile_new(criteria->current_energy_profile(config_add), config_add);
-  acceptance->add_to_macrostate_shift(1, config_add);
-
   // del
   acceptance->set_energy_new(criteria->current_energy(config_del) - acceptance->energy_old(config_del));
   acceptance->set_energy_profile_new(criteria->current_energy_profile(config_del), config_del);
   acceptance->subtract_from_energy_profile_new(acceptance->energy_profile_old(config_del), config_del);
   acceptance->add_to_macrostate_shift(-1, config_del);
 
+  compute_rosenbluth(0, criteria, system, acceptance, stages, random);
+
+  // add
+  acceptance->add_to_energy_new(criteria->current_energy(config_add), config_add);
+  acceptance->add_to_energy_profile_new(criteria->current_energy_profile(config_add), config_add);
+  acceptance->add_to_macrostate_shift(1, config_add);
+
   INFO("lnmet " << acceptance->ln_metropolis_prob());
-  INFO("old en " << criteria->current_energy());
-  INFO("new en " << MAX_PRECISION << acceptance->energy_new());
+  INFO("old en of config 0 " << criteria->current_energy(0));
+  INFO("new en of config 0" << MAX_PRECISION << acceptance->energy_new(0));
+  INFO("old en of config 0" << MAX_PRECISION << acceptance->energy_old(0));
+  INFO("old en of config 1 " << criteria->current_energy(1));
+  INFO("new en of config 1" << MAX_PRECISION << acceptance->energy_new(1));
+  INFO("old en of config 1" << MAX_PRECISION << acceptance->energy_old(1));
   { // Metropolis
     const Configuration& config = system->configuration();
     const TrialSelect& select = (*stages)[0]->trial_select();

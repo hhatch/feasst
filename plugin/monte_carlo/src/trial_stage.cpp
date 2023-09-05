@@ -46,7 +46,7 @@ bool TrialStage::select(System * system,
 
 void TrialStage::set_mobile_physical(const bool physical, System * system) {
   DEBUG("setting mobile physical " << physical);
-  system->get_configuration()->set_selection_physical(
+  select_->get_configuration(system)->set_selection_physical(
     select_->mobile(),
     physical);
 }
