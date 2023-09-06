@@ -15,7 +15,7 @@ class TrialGibbsParticleTransferOneWay : public Trial {
     args:
     - to_configuration_index: index of configuration to send the particle.
     - configuration_index: from TrialSelect, configuration which donates a
-      particle.
+      particle (default: 0).
    */
   explicit TrialGibbsParticleTransferOneWay(argtype args = argtype());
   explicit TrialGibbsParticleTransferOneWay(argtype * args);
