@@ -60,8 +60,8 @@ TEST(MonteCarlo, gibbs_ensemble) {
   EXPECT_EQ(2, mc->system().num_configurations());
   EXPECT_NE(mc->system().potential(0, 0).stored_energy(),
             mc->system().potential(0, 1).stored_energy());
-  EXPECT_EQ(mc->system().configuration(0).num_particles() + 
-            mc->system().configuration(1).num_particles(), 60); 
+  EXPECT_EQ(mc->system().configuration(0).num_particles() +
+            mc->system().configuration(1).num_particles(), 60);
 }
 
 }  // namespace feasst

@@ -13,6 +13,8 @@ class PerturbVolume : public Perturb {
  public:
   /**
     args:
+    - uniform_volume: if true, change volume uniformly in V instead of
+      :math:`\ln V` (default: false).
     - Tunable arguments.
    */
   explicit PerturbVolume(argtype args = argtype());
@@ -40,6 +42,7 @@ class PerturbVolume : public Perturb {
   virtual ~PerturbVolume() {}
 
  private:
+  bool uniform_volume_;
   argtype args_;
 
   // temporary
