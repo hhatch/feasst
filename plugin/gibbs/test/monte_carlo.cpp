@@ -31,6 +31,7 @@
 #include "steppers/include/movie.h"
 #include "steppers/include/profile_trials.h"
 #include "gibbs/include/trial_gibbs_particle_transfer.h"
+#include "gibbs/include/trial_gibbs_volume_transfer.h"
 
 namespace feasst {
 
@@ -52,6 +53,7 @@ TEST(MonteCarlo, gibbs_ensemble) {
     {"TrialTranslate", {{"configuration_index", "0"}}},
     {"TrialTranslate", {{"configuration_index", "1"}}},
     {"TrialGibbsParticleTransfer", {{"particle_type", "0"}}},
+    {"TrialGibbsVolumeTransfer", {{}}},
     //{"TrialGibbsParticleTransfer", {{"configuration_index0", "0"}, {"configuration_index1", "1"}}},
     {"Log", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj.txt"}}},
     {"Movie", {{"trials_per_write", str(1e0)}, {"file_name", "tmp/lj0.xyz"}, {"configuration_index", "0"}}},
@@ -64,6 +66,8 @@ TEST(MonteCarlo, gibbs_ensemble) {
             mc->system().potential(0, 1).stored_energy());
   EXPECT_EQ(mc->system().configuration(0).num_particles() +
             mc->system().configuration(1).num_particles(), 60);
+  EXPECT_EQ(mc->system().configuration(0).domain().volume() +
+            mc->system().configuration(1).domain().volume(), 2*std::pow(8,3));
 }
 
 }  // namespace feasst

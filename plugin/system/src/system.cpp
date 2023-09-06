@@ -304,11 +304,6 @@ void System::synchronize_(const System& system, const Select& perturbed) {
   }
 }
 
-void System::change_volume(const double delta_volume, argtype args) {
-  change_volume(delta_volume, &args);
-  FEASST_CHECK_ALL_USED(args);
-}
-
 void System::change_volume(const double delta_volume, argtype * args) {
   const int config = integer("configuration", args, 0);
   const int dimen = integer("dimension", args, -1);
@@ -321,7 +316,22 @@ void System::change_volume(const double delta_volume, argtype * args) {
       ref.change_volume(delta_volume, dimen);
     }
   }
+  delta_volume_previous_ = delta_volume;
 }
+void System::change_volume(const double delta_volume, argtype args) {
+  change_volume(delta_volume, &args);
+  FEASST_CHECK_ALL_USED(args);
+}
+
+//double System::constrained_volume_change(argtype * args) {
+//  change_volume(-delta_volume_previous_, args);
+//  return -delta_volume_previous_;
+//}
+//double System::constrained_volume_change(argtype args) {
+//  const double delta_volume = constrained_volume_change(&args);
+//  FEASST_CHECK_ALL_USED(args);
+//  return delta_volume;
+//}
 
 int System::num_references(const int config) const {
   if (static_cast<int>(references_.size()) > 0) {

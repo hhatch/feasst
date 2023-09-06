@@ -8,7 +8,8 @@ namespace feasst {
 
 PerturbVolume::PerturbVolume(argtype * args) : Perturb(args) {
   class_name_ = "PerturbVolume";
-  uniform_volume_ = boolean("uniform_volume", args, false); 
+  uniform_volume_ = boolean("uniform_volume", args, false);
+  constrain_volume_change_ = boolean("constrain_volume_change", args, false);
 }
 PerturbVolume::PerturbVolume(argtype args) : PerturbVolume(&args) {
   FEASST_CHECK_ALL_USED(args);
@@ -28,16 +29,24 @@ std::shared_ptr<Perturb> PerturbVolume::create(std::istream& istr) const {
   return std::make_shared<PerturbVolume>(istr);
 }
 
+void PerturbVolume::precompute(TrialSelect * select, System * system) {
+  const int config = select->configuration_index();
+  args_.insert({"configuration", str(config)});
+}
+
 void PerturbVolume::perturb(
     System * system,
     TrialSelect * select,
     Random * random,
     const bool is_position_held) {
-  //WARN("PerturbVolume is not correctly implemented.");
-  ASSERT(!is_position_held, "not implemented");
-  const int config = select->configuration_index();
+  if (is_position_held) {
+    select->set_trial_state(0);
+    return;
+  }
   const double volume = select->configuration(*system).domain().volume();
-  if (uniform_volume_) {
+  if (constrain_volume_change_) {
+    volume_change_ = -system->delta_volume_previous();
+  } else  if (uniform_volume_) {
     volume_change_ = random->uniform_real(-tunable().value(),
                                            tunable().value());
   } else {
@@ -49,7 +58,6 @@ void PerturbVolume::perturb(
     volume_change_ = std::exp(std::log(volume) + dlnv) - volume;
   }
   if (volume + volume_change_ > 0) {
-    args_.insert({"configuration", str(config)});
     change_volume(volume_change_, system, select->mobile());
   } else {
     volume_change_ = 0.;
@@ -83,6 +91,8 @@ PerturbVolume::PerturbVolume(std::istream& istr)
   ASSERT(version >= 1634 && version <= 1635, "mismatch version: " << version);
   if (version >= 1635) {
     feasst_deserialize(&uniform_volume_, istr);
+    feasst_deserialize(&constrain_volume_change_, istr);
+    feasst_deserialize(&args_, istr);
   }
 }
 
@@ -91,6 +101,8 @@ void PerturbVolume::serialize(std::ostream& ostr) const {
   serialize_perturb_(ostr);
   feasst_serialize_version(1635, ostr);
   feasst_serialize(uniform_volume_, ostr);
+  feasst_serialize(constrain_volume_change_, ostr);
+  feasst_serialize(args_, ostr);
 }
 
 }  // namespace feasst

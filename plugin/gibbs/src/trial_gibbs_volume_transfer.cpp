@@ -1,7 +1,6 @@
 #include "utils/include/serialize.h"
-#include "monte_carlo/include/trial_select_particle.h"
-#include "monte_carlo/include/perturb_add.h"
-#include "monte_carlo/include/perturb_remove.h"
+#include "monte_carlo/include/trial_select_all.h"
+#include "monte_carlo/include/perturb_volume.h"
 #include "gibbs/include/compute_gibbs_volume_transfer.h"
 #include "gibbs/include/trial_gibbs_volume_transfer.h"
 
@@ -22,17 +21,18 @@ TrialGibbsVolumeTransferOneWay::TrialGibbsVolumeTransferOneWay(argtype * args) :
   set_description("TrialGibbsVolumeTransferOneWay");
   const int to_configuration_index = integer("to_configuration_index", args);
   const int configuration_index = integer("configuration_index", args, 0);
-  argtype add_args = *args;
-  add_args.insert({"configuration_index", str(to_configuration_index)});
+  argtype args2 = *args;
+  args2.insert({"configuration_index", str(to_configuration_index)});
   add_stage(
-    std::make_shared<TrialSelectParticle>(&add_args),
-    std::make_shared<PerturbAdd>(),
-    &add_args);
-  FEASST_CHECK_ALL_USED(add_args);
+    std::make_shared<TrialSelectAll>(&args2),
+    std::make_shared<PerturbVolume>(),
+    &args2);
+  FEASST_CHECK_ALL_USED(args2);
   args->insert({"configuration_index", str(configuration_index)});
+  args->insert({"constrain_volume_change", "true"});
   add_stage(
-    std::make_shared<TrialSelectParticle>(args),
-    std::make_shared<PerturbRemove>(),
+    std::make_shared<TrialSelectAll>(args),
+    std::make_shared<PerturbVolume>(args),
     args);
   set(MakeComputeGibbsVolumeTransfer());
 }
@@ -68,17 +68,17 @@ TrialGibbsVolumeTransfer::TrialGibbsVolumeTransfer(argtype * args) : TrialFactor
   //INFO("args " << str(*args));
   //ASSERT(!used("configuration_index", *args),
   //  "Do not use argument:configuration_index. Use configuration_index0 or 1.");
-  argtype orig_args = *args;
-  orig_args.insert({"configuration_index", str(config0)});
-  orig_args.insert({"to_configuration_index", str(config1)});
+  argtype args1 = *args;
+  args1.insert({"configuration_index", str(config0)});
+  args1.insert({"to_configuration_index", str(config1)});
   args->insert({"configuration_index", str(config1)});
   args->insert({"to_configuration_index", str(config0)});
-  auto trial_add = MakeTrialGibbsVolumeTransferOneWay(orig_args);
-  trial_add->set_weight(trial_add->weight()/2.);
-  add(trial_add);
-  auto trial_remove = std::make_shared<TrialGibbsVolumeTransferOneWay>(args);
-  trial_remove->set_weight(trial_remove->weight()/2.);
-  add(trial_remove);
+  auto trial1 = MakeTrialGibbsVolumeTransferOneWay(args1);
+  trial1->set_weight(trial1->weight()/2.);
+  add(trial1);
+  auto trial2 = std::make_shared<TrialGibbsVolumeTransferOneWay>(args);
+  trial2->set_weight(trial2->weight()/2.);
+  add(trial2);
 }
 TrialGibbsVolumeTransfer::TrialGibbsVolumeTransfer(argtype args) : TrialGibbsVolumeTransfer(&args) {
   FEASST_CHECK_ALL_USED(args);

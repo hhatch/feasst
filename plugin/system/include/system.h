@@ -206,7 +206,7 @@ class System {
   //@}
   // Other functions:
 
-  /*
+  /**
     Change the volume.
 
     args:
@@ -215,6 +215,19 @@ class System {
    */
   void change_volume(const double delta_volume, argtype args = argtype());
   void change_volume(const double delta_volume, argtype * args);
+
+  /// Return the previous delta_volume.
+  double delta_volume_previous() const { return delta_volume_previous_; }
+//  /**
+//    Change the volume in the opposite amount as the last volume change.
+//    This is implemented to keep the total volume constant for Gibbs ensemble.
+//    Return the actual volume change.
+//
+//    args:
+//    - Same as change_volume above.
+//   */
+//  double constrained_volume_change(argtype * args);
+//  double constrained_volume_change(argtype args = argtype());
 
   /// Revert changes due to energy computation of perturbations.
   void revert(const Select& select, const int config = 0);
@@ -260,6 +273,7 @@ class System {
   // In order to finalize or restart the correct reference potential utilized
   // in a trial, this temporarily stores that reference potential index.
   int ref_used_last_ = -1;
+  double delta_volume_previous_ = 1e30; // implemented for Gibbs ensemble.
 
   PotentialFactory * reference_(const int index, const int config);
   PotentialFactory * potentials_(const int config);
