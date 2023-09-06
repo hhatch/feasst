@@ -51,16 +51,16 @@ void TrialCompute::compute_rosenbluth(
       acceptance->add_to_energy_old(energy, config);
       acceptance->add_to_energy_profile_old(stage->rosenbluth().energy_profile(0), config);
       ln_rosenbluth -= stage->rosenbluth().ln_total_rosenbluth();
-      INFO("adding to old energy " << energy);
+      DEBUG("adding to old energy " << energy);
     } else {
       energy = stage->rosenbluth().chosen_energy();
       DEBUG("energy new " << acceptance->energy_new());
       DEBUG("energy " << energy);
       acceptance->add_to_energy_new(energy, config);
       acceptance->add_to_energy_profile_new(stage->rosenbluth().chosen_energy_profile(), config);
-      INFO("energy new updated " << acceptance->energy_new());
+      DEBUG("energy new updated " << acceptance->energy_new());
       ln_rosenbluth += stage->rosenbluth().ln_total_rosenbluth();
-      INFO("adding to new energy " << energy);
+      DEBUG("adding to new energy " << energy);
     }
     energy_change += energy;
     if (stage->reference() >= 0) reference_used = true;

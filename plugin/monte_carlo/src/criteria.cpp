@@ -51,7 +51,7 @@ const std::vector<double>& Criteria::current_energy_profile(const int config) co
 void Criteria::update_current_energy(const Acceptance& acceptance) {
   for (int iconf = 0; iconf < acceptance.num_configurations(); ++iconf) {
     if (acceptance.updated(iconf) == 1) {
-      INFO("iconf " << iconf);
+      DEBUG("iconf " << iconf);
       set_current_energy(acceptance.energy_new(iconf), iconf);
       set_current_energy_profile(acceptance.energy_profile_new(iconf), iconf);
     }
