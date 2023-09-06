@@ -39,11 +39,10 @@ void PerturbVolume::perturb(
     TrialSelect * select,
     Random * random,
     const bool is_position_held) {
-  if (is_position_held) {
-    select->set_trial_state(0);
-    return;
-  }
+  ASSERT(!is_position_held, "not implemeted");
+  DEBUG("config " << select->configuration_index());
   const double volume = select->configuration(*system).domain().volume();
+  DEBUG("volume " << volume);
   if (constrain_volume_change_) {
     volume_change_ = -system->delta_volume_previous();
   } else  if (uniform_volume_) {
@@ -57,6 +56,7 @@ void PerturbVolume::perturb(
                                               tunable().value());
     volume_change_ = std::exp(std::log(volume) + dlnv) - volume;
   }
+  DEBUG("volume_change_ " << volume_change_);
   if (volume + volume_change_ > 0) {
     change_volume(volume_change_, system, select->mobile());
   } else {

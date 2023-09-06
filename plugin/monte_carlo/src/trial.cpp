@@ -1,8 +1,9 @@
 #include <string>
 #include <memory>
 #include "utils/include/serialize.h"
-#include "monte_carlo/include/trial.h"
 #include "math/include/random.h"
+#include "configuration/include/domain.h"
+#include "monte_carlo/include/trial.h"
 
 namespace feasst {
 
@@ -143,6 +144,7 @@ bool Trial::attempt(Criteria * criteria, System * system, Random * random) {
     DEBUG("num particles: " << config.num_particles());
     DEBUG("num ghosts: " << config.particles().num() -
                            config.num_particles());
+    DEBUG("volume " << config.domain().volume());
     //DEBUG("existing: " << config.group_select(0).str());
     DEBUG("num of type 0: " << config.num_particles_of_type(0));
     DEBUG("current_energy: " << criteria->current_energy(iconf));

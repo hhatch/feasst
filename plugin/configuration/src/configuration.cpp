@@ -866,6 +866,7 @@ void Configuration::change_volume(const double delta_volume,
 
 void Configuration::change_volume(const double delta_volume,
     argtype * args) {
+  DEBUG("delta_volume " << delta_volume);
   ASSERT(domain().volume() + delta_volume > 0,
     "delta_volume " << delta_volume << " too large for volume "
     << domain().volume());
