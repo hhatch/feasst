@@ -22,7 +22,6 @@ TrialGibbsParticleTransferOneWay::TrialGibbsParticleTransferOneWay(argtype * arg
   set_description("TrialGibbsParticleTransferOneWay");
   const int to_configuration_index = integer("to_configuration_index", args);
   const int configuration_index = integer("configuration_index", args, 0);
-//  args->insert({"grand_canonical", "true"});
   argtype add_args = *args;
   add_args.insert({"configuration_index", str(to_configuration_index)});
   add_stage(
