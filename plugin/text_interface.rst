@@ -203,8 +203,8 @@ These classes add :cpp:class:`Trials <feasst::Trial>`.
 Analyze and Modify
 ==========================
 
-Analyze happen every so many steps, and do not change the simulation.
-Modify happen every so many steps, and may change the simulation.
+:cpp:class:`Analyze <feasst::Analyze>` update/write every fixed number of trials, and do not change the simulation.
+:cpp:class:`Modify <feasst::Modify>` update/write every fixed number of trials, but may change the simulation.
 
 .. toctree::
 
