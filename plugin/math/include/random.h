@@ -24,10 +24,6 @@ class Random {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - seed : Provide an integer to seed the random number generator.
       If the string "time" is provided, then use the time and date to generate
       the seed.
@@ -37,7 +33,7 @@ class Random {
       included in Random::seed().
    */
   explicit Random(argtype * args);
-  
+
   //@}
   /** @name Public Functions
    */

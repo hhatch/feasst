@@ -22,8 +22,17 @@ namespace feasst {
  */
 class RandomModulo : public Random {
  public:
+  //@{
+  /** @name Arguments
+    - Random arguments.
+   */
   explicit RandomModulo(argtype args = argtype());
   explicit RandomModulo(argtype * args);
+
+  //@}
+  /** @name Public Functions
+   */
+  //@{
 
   // serialize
   std::shared_ptr<Random> create(std::istream& istr) const override {
@@ -33,7 +42,7 @@ class RandomModulo : public Random {
   void serialize(std::ostream& ostr) const override;
   explicit RandomModulo(std::istream& istr);
   virtual ~RandomModulo() {}
-
+  //@}
  private:
   long int M_, a_, X_;
 

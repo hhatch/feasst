@@ -15,7 +15,6 @@ Random Number Generators
 
 .. toctree::
 
-   math/doc/Random_arguments
    math/doc/RandomMT19937_arguments
    math/doc/RandomModulo_arguments
 
