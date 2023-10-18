@@ -93,7 +93,8 @@ How to install (e.g., compile the executables)
     # optional python packages for feasst tutorials
     pip install ../pyfeasst jupyter matplotlib pandas scipy
 
-The executables `fst`, which is used to start a simulation, and `rst`, which is used to restart a simulation, should now be located in `/path/to/feasst/build/bin/`.
+The executables `fst` and `rst` should appear in `/path/to/feasst/build/bin/`.
+Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
 
 Troubleshooting install
 ------------------------
