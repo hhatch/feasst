@@ -20,10 +20,6 @@ class ExtensiveMoments : public Analyze {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - max_order: maximum order cutoff for the powers (default: 3).
     - Stepper args.
    */

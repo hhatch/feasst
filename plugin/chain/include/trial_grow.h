@@ -149,11 +149,6 @@ class TrialGrowFile : public TrialGrow {
   TrialGrowFile() : TrialGrow() {} // only use for deserialize_map.
   //@{
   /** @name Arguments
-   */
-
-
-  /**
-    args:
     - file_name: name of TrialGrowFile file with the following format:
 
       line1: TrialGrowFile

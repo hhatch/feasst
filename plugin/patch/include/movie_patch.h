@@ -13,8 +13,17 @@ namespace feasst {
  */
 class MoviePatch : public AnalyzeWriteOnly {
  public:
+  //@{
+  /** @name Arguments
+    - FileXYZPatch arguments.
+   */
   explicit MoviePatch(argtype args = argtype());
   explicit MoviePatch(argtype * args);
+
+  //@}
+  /** @name Public Functions
+   */
+  //@{
 
   /// Write the sample VMD files and the initial configuration.
   void initialize(Criteria * criteria,
@@ -35,6 +44,7 @@ class MoviePatch : public AnalyzeWriteOnly {
     return std::make_shared<MoviePatch>(args); }
   MoviePatch(std::istream& istr);
 
+  //@}
  private:
   FileXYZPatch xyz_;
   FileVMDPatch vmd_;

@@ -19,10 +19,6 @@ class GhostTrialGrow : public Modify {
 
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - trial_grow_file: file name for use with TrialGrowFile.
     - Stepper arguments.
    */

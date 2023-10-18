@@ -32,10 +32,6 @@ class Rotator {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - unique_tolerance: tolerance to determine uniqueness based on positions
       (default: 1e-5);
     - contact_tolerance: contact distance tolerance (default: 1e-4).
@@ -114,10 +110,6 @@ class TabulateTwoRigidBody3D : public Action {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - num_orientations_per_pi: As described in VisitModelInnerTable
       (default: -1).
     - num_z: As described in VisitModelInnerTable (default: -1).

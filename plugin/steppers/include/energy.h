@@ -14,10 +14,6 @@ class Energy : public Analyze {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Stepper args.
    */
   explicit Energy(argtype args = argtype());

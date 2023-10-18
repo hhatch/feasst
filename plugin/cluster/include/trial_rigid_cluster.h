@@ -16,10 +16,6 @@ class TrialRigidCluster : public TrialFactoryNamed {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - rotate_param: initial value of the tunable parameter (default: 25).
     - translate_param: initial value of the tunable parameter (default: 0.1).
     - Trial arguments.
@@ -50,10 +46,6 @@ class TrialTranslateCluster : public Trial {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Trial arguments.
     - SelectCluster arguments.
     - Tunable arguments.
@@ -86,10 +78,6 @@ class TrialRotateCluster : public Trial {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Trial arguments.
     - SelectCluster arguments.
     - Tunable arguments.

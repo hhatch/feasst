@@ -14,10 +14,6 @@ class TrialTransferAVBDivalent : public TrialFactoryNamed {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - particle_type_a: type of second added particle in AV of first.
     - site_index_a: index of site in type a that defines AV (default: 0).
     - particle_type_b: type of third added particle in AV of first.
@@ -49,10 +45,6 @@ class TrialAddAVBDivalent : public Trial {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - particle_type_a: type of second added particle in AV of first.
     - site_index_a: index of site in type a that defines AV (default: 0).
     - particle_type_b: type of third added particle in AV of first.
@@ -85,10 +77,6 @@ class TrialRemoveAVBDivalent : public Trial {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - particle_type_a: type of second added particle in AV of first.
     - site_index_a: index of site in type a that defines AV (default: 0).
     - particle_type_b: type of third added particle in AV of first.

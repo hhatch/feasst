@@ -32,10 +32,6 @@ class VisitModel {
 
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - energy_cutoff: energy above this value will immediately end loop without
       computing the energy of the remaining sites in the loop.
       Must be > 1e10 because too low could result in an accepted trial.

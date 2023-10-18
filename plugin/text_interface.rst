@@ -110,16 +110,25 @@ These classes store neighbors and their interaction energies.
    cluster/doc/EnergyMapNeighbor_arguments
    cluster/doc/EnergyMapNeighborCriteria_arguments
 
-Zero- or One-Body Potentials
+One-Body Potentials
 ==============================
 
-These classes include zero- or one-body interactions.
+These classes include zero- and one-body interactions.
 
 .. toctree::
 
    confinement/doc/Background_arguments
    confinement/doc/ModelHardShape_arguments
    confinement/doc/ModelTableCart1DHard_arguments
+   shape/doc/ShapeFile_arguments
+   shape/doc/Cuboid_arguments
+   shape/doc/Cylinder_arguments
+   shape/doc/FiniteCylinder_arguments
+   shape/doc/FormulaSineWave_arguments
+   shape/doc/HalfSpace_arguments
+   shape/doc/Slab_arguments
+   shape/doc/SlabSine_arguments
+   shape/doc/Sphere_arguments
 
 Bonded Interactions
 =======================

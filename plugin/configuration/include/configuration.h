@@ -52,10 +52,6 @@ class Configuration {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Domain arguments may be parsed here.
     - particle_type[i]: add the i-th type of particle.
       The "[i]" is to be substituted for an integer 0, 1, 2, ...

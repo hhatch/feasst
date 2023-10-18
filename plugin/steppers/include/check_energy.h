@@ -35,10 +35,6 @@ class CheckEnergy : public ModifyUpdateOnly {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - tolerance: relative absolute difference between running energy
       and recomputed energy (default: 1e-10).
     - Stepper arguments.

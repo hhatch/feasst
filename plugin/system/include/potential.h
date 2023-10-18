@@ -23,10 +23,6 @@ class Potential {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - group_index: set the index of the group in the configuration which
       contributes to this potential (default: 0, representing entire config).
     - group: name of group defined within system (default: "").

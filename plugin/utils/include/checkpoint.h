@@ -25,10 +25,6 @@ class Checkpoint {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - num_hours: Number of hours between printing of checkpoint file
       (default: 1).
     - num_hours_terminate: Terminate after this many hours. If -1, do not

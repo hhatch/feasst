@@ -39,10 +39,6 @@ class Ewald : public VisitModel {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - tolerance: determine the alpha parameter and number of wave vectors by
       specifying the accuracy relative to the energy of two unit charges
       separated by a distance of one unit.

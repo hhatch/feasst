@@ -16,10 +16,6 @@ class WriteModelParams : public Action {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - file_name: name of file to write.
     - potential_index: index of potential.
       If -1, use Configuration (default: -1)

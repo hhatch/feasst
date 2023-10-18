@@ -14,10 +14,6 @@ class Density : public Analyze {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Stepper args.
    */
   explicit Density(argtype args = argtype());

@@ -56,10 +56,6 @@ class Domain {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - side_length[i]: set the side length of the i-th dimension.
       The "[i]" is to be substituted for an integer 0, 1, 2, ...
     - cubic_side_length: side length of cubic perioidic boundary conditions.

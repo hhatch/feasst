@@ -45,10 +45,6 @@ class PairDistribution : public Modify {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - dr: radial distribution bin size (default: 0.1).
     - print_intra: print the intramolecular distributions (default: false).
    */

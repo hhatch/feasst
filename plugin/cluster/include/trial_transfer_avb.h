@@ -13,10 +13,6 @@ class TrialTransferAVB : public TrialFactoryNamed {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Trial arguments.
     - SelectParticleAVB arguments.
    */

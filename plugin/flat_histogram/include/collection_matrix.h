@@ -34,10 +34,6 @@ class CollectionMatrix {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - delta_ln_prob_guess: if the CollectionMatrix lacks transitions to compute
       a delta_ln_prob, use this value instead (default: 0).
       This guess can affect the initial convergence.

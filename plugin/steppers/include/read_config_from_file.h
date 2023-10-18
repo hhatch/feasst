@@ -20,10 +20,6 @@ class ReadConfigFromFile : public ModifyUpdateOnly {
  public:
   //@{
   /** @name Arguments
-   */
-
-  /**
-    args:
     - Stepper arguments.
    */
   explicit ReadConfigFromFile(argtype args = argtype());
