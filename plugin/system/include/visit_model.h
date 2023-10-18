@@ -18,7 +18,6 @@ class ModelOneBody;
 class ModelTwoBody;
 class ModelThreeBody;
 
-// HWH document and lint VisitModel
 /**
   This class loops a Model over a Configuration or Select.
 
@@ -41,6 +40,7 @@ class VisitModel {
       computing the energy of the remaining sites in the loop.
       Must be > 1e10 because too low could result in an accepted trial.
       If -1, ignore energy_cutoff (default: -1).
+    - VisitModelInner: derived class VisitModelInner (default: VisitModelInner).
    */
   explicit VisitModel(argtype args);
   explicit VisitModel(argtype * args);

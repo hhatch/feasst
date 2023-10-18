@@ -29,7 +29,6 @@ These classes describe the identity of the particles, their positions and the sp
    configuration/doc/Configuration_arguments
    configuration/doc/Domain_arguments
    configuration/doc/PhysicalConstants
-   configuration/doc/NeighborCriteria_arguments
 
 Nonbonded Isotropic Models
 ======================================
@@ -56,6 +55,22 @@ These classes include pair-wise (two-body) isotropic interactions.
    confinement/doc/HenryCoefficient_arguments
    example/doc/ModelExample_arguments
 
+Nonbonded Potentials
+==============================
+
+These classes include various ways that interactions may be computed over a :cpp:class:`Selection <feasst::Select>` or the entire :cpp:class:`Configuration <feasst::Configuration>`.
+
+.. toctree::
+
+   system/doc/Potential_arguments
+   system/doc/VisitModel_arguments
+   system/doc/DontVisitModel_arguments
+   system/doc/VisitModelBond_arguments
+   system/doc/VisitModelCell_arguments
+   system/doc/VisitModelIntra_arguments
+   system/doc/VisitModelIntraMap_arguments
+   system/doc/LongRangeCorrections_arguments
+
 Nonbonded Anisotropic Models
 =====================================
 
@@ -81,13 +96,14 @@ These classes include Ewald and long-range electrostatics.
    charge/doc/ChargeSelf_arguments
    charge/doc/SlabCorrection_arguments
 
-Neighbor lists
+Neighbor Lists
 ===========================
 
 These classes store neighbors and their interaction energies.
 
 .. toctree::
 
+   configuration/doc/NeighborCriteria_arguments
    system/doc/VisitModelInner_arguments
    system/doc/EnergyMap_arguments
    cluster/doc/EnergyMapAll_arguments
@@ -105,22 +121,6 @@ These classes include zero- or one-body interactions.
    confinement/doc/Background_arguments
    confinement/doc/ModelHardShape_arguments
    confinement/doc/ModelTableCart1DHard_arguments
-
-Nonbonded Potentials
-==============================
-
-These classes include various ways that interactions may be computed over a :cpp:class:`Selection <feasst::Select>` or the entire :cpp:class:`Configuration <feasst::Configuration>`.
-
-.. toctree::
-
-   system/doc/Potential_arguments
-   system/doc/VisitModel_arguments
-   system/doc/DontVisitModel_arguments
-   system/doc/VisitModelBond_arguments
-   system/doc/VisitModelCell_arguments
-   system/doc/VisitModelIntra_arguments
-   system/doc/VisitModelIntraMap_arguments
-   system/doc/LongRangeCorrections_arguments
 
 Bonded Interactions
 =======================
@@ -241,7 +241,7 @@ Modify happen every so many steps, and may change the simulation.
 Actions
 ==========================
 
-Actions happen one time.
+Actions happen once.
 
 .. toctree::
 

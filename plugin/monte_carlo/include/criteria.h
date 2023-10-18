@@ -20,7 +20,6 @@ class Bias;
 /**
   Determine whether to accept or reject a trial.
   Stores the total energy based on energy changes from each trial.
-  probability of acceptance.
  */
 class Criteria {
  public:

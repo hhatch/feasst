@@ -24,6 +24,7 @@ class GhostTrialGrow : public Modify {
   /**
     args:
     - trial_grow_file: file name for use with TrialGrowFile.
+    - Stepper arguments.
    */
   explicit GhostTrialGrow(argtype args);
   explicit GhostTrialGrow(argtype * args);
