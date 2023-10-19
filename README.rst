@@ -42,16 +42,6 @@ Thermodynamic ensembles
 * Temperature and growth expanded ensembles
 * Gibbs ensemble
 
-Monte Carlo trials
-
-* Translation, rotation, crankshaft, pivot
-* Rigid cluster rotation and translation
-* Configurational bias transfers and partial regrowth
-* Dual-cut configurational bias
-* Aggregation volume bias
-* Reptation
-* Branches
-
 Interaction potentials
 
 * Hard spheres
@@ -63,6 +53,16 @@ Interaction potentials
 * TraPPE small molecules and n-alkanes
 * Slab, cylindrical and spherical confinement
 * Cell list and neighbor list
+
+Monte Carlo trials
+
+* Translation, rotation, crankshaft, pivot
+* Rigid cluster rotation and translation
+* Configurational bias transfers and partial regrowth
+* Dual-cut configurational bias
+* Aggregation volume bias
+* Reptation
+* Branches
 
 Modern software
 
