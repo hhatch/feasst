@@ -12,6 +12,11 @@ namespace feasst {
 
 /**
   Compute the Metropolis acceptance for a TrialGrow that is never accepted.
+
+  This class effectively functions as an Analyze, because it does not change the
+  System.
+  The Trial is always rejected; however, because the Trial interface is used
+  then the System is temporarily modified.
  */
 class GhostTrialGrow : public Modify {
  public:

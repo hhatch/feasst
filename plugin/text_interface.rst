@@ -208,19 +208,16 @@ These classes add :cpp:class:`Trials <feasst::Trial>`.
    cluster/doc/TrialTransferAVBDivalent_arguments
    morph/doc/TrialMorph_arguments
 
-Analyze and Modify
+Analyze
 ==========================
 
 :cpp:class:`Analyze <feasst::Analyze>` update/write every fixed number of trials, and do not change the simulation.
-:cpp:class:`Modify <feasst::Modify>` update/write every fixed number of trials, but may change the simulation.
 
 .. toctree::
 
    steppers/doc/Check_arguments
-   steppers/doc/CheckEnergy_arguments
    steppers/doc/Chirality2D_arguments
    steppers/doc/CPUTime_arguments
-   steppers/doc/CriteriaUpdater_arguments
    steppers/doc/CriteriaWriter_arguments
    steppers/doc/Density_arguments
    steppers/doc/DensityProfile_arguments
@@ -230,21 +227,31 @@ Analyze and Modify
    steppers/doc/MeanSquaredDisplacement_arguments
    steppers/doc/Movie_arguments
    steppers/doc/NumParticles_arguments
-   steppers/doc/PairDistributionInner_arguments
    steppers/doc/ProfileTrials_arguments
-   steppers/doc/ReadConfigFromFile_arguments
    steppers/doc/Scattering_arguments
-   steppers/doc/Tune_arguments
    steppers/doc/Volume_arguments
    steppers/doc/WallClockLimit_arguments
-   steppers/doc/WrapParticles_arguments
    chain/doc/AnalyzeBonds_arguments
    chain/doc/EndToEndDistance_arguments
-   chain/doc/GhostTrialGrow_arguments
    chain/doc/RadiusOfGyration_arguments
    charge/doc/CheckNetCharge_arguments
    cluster/doc/AnalyzeCluster_arguments
    example/doc/AnalyzeExample_arguments
+
+Modify
+============================
+
+:cpp:class:`Modify <feasst::Modify>` update/write every fixed number of trials, but may change the simulation.
+
+.. toctree::
+
+   steppers/doc/CheckEnergy_arguments
+   steppers/doc/CriteriaUpdater_arguments
+   steppers/doc/PairDistributionInner_arguments
+   steppers/doc/ReadConfigFromFile_arguments
+   steppers/doc/Tune_arguments
+   steppers/doc/WrapParticles_arguments
+   chain/doc/GhostTrialGrow_arguments
 
 Actions
 ==========================
@@ -286,7 +293,7 @@ Flat-histogram simulations bias along a 1-dimensional macrostate.
 Gibbs Ensemble
 ===================
 
-Simultaneous simulate multiple configurations and transfer particles and/or volume between them.
+Simulate multiple configurations and transfer particles and/or volume between them.
 
 .. toctree::
 
