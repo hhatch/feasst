@@ -53,6 +53,7 @@ void GhostTrialGrow::initialize(Criteria * criteria,
     TrialFactory * trial_factory) {
   printer(header(*criteria, *system, *trial_factory),
           file_name(*criteria));
+  // HWH double check this initialization
   const int conf = configuration_index();
   criteria_.set_current_energy(criteria->current_energy(), conf);
   criteria_.set_current_energy_profile(system->stored_energy_profile(conf), conf);
@@ -73,7 +74,11 @@ void GhostTrialGrow::update(Criteria * criteria,
   //  << acc.energy_new(conf) << " "
   //  << acc.energy_old(conf));
   //const double delta_energy = acc.energy_new(conf) - acc.energy_old(conf);
-  metropolis_prob_.accumulate(std::exp(acc.ln_metropolis_prob()));
+  if (acc.reject()) {
+    metropolis_prob_.accumulate(0.);
+  } else {
+    metropolis_prob_.accumulate(std::exp(acc.ln_metropolis_prob()));
+  }
   grow_.revert(trial_index, false, acc.reject(), system, &criteria_);
 }
 

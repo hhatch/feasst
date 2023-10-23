@@ -60,7 +60,7 @@ PARAMS['densities'] = np.linspace(PARAMS['density_lower'], PARAMS['density_upper
 PARAMS['cubic_side_lengths'] = np.power(PARAMS['num_particles']/PARAMS['densities'], 1./3.).tolist()
 PARAMS['densities'] = PARAMS['densities'].tolist()
 def sim_node_dependent_params(params):
-    """ Set parameters that depent upon the sim or node here. """
+    """ Set parameters that depend upon the sim or node here. """
     params['cubic_side_length'] = params['cubic_side_lengths'][params['sim']]
 
 def write_feasst_script(params, file_name):
