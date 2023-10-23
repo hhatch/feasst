@@ -25,17 +25,14 @@ For contributing code
 Guidelines for collaboration with FEASST developers
 -------------------------------------------------------
 
-FEASST developers collaborate with other scientists to justify developing and maintaining FEASST.
-If a developer spends many hours helping a collaborator, then a single citation of FEASST may not properly credit the developer for their work, even if the code used is available open-source to other users.
+FEASST developers appreciate collaboration with other scientists.
+Some general guidelines to consider are listed below.
+These may be further refined on a case-by-case basis.
 
 * Collaborators intend to publish with developers.
 * Users do not intend to publish with developers.
 * Collaborators may have extensive private conversations with developers.
-* User questions are directed to public mail lists or GitHub issues (see `../CONTACT`).
-* Developers may spend many hours helping collaborators.
-* Developers cannot spend many hours helping any particular user.
-* Collaborators get priority on feature requests.
-* Feature requests by users have lower priority.
-* If you are a collaborator, then you are not a user.
-* If a former collaborator wishes to be a user, but continues to contact the developers privately, the former collaborator should tell developers they are no longer collaborating.
+* User questions are preferred in public mail lists or GitHub issues (see `Contact <CONTACT.html>`_).
+* Feature requests involving collaboration implicitly gain priority due to common interest.
+* Former collaborators may become users and *vice versa*. Future private communication with developers should include this change of role.
 
