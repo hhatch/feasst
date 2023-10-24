@@ -26,13 +26,12 @@ Guidelines for collaboration with FEASST developers
 -------------------------------------------------------
 
 FEASST developers appreciate collaboration with other scientists.
-Some general guidelines to consider are listed below.
+Some general collaboration guidelines are listed below.
 These may be further refined on a case-by-case basis.
 
-* Collaborators intend to publish with developers.
-* Users do not intend to publish with developers.
+* Collaborators intend to publish with developers while users do not.
 * Collaborators may have extensive private conversations with developers.
 * User questions are preferred in public mail lists or GitHub issues (see `Contact <CONTACT.html>`_).
-* Feature requests involving collaboration implicitly gain priority due to common interest.
-* Former collaborators may become users and *vice versa*. Future private communication with developers should include this change of role.
+* Feature requests involving collaboration implicitly have priority due to common interest.
+* Former collaborators may become users and *vice versa*. Future private FEASST-related communication with developers should indicate this change of role.
 
