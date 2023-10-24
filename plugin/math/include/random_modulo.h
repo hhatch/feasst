@@ -10,15 +10,13 @@
 namespace feasst {
 
 /**
-  This is a very simple implementation of a random number generator that is of
-  poor quality.
-  See the discussion in Allen and Tildesley "Computer Simulation of Liquids"
+  This is a poor quality implementation of a random number generator,
+  as described in Allen and Tildesley "Computer Simulation of Liquids"
   Appendix G.
-  This was implemented so that the same number sequence can be obtained on
-  different compilers and operating systems, whereas RandomMT19937 has known
-  differences between GCC and Clang.
-  It is recommended to use the more high-quality RandomMT19937 for production
-  simulations.
+  Because RandomMT19937 has known differences between GCC and Clang, this
+  implementation allows exact reproduction on different compilers and
+  operating systems.
+  The higher-quality RandomMT19937 is recommended for production simulations.
  */
 class RandomModulo : public Random {
  public:

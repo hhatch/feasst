@@ -16,10 +16,9 @@ namespace feasst {
 
 /**
   Save the state of a class in memory by writing to disk, such that the
-  checkpoint file can be read again later to restart the simulation.
-  Checkpoint after user defined number of hours.
+  checkpoint file can be later read to restart the simulation.
   Note that for OMP or parallel simulations, the number of hours is multiplied
-  by the number of cores.
+  by the number of threads.
  */
 class Checkpoint {
  public:
@@ -35,7 +34,8 @@ class Checkpoint {
     - writes_per_backup: Create a unique checkpoint file name every this many
       times that a checkpoint is written (default: -1).
       If -1, only backup the previous file by appending its name with ".bak".
-      Otherwise, if > 0, append each backup with an integer count beginning 0.
+      Otherwise, if > 0, append each backup with an integer count beginning
+      with 0.
    */
   explicit Checkpoint(argtype args = argtype());
 

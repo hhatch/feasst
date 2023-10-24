@@ -13,7 +13,7 @@ class Domain;
 // HWH consider applying Shapes from confinement into NeighborCriteria
 // For now, it assumes spheres/circles
 /**
-  Criteria for determining neighbors.
+  Criteria for defining neighbors.
  */
 class NeighborCriteria {
  public:

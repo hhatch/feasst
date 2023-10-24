@@ -2,9 +2,11 @@
 Text Interface
 ***************************
 
-The first word in each line of a FEASST input text file is the name of a class, followed by pairs of class arguments.
-The following related lists of classes and their arguments aid in understanding or modifying :doc:`../tutorial/README`.
-The text interface is backwards compatible within major version (e.g., text files using version v0.23.0 should also work with v0.23.1).
+The syntax of a FEASST text input file is follows.
+Each line begins with the name of a class in FEASST, listed below.
+The class name is then proceeded by space-separated pairs of argument names and values.
+Minor version changes support the same text files, but major version changes do not.
+For example, version v0.23.0 should also work with v0.23.1, but not v0.24.0.
 
 .. toctree::
 
@@ -12,6 +14,8 @@ The text interface is backwards compatible within major version (e.g., text file
 
 Random Number Generators
 =========================
+
+These are the number generators available for use.
 
 .. toctree::
 
@@ -32,7 +36,7 @@ These classes describe the identity of the particles, their positions and the sp
 Nonbonded Isotropic Models
 ======================================
 
-These classes include pair-wise (two-body) isotropic interactions.
+These classes include pair-wise (two-body) isotropic interactions models.
 
 .. toctree::
 
@@ -182,7 +186,6 @@ Monte Carlo Trials
 ==========================
 
 These classes add :cpp:class:`Trials <feasst::Trial>`.
-:cpp:class:`TrialGrow <feasst::TrialGrow>` has the most features.
 
 .. toctree::
 
