@@ -255,6 +255,9 @@ void Rotator::determine_if_unique(const int ior, const std::vector<int>& iors, c
     if (!xyz_file_name_.empty()) {
       xyz_.write(xyz_file_name_, system->configuration());
     }
+//  } else {
+//    INFO("non unique stheta:" << stheta_[ior] << " sphi:" << sphi_[ior] <<
+//      " ephi:" << eulers_[ior].phi() << " etheta:" << eulers_[ior].theta() << " epsi:" << eulers_[ior].psi());
   }
 }
 
