@@ -91,8 +91,8 @@ class CollectionMatrix {
 //  /// the bin below.
 //  double delta_ln_prob_stdev(const int bin, const int block) const;
 
-  std::string write_per_bin(const int bin) const;
-  std::string write_per_bin_header() const;
+  std::string write_per_bin(const int bin, const bool widom = false) const;
+  std::string write_per_bin_header(const bool widom = false) const;
 
   int min_blocks() const;
   std::vector<LnProbability> ln_prob_blocks() const;
