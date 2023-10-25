@@ -49,7 +49,7 @@ class Random;
   For more information, see LAMMPS:
   https://docs.lammps.org/Howto_triclinic.html
 
-  On the inner workings of Monte Carlo codes
+  Another good resource is the inner workings of Monte Carlo codes
   https://doi.org/10.1080/08927022.2013.819102
 */
 class Domain {

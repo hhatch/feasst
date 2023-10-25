@@ -373,3 +373,4 @@ To Do List
 * tutorials which segfault on restart dont report errors in automated tests
 * remove prefix from argparse in tutorials: prefix can't change in slurm runs
 * Add Stepper arguments to text interface documentation
+* Movie Trial checks so that they can be applied to GhostTrialGrow
