@@ -81,7 +81,9 @@ void PerturbBranch::precompute(TrialSelect * select, System * system) {
  * [1+C^2+A^2] x^2 + [2CD+2AB] x + [D^2+B^2-L^2] = 0
  *
  * this solution is plagued by numerical stability, if y1 ~ 0 or |H|<1e-8
- *   modified to do alternative solves for more stable H  */
+ *   modified to do alternative solves for more stable H
+ * Added a third alternative (thanks Bartosz Mazur).
+ */
 void PerturbBranch::place_in_branch(const double L,
     const double t143,
     const double t243,
@@ -126,23 +128,28 @@ void PerturbBranch::place_in_branch(const double L,
   double x3, y3, z3;
 //  INFO("y1 " << y1);
 //  INFO("x1 " << x1);
-//  INFO("H " << z2 - y2*z1/y1);
-//  INFO("H " << z2 - x2*z1/x1);
-  const double H = z2 - y2*z1/y1;
-  const double H_alt = z2 - x2*z1/x1;
-//  INFO("H " << H);
-//  INFO("H " << H_alt);
-  if ( std::abs(H) > std::abs(H_alt) ) {
+//  INFO("H_x " << z2 - x2*z1/x1);
+//  INFO("H_y " << z2 - y2*z1/y1);
+//  INFO("H_z " << x2 - z2*x1/z1);
+  const double H_x = z2 - x2*z1/x1;
+  const double H_y = z2 - y2*z1/y1;
+  const double H_z = x2 - z2*x1/z1;
+//  INFO("H_x " << H_x);
+//  INFO("H_y " << H_y);
+//  INFO("H_z " << H_z);
+  if ( std::abs(H_y) >= std::abs(H_x) && std::abs(H_y) >= std::abs(H_z) ) {
   //if ( std::abs(y1) > std::abs(x1) ) {
 //  if ( (abs(x1) < DTOL) || (abs(Cyz) > abs(Cxz)) ) {
     // cout << "test1 " << abs(x1) << " t2 " << abs(Cyz) << " > "
     //      << abs(Cxz) << endl;
     solve_branch_(x1, y1, z1, x2, y2, z2, &x3, &y3, &z3, c143, c243, planar, random);
-  } else {
+  } else if (std::abs(H_x) >= std::abs(H_z)) {
   // } else if ( (abs(y1) < DTOL) || (abs(Cyz) < abs(Cxz)) ) {
     // cout << "test2 " << abs(y1) << " t2 " << abs(Cyz) << " > "
     //      << abs(Cxz) << endl;
     solve_branch_(y1, x1, z1, y2, x2, z2, &y3, &x3, &z3, c143, c243, planar, random);
+  } else {
+    solve_branch_(y1, z1, x1, y2, z2, x2, &y3, &z3, &x3, c143, c243, planar, random);
   }
   //INFO("L: " << L << " dist " << std::sqrt(x3*x3+y3*y3+z3*z3));
 //  const double dist = std::sqrt(x3*x3+y3*y3+z3*z3);
