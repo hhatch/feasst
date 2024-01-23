@@ -8,13 +8,14 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "feasst/include/feasst.h"
 #include "server/include/listen.h"
 
-using namespace std;
+//using namespace std;
 
 namespace feasst {
 
@@ -56,7 +57,7 @@ void Listen::serialize(std::ostream& ostr) const {
 // implementation from https://stackoverflow.com/questions/20732980/how-to-use-socket-with-a-python-client-and-a-c-server
 void Listen::run(MonteCarlo * mc) {
   char* buffer = new char[buffer_size_ + 1];
-  int code;
+  int size;
   int server_socket=socket(AF_INET, SOCK_STREAM, 0);
   sockaddr_in serverAddr;
   serverAddr.sin_family = AF_INET;
@@ -70,16 +71,30 @@ void Listen::run(MonteCarlo * mc) {
   bool finished = false;
   while (!finished) {
     bzero(buffer, buffer_size_);
-    code = read(client_socket, buffer, buffer_size_/2);
-    ASSERT(code >= 0, "error");
+    size = read(client_socket, buffer, buffer_size_/2);
+    DEBUG("received: " << buffer);
+    DEBUG("receive size: " << size);
+    ASSERT(size >= 0, "error");
     if (strcmp(buffer, "EndListen") == 0) {
-      INFO(buffer);
+      DEBUG(buffer);
       finished = true;
     } else {
-      strcpy(buffer, "test");
-      code = write(client_socket, buffer, strlen(buffer));
+      if (size > 0) {
+        std::string line(buffer);
+        std::pair<std::string, argtype> marg = parse_line(line, NULL, NULL);
+        DEBUG(marg.first);
+        DEBUG(str(marg.second));
+        arglist list(1);
+        list[0] = marg;
+        mc->parse_args(&list);
+        ASSERT(list.size() == 0, "Unrecognized argument: " << list.begin()->first);
+      }
+      strcpy(buffer, "Message received. Continue.");
+      size = write(client_socket, buffer, strlen(buffer));
+      DEBUG("sent: " << buffer);
+      DEBUG("send size: " << size);
     }
-    ASSERT(code >= 0, "error");
+    ASSERT(size >= 0, "error");
   }
   close(server_socket);
   delete[] buffer;

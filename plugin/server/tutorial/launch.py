@@ -6,6 +6,7 @@ import subprocess
 import multiprocessing
 import time
 import argparse
+import random
 import socket
 from pyfeasst import fstio
 
@@ -38,6 +39,9 @@ PARAMS['script'] = __file__
 PARAMS['sim_id_file'] = PARAMS['prefix']+ '_sim_ids.txt'
 PARAMS['procs_per_sim'] = 1
 PARAMS['num_sims'] = PARAMS['num_nodes']*PARAMS['procs_per_node']
+if PARAMS['seed'] == -1:
+    PARAMS['seed'] = random.randrange(int(1e9))
+
 
 def write_feasst_script(params, script_file):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -55,10 +59,20 @@ def server(params):
 def client(params):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("localhost", params['port']))
-    sock.send(b'Hello')
-    #sock.send(b'EndListen')
-    message = sock.recv(params['buffer_size'])
-    print(str(message))
+    for line in ['RandomMT19937 seed '+str(params['seed']),
+                 'Configuration cubic_side_length 8 particle_type0 /feasst/particle/lj.fstprt',
+                 'Potential Model LennardJones',
+                 'ThermoParams beta 1 chemical_potential0 1',
+                 'Metropolis',
+                 'TrialTranslate',
+                 'TrialAdd particle_type 0',
+                 'Run until_num_particles 20',
+                 'RemoveTrial name TrialAdd',
+                 'Log output_file '+params['prefix']+'.csv',
+                 'Run num_trials 10']:
+        sock.send(bytes(line, 'utf-8'))
+        message = sock.recv(params['buffer_size'])
+        #print(str(message))
 
 if __name__ == '__main__':
     proc1 = multiprocessing.Process(target=server, args=(PARAMS,))
