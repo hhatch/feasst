@@ -59,14 +59,6 @@ def client(params):
     #sock.send(b'EndListen')
     message = sock.recv(params['buffer_size'])
     print(str(message))
-#    for x in range(0, 10000):
-#        print("Step 1")
-#        sock.send(b'Hello')
-#        #sock.send(b'EndListen')
-#        print("Step 2")
-#        print(str(sock.recv(1000)))
-#        print(x)
-    
 
 if __name__ == '__main__':
     proc1 = multiprocessing.Process(target=server, args=(PARAMS,))
@@ -76,9 +68,3 @@ if __name__ == '__main__':
     proc2.start()
     proc1.join()
     proc2.join()
-#    fstio.run_simulations(params=PARAMS,
-#                          sim_node_dependent_params=None,
-#                          write_feasst_script=write_feasst_script,
-#                          post_process=None,
-#                          queue_function=fstio.slurm_single_node,
-#                          args=ARGS)

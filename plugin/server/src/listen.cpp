@@ -7,8 +7,6 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-//#include <iostream>
-//#include <stdio.h>
 #include <string.h>
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
@@ -57,8 +55,7 @@ void Listen::serialize(std::ostream& ostr) const {
 
 // implementation from https://stackoverflow.com/questions/20732980/how-to-use-socket-with-a-python-client-and-a-c-server
 void Listen::run(MonteCarlo * mc) {
-  //char** buffer = new char*[buffer_size_ + 1];
-  char buffer[buffer_size_];
+  char* buffer = new char[buffer_size_ + 1];
   int code;
   int server_socket=socket(AF_INET, SOCK_STREAM, 0);
   sockaddr_in serverAddr;
@@ -85,6 +82,7 @@ void Listen::run(MonteCarlo * mc) {
     ASSERT(code >= 0, "error");
   }
   close(server_socket);
+  delete[] buffer;
 }
 
 }  // namespace feasst
