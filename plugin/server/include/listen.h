@@ -14,6 +14,8 @@ namespace feasst {
   Listen to receive a message from client.
   Each message should be processed as a single line with the same syntax as the
   text interface.
+  This Action is not recommended for use in the text interface.
+  Instead, use: echo "Server port 54321 buffer_size 1000" | /path/to/feasst/build/bin/fst
  */
 class Listen : public Action {
  public:

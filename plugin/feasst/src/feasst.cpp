@@ -128,7 +128,7 @@ void parse_server(std::string line) {
   const int port = integer("port", &line_pair.second, 50007);
   const int buffer_size = integer("buffer_size", &line_pair.second, 1000);
   FEASST_CHECK_ALL_USED(line_pair.second);
-  std::cout << "# initializing server on localhost port " << port << std::endl;
+  std::cout << "# initializing server on localhost:" << port << std::endl;
   char* buffer = new char[buffer_size + 1];
   int size;
   int server_socket=socket(AF_INET, SOCK_STREAM, 0);
