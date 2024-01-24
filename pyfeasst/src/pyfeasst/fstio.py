@@ -3,11 +3,13 @@ This module provides some utility input / output functions for use with the FEAS
 """
 
 import os
+import time
 import sys
 import random
 import json
 import subprocess
 from multiprocessing import Pool
+import multiprocessing
 from itertools import repeat
 import numpy as np
 from pathlib import Path
@@ -135,32 +137,72 @@ fi
 echo "Time is $(date)"
 """.format(**params))
 
-def run_single(sim, params, args, sim_node_dependent_params, write_feasst_script, post_process):
-    """ Run a single simulation. If all simulations are complete, run PostProcess. """
-    if args.queue_task == 0:
-        params['sim'] = sim
-        if 'seed' in params:
-            if params['seed'] == -1:
-                params['seed'] = random.randrange(int(1e9))
-        if sim_node_dependent_params:
-            sim_node_dependent_params(params)
-        file_name = params['prefix']+str(sim)+'_run'
-        write_feasst_script(params, script_file=file_name+'.txt')
-        syscode = subprocess.call(
-            args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
-            shell=True, executable='/bin/bash')
-    else: # if queue_task < 1, restart from checkpoint
-        syscode = subprocess.call(
-            args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
-            shell=True, executable='/bin/bash')
-    if syscode == 0: # if simulation finishes with no errors, write to sim id file
-        with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
-            file1.write(str(sim)+'\n')
-        # if all sims are complete, post process or test once (by removing sim id file)
-        if all_sims_complete(params['sim_id_file'], params['num_sims']):
-            os.remove(params['sim_id_file'])
-            post_process(params)
+def server(params, args):
+    if 'port' not in params:
+        params['port'] = 54321
+    if 'buffer_size' not in params:
+        params['buffer_size'] = 1000
+    #print('starting server localhost:', params['port'])
+    syscode = subprocess.call(
+        """echo "Server port {port} buffer_size {buffer_size}" |""".format(**params) + args.feasst_install+'bin/fst > '+params['prefix']+str(params['sim'])+'_run.log',
+        shell=True, executable='/bin/bash')
     return syscode
+
+def run_single(sim, params, args, sim_node_dependent_params, write_feasst_script, post_process, client):
+    """ Run a single simulation. If all simulations are complete, run PostProcess. """
+    if write_feasst_script:
+        if args.queue_task == 0:
+            params['sim'] = sim
+            if 'seed' in params:
+                if params['seed'] == -1:
+                    params['seed'] = random.randrange(int(1e9))
+            if sim_node_dependent_params:
+                sim_node_dependent_params(params)
+            file_name = params['prefix']+str(sim)+'_run'
+            write_feasst_script(params, script_file=file_name+'.txt')
+            syscode = subprocess.call(
+                args.feasst_install+'bin/fst < '+file_name+'.txt  > '+file_name+'.log',
+                shell=True, executable='/bin/bash')
+        else: # if queue_task < 1, restart from checkpoint
+            syscode = subprocess.call(
+                args.feasst_install+'bin/rst '+params['prefix']+str(sim)+'_checkpoint.fst',
+                shell=True, executable='/bin/bash')
+        if syscode == 0: # if simulation finishes with no errors, write to sim id file
+            with open(params['sim_id_file'], 'a', encoding='utf-8') as file1:
+                file1.write(str(sim)+'\n')
+            # if all sims are complete, post process or test once (by removing sim id file)
+            if all_sims_complete(params['sim_id_file'], params['num_sims']):
+                os.remove(params['sim_id_file'])
+                if post_process is not None:
+                    post_process(params)
+        return syscode
+    if client is not None:
+        assert False, "not implemented"
+        #print('clients?2', clients != None)
+        #proc1 = multiprocessing.Process(target=server, args=(params,))
+        #proc2 = multiprocessing.Process(target=clients[sim], args=(params,))
+        #proc1.start()
+        #time.sleep(0.1)
+        #proc2.start()
+        #proc1.join()
+        #proc2.join()
+#        if sim % 2 == 0:
+#            params['sim'] = sim/2
+#            syscode = server(params, args)
+#            time.sleep(0.1) # extra time to start up server for listening
+#            return syscode
+#        else:
+#            params['sim'] = (sim-1)/2
+#            #print('num_clients', len(clients))
+#            #print('picking client')
+#            #client=clients[params['sim']]
+#            print('should be starting client')
+#            #clients[params['sim']](params)
+#            client(params)
+#            print('ending client')
+#            return 1
+    else:
+        assert False, "provide write_feasst_script or client."
 
 def split(a, n):
     """
@@ -173,7 +215,7 @@ def split(a, n):
     k, m = divmod(len(a), n)
     return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
 
-def run_simulations(params, sim_node_dependent_params, write_feasst_script, post_process, queue_function, args):
+def run_simulations(params, queue_function, args, write_feasst_script=None, client=None, sim_node_dependent_params=None, post_process=None):
     """
     Run a simulation either locally in the shell or queue on HPC nodes
 
@@ -192,6 +234,8 @@ def run_simulations(params, sim_node_dependent_params, write_feasst_script, post
     :param function write_feasst_script:
         The name of the function to write the feasst text interface file,
         which has the first argment as the parameters and the second argument as the filename.
+    :param function client:
+        If write_feasst_script is None, instead run in server mode with default port 54321 and default buffer_size 1000.
     :param function post_process:
         The name of the function to post process all simulations once complete,
         and has the only argument as the params.
@@ -203,21 +247,37 @@ def run_simulations(params, sim_node_dependent_params, write_feasst_script, post
     with open(params['sim_id_file'], 'w') as file1:
         file1.close() # clear file, then append sim id when complete
     if args.run_type == 0: # run directly
-        if args.queue_id != -1: # if run from queue
-            if args.queue_task == 0: # read param file if not checkpoint
-                with open(params['prefix']+'_params'+str(args.queue_id)+'.json', 'r') as file1:
-                    params = json.load(file1)
+        if client is None:
+            if args.queue_id != -1: # if run from queue
+                if args.queue_task == 0: # read param file if not checkpoint
+                    with open(params['prefix']+'_params'+str(args.queue_id)+'.json', 'r') as file1:
+                        params = json.load(file1)
+            else:
+                with open(params['prefix']+'_params.json', 'w') as file1:
+                    file1.write(json.dumps(params, indent=2))
+            with Pool(params['procs_per_node']) as pool:
+                sims = list(split(range(params['num_sims']), params['num_nodes']))[params['node']]
+                codes = pool.starmap(run_single, zip(sims, repeat(params), repeat(args),
+                                                     repeat(sim_node_dependent_params),
+                                                     repeat(write_feasst_script),
+                                                     repeat(post_process),
+                                                     repeat(client)))
+                if np.count_nonzero(codes) > 0:
+                    sys.exit(1)
         else:
-            with open(params['prefix']+'_params.json', 'w') as file1:
-                file1.write(json.dumps(params, indent=2))
-        with Pool(params['procs_per_node']) as pool:
+            # run in server client mode
             sims = list(split(range(params['num_sims']), params['num_nodes']))[params['node']]
-            codes = pool.starmap(run_single, zip(sims, repeat(params), repeat(args),
-                                                 repeat(sim_node_dependent_params),
-                                                 repeat(write_feasst_script),
-                                                 repeat(post_process)))
-            if np.count_nonzero(codes) > 0:
-                sys.exit(1)
+            #procs = list()
+            for s in sims:
+                params['sim'] = s
+                proc1 = multiprocessing.Process(target=server, args=(params, args))
+                proc2 = multiprocessing.Process(target=client, args=(params,))
+                proc1.start()
+                time.sleep(0.1)
+                proc2.start()
+                #proc1.join()
+                #proc2.join()
+
     elif args.run_type == 1: # queue
         queue_id_file = params['prefix']+ '_queue_ids.txt'
         with open(queue_id_file, 'w') as file1:
