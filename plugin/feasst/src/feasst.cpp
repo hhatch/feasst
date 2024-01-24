@@ -1,4 +1,12 @@
+#include <memory>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <string.h>
 #ifdef _OPENMP
   #include <omp.h>
 #endif // _OPENMP
@@ -112,6 +120,71 @@ void parse_prefetch(std::string line) {
   }
 }
 
+void parse_server(std::string line) {
+  argtype variables;
+  bool assign_to_list;
+  std::pair<std::string, argtype> line_pair = parse_line(line, &variables, &assign_to_list);
+  ASSERT(line_pair.first == "Server", "error");
+  const int port = integer("port", &line_pair.second, 50007);
+  const int buffer_size = integer("buffer_size", &line_pair.second, 1000);
+  FEASST_CHECK_ALL_USED(line_pair.second);
+  std::cout << "# initializing server on localhost port " << port << std::endl;
+  char* buffer = new char[buffer_size + 1];
+  int size;
+  int server_socket=socket(AF_INET, SOCK_STREAM, 0);
+  sockaddr_in serverAddr;
+  serverAddr.sin_family = AF_INET;
+  serverAddr.sin_port = htons(port);
+  serverAddr.sin_addr.s_addr = INADDR_ANY;
+  bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(struct sockaddr));
+  listen(server_socket, 1);
+  sockaddr_in clientAddr;
+  socklen_t sin_size = sizeof(struct sockaddr_in);
+  int client_socket = accept(server_socket, (struct sockaddr*)&clientAddr, &sin_size);
+  bool finished = false;
+  std::string sim_type;
+  std::shared_ptr<MonteCarlo> mc;
+  while (!finished) {
+    bzero(buffer, buffer_size);
+    size = read(client_socket, buffer, buffer_size/2);
+    DEBUG("received: " << buffer);
+    DEBUG("receive size: " << size);
+    ASSERT(size >= 0, "error");
+    if (strcmp(buffer, "EndListen") == 0) {
+      DEBUG(buffer);
+      finished = true;
+    } else {
+      if (size > 0) {
+        std::string line(buffer);
+        std::pair<std::string, argtype> marg = parse_line(line, NULL, NULL);
+        DEBUG(marg.first);
+        DEBUG(str(marg.second));
+        if (marg.first == "MonteCarlo") {
+          std::cout << "MonteCarlo" << std::endl;
+          sim_type = marg.first;
+          mc = std::make_shared<MonteCarlo>();
+        } else {
+          arglist list(1);
+          list[0] = marg;
+          if (sim_type.empty()) {
+            FATAL(marg.first << " not yet implemented in server-client mode.");
+          } else if (sim_type == "MonteCarlo") {
+            mc->parse_args(&list);
+          }
+          ASSERT(list.size() == 0, "Unrecognized argument: " << list.begin()->first);
+        }
+      }
+      strcpy(buffer, "received");
+      size = write(client_socket, buffer, strlen(buffer));
+      DEBUG("sent: " << buffer);
+      DEBUG("send size: " << size);
+    }
+    ASSERT(size >= 0, "error");
+  }
+  close(server_socket);
+  delete[] buffer;
+}
+
 /**
   Usage: ./fst < file.txt
 
@@ -146,10 +219,12 @@ int main() {
     parse_prefetch(line);
   } else if (line.substr(0, 22) == "CollectionMatrixSplice") {
     parse_cm(line);
+  } else if (line.substr(0, 6) == "Server") {
+    parse_server(line);
   } else {
     FATAL("As currently implemented, all FEASST input text files must begin "
-      << "with \"MonteCarlo,\" \"CollectionMatrixSplice\" or \"Prefetch.\" "
-      << "The first readable line in this file is: " << line);
+      << "with \"MonteCarlo,\" \"CollectionMatrixSplice,\" \"Prefetch\" "
+      << "or \"Server.\" The first readable line in this file is: " << line);
   }
   return 0;
 }

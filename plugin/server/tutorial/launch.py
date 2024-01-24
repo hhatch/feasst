@@ -37,8 +37,7 @@ def write_feasst_script(params, script_file):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(script_file, 'w', encoding='utf-8') as myfile:
         myfile.write("""
-MonteCarlo
-Listen port {port} buffer_size {buffer_size}
+Server port {port} buffer_size {buffer_size}
 """.format(**params))
 
 def server(params):
@@ -49,7 +48,8 @@ def server(params):
 def client(params):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("localhost", params['port']))
-    for line in ['RandomMT19937 seed '+str(params['seed']),
+    for line in ['MonteCarlo',
+                 'RandomMT19937 seed '+str(params['seed']),
                  'Configuration cubic_side_length 8 particle_type0 /feasst/particle/lj.fstprt',
                  'Potential Model LennardJones',
                  'ThermoParams beta 1 chemical_potential0 1',
