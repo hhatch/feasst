@@ -17,18 +17,8 @@ PARSER.add_argument('--feasst_install', type=str, default='../../../build/',
 PARSER.add_argument('--port', type=int, default=54321, help='server client interface port')
 PARSER.add_argument('--buffer_size', type=int, default=1000, help='server client interface port')
 PARSER.add_argument('--procs_per_node', type=int, default=1, help='number of processors')
-PARSER.add_argument('--run_type', '-r', type=int, default=0,
-                    help='0: run, 1: submit to queue, 2: post-process')
 PARSER.add_argument('--seed', type=int, default=-1,
                     help='Random number generator seed. If -1, assign random seed to each sim.')
-PARSER.add_argument('--max_restarts', type=int, default=10, help='Number of restarts in queue')
-PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
-PARSER.add_argument('--scratch', type=str, default=None,
-                    help='Optionally write scheduled job to scratch/logname/jobid.')
-PARSER.add_argument('--queue_flags', type=str, default="", help='extra flags for queue (e.g., for slurm, "-p queue")')
-PARSER.add_argument('--node', type=int, default=0, help='node ID')
-PARSER.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
-PARSER.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
 
 # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
 ARGS, UNKNOWN_ARGS = PARSER.parse_known_args()
@@ -38,7 +28,7 @@ PARAMS['prefix'] = 'listen'
 PARAMS['script'] = __file__
 PARAMS['sim_id_file'] = PARAMS['prefix']+ '_sim_ids.txt'
 PARAMS['procs_per_sim'] = 1
-PARAMS['num_sims'] = PARAMS['num_nodes']*PARAMS['procs_per_node']
+PARAMS['num_sims'] = PARAMS['procs_per_node']
 if PARAMS['seed'] == -1:
     PARAMS['seed'] = random.randrange(int(1e9))
 
