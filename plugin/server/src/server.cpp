@@ -91,6 +91,8 @@ void Server::send(const char* message) {
 
 void Server::send(const std::string message) {
   strcpy(buffer_, message.c_str());
+  const size_t len = strlen(buffer_);
+  ASSERT(len <= message.length(), "message is larger than buffer");
   const int size = write(client_socket_, buffer_, strlen(buffer_));
   DEBUG("sent: " << buffer_);
   DEBUG("send size: " << size);
