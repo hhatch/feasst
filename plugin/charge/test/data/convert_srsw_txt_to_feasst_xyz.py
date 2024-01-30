@@ -13,6 +13,7 @@ for U in [2.50251E+04, -1.63091E+02, 2.23372E+04, -1.71462E+05, 2.85884E+06, -2.
     print('U(K)', U, 'U(kJ/mol)', U*physical_constants.MolarGasConstant().value()/1e3)
 
 print('U_ewald_config4', 185.60955025935957*1e3/physical_constants.MolarGasConstant().value())
+print('U_ewald_config4', 185.720351510974*1e3/physical_constants.MolarGasConstant().value())
 
 lx=30
 ly=28.97777478867205
