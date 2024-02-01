@@ -1,6 +1,13 @@
 """
 Example Mayer-sampling simulation of a square well with a hard sphere reference.
 Compare with Eq. 6 of https://doi.org/10.1063/1.1569473
+
+As an excercise, consider modifying this tutorial to compute the B2 of LennardJones with the following steps:
+- Compare with a known result, such as temperature at which the B2 is zero: T_Boyle=3.417928023 from https://doi.org/10.1016/S0378-4371(00)00362-9
+- Set beta = 1/3.417928023
+- Set cutoff to 1/2 the box (e.g., 5e9 for 1e10 box)
+- Replace the line "Potential Model SquareWell" with "Potential Model LennardJones"
+- Set b2reduced_analytical to zero.
 """
 
 import argparse
@@ -60,9 +67,10 @@ def write_feasst_script(params, script_file):
         myfile.write("""
 MonteCarlo
 RandomMT19937 seed {seed}
-Configuration cubic_side_length 500 particle_type0 {fstprt} \
+Configuration cubic_side_length 1e10 particle_type0 {fstprt} \
     add_particles_of_type0 2 \
-    group0 first first_particle_index 0
+    group0 first first_particle_index 0 \
+    cutoff {cutoff}
 Potential Model SquareWell
 RefPotential Model HardSphere sigma 0 sigma0 {reference_sigma} cutoff 0 cutoff0 {reference_sigma}
 ThermoParams beta {beta}
