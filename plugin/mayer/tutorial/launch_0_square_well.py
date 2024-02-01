@@ -1,6 +1,8 @@
 """
-Example Mayer-sampling simulation of a square well with a hard sphere reference.
+Example Mayer-sampling (https://doi.org/10.1103/PhysRevLett.92.220601) simulation of a square well with a hard sphere reference.
 Compare with Eq. 6 of https://doi.org/10.1063/1.1569473
+
+Note that the post_process compares the simulated with the expected result using reduced which is the B2 divided by the B2 of the hard sphere of unit diameter.
 
 As an excercise, consider modifying this tutorial to compute the B2 of LennardJones with the following steps:
 - Compare with a known result, such as temperature at which the B2 is zero: T_Boyle=3.417928023 from https://doi.org/10.1016/S0378-4371(00)00362-9
