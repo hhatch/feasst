@@ -1,7 +1,7 @@
 """
 Flat-histogram simulation of single-site Lennard Jones particles in the grand canonical ensemble.
-Simulate the adsorption of an LJ fluid instead of a rigid porous network of WCA
-particles as described in https://doi.org/10.1021/acs.jpcb.3c00613 .
+Simulate the adsorption of an LJ fluid instead of a rigid porous network of WCA particles,
+as described in https://doi.org/10.1021/acs.jpcb.3c00613 .
 """
 
 import argparse
