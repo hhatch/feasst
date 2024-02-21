@@ -1,5 +1,5 @@
 ***************************
-Python interface
+Python interface with SWIG
 ***************************
 
 Installation is described in :doc:`/../tutorial/library/tutorial`

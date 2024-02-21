@@ -1,5 +1,9 @@
 #include <pybind11/pybind11.h>
-#include "math/include/position.h"
+#include <string>
+//#include "math/include/position.h"
+//#include "system/include/system.h"
+#include "utils/include/arguments.h"
+#include "monte_carlo/include/monte_carlo.h"
 //#include "feasst/include/feasst.h"
 
 #define STRINGIFY(x) #x
@@ -9,8 +13,11 @@ int add(int i, int j) {
     return i + j;
 }
 
-feasst::Position mc() {
-  return feasst::Position();
+void parse(feasst::MonteCarlo * mc, const std::string& line) {
+  auto parsed = feasst::parse_line(line, NULL, NULL);
+  feasst::arglist list;
+  list.push_back(parsed);
+  mc->begin(list);
 }
 
 namespace py = pybind11;
@@ -41,7 +48,11 @@ PYBIND11_MODULE(_core, m) {
         Some other explanation about the subtract function.
     )pbdoc");
 
-    m.def("mc", &mc, R"pbdoc(
+    py::class_<feasst::MonteCarlo>(m, "MonteCarlo")
+        .def(py::init<>());
+        //.def("begin", &feasst::MonteCarlo::begin);
+
+    m.def("parse", &parse, R"pbdoc(
         Hi
     )pbdoc");
 
