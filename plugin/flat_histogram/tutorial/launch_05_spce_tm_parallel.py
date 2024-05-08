@@ -1,8 +1,6 @@
 """
 Flat-histogram simulation of SPC/E water in the grand canonical ensemble.
 The default temperature of 525 K is above the critical point.
-Dual-cut configurational bias is used for insertions and deletions with a reference potential of
-hard spheres on the oxygen sigma.
 The results are are compared with the SRSW https://doi.org/10.18434/T4M88Q
 (which use CODATA2010 physical constants).
 """
@@ -29,8 +27,6 @@ PARSER.add_argument('--min_sweeps', type=int, default=5,
                     help='Minimum number of sweeps defined in https://dx.doi.org/10.1063/1.4918557')
 PARSER.add_argument('--cubic_side_length', type=float, default=20,
                     help='cubic periodic boundary length')
-PARSER.add_argument('--dccb_cut', type=float, default=0.9*3.165,
-                    help='dual-cut configurational bias cutoff')
 PARSER.add_argument('--trials_per_iteration', type=int, default=int(1e6),
                     help='like cycles, but not necessary num_particles')
 PARSER.add_argument('--equilibration_iterations', type=int, default=0,
@@ -66,10 +62,6 @@ PARAMS['procs_per_sim'] = PARAMS['procs_per_node']
 PARAMS['alpha'] = 5.6/PARAMS['cubic_side_length']
 PARAMS['beta'] = 1./(PARAMS['temperature']*physical_constants.MolarGasConstant().value()/1e3) # mol/kJ
 PARAMS['mu'] = PARAMS['beta_mu']/PARAMS['beta']
-PARAMS['dccb_cut'] = PARAMS['cubic_side_length']/int(PARAMS['cubic_side_length']/PARAMS['dccb_cut']) # maximize inside box
-PARAMS['place_h'] = 'angle true mobile_site 2 anchor_site 0 anchor_site2 1 reference_index 0'
-if 'tip4p' in PARAMS['fstprt']:
-    PARAMS['place_h'] = 'branch true mobile_site 2 mobile_site2 3 anchor_site 0 anchor_site2 1 reference_index 0'
 
 def write_feasst_script(params, script_file):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -84,7 +76,6 @@ RandomMT19937 seed {seed}
 Configuration cubic_side_length {cubic_side_length} particle_type0 {fstprt} group0 oxygen oxygen_site_type 0
 Potential VisitModel Ewald alpha {alpha} kmax_squared 38
 Potential Model ModelTwoBodyFactory model0 LennardJones model1 ChargeScreened erfc_table_size 2e4 VisitModel VisitModelCutoffOuter
-RefPotential Model HardSphere group oxygen cutoff {dccb_cut} VisitModel VisitModelCell min_length {dccb_cut} cell_group oxygen
 Potential Model ChargeScreenedIntra VisitModel VisitModelBond
 Potential Model ChargeSelf
 Potential VisitModel LongRangeCorrections
