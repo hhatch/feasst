@@ -14,7 +14,7 @@ from pyfeasst import physical_constants
 PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 PARSER.add_argument('--feasst_install', type=str, default='../../../build/',
                     help='FEASST install directory (e.g., the path to build)')
-PARSER.add_argument('--fluid', type=str, default='TrCO2.fstprt',
+PARSER.add_argument('--fluid', type=str, default='/feasst/particle/co2.fstprt',
                     help='FEASST particle definition of a fluid particle / adsorbate.')
 PARSER.add_argument('--temperature', type=float, default=303, help='temperature in Kelvin')
 PARSER.add_argument('--mu', type=float, default=-16, help='chemical potential')
