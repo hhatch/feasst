@@ -30,7 +30,7 @@ PARSER.add_argument('--domain1', type=str, default='4lyt', help='fstprt file')
 PARSER.add_argument('--domain2', type=str, default='4lyt', help='fstprt file')
 PARSER.add_argument('--run_type', '-r', type=int, default=0,
                     help='0: run, 1: submit to queue, 2: post-process')
-PARSER.add_argument('--hours_terminate', type=float, default=1, help='hours until termination')
+PARSER.add_argument('--hours_terminate', type=float, default=0.5, help='hours until termination')
 PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
 PARSER.add_argument('--procs_per_node', type=int, default=32, help='Number of nodes in queue')
 PARSER.add_argument('--scratch', type=str, default=None,

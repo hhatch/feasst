@@ -1,5 +1,4 @@
 # LAMMPS-inspired data file
-# TRAPPE CO2 http://trappe.oit.umn.edu/
 #
 #   O(1) - C(0) - O(2)
 #
@@ -20,23 +19,23 @@ charge elementary
 
 Site Labels
 
-0 C
-1 O
+0  C
+1  O
 
 Site Properties
 
-0 sigma 2.80 epsilon 0.2244904906901375 cutoff 14.0 charge  0.7  cutoff_outer 1.16
-1 sigma 3.05 epsilon 0.6568425468341059 cutoff 14.0 charge -0.35 cutoff_outer 1.16
+0 sigma 2.800 epsilon 0.224490417862045000 cutoff 15.0 charge  0.700 cutoff_outer 1.16
+1 sigma 3.050 epsilon 0.656842333744501000 cutoff 15.0 charge -0.350 cutoff_outer 1.16
 
 Sites
 
-0 0  0    0 0
-1 1 -1.16 0 0
-2 1  1.16 0 0
+0 0 0.0  0.0000 0.0
+1 1 0.0 -1.1600 0.0
+2 1 0.0  1.1600 0.0
 
 Bond Properties
 
-0 RigidBond length 1.16 delta 0.000001
+0 RigidBond length 1.160 delta 0.00001
 
 Bonds
 
@@ -50,4 +49,3 @@ Angle Properties
 Angles
 
 0 0 1 0 2
-
