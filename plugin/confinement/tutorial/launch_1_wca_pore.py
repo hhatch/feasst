@@ -79,7 +79,7 @@ Potential EnergyMap EnergyMapNeighborCriteria neighbor_index 0 Model LennardJone
 ConvertToRefPotential cutoff {dccb_cut} use_cell true
 ThermoParams beta {beta} chemical_potential {mu_init}
 Metropolis
-TrialTranslate weight 1 tunable_param 0.2 tunable_target_acceptance 0.25
+TrialTranslate weight 1 particle_type 0 tunable_param 0.2 tunable_target_acceptance 0.25
 TrialAVB2 weight 0.1 particle_type 0
 TrialAVB4 weight 0.1 particle_type 0
 CheckEnergy trials_per_update {trials_per_iteration} tolerance 1e-4
