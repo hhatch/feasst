@@ -16,6 +16,7 @@ PARSER.add_argument('--feasst_install', type=str, default='../../../build/',
                     help='FEASST install directory (e.g., the path to build)')
 PARSER.add_argument('--fluid', type=str, default='/feasst/particle/co2.fstprt',
                     help='FEASST particle definition of a fluid particle / adsorbate.')
+PARSER.add_argument('--cutoff', type=float, default=15, help='site-site cutoff distance in Angstroms')
 PARSER.add_argument('--temperature', type=float, default=303, help='temperature in Kelvin')
 PARSER.add_argument('--mu', type=float, default=-16, help='chemical potential')
 PARSER.add_argument('--mu_init', type=float, default=-1, help='initial chemical potential')
@@ -31,7 +32,7 @@ PARSER.add_argument('--trials_per_iteration', type=int, default=int(1e5),
 PARSER.add_argument('--equilibration_iterations', type=int, default=1e0,
                     help='number of iterations for equilibration')
 PARSER.add_argument('--hours_checkpoint', type=float, default=1, help='hours per checkpoint')
-PARSER.add_argument('--hours_terminate', type=float, default=2, help='hours until termination')
+PARSER.add_argument('--hours_terminate', type=float, default=1, help='hours until termination')
 PARSER.add_argument('--procs_per_node', type=int, default=32, help='number of processors')
 PARSER.add_argument('--run_type', '-r', type=int, default=0,
                     help='0: run, 1: submit to queue, 2: post-process')
@@ -71,7 +72,7 @@ WindowExponential maximum {max_particles} min0 {min_particles} num {procs_per_no
 Checkpoint checkpoint_file {prefix}{sim}_checkpoint.fst num_hours {hours_checkpoint} num_hours_terminate {hours_terminate}
 
 RandomMT19937 seed {seed}
-Configuration cubic_side_length {cubic_side_length} particle_type0 {fluid}
+Configuration cubic_side_length {cubic_side_length} particle_type0 {fluid} cutoff {cutoff}
 Potential VisitModel Ewald alpha {alpha} kmax_squared 27
 Potential Model ModelTwoBodyFactory model0 LennardJonesForceShift model1 ChargeScreened erfc_table_size 2e4 VisitModel VisitModelCutoffOuter
 Potential Model ChargeScreenedIntra VisitModel VisitModelBond
