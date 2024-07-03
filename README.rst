@@ -91,8 +91,8 @@ How to install (i.e., compile the executables)
     cd feasst/build
     cmake ..
     make install -j4
-    # optional python packages for feasst tutorials
-    pip install ../pyfeasst jupyter matplotlib pandas scipy
+    # Optional Python packages for feasst tutorials (virtual environment recommended)
+    pip install jupyter matplotlib pandas scipy ../pyfeasst
 
 The executables `fst` and `rst` should appear in `/path/to/feasst/build/bin/`.
 Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
