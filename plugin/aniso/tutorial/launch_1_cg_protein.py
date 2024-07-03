@@ -122,7 +122,8 @@ if __name__ == '__main__':
     prms['minutes'] = int(prms['hours_terminate']*60) # minutes allocated on queue
     prms['hours_terminate'] = 0.99*prms['hours_terminate'] - 0.0333 # terminate before queue
     prms['procs_per_sim'] = prms['procs_per_node']
-    prms['num_sims'] = prms['num_nodes']*prms['procs_per_node']
+    prms['num_nodes'] = 1
+    prms['num_sims'] = prms['num_nodes']
     orient_file_prefix = '''{prefix}{num_orientations_per_pi}'''.format(**prms)
     if os.path.isfile(orient_file_prefix+'.txt') and \
        os.path.isfile(orient_file_prefix+'_ij.txt'):
