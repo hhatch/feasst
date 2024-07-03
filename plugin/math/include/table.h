@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <vector>
+#include <sstream>
 #include "utils/include/arguments.h"
 
 namespace feasst {
