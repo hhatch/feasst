@@ -14,47 +14,14 @@ These orientation files only need to be generated once per num_orientations_per_
 After this step, the next script after_1_contact is called in post_process.
 """
 
+import copy
 import os.path
 import argparse
 import subprocess
 import pandas as pd
 from pyfeasst import fstio
 
-def write_feasst_script(params, script_file):
-    """ Write fst script for a single simulation with keys of params {} enclosed. """
-    with open(script_file, 'w', encoding='utf-8') as myfile:
-        myfile.write("""
-MonteCarlo
-Configuration cubic_side_length 2e2 particle_type0 /feasst/particle/spce.fstprt particle_type1 /feasst/particle/spce.fstprt \
-  add_particles_of_type0 1 add_particles_of_type1 1 \
-  group0 fixed fixed_particle_type 0 group1 mobile mobile_particle_type 1
-Potential Model ModelEmpty
-TabulateTwoRigidBody3D num_orientations_per_pi {num_orientations_per_pi} output_orientation_file {prefix}{num_orientations_per_pi}.txt
-
-MonteCarlo
-Configuration cubic_side_length 2e2 particle_type0 /feasst/particle/spce.fstprt particle_type1 /feasst/particle/propane.fstprt \
-  add_particles_of_type0 1 add_particles_of_type1 1 \
-  group0 fixed fixed_particle_type 0 group1 mobile mobile_particle_type 1
-Potential Model ModelEmpty
-TabulateTwoRigidBody3D num_orientations_per_pi {num_orientations_per_pi} output_orientation_file {prefix}{num_orientations_per_pi}_ij.txt
-""".format(**params))
-
-def post_process(params):
-    """ Check the final file length and then launch the next step. """
-    nk = params['num_orientations_per_pi']
-    for ij in [True, False]:
-        extra = ''
-        expected = (2*nk+1)**2 * (nk+1)**3
-        if ij:
-            expected = (2*nk+1)**3 * (nk+1)**2
-            extra = '_ij'
-        print('expected number of orientations:', expected)
-        df = pd.read_csv('''{prefix}{num_orientations_per_pi}'''.format(**params)+extra+'.txt', skiprows=1, sep=r'\s+')
-        assert expected == len(df.columns)
-    print('launching after_1_contact.py')
-    subprocess.check_call("""python after_1_contact.py --num_orientations_per_pi {num_orientations_per_pi} --run_type {run_type}""".format(**params), shell=True, executable='/bin/bash')
-
-if __name__ == '__main__':
+def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--feasst_install', type=str, default='../../../build/',
                         help='FEASST install directory (e.g., the path to build)')
@@ -73,9 +40,53 @@ if __name__ == '__main__':
     parser.add_argument('--node', type=int, default=0, help='node ID')
     parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
     parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
+
+    # additional in contact step (or more)
+    parser.add_argument('--pH', type=float, default=6, help='pH')
+    parser.add_argument('--domain1', type=str, default='4lyt', help='fstprt file')
+    parser.add_argument('--domain2', type=str, default='4lyt', help='fstprt file')
+    parser.add_argument('--contact_xyz_file', type=str, default='',
+                        help='If not empty, print contact configuration for each orientation')
+    parser.add_argument('--contact_xyz_index', type=int, default=-1,
+                        help='If not -1, print contact configuration for one orientation')
+
+    # additional in energy step (or more)
+    parser.add_argument('--num_z', type=int, default=7, help='num of distances per orientation')
+    parser.add_argument('--gamma', type=float, default=-4, help='stretching exponent for table')
+    parser.add_argument('--temperature', type=float, default=298.15, help='temperature in Kelvin')
+    parser.add_argument('--ionic_strength', type=float, default=0.15, help='formulation ionic strength of NaCl in Molar units')
+    parser.add_argument('--smoothing_distance', type=float, default=2, help='distance from cutoff to smooth to zero')
+    return parser
+
+def write_feasst_script(params, script_file):
+    """ Write fst script for a single simulation with keys of params {} enclosed. """
+    with open(script_file, 'w', encoding='utf-8') as myfile:
+        myfile.write("""
+MonteCarlo
+Configuration cubic_side_length 2e2 particle_type0 /feasst/particle/spce.fstprt particle_type1 /feasst/particle/spce.fstprt \
+  add_particles_of_type0 1 add_particles_of_type1 1 \
+  group0 fixed fixed_particle_type 0 group1 mobile mobile_particle_type 1
+Potential Model ModelEmpty
+TabulateTwoRigidBody3D num_orientations_per_pi {num_orientations_per_pi} output_orientation_file {prefix}{num_orientations_per_pi}.txt
+""".format(**params))
+
+def post_process(params):
+    """ Check the final file length and then launch the next step. """
+    nk = params['num_orientations_per_pi']
+    expected = (2*nk+1)**2 * (nk+1)**3
+    #print('expected number of orientations:', expected)
+    df = pd.read_csv('''{prefix}{num_orientations_per_pi}.txt'''.format(**params), skiprows=1, sep=r'\s+')
+    assert expected == len(df.columns)
+    print('launching after_1_contact.py')
+    subprocess.check_call('python after_1_contact.py '+fstio.dict_to_argparse(params['original_args']),
+                          shell=True, executable='/bin/bash')
+
+if __name__ == '__main__':
+    parser = parse()
     args, unknown_args = parser.parse_known_args()
     assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
     prms = vars(args)
+    prms['original_args'] = copy.deepcopy(prms)
     prms['script'] = __file__
     prms['prefix'] = 'orientations'
     prms['sim_id_file'] = prms['prefix'] + '_sim_ids.txt'

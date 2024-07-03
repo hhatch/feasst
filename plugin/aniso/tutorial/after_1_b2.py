@@ -32,7 +32,7 @@ PARSER.add_argument('--run_type', '-r', type=int, default=0,
 PARSER.add_argument('--prefix', type=str, default='b2', help='prefix for all output file names')
 PARSER.add_argument('--hours_terminate', type=float, default=5*24, help='hours until termination')
 PARSER.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
-PARSER.add_argument('--procs_per_node', type=int, default=32, help='Number of nodes in queue')
+PARSER.add_argument('--procs_per_node', type=int, default=16, help='Number of nodes in queue')
 PARSER.add_argument('--scratch', type=str, default=None,
                     help='Optionally write scheduled job to scratch/logname/jobid.')
 PARSER.add_argument('--queue_flags', type=str, default="", help='extra flags for queue (e.g., for slurm, "-p queue")')

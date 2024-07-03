@@ -10,6 +10,7 @@ import numpy as np
 import subprocess
 from pyfeasst import fstio
 from pyfeasst import physical_constants
+from launch_1_cg_protein import parse
 
 def write_feasst_script(params, script_file):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
@@ -28,7 +29,7 @@ TabulateTwoRigidBody3D proc {sim} num_proc {num_sims} input_orientation_file {or
 """.format(**params))
 
 def post_process(params):
-    subprocess.check_call(['sleep', '1'])
+    subprocess.check_call(['sleep', '5']) # without this command, combine doesn't read all tables?
     if not os.path.isfile('''{prefix}.txt'''.format(**params)):
         fstio.combine_tables_two_rigid_body(prefix=params['prefix'], suffix='.txt', num_procs=params['num_sims'])
         if params['num_orientations_per_pi'] == 6 and params['domain1'] == '4lyt' and params['domain2'] == params['domain1']:
@@ -43,31 +44,7 @@ def post_process(params):
     subprocess.check_call("""python after_1_b2.py --run_type {run_type}""".format(**params), shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
-    # Parse arguments from command line or change their default values.
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--feasst_install', type=str, default='../../../build/',
-                        help='FEASST install directory (e.g., the path to build)')
-    parser.add_argument('--num_orientations_per_pi', type=int, default=1, help='num orientations per 180 degrees')
-    parser.add_argument('--num_z', type=int, default=7, help='num of distances per orientation')
-    parser.add_argument('--gamma', type=float, default=-4, help='stretching exponent for table')
-    parser.add_argument('--temperature', type=float, default=298.15, help='temperature in Kelvin')
-    parser.add_argument('--ionic_strength', type=float, default=0.15, help='formulation ionic strength of NaCl in Molar units')
-    parser.add_argument('--smoothing_distance', type=float, default=2, help='distance from cutoff to smooth to zero')
-    parser.add_argument('--domain1', type=str, default='4lyt', help='fstprt file')
-    parser.add_argument('--domain2', type=str, default='4lyt', help='fstprt file')
-    parser.add_argument('--run_type', '-r', type=int, default=0,
-                        help='0: run, 1: submit to queue, 2: post-process')
-    parser.add_argument('--hours_terminate', type=float, default=14*24, help='hours until termination')
-    parser.add_argument('--num_nodes', type=int, default=1, help='Number of nodes in queue')
-    parser.add_argument('--procs_per_node', type=int, default=32, help='Number of nodes in queue')
-    parser.add_argument('--scratch', type=str, default=None,
-                        help='Optionally write scheduled job to scratch/logname/jobid.')
-    parser.add_argument('--queue_flags', type=str, default="", help='extra flags for queue (e.g., for slurm, "-p queue")')
-    parser.add_argument('--node', type=int, default=0, help='node ID')
-    parser.add_argument('--queue_id', type=int, default=-1, help='If != -1, read args from file')
-    parser.add_argument('--queue_task', type=int, default=0, help='If > 0, restart from checkpoint')
-
-    # Convert arguments into a parameter dictionary, and add argument-dependent parameters.
+    parser = parse()
     args, unknown_args = parser.parse_known_args()
     assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
     prms = vars(args)
