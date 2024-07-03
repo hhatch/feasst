@@ -3,7 +3,6 @@
 #define FEASST_CLUSTER_ENERGY_MAP_NEIGHBOR_H_
 
 #include <vector>
-//#include "utils/include/debug.h"
 #include "utils/include/arguments.h"
 #include "system/include/energy_map.h"
 #include "configuration/include/neighbor_criteria.h"
