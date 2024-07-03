@@ -37,7 +37,7 @@ void SelectReptate::serialize(std::ostream& ostr) const {
 }
 
 SelectReptate::SelectReptate(argtype args) : SelectReptate(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 SelectReptate::SelectReptate(argtype * args) : SelectEndSegment(args) {
   ASSERT(max_length() == 1, "requires max_length(" << max_length() << ") of 1");

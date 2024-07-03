@@ -18,7 +18,7 @@ RemoveModify::RemoveModify(argtype * args) {
   all_ = boolean("all", args, false);
 }
 RemoveModify::RemoveModify(argtype args) : RemoveModify(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapRemoveModify {

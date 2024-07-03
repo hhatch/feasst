@@ -8,7 +8,7 @@ namespace feasst {
 Background::Background(argtype args) {
   class_name_ = "Background";
   constant_ = dble("constant", &args);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Background::compute(

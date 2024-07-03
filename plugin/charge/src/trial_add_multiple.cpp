@@ -58,11 +58,11 @@ TrialAddMultiple::TrialAddMultiple(argtype * args) : Trial(args) {
       std::make_shared<TrialSelectParticle>(&arg),
       std::make_shared<PerturbAdd>(&arg),
       &arg);
-    FEASST_CHECK_ALL_USED(arg);
+    feasst_check_all_used(arg);
   }
 }
 TrialAddMultiple::TrialAddMultiple(argtype args) : TrialAddMultiple(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialAddMultiple::TrialAddMultiple(std::istream& istr) : Trial(istr) {

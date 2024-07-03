@@ -12,7 +12,7 @@ Spherocylinder::Spherocylinder(argtype * args) : VisitModelInner(args) {
   class_name_ = "Spherocylinder";
 }
 Spherocylinder::Spherocylinder(argtype args) : Spherocylinder(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 double Spherocylinder::calc_sph_sq_dist_vega_(const double rr, const double rw1,

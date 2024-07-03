@@ -58,11 +58,11 @@ TrialAVB2Half::TrialAVB2Half(argtype * args) : Trial(args) {
     std::make_shared<PerturbMoveAVB>(&perturb_args),
     args);
   set(compute);
-//  FEASST_CHECK_ALL_USED(args);
-  FEASST_CHECK_ALL_USED(perturb_args);
+//  feasst_check_all_used(args);
+  feasst_check_all_used(perturb_args);
 }
 TrialAVB2Half::TrialAVB2Half(argtype args) : TrialAVB2Half(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialAVB2Half::TrialAVB2Half(std::istream& istr) : Trial(istr) {
@@ -100,7 +100,7 @@ TrialAVB2::TrialAVB2(argtype * args) : TrialFactoryNamed() {
   add(trial_in2out);
 }
 TrialAVB2::TrialAVB2(argtype args) : TrialAVB2(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

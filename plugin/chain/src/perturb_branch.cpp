@@ -14,7 +14,7 @@ PerturbBranch::PerturbBranch(argtype * args) : PerturbMove(args) {
   class_name_ = "PerturbBranch";
 }
 PerturbBranch::PerturbBranch(argtype args) : PerturbBranch(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapPerturbBranch {

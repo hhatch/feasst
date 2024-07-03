@@ -25,7 +25,7 @@ TrialRotateCluster::TrialRotateCluster(argtype * args) : Trial(args) {
   set(std::make_shared<ComputeMoveCluster>());
 }
 TrialRotateCluster::TrialRotateCluster(argtype args) : TrialRotateCluster(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialRotateCluster::TrialRotateCluster(std::istream& istr) : Trial(istr) {

@@ -14,7 +14,7 @@ AEqualB::AEqualB(argtype * args) : Constraint() {
     << " == particle_type_B_: " << num_B_.type());
 }
 AEqualB::AEqualB(argtype args) : AEqualB(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool AEqualB::is_allowed(const System& system,

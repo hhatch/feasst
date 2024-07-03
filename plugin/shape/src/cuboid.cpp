@@ -41,7 +41,7 @@ Cuboid::Cuboid(argtype * args) : Shape() {
   }
 }
 Cuboid::Cuboid(argtype args) : Cuboid(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 double Cuboid::nearest_distance(const Position& point) const {

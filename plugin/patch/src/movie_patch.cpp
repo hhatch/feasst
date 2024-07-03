@@ -19,7 +19,7 @@ MoviePatch::MoviePatch(argtype * args) : AnalyzeWriteOnly(args) {
   args->insert({"append", "true"}); // always append
   xyz_ = FileXYZPatch(args);
 }
-MoviePatch::MoviePatch(argtype args) : MoviePatch(&args) { FEASST_CHECK_ALL_USED(args); }
+MoviePatch::MoviePatch(argtype args) : MoviePatch(&args) { feasst_check_all_used(args); }
 
 void MoviePatch::initialize(Criteria * criteria,
     System * system,

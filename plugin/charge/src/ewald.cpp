@@ -8,7 +8,7 @@
 
 namespace feasst {
 
-Ewald::Ewald(argtype args) : Ewald(&args) { FEASST_CHECK_ALL_USED(args); }
+Ewald::Ewald(argtype args) : Ewald(&args) { feasst_check_all_used(args); }
 Ewald::Ewald(argtype * args) {
   class_name_ = "Ewald";
   if (used("tolerance", *args)) {

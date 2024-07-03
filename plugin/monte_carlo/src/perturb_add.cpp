@@ -4,7 +4,7 @@
 namespace feasst {
 
 PerturbAdd::PerturbAdd(argtype args) : PerturbAdd(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbAdd::PerturbAdd(argtype * args) : Perturb(args) {
   class_name_ = "PerturbAdd";

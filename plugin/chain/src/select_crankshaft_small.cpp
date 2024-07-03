@@ -39,7 +39,7 @@ void SelectCrankshaftSmall::serialize(std::ostream& ostr) const {
 }
 
 SelectCrankshaftSmall::SelectCrankshaftSmall(argtype args) : SelectCrankshaftSmall(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 SelectCrankshaftSmall::SelectCrankshaftSmall(argtype * args) : TrialSelectParticle(args) {
   class_name_ = "SelectCrankshaftSmall";

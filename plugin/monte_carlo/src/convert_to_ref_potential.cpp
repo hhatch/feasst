@@ -18,7 +18,7 @@ ConvertToRefPotential::ConvertToRefPotential(argtype * args) {
   use_cell_ = boolean("use_cell", args, false);
 }
 ConvertToRefPotential::ConvertToRefPotential(argtype args) : ConvertToRefPotential(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapConvertToRefPotential {

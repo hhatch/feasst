@@ -15,7 +15,7 @@ class MapPerturbPivot {
 static MapPerturbPivot mapper_ = MapPerturbPivot();
 
 PerturbPivot::PerturbPivot(argtype args) : PerturbPivot(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbPivot::PerturbPivot(argtype * args) : PerturbRotate(args) {
   class_name_ = "PerturbPivot";

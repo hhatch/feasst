@@ -11,7 +11,7 @@ ConstrainNumParticles::ConstrainNumParticles(argtype * args) : Constraint() {
   type_ = integer("type", args, -1);
 }
 ConstrainNumParticles::ConstrainNumParticles(argtype args) : ConstrainNumParticles(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 int ConstrainNumParticles::num_particles(const System& system,

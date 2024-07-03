@@ -19,7 +19,7 @@ Yukawa::Yukawa(argtype * args) {
   set_kappa(dble("kappa", args, 1.));
 }
 Yukawa::Yukawa(argtype args) : Yukawa(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Yukawa::serialize(std::ostream& ostr) const {

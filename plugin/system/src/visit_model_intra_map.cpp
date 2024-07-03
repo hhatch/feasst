@@ -15,7 +15,7 @@ VisitModelIntraMap::VisitModelIntraMap(argtype * args) : VisitModel() {
   dihedral_weight_ = dble("dihedral_weight", args, -1);
 }
 VisitModelIntraMap::VisitModelIntraMap(argtype args) : VisitModelIntraMap(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelIntraMap::precompute(Configuration * config) {

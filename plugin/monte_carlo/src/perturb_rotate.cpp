@@ -7,7 +7,7 @@
 namespace feasst {
 
 PerturbRotate::PerturbRotate(argtype args) : PerturbRotate(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbRotate::PerturbRotate(argtype * args) : PerturbMove(args) {
   class_name_ = "PerturbRotate";

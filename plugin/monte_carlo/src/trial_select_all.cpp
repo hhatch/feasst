@@ -9,7 +9,7 @@ TrialSelectAll::TrialSelectAll(argtype * args) : TrialSelect(args) {
   class_name_ = "TrialSelectAll";
 }
 TrialSelectAll::TrialSelectAll(argtype args) : TrialSelectAll(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapTrialSelectAll {

@@ -224,4 +224,15 @@ std::pair<std::string, argtype> parse_line(const std::string line,
   return std::pair<std::string, argtype>(major, args);
 }
 
+void feasst_check_all_used(const argtype& args) {
+  if (args.size() != 0) {
+    ASSERT(args.size() == 1 && args.begin()->first.empty() &&
+      args.begin()->second.empty(),
+      "unused argument(s): " << feasst::str(args) << ". If the arguments " <<
+      "are unused, the argument parser did not expect the first keyword " <<
+      "in each of the above argument pair(s). There may be a typo, a " <<
+      "keyword intended for a different class, or a deprecated keyword.");
+  }
+}
+
 }  // namespace feasst

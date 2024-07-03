@@ -165,7 +165,7 @@ double Shape::integrate(
     }
     ++irad;
   }
-  //FEASST_CHECK_ALL_USED(*args);
+  //feasst_check_all_used(*args);
   return sum;
 }
 double Shape::integrate(

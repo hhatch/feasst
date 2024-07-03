@@ -35,7 +35,7 @@ PressureFromTestVolume::PressureFromTestVolume(argtype * args) : Modify(args) {
   delta_volume_ = dble("delta_volume", args, 1e-4);
 }
 PressureFromTestVolume::PressureFromTestVolume(argtype args) : PressureFromTestVolume(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void PressureFromTestVolume::initialize(Criteria * criteria,

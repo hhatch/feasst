@@ -56,14 +56,14 @@ Potential::Potential(std::shared_ptr<Model> model,
                      argtype args) : Potential(&args) {
   model_ = model;
   visit_model_ = std::make_shared<VisitModel>();
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Potential::Potential(std::shared_ptr<VisitModel> visit_model,
                      argtype args) : Potential(&args) {
   model_ = std::make_shared<ModelEmpty>();
   visit_model_ = visit_model;
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Potential::Potential(
@@ -72,7 +72,7 @@ Potential::Potential(
     argtype args) : Potential(&args) {
   model_ = model;
   visit_model_ = visit_model;
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Potential::Potential(argtype args) : Potential(&args) {
@@ -84,7 +84,7 @@ Potential::Potential(argtype args) : Potential(&args) {
   visit_model_ = VisitModel().factory(name, &args);
   DEBUG(visit_model_->class_name());
   DEBUG("checking args: " << str(args));
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Potential::set(const ModelParams& model_params) {
@@ -231,7 +231,7 @@ void Potential::precompute(Configuration * config) {
         }
       }
     }
-    FEASST_CHECK_ALL_USED(args);
+    feasst_check_all_used(args);
   }
 }
 

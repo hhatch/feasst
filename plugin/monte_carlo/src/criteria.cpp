@@ -25,7 +25,7 @@ Criteria::Criteria(argtype * args) {
   }
 }
 Criteria::Criteria(argtype args) : Criteria(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Criteria::Criteria(std::shared_ptr<Constraint> constraint, argtype args)

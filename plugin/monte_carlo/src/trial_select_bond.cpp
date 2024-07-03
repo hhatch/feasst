@@ -5,7 +5,7 @@
 namespace feasst {
 
 TrialSelectBond::TrialSelectBond(argtype args) : TrialSelectBond(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialSelectBond::TrialSelectBond(argtype * args) : TrialSelect(args) {
   class_name_ = "TrialSelectBond";

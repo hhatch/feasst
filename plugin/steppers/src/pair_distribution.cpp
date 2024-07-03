@@ -71,7 +71,7 @@ PairDistribution::PairDistribution(argtype * args) : Modify(args) {
   DEBUG("output_file " << output_file());
 }
 PairDistribution::PairDistribution(argtype args) : PairDistribution(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void PairDistribution::initialize(Criteria * criteria,

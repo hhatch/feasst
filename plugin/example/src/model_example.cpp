@@ -34,7 +34,7 @@ ModelExample::ModelExample(argtype * args) {
     0);                       // (optional) default value if no argument given.
 }
 ModelExample::ModelExample(argtype args) : ModelExample(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ModelExample::precompute(const ModelParams& existing) {

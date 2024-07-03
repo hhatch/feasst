@@ -19,7 +19,7 @@ WLTM::WLTM(argtype * args) {
   transition_matrix_ = std::make_shared<TransitionMatrix>(args);
 }
 WLTM::WLTM(argtype args) : WLTM(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool WLTM::is_wl_bias_(const Macrostate& macro) const {

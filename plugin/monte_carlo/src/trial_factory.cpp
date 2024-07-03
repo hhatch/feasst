@@ -10,7 +10,7 @@ TrialFactory::TrialFactory(argtype * args) : Trial(args) {
   data_.get_dble_2D()->resize(1);
 }
 TrialFactory::TrialFactory(argtype args) : TrialFactory(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapTrialFactory {

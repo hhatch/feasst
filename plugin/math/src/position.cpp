@@ -248,7 +248,7 @@ Position::Position(argtype * args) {
   }
 }
 Position::Position(argtype args) : Position(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Position::orthogonal(const Position& orthogonal) {

@@ -17,7 +17,7 @@ HeatCapacity::HeatCapacity(argtype * args) : Analyze(args) {
   energy_ = *MakeAccumulator({{"num_moments", "3"}});
 }
 HeatCapacity::HeatCapacity(argtype args) : HeatCapacity(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void HeatCapacity::initialize(Criteria * criteria,

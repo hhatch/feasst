@@ -28,7 +28,7 @@ NeighborCriteria::NeighborCriteria(argtype * args) {
     " must be either both -1 or neither -1");
 }
 NeighborCriteria::NeighborCriteria(argtype args) : NeighborCriteria(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool NeighborCriteria::is_accepted(const double energy,

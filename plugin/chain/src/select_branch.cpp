@@ -4,7 +4,7 @@
 namespace feasst {
 
 SelectBranch::SelectBranch(argtype args) : SelectBranch(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 SelectBranch::SelectBranch(argtype * args) : TrialSelectAngle(args) {
   class_name_ = "SelectBranch";

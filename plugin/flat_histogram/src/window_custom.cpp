@@ -19,13 +19,13 @@ WindowCustom::WindowCustom(argtype args) : Window(&args) {
   }
   segment.push_back(dble("max", &args));
   init_segment_(segment);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 WindowCustom::WindowCustom(const std::vector<double> segment,
                            argtype args) : Window(&args) {
   init_segment_(segment);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void WindowCustom::init_segment_(std::vector<double> segment) {

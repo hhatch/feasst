@@ -21,7 +21,7 @@ EnergyMapNeighborCriteria::EnergyMapNeighborCriteria(argtype * args)
 }
 EnergyMapNeighborCriteria::EnergyMapNeighborCriteria(argtype args)
   : EnergyMapNeighborCriteria(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 EnergyMapNeighborCriteria::EnergyMapNeighborCriteria(std::istream& istr)

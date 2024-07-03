@@ -23,7 +23,7 @@ EnergyMapAll::EnergyMapAll(argtype * args) : EnergyMap(args) {
   data_.get_dble_6D()->resize(2);
 }
 EnergyMapAll::EnergyMapAll(argtype args) : EnergyMapAll(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 EnergyMapAll::EnergyMapAll(std::istream& istr) : EnergyMap(istr) {

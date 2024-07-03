@@ -31,7 +31,7 @@ RandomMT19937::RandomMT19937(argtype * args) : Random(args) {
   parse_seed_(args);
 }
 RandomMT19937::RandomMT19937(argtype args) : RandomMT19937(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void RandomMT19937::serialize(std::ostream& ostr) const {

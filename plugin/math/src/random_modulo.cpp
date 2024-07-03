@@ -37,7 +37,7 @@ RandomModulo::RandomModulo(argtype * args) : Random(args) {
   parse_seed_(args);
 }
 RandomModulo::RandomModulo(argtype args) : RandomModulo(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void RandomModulo::serialize(std::ostream& ostr) const {

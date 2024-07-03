@@ -23,7 +23,7 @@ Server::Server(argtype * args) {
   ASSERT(buffer_size_ % 2 == 0, "buffer_size must be even.");
 }
 Server::Server(argtype args) : Server(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Server::~Server() {

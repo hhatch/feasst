@@ -47,7 +47,7 @@ GhostTrialGrow::GhostTrialGrow(argtype * args) : Modify(args) {
   grow_.add(grow->trials()[0]);
 }
 GhostTrialGrow::GhostTrialGrow(argtype args) : GhostTrialGrow(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void GhostTrialGrow::initialize(Criteria * criteria,

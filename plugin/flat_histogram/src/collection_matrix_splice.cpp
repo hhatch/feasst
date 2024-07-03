@@ -33,7 +33,7 @@ CollectionMatrixSplice::CollectionMatrixSplice(argtype * args) {
 }
 CollectionMatrixSplice::CollectionMatrixSplice(argtype args) :
   CollectionMatrixSplice(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 const MonteCarlo& CollectionMatrixSplice::clone(const int index) const {

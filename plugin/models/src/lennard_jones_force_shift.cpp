@@ -19,7 +19,7 @@ LennardJonesForceShift::LennardJonesForceShift(argtype * args)
   class_name_ = "LennardJonesForceShift";
 }
 LennardJonesForceShift::LennardJonesForceShift(argtype args) : LennardJonesForceShift(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void LennardJonesForceShift::serialize(std::ostream& ostr) const {

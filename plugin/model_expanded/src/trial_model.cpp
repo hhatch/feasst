@@ -26,7 +26,7 @@ TrialModel::TrialModel(argtype * args) : Trial(args) {
   set(MakeComputeModel());
 }
 TrialModel::TrialModel(argtype args) : TrialModel(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialModel::TrialModel(std::istream& istr) : Trial(istr) {

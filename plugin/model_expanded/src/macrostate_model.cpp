@@ -10,11 +10,11 @@ MacrostateModel::MacrostateModel(const Histogram& histogram,
 }
 MacrostateModel::MacrostateModel(const Histogram& histogram,
     argtype args) : MacrostateModel(histogram, &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 MacrostateModel::MacrostateModel(argtype args) :
     MacrostateModel(Histogram(&args), &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapMacrostateModel {

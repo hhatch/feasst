@@ -22,7 +22,7 @@ Run::Run(argtype * args) {
   class_name_ = "Run";
 }
 Run::Run(argtype args) : Run(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapRun {

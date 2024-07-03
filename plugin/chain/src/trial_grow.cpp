@@ -358,9 +358,9 @@ void TrialGrow::build_(std::vector<argtype> * args) {
         {"reference_index", str("reference_index", &iargs, default_reference_index)},
         {"new_only", str("new_only", &iargs, default_new_only)},
       };
-      FEASST_CHECK_ALL_USED(iargs);
+      feasst_check_all_used(iargs);
       trial->add_stage(select, perturb, &stage_args);
-      FEASST_CHECK_ALL_USED(stage_args);
+      feasst_check_all_used(stage_args);
     }
     if (trial_types[0] == "gibbs_transfer") {
       ASSERT(static_cast<int>(trial_types.size()) == 1,
@@ -474,7 +474,7 @@ TrialGrowFile::TrialGrowFile(argtype * args) : TrialGrow() {
   }
 }
 TrialGrowFile::TrialGrowFile(argtype args) : TrialGrowFile(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

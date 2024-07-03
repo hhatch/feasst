@@ -12,11 +12,11 @@ MacrostatePosition::MacrostatePosition(const Histogram& histogram,
 }
 MacrostatePosition::MacrostatePosition(const Histogram& histogram,
     argtype args) : MacrostatePosition(histogram, &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 MacrostatePosition::MacrostatePosition(argtype args) :
     MacrostatePosition(Histogram(&args), &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 std::shared_ptr<Macrostate> MacrostatePosition::create(argtype * args) const {
   return std::make_shared<MacrostatePosition>(args);

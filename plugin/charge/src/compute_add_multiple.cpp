@@ -9,7 +9,7 @@ namespace feasst {
 
 ComputeAddMultiple::ComputeAddMultiple(argtype args)
   : ComputeAddMultiple(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 ComputeAddMultiple::ComputeAddMultiple(argtype * args)
   : TrialCompute(args) {

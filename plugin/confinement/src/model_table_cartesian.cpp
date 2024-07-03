@@ -126,7 +126,7 @@ void ModelTableCart1DHard::compute_table(
     table->set_data(bin, minimize.minimum(&objective));
     report->check();
   }
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapModelTableCart2DIntegr {
@@ -319,7 +319,7 @@ ModelTableCart3DIntegr::ModelTableCart3DIntegr(argtype *args) {
   write(table_file);
 }
 ModelTableCart3DIntegr::ModelTableCart3DIntegr(argtype args) : ModelTableCart3DIntegr(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ModelTableCart3DIntegr::read(const std::string file_name) {

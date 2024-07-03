@@ -15,7 +15,7 @@ ActionExample::ActionExample(argtype * args) {
   modify_name_ = str("modify_name", args, "");
 }
 ActionExample::ActionExample(argtype args) : ActionExample(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapActionExample {

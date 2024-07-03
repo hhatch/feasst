@@ -4,7 +4,7 @@
 namespace feasst {
 
 TrialSelectDihedral::TrialSelectDihedral(argtype args) : TrialSelectDihedral(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialSelectDihedral::TrialSelectDihedral(argtype * args) : TrialSelectAngle(args) {
   class_name_ = "TrialSelectDihedral";

@@ -31,7 +31,7 @@ Supertoroid::Supertoroid(argtype * args) : Shape() {
   }
 }
 Supertoroid::Supertoroid(argtype args) : Supertoroid(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 double Supertoroid::nearest_distance(const Position& point) const {

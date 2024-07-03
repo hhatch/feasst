@@ -31,7 +31,7 @@ FlatHistogram::FlatHistogram(argtype * args) : Criteria(args) {
         MakeWangLandau({{"min_flatness", "1"}})->factory(str("Bias", args), args));
 }
 FlatHistogram::FlatHistogram(argtype args) : FlatHistogram(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 FlatHistogram::FlatHistogram(std::shared_ptr<Macrostate> macrostate,

@@ -21,7 +21,7 @@ RadiusOfGyration::RadiusOfGyration(argtype * args) : Analyze(args) {
   }
 }
 RadiusOfGyration::RadiusOfGyration(argtype args) : RadiusOfGyration(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void RadiusOfGyration::initialize(Criteria * criteria,

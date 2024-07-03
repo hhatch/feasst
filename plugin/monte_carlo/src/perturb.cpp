@@ -3,7 +3,7 @@
 
 namespace feasst {
 
-Perturb::Perturb(argtype args) : Perturb(&args) { FEASST_CHECK_ALL_USED(args); }
+Perturb::Perturb(argtype args) : Perturb(&args) { feasst_check_all_used(args); }
 Perturb::Perturb(argtype * args) {
   tunable_ = Tunable(args);
 }

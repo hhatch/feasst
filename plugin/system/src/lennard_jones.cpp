@@ -21,7 +21,7 @@ LennardJones::LennardJones(argtype * args) {
   hard_sphere_threshold_sq_ = thres*thres;
 }
 LennardJones::LennardJones(argtype args) : LennardJones(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void LennardJones::serialize(std::ostream& ostr) const {

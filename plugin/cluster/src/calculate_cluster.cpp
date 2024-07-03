@@ -15,7 +15,7 @@ static MapCalculateCluster mapper_ = MapCalculateCluster();
 
 CalculateCluster::CalculateCluster(argtype * args) : Modify(args) {}
 CalculateCluster::CalculateCluster(argtype args) : CalculateCluster(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void CalculateCluster::initialize(Criteria * criteria,

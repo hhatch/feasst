@@ -15,7 +15,7 @@ PerturbVolume::PerturbVolume(argtype * args) : Perturb(args) {
   }
 }
 PerturbVolume::PerturbVolume(argtype args) : PerturbVolume(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapPerturbVolume {

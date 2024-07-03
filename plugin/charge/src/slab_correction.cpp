@@ -24,7 +24,7 @@ SlabCorrection::SlabCorrection(argtype * args) {
   data_.get_dble_1D()->resize(1);
 }
 SlabCorrection::SlabCorrection(argtype args) : SlabCorrection(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void SlabCorrection::serialize(std::ostream& ostr) const {

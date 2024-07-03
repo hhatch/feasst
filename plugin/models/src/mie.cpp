@@ -9,7 +9,7 @@ Mie::Mie(argtype * args) {
   class_name_ = "Mie";
 }
 Mie::Mie(argtype args) : Mie(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapMie {

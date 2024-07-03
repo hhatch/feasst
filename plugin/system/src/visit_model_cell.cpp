@@ -25,7 +25,7 @@ VisitModelCell::VisitModelCell(argtype * args) : VisitModel(args) {
   ASSERT(group_index_ >= 0, "invalid group_index: " << group_index_);
 }
 VisitModelCell::VisitModelCell(argtype args) : VisitModelCell(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 VisitModelCell::VisitModelCell(std::shared_ptr<VisitModelInner> inner,
   argtype args) : VisitModelCell(args) {

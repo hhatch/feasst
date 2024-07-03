@@ -32,7 +32,7 @@ TrialTransferAVB::TrialTransferAVB(argtype * args) : TrialFactoryNamed() {
   add(trial_remove);
 }
 TrialTransferAVB::TrialTransferAVB(argtype args) : TrialTransferAVB(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

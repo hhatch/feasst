@@ -5,7 +5,7 @@
 namespace feasst {
 
 SelectTwoSites::SelectTwoSites(argtype args) : SelectTwoSites(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 SelectTwoSites::SelectTwoSites(argtype * args) : TrialSelect(args) {
   class_name_ = "SelectTwoSites";

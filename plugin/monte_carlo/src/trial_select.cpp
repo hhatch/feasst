@@ -5,7 +5,7 @@
 namespace feasst {
 
 TrialSelect::TrialSelect(argtype args) : TrialSelect(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialSelect::TrialSelect(argtype * args) {
   // defaults

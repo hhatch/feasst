@@ -323,7 +323,7 @@ void System::change_volume(const double delta_volume, argtype * args) {
 }
 void System::change_volume(const double delta_volume, argtype args) {
   change_volume(delta_volume, &args);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 //double System::constrained_volume_change(argtype * args) {
@@ -332,7 +332,7 @@ void System::change_volume(const double delta_volume, argtype args) {
 //}
 //double System::constrained_volume_change(argtype args) {
 //  const double delta_volume = constrained_volume_change(&args);
-//  FEASST_CHECK_ALL_USED(args);
+//  feasst_check_all_used(args);
 //  return delta_volume;
 //}
 

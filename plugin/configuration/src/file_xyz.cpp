@@ -25,7 +25,7 @@ FileXYZ::FileXYZ(argtype * args) {
   euler_ = boolean("euler", args, false);
 }
 FileXYZ::FileXYZ(argtype args) : FileXYZ(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool FileXYZ::load_frame(std::ifstream& xyz_file, Configuration * config) const {

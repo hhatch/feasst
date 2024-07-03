@@ -68,7 +68,7 @@ Group::Group(argtype * args) : PropertiedEntity() {
   ASSERT(!spatial_, "spatial groups are not implemented");
 }
 Group::Group(argtype args) : Group(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool Group::is_empty() const {

@@ -16,7 +16,7 @@ FormulaSineWave::FormulaSineWave(argtype * args) : Formula(args) {
   shift_ = dble("shift", args, default_shift());
 }
 FormulaSineWave::FormulaSineWave(argtype args) : FormulaSineWave(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapFormulaSineWave {

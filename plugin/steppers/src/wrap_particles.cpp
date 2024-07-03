@@ -15,7 +15,7 @@ static MapWrapParticles mapper_energy_check_ = MapWrapParticles();
 WrapParticles::WrapParticles(argtype * args) : ModifyUpdateOnly(args) {
 }
 WrapParticles::WrapParticles(argtype args) : WrapParticles(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void WrapParticles::update(Criteria * criteria,

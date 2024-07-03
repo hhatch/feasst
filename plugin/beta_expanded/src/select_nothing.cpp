@@ -5,7 +5,7 @@
 namespace feasst {
 
 SelectNothing::SelectNothing(argtype args) : SelectNothing(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 SelectNothing::SelectNothing(argtype * args) : TrialSelect(args) {
   class_name_ = "SelectNothing";

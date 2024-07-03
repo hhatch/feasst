@@ -18,7 +18,7 @@ TablePotential::TablePotential(argtype * args) {
   }
 }
 TablePotential::TablePotential(argtype args) : TablePotential(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void TablePotential::read_table_(const std::string file_name) {

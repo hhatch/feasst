@@ -14,7 +14,7 @@ namespace feasst {
 class PerturbReptate : public PerturbDistance {
  public:
   PerturbReptate(argtype args = argtype()) : PerturbReptate(&args) {
-    FEASST_CHECK_ALL_USED(args);
+    feasst_check_all_used(args);
   }
   PerturbReptate(argtype * args) : PerturbDistance(args) {
     class_name_ = "PerturbReptate";

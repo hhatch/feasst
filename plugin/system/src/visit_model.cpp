@@ -25,7 +25,7 @@ VisitModel::VisitModel(argtype * args) {
   }
 }
 VisitModel::VisitModel(argtype args) : VisitModel(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 void VisitModel::compute(
     ModelOneBody * model,

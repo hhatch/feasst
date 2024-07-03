@@ -14,7 +14,7 @@
 namespace feasst {
 
 TransitionMatrix::TransitionMatrix(argtype args) : TransitionMatrix(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TransitionMatrix::TransitionMatrix(argtype * args) {
   class_name_ = "TransitionMatrix";

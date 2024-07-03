@@ -21,7 +21,7 @@ Metropolis::Metropolis(argtype * args) : Criteria(args) {
     integer("num_trials_per_iteration", args, 1e9);
 }
 Metropolis::Metropolis(argtype args) : Metropolis(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Metropolis::Metropolis(std::shared_ptr<Constraint> constraint) : Metropolis() {

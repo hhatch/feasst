@@ -31,7 +31,7 @@ TwoBodyAlpha::TwoBodyAlpha(argtype * args) {
   }
 }
 TwoBodyAlpha::TwoBodyAlpha(argtype args) : TwoBodyAlpha(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapTwoBodyAlpha {

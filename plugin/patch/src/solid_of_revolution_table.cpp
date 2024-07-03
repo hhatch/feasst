@@ -16,7 +16,7 @@ SolidOfRevolutionTable::SolidOfRevolutionTable(argtype * args) : VisitModelInner
   ignore_energy_ = boolean("ignore_energy", args, false);
 }
 SolidOfRevolutionTable::SolidOfRevolutionTable(argtype args) : SolidOfRevolutionTable(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void SolidOfRevolutionTable::read_table_(const std::string file_name,

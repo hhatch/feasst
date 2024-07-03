@@ -8,7 +8,7 @@ namespace feasst {
 
 ComputeRemoveMultiple::ComputeRemoveMultiple(argtype args)
   : ComputeRemoveMultiple(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 ComputeRemoveMultiple::ComputeRemoveMultiple(argtype * args)
   : TrialCompute(args) {

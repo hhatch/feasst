@@ -34,7 +34,7 @@ MayerSampling::MayerSampling(argtype * args) : Criteria(args) {
   training_per_write_ = integer("training_per_write", args, 1e4);
 }
 MayerSampling::MayerSampling(argtype args) : MayerSampling(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void MayerSampling::precompute(System * system) {

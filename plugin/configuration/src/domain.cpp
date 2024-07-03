@@ -49,7 +49,7 @@ Domain::Domain(argtype * args) {
   }
 }
 Domain::Domain(argtype args) : Domain(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 Domain& Domain::set_cubic(const double box_length) {

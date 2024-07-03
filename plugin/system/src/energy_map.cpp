@@ -14,7 +14,7 @@ EnergyMap::EnergyMap(argtype * args) {
   default_value_ = dble("default_value", args, 0.);
 }
 EnergyMap::EnergyMap(argtype args) : EnergyMap(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void EnergyMap::clear(

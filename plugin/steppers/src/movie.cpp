@@ -20,7 +20,7 @@ Movie::Movie(argtype * args) : AnalyzeWriteOnly(args) {
   xyz_ = FileXYZ(args);
   vmd_ = FileVMD(args);
 }
-Movie::Movie(argtype args) : Movie(&args) { FEASST_CHECK_ALL_USED(args); }
+Movie::Movie(argtype args) : Movie(&args) { feasst_check_all_used(args); }
 
 void Movie::initialize(Criteria * criteria,
     System * system,

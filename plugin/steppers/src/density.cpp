@@ -16,7 +16,7 @@ static MapDensity mapper_ = MapDensity();
 
 Density::Density(argtype * args) : Analyze(args) {}
 Density::Density(argtype args) : Density(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Density::initialize(Criteria * criteria,

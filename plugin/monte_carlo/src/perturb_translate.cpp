@@ -14,7 +14,7 @@ PerturbTranslate::PerturbTranslate(argtype * args) : PerturbMove(args) {
   }
 }
 PerturbTranslate::PerturbTranslate(argtype args) : PerturbTranslate(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapPerturbTranslate {

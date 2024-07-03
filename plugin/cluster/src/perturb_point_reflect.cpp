@@ -8,7 +8,7 @@ namespace feasst {
 
 PerturbPointReflect::PerturbPointReflect(argtype args) : PerturbMove(&args) {
   class_name_ = "PerturbPointReflect";
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapPerturbPointReflect {

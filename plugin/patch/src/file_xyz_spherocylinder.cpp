@@ -63,7 +63,7 @@ FileXYZSpherocylinder::FileXYZSpherocylinder(argtype * args) {
   append_ = boolean("append", args, false);
 }
 FileXYZSpherocylinder::FileXYZSpherocylinder(argtype args) : FileXYZSpherocylinder(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void FileXYZSpherocylinder::load(const std::string file_name, Configuration * config) const {

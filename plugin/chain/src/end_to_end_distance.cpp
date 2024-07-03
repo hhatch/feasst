@@ -17,7 +17,7 @@ EndToEndDistance::EndToEndDistance(argtype * args) : Analyze(args) {
   group_index_ = integer("group_index", args, 0);
 }
 EndToEndDistance::EndToEndDistance(argtype args) : EndToEndDistance(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void EndToEndDistance::initialize(Criteria * criteria,

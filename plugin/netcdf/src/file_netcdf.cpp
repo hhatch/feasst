@@ -24,7 +24,7 @@ FileNETCDF::FileNETCDF(argtype * args) : file_(file_parse_(args)) {
   float_precision_ = boolean("float_precision", args, false);
 }
 FileNETCDF::FileNETCDF(argtype args) : FileNETCDF(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 PrinterNETCDF::PrinterNETCDF(const bool euler,

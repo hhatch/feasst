@@ -27,7 +27,7 @@ SelectParticleAVBDivalent::SelectParticleAVBDivalent(argtype args)
   anchor_.add_site(0,
     integer("target_site_index", &args, 0));
   ASSERT(!used("group_index", args), "group not implemented with AVB");
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapSelectParticleAVBDivalent {

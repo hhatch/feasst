@@ -8,7 +8,7 @@
 #include <memory>
 #include "utils/include/io.h"
 #include "utils/include/utils.h"
-#include "utils/include/debug.h"
+//#include "utils/include/debug.h"
 
 namespace feasst {
 
@@ -96,17 +96,7 @@ bool boolean(const std::string& key, argtype * args,
 void append(const std::string& key, argtype * args, const std::string& append);
 
 /// Check that all arguments are used.
-# define FEASST_CHECK_ALL_USED(args) \
-{ \
-  if (args.size() != 0) { \
-    ASSERT(args.size() == 1 && args.begin()->first.empty() && \
-      args.begin()->second.empty(), \
-      "unused argument(s): " << feasst::str(args) << ". If the arguments " << \
-      "are unused, the argument parser did not expect the first keyword " << \
-      "in each of the above argument pair(s). There may be a typo, a " << \
-      "keyword intended for a different class, or a deprecated keyword."); \
-  } \
-}
+void feasst_check_all_used(const argtype& args);
 
 /// If args contains derived class of T, return factory pointer and remove from
 /// args.
@@ -126,7 +116,7 @@ std::shared_ptr<T> parse(T * obj, arglist * args) {
   //if (find_in_map((*args)[iarg].first, map, &find)) {
     new_obj = obj->factory(args->begin()->first, &args->begin()->second);
     //INFO(new_obj->class_name());
-    FEASST_CHECK_ALL_USED(args->begin()->second);
+    feasst_check_all_used(args->begin()->second);
     //new_obj = obj->factory((*args)[iarg].first, &(*args)[iarg].second);
     args->erase(args->begin());
     //args->erase(args->begin() + iarg);

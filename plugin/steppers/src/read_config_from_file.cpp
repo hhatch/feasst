@@ -8,7 +8,7 @@ ReadConfigFromFile::ReadConfigFromFile(argtype * args) : ModifyUpdateOnly(args) 
   xyz_ = FileXYZ(args);
 }
 ReadConfigFromFile::ReadConfigFromFile(argtype args) : ReadConfigFromFile(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapReadConfigFromFile {

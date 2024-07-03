@@ -4,7 +4,7 @@
 namespace feasst {
 
 TrialComputeTranslate::TrialComputeTranslate(argtype args) : TrialComputeTranslate(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialComputeTranslate::TrialComputeTranslate(argtype * args) : TrialCompute(args) {
   class_name_ = "TrialComputeTranslate";

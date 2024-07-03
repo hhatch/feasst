@@ -22,7 +22,7 @@ MovieNETCDF::MovieNETCDF(argtype * args)
   set_append();
 }
 MovieNETCDF::MovieNETCDF(argtype args) : MovieNETCDF(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void MovieNETCDF::initialize(Criteria * criteria,

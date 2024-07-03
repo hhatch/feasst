@@ -23,7 +23,7 @@ Jagla::Jagla(argtype * args) {
     num_discretized_steps_ << " not implemented");
 }
 Jagla::Jagla(argtype args) : Jagla(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Jagla::precompute(const ModelParams& existing) {

@@ -25,7 +25,7 @@ TrialRotate::TrialRotate(argtype * args) :
   set_description("TrialRotate");
 }
 TrialRotate::TrialRotate(argtype args) : TrialRotate(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialRotate::TrialRotate(std::istream& istr) : TrialMove(istr) {

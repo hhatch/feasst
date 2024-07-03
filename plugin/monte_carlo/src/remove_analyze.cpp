@@ -18,7 +18,7 @@ RemoveAnalyze::RemoveAnalyze(argtype * args) {
   all_ = boolean("all", args, false);
 }
 RemoveAnalyze::RemoveAnalyze(argtype args) : RemoveAnalyze(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapRemoveAnalyze {

@@ -20,7 +20,7 @@ VisitModelCutoffOuter::VisitModelCutoffOuter(argtype * args) : VisitModel() {
   }
 }
 VisitModelCutoffOuter::VisitModelCutoffOuter(argtype args) : VisitModelCutoffOuter(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 VisitModelCutoffOuter::VisitModelCutoffOuter(std::shared_ptr<VisitModelInner> inner,
   argtype args) : VisitModelCutoffOuter(args) {

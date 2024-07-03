@@ -23,7 +23,7 @@ DebyeHuckel::DebyeHuckel(argtype * args) {
   smoothing_distance_ = dble("smoothing_distance", args, -1.);
 }
 DebyeHuckel::DebyeHuckel(argtype args) : DebyeHuckel(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void DebyeHuckel::serialize(std::ostream& ostr) const {

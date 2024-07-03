@@ -19,7 +19,7 @@ RefPotential::RefPotential(argtype * args) {
   args->clear();
 }
 RefPotential::RefPotential(argtype args) : RefPotential(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapRefPotential {

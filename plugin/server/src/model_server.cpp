@@ -24,7 +24,7 @@ ModelServer::ModelServer(argtype * args) {
   server_ = std::make_shared<Server>(args);
 }
 ModelServer::ModelServer(argtype args) : ModelServer(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ModelServer::serialize(std::ostream& ostr) const {

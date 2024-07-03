@@ -30,7 +30,7 @@ TrialRemoveAVB::TrialRemoveAVB(argtype * args) : Trial(args) {
   set(MakeComputeRemoveAVB());
 }
 TrialRemoveAVB::TrialRemoveAVB(argtype args) : TrialRemoveAVB(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialRemoveAVB::TrialRemoveAVB(std::istream& istr) : Trial(istr) {

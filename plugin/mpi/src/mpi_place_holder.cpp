@@ -22,7 +22,7 @@ MPIPlaceHolder::MPIPlaceHolder(argtype * args) {
   class_name_ = "MPIPlaceHolder";
 }
 MPIPlaceHolder::MPIPlaceHolder(argtype args) : MPIPlaceHolder(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void MPIPlaceHolder::serialize(std::ostream& ostr) const {

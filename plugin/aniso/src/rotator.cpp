@@ -22,7 +22,7 @@ Rotator::Rotator(argtype * args) {
   proc_ = integer("proc", args, 0);
 }
 Rotator::Rotator(argtype args) : Rotator(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool Rotator::ior_in_proc(const int ior) const {

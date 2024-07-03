@@ -24,7 +24,7 @@ void Table1D::calc_d_() {
   bin_spacing_ = bin_spacing(num());
 }
 
-Table1D::Table1D(argtype args) : Table1D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table1D::Table1D(argtype args) : Table1D(&args) { feasst_check_all_used(args); }
 Table1D::Table1D(argtype * args) : Table() {
   const int num = integer("num", args, 1);
   data_.resize(num, dble("default_value", args, 0.));
@@ -110,7 +110,7 @@ void Table2D::calc_d_() {
     bin_spacing(num1())});
 }
 
-Table2D::Table2D(argtype args) : Table2D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table2D::Table2D(argtype args) : Table2D(&args) { feasst_check_all_used(args); }
 Table2D::Table2D(argtype * args) : Table() {
   const int num0 = integer("num0", args, 1);
   const int num1 = integer("num1", args, 1);
@@ -193,7 +193,7 @@ void Table3D::calc_d_() {
     bin_spacing(num2())});
 }
 
-Table3D::Table3D(argtype args) : Table3D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table3D::Table3D(argtype args) : Table3D(&args) { feasst_check_all_used(args); }
 Table3D::Table3D(argtype * args) : Table() {
   const int num0 = integer("num0", args, 1);
   const int num1 = integer("num1", args, 1);
@@ -335,7 +335,7 @@ void Table4D::calc_d_() {
     bin_spacing(num3())});
 }
 
-Table4D::Table4D(argtype args) : Table4D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table4D::Table4D(argtype args) : Table4D(&args) { feasst_check_all_used(args); }
 Table4D::Table4D(argtype * args) : Table() {
   const int num0 = integer("num0", args, 1);
   const int num1 = integer("num1", args, 1);
@@ -499,7 +499,7 @@ void Table5D::calc_d_() {
     bin_spacing(num4())});
 }
 
-Table5D::Table5D(argtype args) : Table5D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table5D::Table5D(argtype args) : Table5D(&args) { feasst_check_all_used(args); }
 Table5D::Table5D(argtype * args) : Table() {
   const int num0 = integer("num0", args, 1);
   const int num1 = integer("num1", args, 1);
@@ -705,7 +705,7 @@ void Table6D::calc_d_() {
     bin_spacing(num5())});
 }
 
-Table6D::Table6D(argtype args) : Table6D(&args) { FEASST_CHECK_ALL_USED(args); }
+Table6D::Table6D(argtype args) : Table6D(&args) { feasst_check_all_used(args); }
 Table6D::Table6D(argtype * args) : Table() {
   const int num0 = integer("num0", args, 1);
   const int num1 = integer("num1", args, 1);

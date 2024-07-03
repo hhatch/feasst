@@ -20,7 +20,7 @@ Scattering::Scattering(argtype * args) : Analyze(args) {
   num_frequency_ = integer("num_frequency", args, 100);
 }
 Scattering::Scattering(argtype args) : Scattering(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Scattering::initialize(Criteria * criteria,

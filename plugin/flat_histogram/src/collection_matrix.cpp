@@ -20,7 +20,7 @@ CollectionMatrix::CollectionMatrix(argtype * args) {
 }
 CollectionMatrix::CollectionMatrix(argtype args)
   : CollectionMatrix(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 int CollectionMatrix::visits_(const int macro, const int block, const bool lower) const {

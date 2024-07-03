@@ -13,7 +13,7 @@ VisitModelIntra::VisitModelIntra(argtype * args) : VisitModel(args) {
   set_intra_cut(integer("intra_cut", args, -1));
 }
 VisitModelIntra::VisitModelIntra(argtype args) : VisitModelIntra(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelIntra::compute(

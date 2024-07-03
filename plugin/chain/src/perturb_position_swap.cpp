@@ -8,7 +8,7 @@
 namespace feasst {
 
 PerturbPositionSwap::PerturbPositionSwap(argtype args) : PerturbPositionSwap(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbPositionSwap::PerturbPositionSwap(argtype * args) : PerturbMove(args) {
   class_name_ = "PerturbPositionSwap";

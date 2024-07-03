@@ -23,7 +23,7 @@ ScatteringFFTW::ScatteringFFTW(argtype * args) : Analyze(args) {
   delta_rho_ = dble("delta_rho", args, 1);
 }
 ScatteringFFTW::ScatteringFFTW(argtype args) : ScatteringFFTW(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ScatteringFFTW::resize_fftw_variables_() {

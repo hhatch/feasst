@@ -34,6 +34,6 @@ TrialTransferAVBDivalent::TrialTransferAVBDivalent(argtype * args) : TrialFactor
   add(trial_remove);
 }
 TrialTransferAVBDivalent::TrialTransferAVBDivalent(argtype args) : TrialTransferAVBDivalent(&args) {
-  // FEASST_CHECK_ALL_USED(args);
+  // feasst_check_all_used(args);
 }
 }  // namespace feasst

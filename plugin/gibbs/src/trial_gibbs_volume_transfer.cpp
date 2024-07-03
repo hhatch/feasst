@@ -31,7 +31,7 @@ TrialGibbsVolumeTransferOneWay::TrialGibbsVolumeTransferOneWay(argtype * args) :
     std::make_shared<TrialSelectAll>(&args2),
     std::make_shared<PerturbVolume>(&args2),
     &args2);
-  FEASST_CHECK_ALL_USED(args2);
+  feasst_check_all_used(args2);
   args->insert({"configuration_index", str(configuration_index)});
   args->insert({"constrain_volume_change", "true"});
   add_stage(
@@ -41,7 +41,7 @@ TrialGibbsVolumeTransferOneWay::TrialGibbsVolumeTransferOneWay(argtype * args) :
   set(MakeComputeGibbsVolumeTransfer());
 }
 TrialGibbsVolumeTransferOneWay::TrialGibbsVolumeTransferOneWay(argtype args) : TrialGibbsVolumeTransferOneWay(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialGibbsVolumeTransferOneWay::TrialGibbsVolumeTransferOneWay(std::istream& istr) : Trial(istr) {
@@ -85,7 +85,7 @@ TrialGibbsVolumeTransfer::TrialGibbsVolumeTransfer(argtype * args) : TrialFactor
   add(trial2);
 }
 TrialGibbsVolumeTransfer::TrialGibbsVolumeTransfer(argtype args) : TrialGibbsVolumeTransfer(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

@@ -18,7 +18,7 @@ NumParticles::NumParticles(argtype * args) : Analyze(args) {
   group_ = integer("group", args, -1);
 }
 NumParticles::NumParticles(argtype args) : NumParticles(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 std::string NumParticles::header(const Criteria& criteria,

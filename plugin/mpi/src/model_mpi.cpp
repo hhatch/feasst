@@ -24,7 +24,7 @@ ModelMPI::ModelMPI(argtype * args) {
   hard_sphere_threshold_sq_ = thres*thres;
 }
 ModelMPI::ModelMPI(argtype args) : ModelMPI(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 ModelMPI::~ModelMPI() {
   if (thread_) {

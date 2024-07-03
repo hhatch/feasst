@@ -28,7 +28,7 @@ TrialGibbsParticleTransferOneWay::TrialGibbsParticleTransferOneWay(argtype * arg
     std::make_shared<TrialSelectParticle>(&add_args),
     std::make_shared<PerturbAdd>(),
     &add_args);
-  FEASST_CHECK_ALL_USED(add_args);
+  feasst_check_all_used(add_args);
   args->insert({"configuration_index", str(configuration_index)});
   add_stage(
     std::make_shared<TrialSelectParticle>(args),
@@ -37,7 +37,7 @@ TrialGibbsParticleTransferOneWay::TrialGibbsParticleTransferOneWay(argtype * arg
   set(MakeComputeGibbsParticleTransfer());
 }
 TrialGibbsParticleTransferOneWay::TrialGibbsParticleTransferOneWay(argtype args) : TrialGibbsParticleTransferOneWay(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialGibbsParticleTransferOneWay::TrialGibbsParticleTransferOneWay(std::istream& istr) : Trial(istr) {
@@ -81,7 +81,7 @@ TrialGibbsParticleTransfer::TrialGibbsParticleTransfer(argtype * args) : TrialFa
   add(trial_remove);
 }
 TrialGibbsParticleTransfer::TrialGibbsParticleTransfer(argtype args) : TrialGibbsParticleTransfer(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

@@ -8,7 +8,7 @@ namespace feasst {
 
 PerturbDihedral::PerturbDihedral(argtype args)
   : PerturbDihedral(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbDihedral::PerturbDihedral(argtype * args)
   : PerturbDistanceAngle(args) {

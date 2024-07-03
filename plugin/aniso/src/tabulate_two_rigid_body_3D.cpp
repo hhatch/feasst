@@ -35,7 +35,7 @@ TabulateTwoRigidBody3D::TabulateTwoRigidBody3D(argtype * args) {
   contact_xyz_index_ = integer("contact_xyz_index", args, -1);
 }
 TabulateTwoRigidBody3D::TabulateTwoRigidBody3D(argtype args) : TabulateTwoRigidBody3D(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapTabulateTwoRigidBody3D {

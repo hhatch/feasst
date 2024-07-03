@@ -19,7 +19,7 @@ RemoveTrial::RemoveTrial(argtype * args) {
   name_contains_ = str("name_contains", args, "");
 }
 RemoveTrial::RemoveTrial(argtype args) : RemoveTrial(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapRemoveTrial {

@@ -20,7 +20,7 @@ MeanSquaredDisplacement::MeanSquaredDisplacement(argtype * args)
 }
 MeanSquaredDisplacement::MeanSquaredDisplacement(argtype args)
   : MeanSquaredDisplacement(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void MeanSquaredDisplacement::initialize(Criteria * criteria,

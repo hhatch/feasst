@@ -16,7 +16,7 @@ TwoParticleContact::TwoParticleContact(argtype * args) {
   tolerance_ = dble("tolerance", args, 1e-6);
 }
 TwoParticleContact::TwoParticleContact(argtype args) : TwoParticleContact(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapTwoParticleContact {

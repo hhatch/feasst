@@ -4,7 +4,7 @@
 namespace feasst {
 
 TrialSelectAngle::TrialSelectAngle(argtype args) : TrialSelectAngle(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialSelectAngle::TrialSelectAngle(argtype * args) : TrialSelectBond(args) {
   class_name_ = "TrialSelectAngle";

@@ -13,7 +13,7 @@ FileVMD::FileVMD(argtype * args) {
   min_sigma_ = dble("min_sigma", args, 0.1);
 }
 FileVMD::FileVMD(argtype args) : FileVMD(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void FileVMD::serialize(std::ostream& ostr) const {

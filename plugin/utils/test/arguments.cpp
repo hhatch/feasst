@@ -9,7 +9,7 @@ namespace feasst {
 class TestArgs {
  public:
   TestArgs(argtype args = argtype()) : TestArgs(&args) {
-    FEASST_CHECK_ALL_USED(args);
+    feasst_check_all_used(args);
   }
   TestArgs(argtype * args) {
     key1_ = str("strkey", args);
@@ -40,7 +40,7 @@ TEST(Arguments, args) {
   EXPECT_EQ(1, args.size());
   append("key1", &args, "a");
   EXPECT_EQ("val1a", str("key1", &args));
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 

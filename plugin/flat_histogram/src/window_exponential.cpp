@@ -21,7 +21,7 @@ WindowExponential::WindowExponential(argtype args) : Window(&args) {
     key << start << index;
     ASSERT(index < 1e8, "index(" << index << ") is very high. Infinite loop?");
   }
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 std::vector<double> WindowExponential::segment() const {

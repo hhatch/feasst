@@ -15,7 +15,7 @@ static MapCheckPhysicality mapper_ = MapCheckPhysicality();
 
 CheckPhysicality::CheckPhysicality(argtype * args) : AnalyzeUpdateOnly(args) {}
 CheckPhysicality::CheckPhysicality(argtype args) : CheckPhysicality(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void CheckPhysicality::serialize(std::ostream& ostr) const {

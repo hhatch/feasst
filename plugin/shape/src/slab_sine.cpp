@@ -44,7 +44,7 @@ SlabSine::SlabSine(argtype * args) : ShapeIntersect() {
   set(half0, half1);
 }
 SlabSine::SlabSine(argtype args) : SlabSine(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void SlabSine::serialize(std::ostream& ostr) const {

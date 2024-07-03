@@ -18,7 +18,7 @@ AnalyzeExample::AnalyzeExample(argtype * args) : Analyze(args) {
   group_index_ = integer("group_index", args, 0);
 }
 AnalyzeExample::AnalyzeExample(argtype args) : AnalyzeExample(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 std::string AnalyzeExample::header(const Criteria& criteria,

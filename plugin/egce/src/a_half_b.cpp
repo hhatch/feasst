@@ -15,7 +15,7 @@ AHalfB::AHalfB(argtype * args) : Constraint() {
     << " == particle_type_B_: " << num_B_.type());
 }
 AHalfB::AHalfB(argtype args) : AHalfB(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool AHalfB::is_allowed(const System& system,

@@ -12,7 +12,7 @@ VisitModelInnerPatch::VisitModelInnerPatch(argtype * args) : VisitModelInner(arg
   class_name_ = "VisitModelInnerPatch";
 }
 VisitModelInnerPatch::VisitModelInnerPatch(argtype args) : VisitModelInnerPatch(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelInnerPatch::compute(

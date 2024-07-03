@@ -9,7 +9,7 @@
 namespace feasst {
 
 WangLandau::WangLandau(argtype args) : WangLandau(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 WangLandau::WangLandau(argtype * args) {
   class_name_ = "WangLandau";

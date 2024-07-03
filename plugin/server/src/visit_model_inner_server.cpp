@@ -27,7 +27,7 @@ VisitModelInnerServer::VisitModelInnerServer(argtype * args) : VisitModelInner(a
   }
 }
 VisitModelInnerServer::VisitModelInnerServer(argtype args) : VisitModelInnerServer(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelInnerServer::precompute(Configuration * config) {

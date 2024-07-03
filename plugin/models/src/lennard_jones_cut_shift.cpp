@@ -21,7 +21,7 @@ LennardJonesCutShift::LennardJonesCutShift(argtype * args)
   class_name_ = "LennardJonesCutShift";
 }
 LennardJonesCutShift::LennardJonesCutShift(argtype args) : LennardJonesCutShift(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void LennardJonesCutShift::serialize(std::ostream& ostr) const {

@@ -70,7 +70,7 @@ FileXYZPatch::FileXYZPatch(argtype * args) {
   append_ = boolean("append", args, false);
 }
 FileXYZPatch::FileXYZPatch(argtype args) : FileXYZPatch(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void FileXYZPatch::load(const std::string file_name, Configuration * config) const {

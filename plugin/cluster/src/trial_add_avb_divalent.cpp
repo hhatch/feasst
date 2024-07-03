@@ -49,7 +49,7 @@ TrialAddAVBDivalent::TrialAddAVBDivalent(argtype * args) : Trial(args) {
     MakeTrialSelectParticle(sel0_args),
     perturb0,
     &parsed_args);
-  FEASST_CHECK_ALL_USED(parsed_args);
+  feasst_check_all_used(parsed_args);
 
   // stage1
   argtype sel1_args;
@@ -64,7 +64,7 @@ TrialAddAVBDivalent::TrialAddAVBDivalent(argtype * args) : Trial(args) {
     MakeSelectParticleAVBDivalent(sel1_args),
     perturb1,
     &parsed_args);
-  FEASST_CHECK_ALL_USED(parsed_args);
+  feasst_check_all_used(parsed_args);
 
   // stage2
   argtype sel2_args;
@@ -79,11 +79,11 @@ TrialAddAVBDivalent::TrialAddAVBDivalent(argtype * args) : Trial(args) {
     MakeSelectParticleAVBDivalent(sel2_args),
     perturb2,
     &parsed_args);
-  FEASST_CHECK_ALL_USED(parsed_args);
+  feasst_check_all_used(parsed_args);
   set(MakeComputeAddAVBDivalent({{"neighbor_index", neighbor}}));
 }
 TrialAddAVBDivalent::TrialAddAVBDivalent(argtype args) : TrialAddAVBDivalent(&args) {
-  //FEASST_CHECK_ALL_USED(args);
+  //feasst_check_all_used(args);
 }
 
 TrialAddAVBDivalent::TrialAddAVBDivalent(std::istream& istr) : Trial(istr) {

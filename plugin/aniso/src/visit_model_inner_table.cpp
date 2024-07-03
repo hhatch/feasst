@@ -16,7 +16,7 @@ VisitModelInnerTable::VisitModelInnerTable(argtype * args) : VisitModelInner(arg
   ignore_energy_ = boolean("ignore_energy", args, false);
 }
 VisitModelInnerTable::VisitModelInnerTable(argtype args) : VisitModelInnerTable(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelInnerTable::read_table(const std::string file_name,
@@ -454,7 +454,7 @@ double VisitModelInnerTable::second_virial_coefficient(const Configuration& conf
   const int type2 = integer("site_type2", &args, 0);
   ASSERT(smoothing_distance_[type1][type2] < NEAR_ZERO, "not implemented with smoothing_distance");
   const double beta = dble("beta", &args, 1.);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
   const Table5D& inner = config.table5d()[type1][type2];
   const Table6D& energy = config.table6d()[type1][type2];
   if (energy.num0() == 1) {
@@ -574,7 +574,7 @@ double VisitModelInnerTable::second_virial_coefficient(const Configuration& conf
 //  const int type2 = integer("site_type2", &args, 0);
 //  ASSERT(type1 == type2, "only implemented for type1 == type2");
 //  const int expand_t = integer("expand_t", &args, 1);
-//  FEASST_CHECK_ALL_USED(args);
+//  feasst_check_all_used(args);
 //  const Table5D& inner = inner_[type1][type2];
 //  const int ns1 = inner.num0();
 //  const int ns2 = inner.num1();

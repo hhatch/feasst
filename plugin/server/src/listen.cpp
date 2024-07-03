@@ -24,7 +24,7 @@ Listen::Listen(argtype * args) {
   server_ = std::make_shared<Server>(args);
 }
 Listen::Listen(argtype args) : Listen(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapListen {

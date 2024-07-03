@@ -7,7 +7,7 @@
 namespace feasst {
 
 PerturbConnector::PerturbConnector(argtype args) : PerturbConnector(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbConnector::PerturbConnector(argtype * args) : PerturbMove(args) {
   class_name_ = "PerturbConnector";

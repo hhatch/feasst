@@ -9,7 +9,7 @@ namespace feasst {
 
 Macrostate::Macrostate(const Histogram& histogram, argtype args)
   : Macrostate(histogram, &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 Macrostate::Macrostate(const Histogram& histogram, argtype * args) {
   set(histogram);
@@ -30,7 +30,7 @@ Macrostate::Macrostate(const Histogram& histogram, argtype * args) {
 
 Macrostate::Macrostate(argtype args) :
     Macrostate(Histogram(&args), &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 bool Macrostate::is_allowed(const System& system,

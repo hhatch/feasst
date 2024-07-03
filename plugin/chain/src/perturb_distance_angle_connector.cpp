@@ -5,7 +5,7 @@ namespace feasst {
 
 PerturbDistanceAngleConnector::PerturbDistanceAngleConnector(argtype args)
   : PerturbDistanceAngleConnector(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbDistanceAngleConnector::PerturbDistanceAngleConnector(argtype * args)
   : PerturbDistanceAngle(args) {

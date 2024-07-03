@@ -7,7 +7,7 @@ namespace feasst {
 
 TrialSelectParticle::TrialSelectParticle(argtype args)
   : TrialSelectParticle(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialSelectParticle::TrialSelectParticle(argtype * args) : TrialSelect(args) {

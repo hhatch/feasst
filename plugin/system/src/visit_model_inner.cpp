@@ -32,7 +32,7 @@ VisitModelInner::VisitModelInner(argtype * args) {
   }
 }
 VisitModelInner::VisitModelInner(argtype args) : VisitModelInner(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelInner::compute(

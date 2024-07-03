@@ -27,7 +27,7 @@ Trial::Trial(argtype * args) {
   reset_stats();
 }
 Trial::Trial(argtype args) : Trial(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Trial::add_stage(

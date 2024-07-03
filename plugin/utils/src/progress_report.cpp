@@ -25,7 +25,7 @@ ProgressReport::ProgressReport(argtype args) {
     ASSERT(percent_per_write_ >= 0.0001,
       "percent_per_write: " << percent_per_write_ << " must be > 0.0001");
   }
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ProgressReport::serialize(std::ostream& ostr) const {

@@ -6,7 +6,7 @@
 namespace feasst {
 
 ComputeAVB2::ComputeAVB2(argtype args) : ComputeAVB2(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 ComputeAVB2::ComputeAVB2(argtype * args) : TrialComputeMove(args) {
   class_name_ = "ComputeAVB2";

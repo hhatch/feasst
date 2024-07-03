@@ -17,7 +17,7 @@ CheckConstantVolume::CheckConstantVolume(argtype * args) : ModifyUpdateOnly(args
   tolerance_ = dble("tolerance", args, 1e-4);
 }
 CheckConstantVolume::CheckConstantVolume(argtype args) : CheckConstantVolume(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void CheckConstantVolume::update(Criteria * criteria,

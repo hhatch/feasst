@@ -25,7 +25,7 @@ TrialTranslateCluster::TrialTranslateCluster(argtype * args) : Trial(args) {
   set(std::make_shared<ComputeMoveCluster>());
 }
 TrialTranslateCluster::TrialTranslateCluster(argtype args) : TrialTranslateCluster(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialTranslateCluster::TrialTranslateCluster(std::istream& istr) : Trial(istr) {

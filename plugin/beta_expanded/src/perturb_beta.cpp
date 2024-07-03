@@ -5,7 +5,7 @@
 namespace feasst {
 
 PerturbBeta::PerturbBeta(argtype args) : PerturbBeta(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbBeta::PerturbBeta(argtype * args) : Perturb(args) {
   class_name_ = "PerturbBeta";

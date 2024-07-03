@@ -5,7 +5,7 @@
 namespace feasst {
 
 PerturbModel::PerturbModel(argtype args) : PerturbModel(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbModel::PerturbModel(argtype * args) : Perturb(args) {
   class_name_ = "PerturbModel";

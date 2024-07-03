@@ -5,7 +5,7 @@ namespace feasst {
 
 PerturbParticleType::PerturbParticleType(argtype args)
   : PerturbParticleType(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbParticleType::PerturbParticleType(argtype * args) : Perturb(args) {
   class_name_ = "PerturbParticleType";

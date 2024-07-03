@@ -12,7 +12,7 @@
 namespace feasst {
 
 Configuration::Configuration(argtype args) : Configuration(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 Configuration::Configuration(argtype * args) {
   domain_ = std::make_shared<Domain>(args);
@@ -886,7 +886,7 @@ void Configuration::set_particle_type(const int ptype,
 void Configuration::change_volume(const double delta_volume,
     argtype args) {
   change_volume(delta_volume, &args);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void Configuration::change_volume(const double delta_volume,

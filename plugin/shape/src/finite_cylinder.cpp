@@ -16,7 +16,7 @@ FiniteCylinder::FiniteCylinder(argtype * args) : ShapeIntersect() {
   set(MakeShapeIntersect(cyl, first_endcap), second_endcap);
 }
 FiniteCylinder::FiniteCylinder(argtype args) : FiniteCylinder(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

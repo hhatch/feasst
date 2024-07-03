@@ -16,7 +16,7 @@ Tune::Tune(argtype * args) : Modify(args) {
   trials_per_tune_ = integer("trials_per_tune", args, 1e3);
   ASSERT(trials_per_update() == 1, "requires 1 trial per update");
 }
-Tune::Tune(argtype args) : Tune(&args) { FEASST_CHECK_ALL_USED(args); }
+Tune::Tune(argtype args) : Tune(&args) { feasst_check_all_used(args); }
 
 void Tune::serialize(std::ostream& ostr) const {
   Stepper::serialize(ostr);

@@ -15,7 +15,7 @@ WriteStepper::WriteStepper(argtype * args) {
   modify_name_ = str("modify_name", args, "");
 }
 WriteStepper::WriteStepper(argtype args) : WriteStepper(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapWriteStepper {

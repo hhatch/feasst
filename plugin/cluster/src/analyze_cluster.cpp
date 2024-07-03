@@ -16,7 +16,7 @@ static MapAnalyzeCluster mapper_ = MapAnalyzeCluster();
 
 AnalyzeCluster::AnalyzeCluster(argtype * args) : Analyze(args) {}
 AnalyzeCluster::AnalyzeCluster(argtype args) : AnalyzeCluster(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void AnalyzeCluster::initialize(Criteria * criteria,

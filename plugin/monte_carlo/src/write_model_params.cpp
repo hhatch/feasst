@@ -22,7 +22,7 @@ WriteModelParams::WriteModelParams(argtype * args) {
   reference_index_ = integer("reference_index", args, -1);
 }
 WriteModelParams::WriteModelParams(argtype args) : WriteModelParams(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapWriteModelParams {

@@ -19,7 +19,7 @@ inline std::shared_ptr<Trial> MakeTrialAnywhere(
     std::make_shared<PerturbAnywhere>(),
     "TrialAnywhere",
     &args);
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
   return trial;
 }
 

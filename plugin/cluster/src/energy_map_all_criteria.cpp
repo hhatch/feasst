@@ -19,7 +19,7 @@ EnergyMapAllCriteria::EnergyMapAllCriteria(argtype * args) : EnergyMapAll(args) 
   neighbor_index_ = integer("neighbor_index", args, 0);
 }
 EnergyMapAllCriteria::EnergyMapAllCriteria(argtype args) : EnergyMapAllCriteria(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 EnergyMapAllCriteria::EnergyMapAllCriteria(std::istream& istr)

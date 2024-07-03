@@ -7,7 +7,7 @@
 namespace feasst {
 
 TrialComputeAdd::TrialComputeAdd(argtype args) : TrialComputeAdd(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 TrialComputeAdd::TrialComputeAdd(argtype * args) : TrialCompute(args) {
   class_name_ = "TrialComputeAdd";

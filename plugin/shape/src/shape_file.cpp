@@ -68,7 +68,7 @@ ShapeFile::ShapeFile(argtype * args) : Shape() {
   }
 }
 ShapeFile::ShapeFile(argtype args) : ShapeFile(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ShapeFile::serialize(std::ostream& ostr) const {

@@ -35,7 +35,7 @@ TrialRigidCluster::TrialRigidCluster(argtype * args) : TrialFactoryNamed() {
   DEBUG("args" << str(*args));
 }
 TrialRigidCluster::TrialRigidCluster(argtype args) : TrialRigidCluster(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 }  // namespace feasst

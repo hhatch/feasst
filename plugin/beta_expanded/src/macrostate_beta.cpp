@@ -9,11 +9,11 @@ MacrostateBeta::MacrostateBeta(const Histogram& histogram,
 }
 MacrostateBeta::MacrostateBeta(const Histogram& histogram,
     argtype args) : Macrostate(histogram, args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 MacrostateBeta::MacrostateBeta(argtype args) :
     MacrostateBeta(Histogram(&args), &args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 class MapMacrostateBeta {

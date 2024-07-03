@@ -33,7 +33,7 @@ TrialAddAVB::TrialAddAVB(argtype * args) : Trial(args) {
   set(MakeComputeAddAVB());
 }
 TrialAddAVB::TrialAddAVB(argtype args) : TrialAddAVB(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialAddAVB::TrialAddAVB(std::istream& istr) : Trial(istr) {

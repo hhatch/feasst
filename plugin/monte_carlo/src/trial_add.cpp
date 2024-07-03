@@ -26,7 +26,7 @@ TrialAdd::TrialAdd(argtype * args) : Trial(args) {
   set(std::make_shared<TrialComputeAdd>(args));
 }
 TrialAdd::TrialAdd(argtype args) : TrialAdd(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 TrialAdd::TrialAdd(std::istream& istr) : Trial(istr) {

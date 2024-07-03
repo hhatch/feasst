@@ -13,7 +13,7 @@ VisitModelInnerNN::VisitModelInnerNN(argtype * args) : VisitModelInnerTable(args
   class_name_ = "VisitModelInnerNN";
 }
 VisitModelInnerNN::VisitModelInnerNN(argtype args) : VisitModelInnerNN(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void VisitModelInnerNN::read_table(const std::string file_name,

@@ -53,7 +53,7 @@ System spce(argtype args) {
     ref->set_model_param("cutoff", 1, dual_cut);
     system.add_to_reference(ref);
   }
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
   return system;
 }
 
@@ -105,7 +105,7 @@ System rpm(argtype args) {
     ref->set_model_param("cutoff", 1, dual_cut);
     system.add_to_reference(ref);
   }
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
   return system;
 }
 

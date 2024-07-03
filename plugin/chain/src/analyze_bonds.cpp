@@ -28,7 +28,7 @@ AnalyzeBonds::AnalyzeBonds(argtype * args) : Analyze(args) {
   dihedral_hist_.push_back(dhist);
 }
 AnalyzeBonds::AnalyzeBonds(argtype args) : AnalyzeBonds(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void AnalyzeBonds::serialize(std::ostream& ostr) const {

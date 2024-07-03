@@ -23,7 +23,7 @@ ChargeScreened::ChargeScreened(argtype * args) {
   hard_sphere_threshold_sq_ = hs_thres*hs_thres;
 }
 ChargeScreened::ChargeScreened(argtype args) : ChargeScreened(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 void ChargeScreened::serialize(std::ostream& ostr) const {

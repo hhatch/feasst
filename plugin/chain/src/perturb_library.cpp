@@ -16,7 +16,7 @@ class MapPerturbLibrary {
 static MapPerturbLibrary mapper_ = MapPerturbLibrary();
 
 PerturbLibrary::PerturbLibrary(argtype args) : PerturbLibrary(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 PerturbLibrary::PerturbLibrary(argtype * args) : PerturbRotate(args) {
   class_name_ = "PerturbLibrary";

@@ -19,7 +19,7 @@ MovieSpherocylinder::MovieSpherocylinder(argtype * args) : AnalyzeWriteOnly(args
   args->insert({"append", "true"}); // always append
   xyz_ = FileXYZSpherocylinder(args);
 }
-MovieSpherocylinder::MovieSpherocylinder(argtype args) : MovieSpherocylinder(&args) { FEASST_CHECK_ALL_USED(args); }
+MovieSpherocylinder::MovieSpherocylinder(argtype args) : MovieSpherocylinder(&args) { feasst_check_all_used(args); }
 
 void MovieSpherocylinder::initialize(Criteria * criteria,
     System * system,

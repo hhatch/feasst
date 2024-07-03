@@ -21,7 +21,7 @@ Cylinder::Cylinder(argtype * args) {
   point1_ = Position(parse_dimensional(str("second_point", args), args, 4));
 }
 Cylinder::Cylinder(argtype args) : Cylinder(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 double Cylinder::nearest_distance(const Position& point) const {
