@@ -22,6 +22,7 @@ import pandas as pd
 from pyfeasst import fstio
 
 def parse():
+    """ Parse arguments for this and following scripts """
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--feasst_install', type=str, default='../../../build/',
                         help='FEASST install directory (e.g., the path to build)')
@@ -56,6 +57,22 @@ def parse():
     parser.add_argument('--temperature', type=float, default=298.15, help='temperature in Kelvin')
     parser.add_argument('--ionic_strength', type=float, default=0.15, help='formulation ionic strength of NaCl in Molar units')
     parser.add_argument('--smoothing_distance', type=float, default=2, help='distance from cutoff to smooth to zero')
+
+    # additional in b2 step
+    parser.add_argument('--table_file', type=str, default='energy.txt', help='file describe cg table potential.')
+    parser.add_argument('--cubic_side_length', type=float, default=1e4, help='cubic side length')
+    parser.add_argument('--molecular_weight', type=float, default=14315.03534, help='molecular weight of protein in g/mol')
+    parser.add_argument('--reference_sigma', type=float, default=30, help='size of hard sphere on COM of rigid domain')
+    parser.add_argument('--ignore_energy', type=str, default='false', help='true if interaction is excluded volume only.')
+    parser.add_argument('--ignore_intra_energy', type=str, default='false', help='true if intra interaction is excluded volume only.')
+    parser.add_argument('--num_beta_taylor', type=int, default=10, help='number of Tayler series derivatives')
+    parser.add_argument('--show_plot', type=int, default=0, help='show extrapolation plot if != 0')
+    parser.add_argument('--trials_per', type=int, default=int(1e5), help='number of trials per iteration')
+    parser.add_argument('--equilibration', type=int, default=int(2e1), help='number of iterations in equilibration')
+    parser.add_argument('--production', type=int, default=int(2e1), help='number of iterations in production')
+    parser.add_argument('--seed', type=int, default=-1,
+                        help='Random number generator seed. If -1, assign random seed to each sim.')
+    parser.add_argument('--fstprt', type=str, default='/feasst/plugin/aniso/particle/aniso_tabular.fstprt', help='fstprt file')
     return parser
 
 def write_feasst_script(params, script_file):
@@ -68,22 +85,34 @@ Configuration cubic_side_length 2e2 particle_type0 /feasst/particle/spce.fstprt 
   group0 fixed fixed_particle_type 0 group1 mobile mobile_particle_type 1
 Potential Model ModelEmpty
 TabulateTwoRigidBody3D num_orientations_per_pi {num_orientations_per_pi} output_orientation_file {prefix}{num_orientations_per_pi}.txt
+
+MonteCarlo
+Configuration cubic_side_length 2e2 particle_type0 /feasst/particle/spce.fstprt particle_type1 /feasst/particle/propane.fstprt \
+  add_particles_of_type0 1 add_particles_of_type1 1 \
+  group0 fixed fixed_particle_type 0 group1 mobile mobile_particle_type 1
+Potential Model ModelEmpty
+TabulateTwoRigidBody3D num_orientations_per_pi {num_orientations_per_pi} output_orientation_file {prefix}{num_orientations_per_pi}_ij.txt
 """.format(**params))
 
 def post_process(params):
     """ Check the final file length and then launch the next step. """
     nk = params['num_orientations_per_pi']
-    expected = (2*nk+1)**2 * (nk+1)**3
-    #print('expected number of orientations:', expected)
-    df = pd.read_csv('''{prefix}{num_orientations_per_pi}.txt'''.format(**params), skiprows=1, sep=r'\s+')
-    assert expected == len(df.columns)
-    print('launching after_1_contact.py')
-    subprocess.check_call('python after_1_contact.py '+fstio.dict_to_argparse(params['original_args']),
+    for ij in [True, False]:
+        extra = ''
+        expected = (2*nk+1)**2 * (nk+1)**3
+        if ij:
+            expected = (2*nk+1)**3 * (nk+1)**2
+            extra = '_ij'
+        #print('expected number of orientations:', expected)
+        df = pd.read_csv('''{prefix}{num_orientations_per_pi}'''.format(**params)+extra+'.txt', skiprows=1, sep=r'\s+')
+        assert expected == len(df.columns)
+    print('launching after_1_1_contact.py')
+    subprocess.check_call('python after_1_1_contact.py '+fstio.dict_to_argparse(params['original_args']),
                           shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
-    parser = parse()
-    args, unknown_args = parser.parse_known_args()
+    prsr = parse()
+    args, unknown_args = prsr.parse_known_args()
     assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
     prms = vars(args)
     prms['original_args'] = copy.deepcopy(prms)

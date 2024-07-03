@@ -3,11 +3,11 @@ Generate an energy table of a protein, by default described by the provided 4lyt
 Each atom is modeled as a hard sphere with an LJ and screened charge interation computed over a number of orientations.
 """
 
+import copy
 import sys
 import os.path
-import argparse
-import numpy as np
 import subprocess
+import numpy as np
 from pyfeasst import fstio
 from pyfeasst import physical_constants
 from launch_1_cg_protein import parse
@@ -29,25 +29,30 @@ TabulateTwoRigidBody3D proc {sim} num_proc {num_sims} input_orientation_file {or
 """.format(**params))
 
 def post_process(params):
+    """ Combine tables, check their length and launch the next step """
     subprocess.check_call(['sleep', '5']) # without this command, combine doesn't read all tables?
     if not os.path.isfile('''{prefix}.txt'''.format(**params)):
-        fstio.combine_tables_two_rigid_body(prefix=params['prefix'], suffix='.txt', num_procs=params['num_sims'])
-        if params['num_orientations_per_pi'] == 6 and params['domain1'] == '4lyt' and params['domain2'] == params['domain1']:
-            with open("""{prefix}.txt""".format(**params), 'r') as file1:
+        fstio.combine_tables_two_rigid_body(prefix=params['prefix'], suffix='.txt',
+                                            num_procs=params['num_sims'])
+        if params['num_orientations_per_pi'] == 6 and params['domain1'] == '4lyt' and \
+           params['domain2'] == params['domain1']:
+            with open("""{prefix}.txt""".format(**params), 'r', encoding="utf-8") as file1:
                 lines = file1.readlines()
             #print(len(lines))
             assert len(lines) == 681
             assert lines[0] == 'site_types 1 0\n'
             assert lines[6] == '3.762260e+01 -4.069026e+00 -7.593451e-04\n'
             assert lines[-1] == '-1 160\n'
-    print('launching after_1_b2.py')
-    subprocess.check_call("""python after_1_b2.py --run_type {run_type}""".format(**params), shell=True, executable='/bin/bash')
+    print('launching after_1_3_b2.py')
+    subprocess.check_call('python after_1_3_b2.py '+fstio.dict_to_argparse(params['original_args']),
+                          shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = parse()
     args, unknown_args = parser.parse_known_args()
     assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
     prms = vars(args)
+    prms['original_args'] = copy.deepcopy(prms)
     prms['script'] = __file__
     prms['prefix'] = 'energy'
     if os.path.isfile('''{prefix}.txt'''.format(**prms)):
@@ -72,7 +77,7 @@ if __name__ == '__main__':
     kb = physical_constants.BoltzmannConstant().value()
     prms['kappa'] = np.sqrt(2*(elem_q**2)*prms['ionic_strength']*(1e3)*na/(prms['dielectric_water']*eps_0*kb*prms['temperature']*1e20))
     prms['cutoff'] = 5/prms['kappa']
-    prms['initial_box'] = 4*prms['cutoff'] # assume initial box to fit cutoff, but TabulateTwoRigidBody3D will adjust it
+    prms['initial_box'] = 4*prms['cutoff'] # initial box adjusted by TabulateTwoRigidBody3D
 
     fstio.run_simulations(params=prms,
                           sim_node_dependent_params=None,

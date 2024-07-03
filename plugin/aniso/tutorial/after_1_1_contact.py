@@ -4,9 +4,9 @@ Each atom is modeled as a hard sphere and the contact distance is computed over 
 orientations.
 """
 
+import copy
 import sys
 import os.path
-import argparse
 import subprocess
 from pyfeasst import fstio
 from pyfeasst import coarse_grain_pdb
@@ -37,14 +37,15 @@ def post_process(params):
             assert len(lines) == 681
             assert lines[0] == 'site_types 1 0\n'
             assert lines[-1] == '-1 160\n'
-    print('launching after_1_energy.py')
-    subprocess.check_call("""python after_1_energy.py --num_orientations_per_pi {num_orientations_per_pi} --run_type {run_type}""".format(**params), shell=True, executable='/bin/bash')
+    print('launching after_1_2_energy.py')
+    subprocess.check_call('python after_1_2_energy.py '+fstio.dict_to_argparse(params['original_args']), shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = parse()
     args, unknown_args = parser.parse_known_args()
     assert len(unknown_args) == 0, 'An unknown argument was included: '+str(unknown_args)
     prms = vars(args)
+    prms['original_args'] = copy.deepcopy(prms)
     prms['prefix'] = 'contact'
     if os.path.isfile('''{prefix}.txt'''.format(**prms)):
         print('using existing:', '''{prefix}.txt'''.format(**prms))
