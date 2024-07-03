@@ -3,10 +3,11 @@
 #define FEASST_STEPPERS_LOG_AND_MOVIE_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/analyze_factory.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /// Combine Log and Movie for convenience.
 class LogAndMovie : public AnalyzeFactory {

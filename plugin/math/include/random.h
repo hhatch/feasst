@@ -7,11 +7,12 @@
 #include <deque>
 #include <string>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "utils/include/cache.h"
 #include "math/include/position.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class RotationMatrix;
 

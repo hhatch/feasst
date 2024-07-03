@@ -2,9 +2,9 @@
 #ifndef FEASST_MONTE_CARLO_TUNABLE_H_
 #define FEASST_MONTE_CARLO_TUNABLE_H_
 
-#include "utils/include/arguments.h"
-
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   A tunable parameter attempts to reach a target value of acceptance by

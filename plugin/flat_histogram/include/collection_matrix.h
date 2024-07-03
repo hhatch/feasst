@@ -4,11 +4,12 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
 #include "flat_histogram/include/ln_probability.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   The collection matrix is triple banded when the macrostate can only increase

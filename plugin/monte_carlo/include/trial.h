@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_select.h"
@@ -14,6 +13,8 @@
 #include "monte_carlo/include/perturb.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   A trial contains a number of TrialStages.

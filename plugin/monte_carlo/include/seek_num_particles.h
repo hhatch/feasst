@@ -3,10 +3,11 @@
 #define FEASST_MONTE_CARLO_SEEK_NUM_PARTICLES_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial_factory.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Criteria;
 class Constraint;

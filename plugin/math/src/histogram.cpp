@@ -1,7 +1,8 @@
 
 #include <cmath>
-#include "math/include/histogram.h"
 #include "utils/include/debug.h"
+#include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "math/include/formula_polynomial.h"
 #include "math/include/utils_math.h"
 #include "utils/include/io.h"

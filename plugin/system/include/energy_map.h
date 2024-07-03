@@ -6,10 +6,11 @@
 #include <vector>
 #include <memory>
 #include <map>
-#include "utils/include/arguments.h"
 #include "system/include/synchronize_data.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Random;
 class Position;

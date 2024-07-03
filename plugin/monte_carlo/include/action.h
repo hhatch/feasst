@@ -4,9 +4,10 @@
 
 #include <memory>
 #include <string>
-#include "utils/include/arguments.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class MonteCarlo;
 

@@ -3,13 +3,14 @@
 #define FEASST_MONTE_CARLO_TRIAL_MOVE_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/trial_compute_move.h"
 #include "monte_carlo/include/perturb_move.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /// Attempt to rigidly move a selection in a Trial in one stage.
 inline std::shared_ptr<Trial> MakeTrialMove(

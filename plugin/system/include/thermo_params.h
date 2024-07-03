@@ -6,9 +6,10 @@
 #include <memory>
 #include <string>
 #include <sstream>
-#include "utils/include/arguments.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Intensive thermodynamic state variables.

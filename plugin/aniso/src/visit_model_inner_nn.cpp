@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/configuration.h"
 #include "system/include/model_two_body.h"

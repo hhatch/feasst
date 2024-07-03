@@ -4,10 +4,11 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "system/include/visit_model.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Intra-particle interactions are computed here.

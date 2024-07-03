@@ -3,10 +3,11 @@
 #define FEASST_FLAT_HISTOGRAM_WINDOW_CUSTOM_H_
 
 #include <vector>
-#include "utils/include/arguments.h"
 #include "flat_histogram/include/window.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Input custom window values directly by manual input of the segment, defined

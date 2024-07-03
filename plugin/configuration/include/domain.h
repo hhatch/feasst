@@ -8,6 +8,8 @@
 
 namespace feasst {
 
+typedef std::map<std::string, std::string> argtype;
+
 class Random;
 
 /**

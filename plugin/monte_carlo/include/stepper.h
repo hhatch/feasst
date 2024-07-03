@@ -3,12 +3,13 @@
 #define FEASST_MONTE_CARLO_STEPPER_H_
 
 #include <string>
-#include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Criteria;
 class System;

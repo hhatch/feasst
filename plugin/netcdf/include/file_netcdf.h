@@ -6,11 +6,12 @@
 #include <fstream>
 #include <sstream>
 #include <netcdf>
-#include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
  */

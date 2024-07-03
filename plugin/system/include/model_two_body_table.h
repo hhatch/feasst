@@ -2,11 +2,14 @@
 #ifndef FEASST_SYSTEM_MODEL_TWO_BODY_TABLE_H_
 #define FEASST_SYSTEM_MODEL_TWO_BODY_TABLE_H_
 
-#include "utils/include/arguments.h"
+#include <map>
+#include <string>
 #include "configuration/include/model_params.h"
 #include "system/include/model_two_body.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Table1D;
 

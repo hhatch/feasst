@@ -3,12 +3,13 @@
 #define FEASST_MONTE_CARLO_CRITERIA_H_
 
 #include <vector>
-#include "utils/include/arguments.h"
 #include "system/include/system.h"
 #include "system/include/synchronize_data.h"
 #include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Random;
 class Constraint;

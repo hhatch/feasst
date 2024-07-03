@@ -5,10 +5,11 @@
 #include <memory>
 #include <string>
 #include <sstream>
-#include "utils/include/arguments.h"
 #include "math/include/formula.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   \f$ f(x) = f(x_0) \exp[A(x - x_0)^B] \f$

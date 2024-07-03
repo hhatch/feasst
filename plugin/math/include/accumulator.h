@@ -14,9 +14,11 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include "utils/include/arguments.h"
+#include <map>
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
  * Accumulate a series of values to compute the average, standard deviation,

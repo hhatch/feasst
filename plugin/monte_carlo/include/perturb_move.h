@@ -3,10 +3,11 @@
 #define FEASST_MONTE_CARLO_PERTURB_MOVE_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/perturb.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Only perturb the positions of the particles and/or sites.

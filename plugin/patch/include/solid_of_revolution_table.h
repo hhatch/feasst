@@ -3,13 +3,14 @@
 #define FEASST_PATCH_SOLID_OF_REVOLUTION_TABLE_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/table.h"
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
 #include "system/include/visit_model.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Model solids of revolution using a tabular potential that is precomputed

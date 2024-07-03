@@ -6,7 +6,6 @@
 #include <vector>
 #include <memory>
 //#include "utils/include/timer.h"
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze.h"
 #include "monte_carlo/include/analyze_factory.h"
@@ -14,6 +13,8 @@
 #include "monte_carlo/include/modify_factory.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Checkpoint;
 class Random;

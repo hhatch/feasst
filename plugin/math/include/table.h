@@ -4,9 +4,10 @@
 #include <cmath>
 #include <vector>
 #include <sstream>
-#include "utils/include/arguments.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Table values are assumed to be equally spaced and vary from 0 to 1.

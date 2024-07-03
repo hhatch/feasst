@@ -3,11 +3,12 @@
 #define FEASST_SYSTEM_VISIT_MODEL_CUTOFF_OUTER_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "system/include/visit_model.h"
 #include "system/include/cells.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class CutoffOuter : public ModelParam {
  public:

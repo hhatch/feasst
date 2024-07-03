@@ -2,13 +2,14 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 #define FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 
-#include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
 #include "configuration/include/properties.h"
 #include "configuration/include/select.h"
 #include "system/include/system.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Select the mobile particles and sites that are to be perturbed via trials.

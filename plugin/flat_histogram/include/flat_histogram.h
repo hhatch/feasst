@@ -3,7 +3,6 @@
 #define FEASST_FLAT_HISTOGRAM_FLAT_HISTOGRAM_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
 #include "monte_carlo/include/criteria.h"
 #include "flat_histogram/include/macrostate.h"
@@ -11,6 +10,8 @@
 #include "flat_histogram/include/bias.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Random;
 

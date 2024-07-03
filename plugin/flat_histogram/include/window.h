@@ -3,9 +3,10 @@
 #define FEASST_FLAT_HISTOGRAM_WINDOW_H_
 
 #include <vector>
-#include "utils/include/arguments.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Macrostate ranges are often broken into separate windows for parallelization.

@@ -4,11 +4,12 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "flat_histogram/include/transition_matrix.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Begin with WangLandau and end with TransitionMatrix.

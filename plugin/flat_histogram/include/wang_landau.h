@@ -4,10 +4,11 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "flat_histogram/include/bias.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Wang Landau flat histogram bias.

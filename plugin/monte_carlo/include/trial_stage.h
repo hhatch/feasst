@@ -4,7 +4,6 @@
 
 #include <string>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/criteria.h"
@@ -12,6 +11,8 @@
 #include "monte_carlo/include/rosenbluth.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   A stage contains both a selection and perturbation.

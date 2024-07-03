@@ -4,11 +4,12 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "flat_histogram/include/bias.h"
 #include "flat_histogram/include/collection_matrix.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Transition matrix flat histogram bias.

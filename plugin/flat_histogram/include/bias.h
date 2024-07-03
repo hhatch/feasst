@@ -4,11 +4,13 @@
 
 #include <memory>
 #include <string>
-#include "utils/include/arguments.h"
+#include <map>
 #include "math/include/histogram.h"
 #include "flat_histogram/include/ln_probability.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Macrostate;
 class CollectionMatrix;

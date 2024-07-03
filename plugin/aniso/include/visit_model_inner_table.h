@@ -3,13 +3,14 @@
 #define FEASST_ANISO_VISIT_MODEL_INNER_TABLE_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/table.h"
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
 #include "system/include/visit_model.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Represent anisotropic sites using a tabular potential that is precomputed

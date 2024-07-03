@@ -3,13 +3,14 @@
 #define FEASST_MONTE_CARLO_PERTURB_H_
 
 #include <string>
-#include "utils/include/arguments.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_select.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Perturbations to the system include the following types:

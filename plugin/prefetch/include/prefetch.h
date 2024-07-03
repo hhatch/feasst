@@ -5,10 +5,11 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "monte_carlo/include/monte_carlo.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Thread;
 

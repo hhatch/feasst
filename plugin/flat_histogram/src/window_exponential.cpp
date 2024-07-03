@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "flat_histogram/include/window_exponential.h"
 

@@ -2,11 +2,12 @@
 #ifndef FEASST_MODELS_MIE_H_
 #define FEASST_MODELS_MIE_H_
 
-#include "utils/include/arguments.h"
 #include "configuration/include/model_params.h"
 #include "system/include/model_two_body.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   The Mie potential, \f$U\f$ is described in
