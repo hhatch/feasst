@@ -1,4 +1,5 @@
 
+#include <cmath>
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"

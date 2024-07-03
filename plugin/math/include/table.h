@@ -1,6 +1,7 @@
 #ifndef FEASST_MATH_TABLE_H_
 #define FEASST_MATH_TABLE_H_
 
+#include <cmath>
 #include <vector>
 #include "utils/include/arguments.h"
 

@@ -2,6 +2,7 @@
 #include <chrono> // sleep
 #include <thread> // sleep
 #include "utils/include/serialize.h"
+#include "utils/include/utils.h"
 #include "utils/include/progress_report.h"
 #include "threads/include/thread_omp.h"
 #include "math/include/formula.h"

@@ -1,4 +1,5 @@
 #include <vector>
+#include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "monte_carlo/include/trial_compute.h"
 

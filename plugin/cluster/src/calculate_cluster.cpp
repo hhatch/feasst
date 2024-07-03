@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/utils.h"
 #include "cluster/include/calculate_cluster.h"
 
 namespace feasst {

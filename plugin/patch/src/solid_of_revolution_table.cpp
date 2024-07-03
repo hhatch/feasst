@@ -1,6 +1,7 @@
 #include <cmath>  // isnan, pow
 #include <string>
 #include <fstream>
+#include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/domain.h"
