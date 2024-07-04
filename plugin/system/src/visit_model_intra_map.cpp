@@ -1,4 +1,5 @@
 #include <vector>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/utils.h"
 #include "configuration/include/configuration.h"

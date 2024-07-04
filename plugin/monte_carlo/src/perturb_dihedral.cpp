@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "math/include/constants.h"  // PI
 #include "math/include/random.h"
 #include "math/include/utils_math.h"  // round

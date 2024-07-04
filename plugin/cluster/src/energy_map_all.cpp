@@ -1,4 +1,5 @@
 #include "utils/include/utils.h"  // find_in_list
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"

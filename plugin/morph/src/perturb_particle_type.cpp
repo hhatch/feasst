@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "morph/include/perturb_particle_type.h"
 
 namespace feasst {

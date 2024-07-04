@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "steppers/include/log.h"
 #include "steppers/include/movie.h"
 #include "steppers/include/log_and_movie.h"

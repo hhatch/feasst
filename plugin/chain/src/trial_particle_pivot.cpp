@@ -1,4 +1,5 @@
 #include "utils/include/debug.h"
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "chain/include/select_particle_pivot.h"
 #include "chain/include/perturb_particle_pivot.h"

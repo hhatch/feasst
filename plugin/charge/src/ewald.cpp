@@ -1,4 +1,5 @@
 #include <cmath>  // isnan, pow
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "math/include/constants.h"

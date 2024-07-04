@@ -1,5 +1,5 @@
-#include "cluster/include/compute_gca.h"
 #include "utils/include/serialize.h"
+#include "cluster/include/compute_gca.h"
 
 namespace feasst {
 

@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "flat_histogram/include/macrostate_energy.h"
 
 namespace feasst {

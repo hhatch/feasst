@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "beta_expanded/include/select_nothing.h"
 #include "beta_expanded/include/perturb_beta.h"
 #include "beta_expanded/include/compute_beta.h"

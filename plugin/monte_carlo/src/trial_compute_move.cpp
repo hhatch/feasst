@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial_compute_move.h"
 
 namespace feasst {

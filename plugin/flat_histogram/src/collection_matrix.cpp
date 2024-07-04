@@ -1,6 +1,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // is_equal
 #include "utils/include/serialize.h"
 #include "utils/include/io.h"

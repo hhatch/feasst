@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "configuration/include/domain.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"

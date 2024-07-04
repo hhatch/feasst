@@ -1,5 +1,6 @@
 #include <cmath>
 #include <vector>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "configuration/include/configuration.h"

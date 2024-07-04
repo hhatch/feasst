@@ -1,6 +1,6 @@
 #include <cmath>
-#include "monte_carlo/include/trial_select.h"
 #include "utils/include/serialize.h"
+#include "monte_carlo/include/trial_select.h"
 #include "cluster/include/compute_remove_avb.h"
 
 namespace feasst {

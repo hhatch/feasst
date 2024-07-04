@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "math/include/random.h"
 #include "monte_carlo/include/trial_select_particle.h"

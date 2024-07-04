@@ -1,7 +1,8 @@
 
-#include "configuration/include/bond.h"
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
+#include "configuration/include/bond.h"
 
 namespace feasst {
 

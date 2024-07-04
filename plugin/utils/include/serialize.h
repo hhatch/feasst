@@ -8,11 +8,12 @@
 #include <deque>
 #include <memory>
 #include <map>
-#include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "utils/include/io.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Utility functions for serialization of objects into human-readable character

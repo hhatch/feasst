@@ -1,7 +1,8 @@
 #include <cmath>
-#include "models/include/lennard_jones_cut_shift.h"
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "models/include/lennard_jones_cut_shift.h"
 
 namespace feasst {
 

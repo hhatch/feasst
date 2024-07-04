@@ -1,6 +1,7 @@
+#include "utils/include/arguments.h"
+#include "utils/include/serialize.h"
 #include "configuration/include/configuration.h"
 #include "cluster/include/energy_map_all_criteria.h"
-#include "utils/include/serialize.h"
 
 namespace feasst {
 

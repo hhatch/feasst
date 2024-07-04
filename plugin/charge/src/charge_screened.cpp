@@ -1,4 +1,5 @@
 #include <cmath>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/table.h"

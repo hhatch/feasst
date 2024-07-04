@@ -1,5 +1,5 @@
-#include "cluster/include/compute_move_cluster.h"
 #include "utils/include/serialize.h"
+#include "cluster/include/compute_move_cluster.h"
 
 namespace feasst {
 

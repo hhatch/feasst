@@ -1,4 +1,5 @@
 #include "utils/include/debug.h"
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/trial_move.h"

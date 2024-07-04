@@ -1,4 +1,5 @@
 #include <cmath>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/domain.h"
 #include "monte_carlo/include/trial_compute_volume.h"

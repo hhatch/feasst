@@ -6,13 +6,14 @@
 #include <sstream>
 #include <string>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "utils/include/timer.h"
 #include "utils/include/file.h"
 #include "utils/include/debug.h"
 #include "utils/include/io.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Save the state of a class in memory by writing to disk, such that the

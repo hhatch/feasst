@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "model_expanded/include/model_expanded.h"
 
 namespace feasst {

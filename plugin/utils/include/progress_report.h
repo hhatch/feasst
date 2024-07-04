@@ -5,9 +5,11 @@
 #include <string>
 #include <sstream>
 #include <memory>
-#include "utils/include/arguments.h"
+#include <map>
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Periodically report on the progress of long tasks and estimate remaining

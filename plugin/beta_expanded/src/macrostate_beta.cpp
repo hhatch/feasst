@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "beta_expanded/include/macrostate_beta.h"
 
 namespace feasst {

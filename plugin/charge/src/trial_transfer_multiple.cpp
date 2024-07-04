@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "charge/include/trial_add_multiple.h"
 #include "charge/include/trial_remove_multiple.h"
 #include "charge/include/trial_transfer_multiple.h"

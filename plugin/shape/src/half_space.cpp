@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "shape/include/half_space.h"
 
 namespace feasst {

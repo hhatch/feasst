@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "math/include/accumulator.h"

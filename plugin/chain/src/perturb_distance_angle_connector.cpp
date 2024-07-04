@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "chain/include/perturb_distance_angle_connector.h"
 
 namespace feasst {

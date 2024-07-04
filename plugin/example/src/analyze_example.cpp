@@ -1,4 +1,5 @@
 #include <sstream>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "example/include/analyze_example.h"
 

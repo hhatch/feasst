@@ -2,6 +2,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iomanip>  // setprecision
+#include "utils/include/arguments.h"
 #include "utils/include/progress_report.h"
 #include "utils/include/utils.h"  // is_equal
 #include "utils/include/serialize.h"

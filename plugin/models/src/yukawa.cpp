@@ -1,4 +1,5 @@
 #include <cmath>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/model_params.h"
 #include "models/include/yukawa.h"

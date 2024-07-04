@@ -1,4 +1,5 @@
 #include <fstream>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/formula.h"
 #include "math/include/golden_search.h"

@@ -1,4 +1,5 @@
 #include <cmath>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "model_expanded/include/constrain_model_index.h"
 

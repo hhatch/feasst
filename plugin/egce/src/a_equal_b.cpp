@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "egce/include/a_equal_b.h"
 
 namespace feasst {

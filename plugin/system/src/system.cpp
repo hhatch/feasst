@@ -1,8 +1,9 @@
 #include <cmath>  // isinf and isnan
-#include "configuration/include/domain.h"
-#include "system/include/system.h"
+#include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/domain.h"
+#include "system/include/system.h"
 
 namespace feasst {
 

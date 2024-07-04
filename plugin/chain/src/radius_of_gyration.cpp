@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "math/include/histogram.h"
 #include "chain/include/radius_of_gyration.h"
 

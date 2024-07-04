@@ -1,10 +1,11 @@
 #include <cmath>
 #include <vector>
-#include "configuration/include/domain.h"
+#include "utils/include/arguments.h"
+#include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
-#include "utils/include/serialize.h"
 #include "math/include/random.h"
+#include "configuration/include/domain.h"
 
 namespace feasst {
 

@@ -1,6 +1,7 @@
 
 #include <chrono> // sleep
 #include <thread> // sleep
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/progress_report.h"
 #include "threads/include/thread_omp.h"

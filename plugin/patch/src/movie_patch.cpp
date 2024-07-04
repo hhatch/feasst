@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "patch/include/movie_patch.h"
 
 namespace feasst {

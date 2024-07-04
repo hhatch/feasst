@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "math/include/random_mt19937.h"
 #include "cluster/include/analyze_cluster.h"
 

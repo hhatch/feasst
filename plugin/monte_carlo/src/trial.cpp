@@ -1,5 +1,6 @@
 #include <string>
 #include <memory>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/random.h"
 #include "configuration/include/domain.h"

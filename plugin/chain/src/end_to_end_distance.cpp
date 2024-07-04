@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "chain/include/end_to_end_distance.h"
 
 namespace feasst {

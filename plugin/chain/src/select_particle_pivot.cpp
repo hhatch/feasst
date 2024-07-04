@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "math/include/random.h"
 #include "chain/include/select_particle_pivot.h"

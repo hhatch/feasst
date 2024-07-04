@@ -1,4 +1,5 @@
 #include <cmath>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "steppers/include/check_energy.h"
 

@@ -1,5 +1,6 @@
-#include "steppers/include/movie.h"
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "steppers/include/movie.h"
 
 namespace feasst {
 

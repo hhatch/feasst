@@ -4,6 +4,7 @@
 #include <cmath>
 #include <limits>
 #include <random>
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "threads/include/thread_omp.h"
 #include "monte_carlo/include/action.h"

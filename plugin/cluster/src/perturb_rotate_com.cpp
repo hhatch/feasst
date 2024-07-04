@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "cluster/include/perturb_rotate_com.h"
 
 namespace feasst {

@@ -1,6 +1,7 @@
 #include <vector>
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
+#include "utils/include/arguments.h"
 #include "monte_carlo/include/trial_compute.h"
 
 namespace feasst {

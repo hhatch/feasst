@@ -1,9 +1,10 @@
 
 #include <algorithm>
-#include "flat_histogram/include/wltm.h"
+#include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "math/include/utils_math.h"
 #include "utils/include/debug.h"
+#include "math/include/utils_math.h"
+#include "flat_histogram/include/wltm.h"
 
 namespace feasst {
 
