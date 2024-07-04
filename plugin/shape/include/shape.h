@@ -5,10 +5,11 @@
 #include <memory>
 #include <map>
 #include <sstream>
-#include "utils/include/arguments.h"
 #include "math/include/position.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Random;
 class Sphere;

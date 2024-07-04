@@ -54,8 +54,6 @@ class ModelTwoBodyTable : public ModelTwoBody {
 
   /// Return the tabular potential.
   const Table1D& table(const int type1, const int type2) const {
-    INFO(table_.size());
-    INFO(table_[type1].size());
     return *table_[type1][type2]; }
 
   double energy(

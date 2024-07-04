@@ -23,7 +23,6 @@ class Thread;
 class Pool {
  public:
   void set_index(const int index) {
-    DEBUG("index " << index);
     index_ = index; }
   int index() const { return index_; }
   void set_ln_prob(const double ln_prob) { ln_prob_ = ln_prob; }

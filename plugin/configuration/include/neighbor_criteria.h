@@ -3,10 +3,11 @@
 #define FEASST_CONFIGURATION_NEIGHBOR_CRITERIA_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/position.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Domain;
 

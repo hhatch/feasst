@@ -5,11 +5,12 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 // Utility class to print XYZ files from selection.
 class PrinterXYZ : public LoopConfigOneBody {

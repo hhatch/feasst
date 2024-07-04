@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <memory>
+#include <map>
 //#include "utils/include/timer.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze.h"
@@ -15,6 +16,7 @@
 namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
+typedef std::vector<std::pair<std::string, argtype> > arglist;
 
 class Checkpoint;
 class Random;

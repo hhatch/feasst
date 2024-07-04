@@ -3,6 +3,8 @@
 #define FEASST_FLAT_HISTOGRAM_WINDOW_EXPONENTIAL_H_
 
 #include <vector>
+#include <map>
+#include <string>
 #include "flat_histogram/include/window.h"
 
 namespace feasst {

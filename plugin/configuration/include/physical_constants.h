@@ -6,9 +6,10 @@
 #include <memory>
 #include <map>
 #include <string>
-#include "utils/include/arguments.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   This class provides physical constants and conversions for convenience.

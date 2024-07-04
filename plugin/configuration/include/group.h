@@ -4,10 +4,11 @@
 
 #include <memory>
 #include <vector>
-#include "utils/include/arguments.h"
 #include "configuration/include/particle.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Define groups based on particle and site types.

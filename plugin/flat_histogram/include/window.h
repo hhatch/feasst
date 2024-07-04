@@ -3,6 +3,8 @@
 #define FEASST_FLAT_HISTOGRAM_WINDOW_H_
 
 #include <vector>
+#include <map>
+#include <string>
 
 namespace feasst {
 

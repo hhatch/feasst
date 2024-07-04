@@ -3,12 +3,13 @@
 #define FEASST_SERVER_VISIT_MODEL_INNER_SERVER_H_
 
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
 #include "system/include/visit_model.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Server;
 

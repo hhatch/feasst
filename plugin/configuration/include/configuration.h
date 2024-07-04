@@ -5,13 +5,14 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "utils/include/arguments.h"
 #include "math/include/table.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
 #include "configuration/include/neighbor_criteria.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 class Domain;
 

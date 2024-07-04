@@ -4,10 +4,12 @@
 
 #include <string>
 #include <memory>
-#include "utils/include/arguments.h"
+#include <map>
 #include "monte_carlo/include/action.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Add an action to FEASST by using this file as a template and instruction set.

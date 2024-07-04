@@ -3,6 +3,8 @@
 
 #include <cmath>
 #include <vector>
+#include <map>
+#include <string>
 #include <sstream>
 
 namespace feasst {
