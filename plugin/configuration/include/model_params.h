@@ -6,12 +6,13 @@
 #include <vector>
 #include <string>
 #include "configuration/include/physical_constants.h"
-#include "configuration/include/particle.h"
 #include "configuration/include/properties.h"
 
 namespace feasst {
 
 class ModelParams;
+class Particle;
+class Site;
 
 /**
   Model parameters depend upon site types, such as epsilon, sigma, etc.

@@ -5,6 +5,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "patch/include/file_xyz_spherocylinder.h"
 

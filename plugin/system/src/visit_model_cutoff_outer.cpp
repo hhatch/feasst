@@ -3,6 +3,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/visit_model_cutoff_outer.h"

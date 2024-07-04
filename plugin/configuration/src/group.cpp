@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/particle.h"
 #include "configuration/include/group.h"
 
 namespace feasst {

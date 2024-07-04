@@ -8,6 +8,7 @@
 #include "utils/include/utils.h"  // resize
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
+#include "configuration/include/particle.h"
 #include "configuration/include/model_params.h"
 
 namespace feasst {

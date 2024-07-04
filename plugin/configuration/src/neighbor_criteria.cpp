@@ -92,12 +92,17 @@ bool NeighborCriteria::is_position_accepted(
     const Position& position,
     const Domain& domain) {
   double squared_distance;
-  if (origin_.dimension() == 0) {
-    origin_.set_to_origin(domain.dimension());
-    rel_.set_to_origin(domain.dimension());
-    pbc_.set_to_origin(domain.dimension());
+  if (!origin_) {
+    for (auto pos : {rel_, pbc_, origin_}) {
+      pos = std::make_shared<Position>();
+    }
   }
-  domain.wrap_opt(position, origin_, &rel_, &pbc_, &squared_distance);
+  if (origin_->dimension() == 0) {
+    origin_->set_to_origin(domain.dimension());
+    rel_->set_to_origin(domain.dimension());
+    pbc_->set_to_origin(domain.dimension());
+  }
+  domain.wrap_opt(position, *origin_, rel_.get(), pbc_.get(), &squared_distance);
   DEBUG("squared_distance " << squared_distance);
   return squared_distance > minimum_distance_sq_ &&
          squared_distance < maximum_distance_sq_;

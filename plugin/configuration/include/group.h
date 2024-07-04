@@ -4,9 +4,13 @@
 
 #include <memory>
 #include <vector>
-#include "configuration/include/particle.h"
+#include <map>
+#include "configuration/include/properties.h"
 
 namespace feasst {
+
+class Particle;
+class Site;
 
 typedef std::map<std::string, std::string> argtype;
 

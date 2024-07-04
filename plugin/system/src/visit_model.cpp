@@ -7,6 +7,7 @@
 #include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/model_params.h"
 #include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
 #include "system/include/model_one_body.h"

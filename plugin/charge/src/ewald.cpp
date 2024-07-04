@@ -3,6 +3,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "math/include/constants.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/visit_configuration.h"
 #include "charge/include/ewald.h"

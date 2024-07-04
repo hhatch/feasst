@@ -15,6 +15,9 @@ namespace feasst {
 typedef std::map<std::string, std::string> argtype;
 
 class Domain;
+class ModelParam;
+class ModelParams;
+class PhysicalConstants;
 
 /**
   A Configuration contains both the particles and the spatial Domain/boundaries.
@@ -173,8 +176,7 @@ class Configuration {
     unique_types_.set_physical_constants(constants); }
 
   /// Return the physical constants.
-  const PhysicalConstants& physical_constants() const {
-    return model_params().physical_constants(); }
+  const PhysicalConstants& physical_constants() const;
 
   /// Return the unique types. Only unique sites and bonds are included.
   /// Thus, the site index is the same as the numeric value for the site type.

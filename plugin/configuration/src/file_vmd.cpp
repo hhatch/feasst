@@ -4,6 +4,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "utils/include/debug.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/select.h"
 #include "configuration/include/file_vmd.h"

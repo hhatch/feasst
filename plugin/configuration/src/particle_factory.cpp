@@ -3,10 +3,16 @@
 #include "utils/include/serialize.h"
 #include "math/include/histogram.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/model_params.h"
+#include "configuration/include/group.h"
 #include "configuration/include/file_particle.h"
 #include "configuration/include/particle_factory.h"
 
 namespace feasst {
+
+ParticleFactory::ParticleFactory() {
+  model_params_ = std::make_shared<ModelParams>();
+}
 
 void ParticleFactory::add(const Particle& particle) {
   // compute types and also check none are skipped.
@@ -111,7 +117,7 @@ void ParticleFactory::add(const std::string file_name) {
 
   // Update model parameters only after the particle has been filtered.
   if (unique_types_) {
-    model_params_.add(particles_.back());
+    model_params_->add(particles_.back());
   }
 }
 
@@ -208,7 +214,7 @@ int ParticleFactory::check_dihedral_types() const {
   return num_dihedral_types;
 }
 
-void ParticleFactory::remove(const Group group) {
+void ParticleFactory::remove(const Group& group) {
   for (int index = num() -1;
        index >= 0;
        --index) {
@@ -243,7 +249,7 @@ void ParticleFactory::serialize(std::ostream& ostr) const {
   feasst_serialize_fstobj(particles_, ostr);
   feasst_serialize(unique_particles_, ostr);
   feasst_serialize(unique_types_, ostr);
-  model_params_.serialize(ostr);
+  feasst_serialize(model_params_, ostr);
 }
 
 ParticleFactory::ParticleFactory(std::istream& istr) {
@@ -252,7 +258,7 @@ ParticleFactory::ParticleFactory(std::istream& istr) {
   feasst_deserialize_fstobj(&particles_, istr);
   feasst_deserialize(&unique_particles_, istr);
   feasst_deserialize(&unique_types_, istr);
-  model_params_ = ModelParams(istr);
+  feasst_deserialize(model_params_, istr);
 }
 
 void ParticleFactory::scale_particle_positions(const int dimen,
@@ -284,6 +290,47 @@ void ParticleFactory::replace_properties(const int particle_index,
   ASSERT(particle_index < num(), "particle_index:" << particle_index <<
     " is >= number of particles:" << num());
   particles_[particle_index].replace_properties(site_index, replacement);
+}
+
+const ModelParams& ParticleFactory::model_params() const { return *model_params_; }
+
+void ParticleFactory::add(const std::shared_ptr<ModelParam> param) {
+  model_params_->add(param);
+}
+
+void ParticleFactory::set_model_param(const std::string name,
+                     const int site_type,
+                     const double value) {
+  model_params_->set(name, site_type, value);
+}
+
+void ParticleFactory::set_model_param(const std::string name,
+                     const int site_type1,
+                     const int site_type2,
+                     const double value) {
+  model_params_->set(name, site_type1, site_type2, value);
+}
+
+void ParticleFactory::set_model_param(const std::string name, const std::string filename) {
+  model_params_->set(name, filename);
+}
+  
+void ParticleFactory::add_model_param(const std::string name,
+                     const double value) {
+  model_params_->add_property(name, value);
+}
+
+void ParticleFactory::add_or_set_model_param(const std::string name,
+                            const double value) {
+  model_params_->add_or_set_property(name, value);
+}
+
+void ParticleFactory::set_cutoff_min_to_sigma() {
+  model_params_->set_cutoff_min_to_sigma();
+}
+  
+void ParticleFactory::set_physical_constants(std::shared_ptr<PhysicalConstants> constants) {
+  model_params_->set_physical_constants(constants);
 }
 
 }  // namespace feasst

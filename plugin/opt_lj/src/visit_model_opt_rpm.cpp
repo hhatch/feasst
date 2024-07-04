@@ -1,7 +1,8 @@
 #include <cmath>  // rint
 #include "utils/include/utils.h"
-#include "math/include/constants.h"
 #include "utils/include/serialize.h"
+#include "math/include/constants.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"

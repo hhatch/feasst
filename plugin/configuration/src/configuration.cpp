@@ -5,6 +5,7 @@
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/model_params.h"
 #include "math/include/constants.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/domain.h"
@@ -986,6 +987,10 @@ std::vector<std::vector<int> > Configuration::num_site_types_per_particle_type()
     nstppt[ptype] = st;
   }
   return nstppt;
+}
+
+const PhysicalConstants& Configuration::physical_constants() const {
+  return model_params().physical_constants();
 }
 
 }  // namespace feasst

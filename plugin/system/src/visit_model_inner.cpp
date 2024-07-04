@@ -2,6 +2,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/select.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
