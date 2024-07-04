@@ -5,6 +5,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/io.h"
 #include "utils/include/serialize.h"
+#include "math/include/position.h"
 #include "math/include/random.h"
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"

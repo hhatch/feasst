@@ -7,13 +7,13 @@
 #include <deque>
 #include <string>
 #include <memory>
-#include "math/include/position.h"
 
 namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
 class Cache;
+class Position;
 class RotationMatrix;
 
 /**

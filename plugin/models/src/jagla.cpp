@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/constants.h"
 #include "configuration/include/model_params.h"
 #include "example/include/model_param_example.h"
 #include "models/include/jagla.h"

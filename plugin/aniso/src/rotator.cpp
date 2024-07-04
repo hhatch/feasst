@@ -5,6 +5,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/progress_report.h"
 #include "threads/include/thread_omp.h"
+#include "math/include/constants.h"
 #include "math/include/formula.h"
 #include "math/include/golden_search.h"
 #include "configuration/include/domain.h"

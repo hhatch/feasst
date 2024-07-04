@@ -4,10 +4,10 @@
 
 #include <string>
 #include <vector>
-#include "math/include/constants.h"
-#include "math/include/position.h"
 
 namespace feasst {
+
+class Position;
 
 /**
   A Matrix is represented by rows and columns.
@@ -88,7 +88,7 @@ class Matrix {
   void invert();
 
   /// Return true if identity matrix.
-  bool is_identity(const double tolerance = NEAR_ZERO) const;
+  bool is_identity(const double tolerance = 1e-15) const;
 
   /// For 3D, return the 3x3 matrix to write cross products as a x b = [a]_x b.
   /// See https://en.wikipedia.org/wiki/Skew-symmetric_matrix
