@@ -3,9 +3,10 @@
 #define FEASST_SYSTEM_VISIT_CONFIGURATION_H_
 
 #include "configuration/include/visit_particles.h"
-#include "configuration/include/configuration.h"
 
 namespace feasst {
+
+class Configuration;
 
 struct LoopDescriptor {
   int particle_index;
@@ -22,8 +23,7 @@ class VisitConfiguration : public VisitParticles {
             const Select& select);
   void loop(const Configuration& config,
             LoopConfigOneBody * loop_config_one_body,
-            const int group_index = 0) {
-    loop(config, loop_config_one_body, config.group_selects()[group_index]); }
+            const int group_index = 0);
 
   virtual ~VisitConfiguration() {}
  private:

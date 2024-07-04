@@ -1,4 +1,5 @@
 #include <vector>
+#include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 
 namespace feasst {
@@ -21,6 +22,12 @@ void VisitConfiguration::loop(const Configuration& config,
       }
     }
   }
+}
+
+void VisitConfiguration::loop(const Configuration& config,
+          LoopConfigOneBody * loop_config_one_body,
+          const int group_index) {
+  loop(config, loop_config_one_body, config.group_selects()[group_index]);
 }
 
 }  // namespace feasst

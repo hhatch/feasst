@@ -2,8 +2,10 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "configuration/include/particle.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/model_params.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 #include "charge/include/slab_correction.h"
 

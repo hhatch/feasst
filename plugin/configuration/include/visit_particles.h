@@ -2,12 +2,12 @@
 #ifndef FEASST_CONFIGURATION_VISIT_PARTICLES_H_
 #define FEASST_CONFIGURATION_VISIT_PARTICLES_H_
 
-#include "configuration/include/particle_factory.h"
-#include "configuration/include/select.h"
-
 namespace feasst {
 
 class LoopOneBody;
+class ParticleFactory;
+class Select;
+class Site;
 
 class VisitParticles {
  public:
