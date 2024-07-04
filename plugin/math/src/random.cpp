@@ -8,6 +8,7 @@
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
 #include "math/include/matrix.h"
+#include "utils/include/cache.h"
 
 namespace feasst {
 
@@ -45,13 +46,16 @@ void Random::seed(const int seed) {
 }
 
 double Random::uniform() {
+  if (!cache_) {
+    cache_ = std::make_shared<Cache>();
+  }
   if (!is_seeded_) {
     seed_by_time();
   }
   double ran;
-  if (!cache_.is_unloading(&ran)) {
+  if (!cache_->is_unloading(&ran)) {
     ran = gen_uniform_();
-    cache_.load(ran);
+    cache_->load(ran);
   }
   DEBUG("ran: " << ran);
   return ran;
@@ -64,7 +68,7 @@ int Random::uniform(const int min, const int max) {
 
 void Random::serialize_random_(std::ostream& ostr) const {
   feasst_serialize_version(979, ostr);
-  feasst_serialize_fstobj(cache_, ostr);
+  feasst_serialize(cache_, ostr);
   feasst_serialize(is_seeded_, ostr);
 }
 
@@ -89,7 +93,7 @@ Random::Random(std::istream& istr) {
   istr >> class_name_;
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 979, "mismatch version: " << version);
-  feasst_deserialize_fstobj(&cache_, istr);
+  feasst_deserialize(cache_, istr);
   feasst_deserialize(&is_seeded_, istr);
 }
 
@@ -315,6 +319,14 @@ double Random::standard_normal() {
 
 int Random::gen_uniform_(const int min, const int max) {
   return min + static_cast<int>(gen_uniform_()*(max - min));
+}
+
+const Cache& Random::cache() const { return *cache_; }
+
+void Random::set_cache_to_load(const bool load) { cache_->set_load(load); }
+
+void Random::set_cache_to_unload(const Random& random) {
+  cache_->set_unload(random.cache());
 }
 
 }  // namespace feasst
