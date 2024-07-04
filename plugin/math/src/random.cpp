@@ -1,6 +1,7 @@
 #include <cmath>  // acos
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "utils/include/arguments.h"
 #include "utils/include/io.h"
 #include "utils/include/serialize.h"

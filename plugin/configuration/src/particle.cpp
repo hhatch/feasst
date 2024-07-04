@@ -47,7 +47,7 @@ void Particle::remove_non_unique_types() {
       } else if (name == "dihedral") {
         type = dihedrals_[index].type();
       } else {
-        ERROR("unrecognized");
+        FATAL("unrecognized");
       }
       if (!find_in_list(type, types_visited)) {
         types_visited.push_back(type);

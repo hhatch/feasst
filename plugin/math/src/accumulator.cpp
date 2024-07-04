@@ -2,6 +2,7 @@
 #include <numeric>
 #include <sstream>
 #include "utils/include/arguments.h"
+#include "utils/include/debug.h"
 #include "utils/include/utils.h"
 #include "utils/include/io.h"
 #include "utils/include/serialize.h"
@@ -222,10 +223,10 @@ bool Accumulator::is_equivalent(const Accumulator& accum,
     pow(block_stdev(num_op), 2)/block_averages_[num_op]->num_values());
   if (std::abs(diff) > t_factor*stdev) {
     if (verbose) {
-      std::cout << str() << " " << accum.str() << std::endl;
-      std::cout << "diff: " << diff << std::endl;
-      std::cout << "stdev: " << stdev << std::endl;
-      std::cout << "t_factor: " << t_factor << std::endl;
+      INFO(str() << " " << accum.str() << std::endl <<
+        "diff: " << diff << std::endl <<
+        "stdev: " << stdev << std::endl <<
+        "t_factor: " << t_factor << std::endl);
     }
     return false;
   }

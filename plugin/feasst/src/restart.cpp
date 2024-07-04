@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "feasst/include/feasst.h"
 
 /**
