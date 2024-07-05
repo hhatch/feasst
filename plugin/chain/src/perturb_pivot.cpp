@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/random.h"
+#include "monte_carlo/include/trial_select.h"
 #include "chain/include/perturb_pivot.h"
 
 namespace feasst {

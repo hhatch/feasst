@@ -3,6 +3,7 @@
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
+#include "monte_carlo/include/trial_select.h"
 #include "cluster/include/perturb_add_avb.h"
 
 namespace feasst {

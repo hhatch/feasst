@@ -3,6 +3,7 @@
 #include "math/include/constants.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
+#include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/perturb_anywhere.h"
 
 namespace feasst {

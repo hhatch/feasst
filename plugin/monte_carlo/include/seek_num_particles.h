@@ -11,6 +11,7 @@ typedef std::map<std::string, std::string> argtype;
 
 class Criteria;
 class Constraint;
+class ThermoParams;
 class TrialAdd;
 class Trial;
 class MonteCarlo;

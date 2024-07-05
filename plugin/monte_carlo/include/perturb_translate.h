@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_TRANSLATE_H_
 #define FEASST_MONTE_CARLO_PERTURB_TRANSLATE_H_
 
+#include "math/include/position.h"
 #include "monte_carlo/include/perturb_move.h"
 
 namespace feasst {

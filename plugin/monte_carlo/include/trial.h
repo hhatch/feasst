@@ -6,10 +6,10 @@
 #include <string>
 #include <memory>
 #include "system/include/synchronize_data.h"
-#include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
 
+class Acceptance;
 class Criteria;
 class Perturb;
 class System;
@@ -174,7 +174,7 @@ class Trial {
   /* Checks and hacky additions */
 
   // Return Acceptance, which is a temporary object.
-  const Acceptance& accept() const { return acceptance_; }
+  const Acceptance& accept() const;
 
   // Check if approximately equal to given trial.
   bool is_equal(const Trial& trial) const;
@@ -223,7 +223,7 @@ class Trial {
   bool is_finalize_delayed_;
 
   // temporary or duplicate
-  Acceptance acceptance_;
+  std::shared_ptr<Acceptance> acceptance_;
   std::vector<TrialStage*> stages_ptr_;
 
   void refresh_stages_ptr_();

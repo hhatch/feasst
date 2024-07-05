@@ -16,6 +16,7 @@
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
+#include "monte_carlo/include/trial_select.h"
 #include "confinement/include/model_table_cartesian.h"
 
 // HWH beware circular dependency
