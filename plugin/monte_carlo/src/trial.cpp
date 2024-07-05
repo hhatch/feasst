@@ -3,6 +3,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "monte_carlo/include/trial.h"
 

@@ -3,6 +3,7 @@
 #include "math/include/constants.h"  // PI
 #include "math/include/random.h"
 #include "math/include/utils_math.h"  // round
+#include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/perturb_distance_angle.h"
 

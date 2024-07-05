@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/configuration.h"
 #include "monte_carlo/include/trial_select_angle.h"
 
 namespace feasst {

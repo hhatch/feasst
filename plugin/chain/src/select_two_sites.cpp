@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "chain/include/select_two_sites.h"
 
 namespace feasst {

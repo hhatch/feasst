@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // find_in_list
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "monte_carlo/include/trial_select_particle.h"
 
 namespace feasst {

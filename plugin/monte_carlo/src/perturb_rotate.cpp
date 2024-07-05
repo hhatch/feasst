@@ -1,9 +1,10 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "monte_carlo/include/perturb_rotate.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
+#include "monte_carlo/include/perturb_rotate.h"
 
 namespace feasst {
 

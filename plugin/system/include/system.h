@@ -2,16 +2,19 @@
 #ifndef FEASST_SYSTEM_SYSTEM_H_
 #define FEASST_SYSTEM_SYSTEM_H_
 
+#include <map>
 #include <vector>
 #include <memory>
-#include "configuration/include/configuration.h"
 #include "system/include/potential_factory.h"
 
 namespace feasst {
 
 class BondVisitor;
+class Configuration;
 class NeighborCriteria;
 class ThermoParams;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   System is a facade design pattern in order to constrain and/or simplify
@@ -48,8 +51,7 @@ class System {
   void add(std::shared_ptr<Configuration> configuration);
 
   /// Return the number of configurations.
-  int num_configurations() const {
-    return static_cast<int>(configurations_.size()); }
+  int num_configurations() const;
 
   /// Return the configuration
   const Configuration& configuration(const int config = 0) const;
@@ -129,8 +131,7 @@ class System {
 
   /// Add a NeighborCriteria.
   void add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
-    const int config = 0) {
-    configurations_[config].add(neighbor_criteria); }
+    const int config = 0);
 
   /// Return a NeighborCriteria by index in order added.
   const NeighborCriteria& neighbor_criteria(const int index,
@@ -235,8 +236,7 @@ class System {
 
   /// Finalize changes due to energy computation of perturbations.
   void finalize(const Select& select, const int config = 0);
-  void finalize(const int config = 0) {
-    finalize(configurations_[config].selection_of_all(), config); }
+  void finalize(const int config = 0);
 
   /// Set cache to load energy calculations.
   void load_cache(const bool load);
@@ -262,7 +262,7 @@ class System {
   explicit System(std::istream& sstr);
 
  private:
-  std::vector<Configuration> configurations_;
+  std::vector<std::shared_ptr<Configuration> > configurations_;
   std::vector<std::shared_ptr<BondVisitor> > bonds_;
   std::vector<PotentialFactory> unoptimized_;
   std::vector<PotentialFactory> optimized_;

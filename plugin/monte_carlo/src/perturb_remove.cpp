@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "configuration/include/configuration.h"
 #include "monte_carlo/include/perturb_remove.h"
 
 namespace feasst {

@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/model_params.h"
 #include "system/include/potential.h"

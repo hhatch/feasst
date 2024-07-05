@@ -3,6 +3,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "chain/include/perturb_connector.h"
 
 namespace feasst {

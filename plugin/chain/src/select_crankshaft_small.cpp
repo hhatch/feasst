@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "chain/include/select_crankshaft_small.h"
 
 namespace feasst {

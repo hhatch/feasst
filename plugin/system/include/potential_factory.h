@@ -10,7 +10,9 @@
 
 namespace feasst {
 
+class Configuration;
 class Potential;
+class Select;
 
 /**
   A list of potentials.

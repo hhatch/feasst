@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/random.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "cluster/include/perturb_move_avb.h"
 

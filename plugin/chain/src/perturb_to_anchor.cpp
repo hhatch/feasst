@@ -4,6 +4,7 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
 #include "chain/include/perturb_to_anchor.h"
 
 namespace feasst {

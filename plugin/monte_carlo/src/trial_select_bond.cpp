@@ -1,7 +1,8 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
-#include "monte_carlo/include/trial_select_bond.h"
 #include "math/include/random.h"
+#include "configuration/include/configuration.h"
+#include "monte_carlo/include/trial_select_bond.h"
 
 namespace feasst {
 

@@ -1,8 +1,8 @@
 #include "utils/include/debug.h"
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "chain/include/perturb_crankshaft.h"
 #include "math/include/random.h"
+#include "chain/include/perturb_crankshaft.h"
 
 namespace feasst {
 

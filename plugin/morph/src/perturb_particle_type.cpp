@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/constants.h"
+#include "configuration/include/configuration.h"
 #include "morph/include/perturb_particle_type.h"
 
 namespace feasst {

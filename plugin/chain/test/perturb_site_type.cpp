@@ -1,5 +1,6 @@
 #include "utils/test/utils.h"
 #include "math/include/random_mt19937.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "chain/include/perturb_site_type.h"

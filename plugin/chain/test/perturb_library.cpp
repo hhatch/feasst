@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "configuration/include/configuration.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "chain/include/perturb_library.h"
 
