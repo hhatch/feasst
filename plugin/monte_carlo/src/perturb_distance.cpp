@@ -4,6 +4,7 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "system/include/potential.h"
 #include "monte_carlo/include/perturb_distance.h"
 
 namespace feasst {

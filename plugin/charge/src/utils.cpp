@@ -4,6 +4,7 @@
 #include "math/include/constants.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/file_xyz.h"
+#include "configuration/include/model_params.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/hard_sphere.h"
 #include "system/include/long_range_corrections.h"

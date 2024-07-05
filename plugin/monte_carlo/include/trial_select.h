@@ -11,6 +11,8 @@ namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
+class EnergyMap;
+
 /**
   Select the mobile particles and sites that are to be perturbed via trials.
   Store the original position in mobile_original for reverting.

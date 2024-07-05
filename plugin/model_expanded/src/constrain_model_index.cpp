@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "system/include/potential.h"
 #include "model_expanded/include/constrain_model_index.h"
 
 namespace feasst {

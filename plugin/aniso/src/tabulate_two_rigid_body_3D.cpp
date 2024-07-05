@@ -10,6 +10,7 @@
 #include "math/include/formula.h"
 #include "math/include/golden_search.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/model_params.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/monte_carlo.h"

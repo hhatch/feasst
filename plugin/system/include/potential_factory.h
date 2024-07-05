@@ -6,10 +6,11 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "system/include/potential.h"
 // #include "utils/include/timer.h"
 
 namespace feasst {
+
+class Potential;
 
 /**
   A list of potentials.

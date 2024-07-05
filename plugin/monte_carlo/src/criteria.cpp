@@ -4,6 +4,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // is_equal
 #include "utils/include/serialize.h"
+#include "system/include/potential.h"
 #include "math/include/constants.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/constraint.h"
