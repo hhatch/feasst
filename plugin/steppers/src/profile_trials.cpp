@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 //#include "utils/include/timer.h"
+#include "monte_carlo/include/trial_factory.h"
 #include "steppers/include/profile_trials.h"
 
 namespace feasst {

@@ -2,9 +2,9 @@
 #ifndef FEASST_MONTE_CARLO_ACCEPTANCE_H_
 #define FEASST_MONTE_CARLO_ACCEPTANCE_H_
 
-#include "configuration/include/select.h"
-
 namespace feasst {
+
+class Select;
 
 /**
   This object contains information necessary for Criteria to make a decision on
@@ -127,7 +127,7 @@ class Acceptance {
   bool endpoint_;
   std::vector<std::vector<double> > energy_profile_new_;
   std::vector<std::vector<double> > energy_profile_old_;
-  std::vector<Select> perturbed_;
+  std::vector<std::shared_ptr<Select> > perturbed_;
   std::vector<int> updated_;
 
   template <typename T>

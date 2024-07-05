@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/histogram.h"
+#include "monte_carlo/include/criteria.h"
 #include "chain/include/radius_of_gyration.h"
 
 namespace feasst {

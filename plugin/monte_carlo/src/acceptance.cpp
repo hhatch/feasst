@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/debug.h"
 #include "utils/include/utils.h"
+#include "configuration/include/select.h"
 #include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
@@ -32,24 +33,26 @@ void Acceptance::reset() {
   macrostate_shift_type_[0] = 0.;
   perturbed_.clear();
   perturbed_.resize(2); // maximum number of configs
+  perturbed_[0] = std::make_shared<Select>();
+  perturbed_[1] = std::make_shared<Select>();
 }
 
 void Acceptance::add_to_perturbed(const Select& select, const int config) {
   resize_(config, &perturbed_);
-  perturbed_[config].add(select);
+  perturbed_[config]->add(select);
 }
 
 void Acceptance::set_perturbed_state(const int state, const int config) {
   resize_(config, &perturbed_);
   DEBUG("state " << state);
-  perturbed_[config].set_trial_state(state);
+  perturbed_[config]->set_trial_state(state);
 }
 
 const Select& Acceptance::perturbed(const int config) const {
   ASSERT(config < static_cast<int>(perturbed_.size()),
     "config: " << config << " >= size:" << perturbed_.size() <<
     "Consider increasing max num config in reset()");
-  return perturbed_[config];
+  return *perturbed_[config];
 }
 
 const std::vector<double>& Acceptance::energy_profile_new(const int config) const {

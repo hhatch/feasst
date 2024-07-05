@@ -6,6 +6,7 @@
 #include "system/include/thermo_params.h"
 #include "system/include/system.h"
 #include "system/include/lennard_jones.h"
+#include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/trial_compute_move.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/analyze.h"

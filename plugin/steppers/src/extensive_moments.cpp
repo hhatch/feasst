@@ -2,6 +2,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "math/include/accumulator.h"
+#include "monte_carlo/include/criteria.h"
 #include "steppers/include/extensive_moments.h"
 
 namespace feasst {
