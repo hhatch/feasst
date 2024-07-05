@@ -4,13 +4,13 @@
 
 #include <map>
 #include <string>
-#include "configuration/include/model_params.h"
 #include "system/include/model_two_body.h"
 
 namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
+class ModelParams;
 class Table1D;
 
 /**

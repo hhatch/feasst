@@ -4,6 +4,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/table.h"
+#include "configuration/include/model_params.h"
 #include "system/include/model_two_body_table.h"
 
 namespace feasst {
