@@ -2,14 +2,14 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 #define FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 
-#include "math/include/accumulator.h"
-#include "configuration/include/properties.h"
 #include "configuration/include/select.h"
 
 namespace feasst {
 
+class Accumulator;
 class Configuration;
 class EnergyMap;
+class Properties;
 class System;
 
 typedef std::map<std::string, std::string> argtype;
@@ -144,16 +144,13 @@ class TrialSelect {
   const EnergyMap& map_(const System& system, const int neighbor_index) const;
 
   /// Return the property value by name.
-  double property(const std::string name) const {
-    return properties_.value(name); }
+  double property(const std::string name) const;
 
   /// Return true if entity has property of name.
-  bool has_property(const std::string name) const {
-    return properties_.has(name); }
+  bool has_property(const std::string name) const;
 
   /// Add a property, or set its value if name already exists.
-  void add_or_set_property(const std::string name, const double value) {
-    properties_.add_or_set(name, value); }
+  void add_or_set_property(const std::string name, const double value);
 
   /// Return true if all sites in mobile are isotropic.
   bool is_isotropic(const System * system) const;
@@ -191,7 +188,7 @@ class TrialSelect {
   int configuration_index_;
   bool is_particle_type_set_ = false;
   bool is_ghost_;
-  Properties properties_;
+  std::shared_ptr<Properties> properties_;
 
   // not checkpointed
   double probability_;

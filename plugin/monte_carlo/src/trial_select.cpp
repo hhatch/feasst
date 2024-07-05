@@ -3,6 +3,7 @@
 #include "configuration/include/configuration.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/model_params.h"
+#include "configuration/include/properties.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
 #include "system/include/visit_model_inner.h"
@@ -15,6 +16,7 @@ TrialSelect::TrialSelect(argtype args) : TrialSelect(&args) {
   feasst_check_all_used(args);
 }
 TrialSelect::TrialSelect(argtype * args) {
+  properties_ = std::make_shared<Properties>();
   // defaults
   set_ghost(false);
 
@@ -106,7 +108,7 @@ void TrialSelect::serialize_trial_select_(std::ostream& ostr) const {
   feasst_serialize(configuration_index_, ostr);
   feasst_serialize(is_particle_type_set_, ostr);
   feasst_serialize(is_ghost_, ostr);
-  feasst_serialize_fstobj(properties_, ostr);
+  feasst_serialize(properties_, ostr);
 }
 
 TrialSelect::TrialSelect(std::istream& istr) {
@@ -123,7 +125,15 @@ TrialSelect::TrialSelect(std::istream& istr) {
   }
   feasst_deserialize(&is_particle_type_set_, istr);
   feasst_deserialize(&is_ghost_, istr);
-  feasst_deserialize_fstobj(&properties_, istr);
+//  feasst_deserialize(properties_, istr);
+// HWH for unknown reasons, this function template does not work.
+  {
+    int existing;
+    istr >> existing;
+    if (existing != 0) {
+       properties_ = std::make_shared<Properties>(istr);
+    }
+  }
 }
 
 void TrialSelect::remove_unphysical_sites(const Configuration& config) {
@@ -254,6 +264,18 @@ const std::map<std::string, std::shared_ptr<Accumulator> >& TrialSelect::printab
 
 const Accumulator& TrialSelect::printable(const std::string str) const {
   return const_cast<const Accumulator&>(*printable_.at(str));
+}
+
+double TrialSelect::property(const std::string name) const {
+  return properties_->value(name);
+}
+
+bool TrialSelect::has_property(const std::string name) const {
+  return properties_->has(name);
+}
+
+void TrialSelect::add_or_set_property(const std::string name, const double value) {
+  properties_->add_or_set(name, value);
 }
 
 }  // namespace feasst
