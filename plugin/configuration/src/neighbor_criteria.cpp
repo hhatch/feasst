@@ -93,9 +93,9 @@ bool NeighborCriteria::is_position_accepted(
     const Domain& domain) {
   double squared_distance;
   if (!origin_) {
-    for (auto pos : {rel_, pbc_, origin_}) {
-      pos = std::make_shared<Position>();
-    }
+    origin_ = std::make_shared<Position>();
+    rel_ = std::make_shared<Position>();
+    pbc_ = std::make_shared<Position>();
   }
   if (origin_->dimension() == 0) {
     origin_->set_to_origin(domain.dimension());

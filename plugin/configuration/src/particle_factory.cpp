@@ -258,7 +258,14 @@ ParticleFactory::ParticleFactory(std::istream& istr) {
   feasst_deserialize_fstobj(&particles_, istr);
   feasst_deserialize(&unique_particles_, istr);
   feasst_deserialize(&unique_types_, istr);
-  feasst_deserialize(model_params_, istr);
+// HWH for unknown reasons, this function template does not work.
+//  feasst_deserialize(model_params_, istr);
+  { int existing;
+    istr >> existing;
+    if (existing != 0) {
+      model_params_ = std::make_shared<ModelParams>(istr);
+    }
+  }
 }
 
 void ParticleFactory::scale_particle_positions(const int dimen,

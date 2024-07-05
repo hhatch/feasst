@@ -19,6 +19,7 @@
 namespace feasst {
 
 Potential::Potential(argtype * args) {
+  cache_ = std::make_shared<Cache>();
   // parse group_index
   if (used("group_index", *args)) {
     group_index_ = integer("group_index", args, 0);
@@ -286,9 +287,25 @@ Potential::Potential(std::istream& istr) {
   feasst_deserialize(&stored_energy_, istr);
   feasst_deserialize(&model_params_override_, istr);
   if (model_params_override_) {
-    feasst_deserialize(model_params_, istr);
+//  HWH for unknown reasons, this function template does not work.
+    //feasst_deserialize(model_params_, istr);
+    {
+      int existing;
+      istr >> existing;
+      if (existing != 0) {
+        model_params_ = std::make_shared<ModelParams>(istr);
+      }
+    }
   }
-  feasst_deserialize(cache_, istr);
+  // HWH for unknown reasons, the below does not work
+  //feasst_deserialize(cache_, istr);
+  {
+    int existing;
+    istr >> existing;
+    if (existing != 0) {
+      cache_ = std::make_shared<Cache>(istr);
+    }
+  }
   feasst_deserialize(&prevent_cache_, istr);
   feasst_deserialize(&table_size_, istr);
   feasst_deserialize(&override_args_, istr);

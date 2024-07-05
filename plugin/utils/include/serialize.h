@@ -312,15 +312,16 @@ void feasst_serialize(const std::shared_ptr<T> ptr, std::ostream& ostr) {
   }
 }
 
-/// Deserialize feasst object stored as shared pointer
-template <typename T>
-void feasst_deserialize(std::shared_ptr<T> ptr, std::istream& istr) {
-  int existing;
-  istr >> existing;
-  if (existing != 0) {
-    ptr = std::make_shared<T>(istr);
-  }
-}
+// HWH for unknown reasons, this function template does not work.
+// /// Deserialize feasst object stored as shared pointer
+// template <typename T>
+// void feasst_deserialize(std::shared_ptr<T> ptr, std::istream& istr) {
+//   int existing;
+//   istr >> existing;
+//   if (existing != 0) {
+//     ptr = std::make_shared<T>(istr);
+//   }
+// }
 
 /// Serialize feasst derived object stored as shared pointer
 template <typename T>
@@ -349,7 +350,7 @@ void feasst_serialize(const std::vector<std::shared_ptr<T> >& vector,
   }
 }
 
-// HWH this didn't work in Accumulator. Depreciate it?
+//  HWH for unknown reasons, this function template does not work.
 /// Deserialize vector of shared pointers of feasst objects
 template <typename T>
 void feasst_deserialize(std::vector<std::shared_ptr<T> > * vector,

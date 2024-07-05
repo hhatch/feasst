@@ -104,7 +104,15 @@ RadiusOfGyration::RadiusOfGyration(std::istream& istr) : Analyze(istr) {
   feasst_deserialize(&group_index_, istr);
   feasst_deserialize_fstobj(&rg_e_, istr);
   feasst_deserialize_fstobj(&rg_e2_, istr);
-  feasst_deserialize(hist_, istr);
+//  HWH for unknown reasons, this function template does not work.
+  //feasst_deserialize(hist_, istr);
+  {
+    int existing;
+    istr >> existing;
+    if (existing != 0) {
+      hist_ = std::make_shared<Histogram>(istr);
+    }
+  }
 }
 
 RadiusOfGyration::RadiusOfGyration(const Analyze& energy) {

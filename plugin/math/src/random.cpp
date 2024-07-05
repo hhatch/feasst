@@ -14,7 +14,9 @@
 
 namespace feasst {
 
-Random::Random(argtype * args) {}
+Random::Random(argtype * args) {
+  cache_ = std::make_shared<Cache>();
+}
 
 // parsing seed in constructor leads to pure virtual function reseed_
 void Random::parse_seed_(argtype * args) {
@@ -48,9 +50,6 @@ void Random::seed(const int seed) {
 }
 
 double Random::uniform() {
-  if (!cache_) {
-    cache_ = std::make_shared<Cache>();
-  }
   if (!is_seeded_) {
     seed_by_time();
   }
@@ -95,7 +94,15 @@ Random::Random(std::istream& istr) {
   istr >> class_name_;
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 979, "mismatch version: " << version);
-  feasst_deserialize(cache_, istr);
+  // HWH for unknown reasons, the below does not work
+  //feasst_deserialize(cache_, istr);
+  {
+    int existing;
+    istr >> existing;
+    if (existing != 0) {
+      cache_ = std::make_shared<Cache>(istr);
+    }
+  }
   feasst_deserialize(&is_seeded_, istr);
 }
 

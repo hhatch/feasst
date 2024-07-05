@@ -186,7 +186,21 @@ System::System(std::istream& sstr) {
   const int version = feasst_deserialize_version(sstr);
   ASSERT(version == 7349, "unrecognized verison: " << version);
   feasst_deserialize_fstobj(&configurations_, sstr);
-  feasst_deserialize(&bonds_, sstr);
+//  HWH for unknown reasons, this function template does not work.
+  //feasst_deserialize(&bonds_, sstr);
+  {
+    int dim1;
+    sstr >> dim1;
+    bonds_.resize(dim1);
+    for (int index = 0; index < dim1; ++index) {
+      //feasst_deserialize((*vector)[index], istr);
+      int existing;
+      sstr >> existing;
+      if (existing != 0) {
+        bonds_[index] = std::make_shared<BondVisitor>(sstr);
+      }
+    }
+  }
   feasst_deserialize_fstobj(&unoptimized_, sstr);
   feasst_deserialize_fstobj(&optimized_, sstr);
   feasst_deserialize(&is_optimized_, sstr);
