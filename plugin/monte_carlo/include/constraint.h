@@ -4,11 +4,12 @@
 
 #include <memory>
 #include <string>
-#include "system/include/system.h"
-#include "monte_carlo/include/acceptance.h"
-#include "monte_carlo/include/criteria.h"
 
 namespace feasst {
+
+class Acceptance;
+class Criteria;
+class System;
 
 /**
   Impose constraints on the System and Criteria.

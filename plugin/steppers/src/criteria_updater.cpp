@@ -1,5 +1,6 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "monte_carlo/include/criteria.h"
 #include "steppers/include/criteria_updater.h"
 
 namespace feasst {

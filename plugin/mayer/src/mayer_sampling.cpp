@@ -7,6 +7,7 @@
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
+#include "system/include/system.h"
 #include "mayer/include/mayer_sampling.h"
 
 namespace feasst {
