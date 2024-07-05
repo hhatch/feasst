@@ -7,10 +7,11 @@
 #include "configuration/include/configuration.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "system/include/potential_factory.h"
-#include "system/include/thermo_params.h"
 #include "system/include/bond_visitor.h"
 
 namespace feasst {
+
+class ThermoParams;
 
 /**
   System is a facade design pattern in order to constrain and/or simplify
@@ -198,11 +199,10 @@ class System {
   const ThermoParams& thermo_params() const;
 
   // Same as above, but as a constant pointer.
-  const ThermoParams * thermo_params_ptr_() const {
-    return thermo_params_.get(); }
+  const ThermoParams * thermo_params_ptr_() const;
 
   /// Set the inverse temperature, \f$\beta\f$.
-  void set_beta(const double beta) { thermo_params_->set_beta(beta); }
+  void set_beta(const double beta);
 
   //@}
   // Other functions:

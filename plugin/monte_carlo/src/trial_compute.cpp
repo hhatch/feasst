@@ -2,6 +2,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_compute.h"
 
 namespace feasst {

@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/io.h"
 #include "utils/include/progress_report.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/seek_num_particles.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trial_add.h"

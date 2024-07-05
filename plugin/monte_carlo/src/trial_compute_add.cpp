@@ -2,6 +2,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "configuration/include/domain.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_select.h"
 

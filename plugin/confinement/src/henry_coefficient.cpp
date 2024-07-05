@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "system/include/thermo_params.h"
 #include "confinement/include/henry_coefficient.h"
 
 namespace feasst {

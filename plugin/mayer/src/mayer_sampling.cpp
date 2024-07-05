@@ -5,6 +5,7 @@
 #include "math/include/utils_math.h" // factorial
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "system/include/thermo_params.h"
 #include "mayer/include/mayer_sampling.h"
 
 namespace feasst {

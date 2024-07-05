@@ -4,6 +4,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/domain.h"
+#include "system/include/thermo_params.h"
 #include "gibbs/include/pressure_from_test_volume.h"
 
 namespace feasst {

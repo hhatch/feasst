@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "system/include/thermo_params.h"
 #include "beta_expanded/include/compute_beta.h"
 
 namespace feasst {

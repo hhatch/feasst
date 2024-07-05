@@ -7,6 +7,7 @@
 #include "math/include/quadratic_equation.h"
 #include "math/include/random.h"
 #include "math/include/utils_math.h"  // round
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_select_angle.h"
 #include "chain/include/perturb_branch.h"
 

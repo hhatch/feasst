@@ -6,6 +6,7 @@
 #include "utils/include/checkpoint.h"
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/action.h"
 

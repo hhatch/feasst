@@ -3,6 +3,7 @@
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/domain.h"
+#include "system/include/thermo_params.h"
 #include "system/include/system.h"
 
 namespace feasst {
@@ -387,5 +388,11 @@ double System::total_volume() const {
   }
   return volume;
 }
+
+const ThermoParams * System::thermo_params_ptr_() const {
+  return thermo_params_.get();
+}
+
+void System::set_beta(const double beta) { thermo_params_->set_beta(beta); }
 
 }  // namespace feasst

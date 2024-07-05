@@ -3,6 +3,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "configuration/include/domain.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_select.h"
 #include "charge/include/compute_add_multiple.h"
 

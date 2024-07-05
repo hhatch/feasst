@@ -4,6 +4,7 @@
 #include "configuration/include/domain.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "system/include/energy_map.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_select.h"
 #include "cluster/include/compute_add_avb_divalent.h"
 

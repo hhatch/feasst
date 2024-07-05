@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "system/include/potential.h"
+#include "system/include/model.h"
 #include "model_expanded/include/constrain_model_index.h"
 
 namespace feasst {

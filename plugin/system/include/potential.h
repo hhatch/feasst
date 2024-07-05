@@ -3,13 +3,13 @@
 #define FEASST_SYSTEM_POTENTIAL_H_
 
 #include <memory>
-#include "configuration/include/model_params.h"
-#include "system/include/model.h"
 
 namespace feasst {
 
 class Cache;
 class Configuration;
+class Model;
+class ModelParams;
 class Select;
 class VisitModel;
 
@@ -57,7 +57,7 @@ class Potential {
   Potential(std::shared_ptr<Model> model, argtype args = argtype());
 
   /// Return the model.
-  const Model& model() const { return const_cast<Model&>(*model_); }
+  const Model& model() const;
 
   /// Construct with visitor and default model.
   Potential(std::shared_ptr<VisitModel> visit_model,
@@ -146,7 +146,7 @@ class Potential {
 
   void set_visit_model_(std::shared_ptr<VisitModel> visit);
 
-  void set_model_index(const int index) { model_->set_model_index(index); }
+  void set_model_index(const int index);
 
   /// Serialize.
   void serialize(std::ostream& ostr) const;
@@ -163,7 +163,7 @@ class Potential {
   std::shared_ptr<Model> model_;
   double stored_energy_ = 0.;
   bool model_params_override_ = false;
-  ModelParams model_params_;
+  std::shared_ptr<ModelParams> model_params_;
   std::shared_ptr<Cache> cache_;
   bool prevent_cache_;
   int table_size_;
