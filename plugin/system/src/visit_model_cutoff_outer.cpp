@@ -213,25 +213,4 @@ void VisitModelCutoffOuter::serialize(std::ostream& ostr) const {
   feasst_serialize(energy_cutoff_, ostr);
 }
 
-class MapCutoffOuter {
- public:
-  MapCutoffOuter() {
-    auto obj = std::make_shared<CutoffOuter>();
-    obj->deserialize_map()["cutoff_outer"] = obj;
-  }
-};
-
-static MapCutoffOuter mapper_cutoff_outer_ = MapCutoffOuter();
-
-void CutoffOuter::serialize(std::ostream& ostr) const {
-  ostr << class_name_ << " ";
-  serialize_model_param_(ostr);
-  feasst_serialize_version(2498, ostr);
-}
-
-CutoffOuter::CutoffOuter(std::istream& istr) : ModelParam(istr) {
-  const int version = feasst_deserialize_version(istr);
-  ASSERT(version == 2498, "mismatch version: " << version);
-}
-
 }  // namespace feasst

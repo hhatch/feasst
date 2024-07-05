@@ -3,22 +3,13 @@
 #define FEASST_SYSTEM_VISIT_MODEL_CUTOFF_OUTER_H_
 
 #include <memory>
-#include "configuration/include/model_params.h"
 #include "system/include/visit_model.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
+class ModelParams;
 
-class CutoffOuter : public ModelParam {
- public:
-  CutoffOuter() : ModelParam() { class_name_ = "cutoff_outer"; }
-  std::shared_ptr<ModelParam> create(std::istream& istr) const override {
-    return std::make_shared<CutoffOuter>(istr); }
-  void serialize(std::ostream& ostr) const override;
-  explicit CutoffOuter(std::istream& istr);
-  virtual ~CutoffOuter() {}
-};
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Similar to VisitModel, except that the distance between the first sites on
