@@ -9,6 +9,8 @@
 
 namespace feasst {
 
+class Random;
+
 /**
   Contains multiple Trials.
  */

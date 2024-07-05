@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze_factory.h"
 

@@ -7,6 +7,7 @@
 #include "system/include/thermo_params.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/metropolis.h"
 #include "cluster/include/trial_transfer_avb_divalent.h"
 #include "cluster/include/trial_add_avb_divalent.h"

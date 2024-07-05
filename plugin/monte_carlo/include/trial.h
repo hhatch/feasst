@@ -5,14 +5,18 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "system/include/system.h"
-#include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/trial_select.h"
-#include "monte_carlo/include/trial_stage.h"
-#include "monte_carlo/include/trial_compute.h"
-#include "monte_carlo/include/perturb.h"
+#include "system/include/synchronize_data.h"
+#include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
+
+class Criteria;
+class Perturb;
+class System;
+class Random;
+class TrialCompute;
+class TrialSelect;
+class TrialStage;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -93,15 +97,13 @@ class Trial {
   void set(const int index, std::shared_ptr<TrialStage> stage);
 
   /// Number of stages.
-  int num_stages() const { return static_cast<int>(stages_.size()); }
+  int num_stages() const;
 
   /// Return a stage.
-  const TrialStage& stage(const int index) const {
-    return const_cast<TrialStage&>(*stages_[index]); }
+  const TrialStage& stage(const int index) const;
 
   // HWH depreciate
-  const std::vector<std::shared_ptr<TrialStage> > stages() const {
-    return stages_; }
+  const std::vector<std::shared_ptr<TrialStage> > stages() const;
 
   /// Number of successful attempts.
   int64_t num_success() const { return data_.int64_1D()[1]; }
@@ -137,11 +139,10 @@ class Trial {
   virtual void precompute(Criteria * criteria, System * system);
 
   /// Set the computation of the trial and acceptance.
-  void set(std::shared_ptr<TrialCompute> compute) { compute_ = compute; }
+  void set(std::shared_ptr<TrialCompute> compute);
 
   /// Return TrialCompute.
-  const TrialCompute& compute() const {
-    return const_cast<TrialCompute&>(*compute_); }
+  const TrialCompute& compute() const;
 
   virtual void before_select(Acceptance * acceptance, Criteria * criteria) {}
 
@@ -186,7 +187,7 @@ class Trial {
   virtual const std::vector<std::shared_ptr<Trial> >& trials() const;
   virtual const Trial& trial(const int index) const;
 
-  TrialStage * get_stage_(const int index) { return stages_[index].get(); }
+  TrialStage * get_stage_(const int index);
 
   // serialize
   std::string class_name() const { return class_name_; }

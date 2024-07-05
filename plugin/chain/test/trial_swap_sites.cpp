@@ -4,6 +4,7 @@
 #include "system/include/lennard_jones.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "math/include/random_mt19937.h"
 #include "monte_carlo/include/metropolis.h"
 #include "chain/include/trial_swap_sites.h"

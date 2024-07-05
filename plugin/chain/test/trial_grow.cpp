@@ -6,6 +6,7 @@
 #include "system/include/ideal_gas.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "steppers/include/movie.h"
 #include "steppers/include/energy.h"
 #include "system/include/dont_visit_model.h"

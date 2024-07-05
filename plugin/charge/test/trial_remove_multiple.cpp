@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "charge/include/trial_remove_multiple.h"
 
 namespace feasst {

@@ -8,6 +8,8 @@
 #include "utils/include/serialize.h"
 #include "threads/include/thread_omp.h"
 #include "monte_carlo/include/action.h"
+#include "monte_carlo/include/criteria.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "prefetch/include/prefetch.h"
 
 // use this to make prefetch serial and simply debugging

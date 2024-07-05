@@ -4,6 +4,7 @@
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_factory.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "confinement/include/henry_coefficient.h"
 
 namespace feasst {

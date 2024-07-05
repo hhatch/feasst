@@ -5,6 +5,12 @@
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/include/system.h"
+#include "monte_carlo/include/perturb.h"
+#include "monte_carlo/include/trial_select.h"
+#include "monte_carlo/include/trial_stage.h"
+#include "monte_carlo/include/trial_compute.h"
+#include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial.h"
 
 namespace feasst {
@@ -348,5 +354,23 @@ void Trial::add_stage(std::shared_ptr<TrialStage> stage) {
   stages_.push_back(stage);
   refresh_stages_ptr_();
 }
+
+void Trial::set(std::shared_ptr<TrialCompute> compute) { compute_ = compute; }
+
+const TrialCompute& Trial::compute() const {
+  return const_cast<TrialCompute&>(*compute_);
+}
+
+int Trial::num_stages() const { return static_cast<int>(stages_.size()); }
+
+const TrialStage& Trial::stage(const int index) const {
+  return const_cast<TrialStage&>(*stages_[index]);
+}
+
+const std::vector<std::shared_ptr<TrialStage> > Trial::stages() const {
+  return stages_;
+}
+
+TrialStage * Trial::get_stage_(const int index) { return stages_[index].get(); }
 
 }  // namespace feasst
