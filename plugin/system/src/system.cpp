@@ -11,11 +11,7 @@
 namespace feasst {
 
 void System::add(std::shared_ptr<Configuration> configuration) {
-  add(*configuration);
-}
-
-void System::add(const Configuration& configuration) {
-  configurations_.push_back(configuration);
+  configurations_.push_back(*configuration);
   bonds_.push_back(std::make_shared<BondVisitor>());
   unoptimized_.push_back(PotentialFactory());
   optimized_.push_back(PotentialFactory());

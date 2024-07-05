@@ -55,7 +55,7 @@ void Backmap::add_backmap_particles_() {
     config_args.insert({"particle_type"+str(type), fstprt});
     ++type;
   }
-  all_atom_ = *MakeConfiguration(config_args);
+  all_atom_ = MakeConfiguration(config_args);
 }
 
 void Backmap::initialize(Criteria * criteria,
@@ -76,7 +76,7 @@ void Backmap::initialize(Criteria * criteria,
   // write vmd
   std::stringstream ss;
   ss << name << ".vmd";
-  vmd_.write(ss.str(), all_atom_, name);
+  vmd_.write(ss.str(), *all_atom_, name);
 }
 
 std::string Backmap::write(const Criteria& criteria,
@@ -84,7 +84,7 @@ std::string Backmap::write(const Criteria& criteria,
     const TrialFactory& trial_factory) {
   const Configuration& orig_config = configuration(system);
   add_backmap_particles_();
-  all_atom_.set(std::make_shared<Domain>(orig_config.domain()));
+  all_atom_->set(std::make_shared<Domain>(orig_config.domain()));
   const Select& all = orig_config.selection_of_all();
   std::vector<std::shared_ptr<TrialSelectParticle> > sels;
   for (int site_type : site_types_) {

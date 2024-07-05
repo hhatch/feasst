@@ -90,9 +90,6 @@ class MonteCarlo {
   /// The first action with a Monte Carlo object is to set the Configuration.
   void add(std::shared_ptr<Configuration> config);
 
-  // HWH depreciated interface. WARN.
-  void add(const Configuration& config);
-
   /// The configuration may be accessed read-only.
   const Configuration& configuration(const int index = 0) const {
     return system_.configuration(index); }

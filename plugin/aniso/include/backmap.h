@@ -56,7 +56,7 @@ class Backmap : public AnalyzeWriteOnly {
  private:
   std::vector<int> site_types_;
   std::vector<std::string> site_fstprt_;
-  Configuration all_atom_;
+  std::shared_ptr<Configuration> all_atom_;
   FileXYZ xyz_;
   FileVMD vmd_;
 

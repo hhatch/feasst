@@ -14,7 +14,7 @@ namespace feasst {
 
 System two_particle_system(argtype args) {
   System sys;
-  sys.add(two_particle_configuration(args));
+  sys.add(std::make_shared<Configuration>(two_particle_configuration(args)));
   sys.add_to_unoptimized(MakePotential(MakeLennardJones()));
   feasst_check_all_used(args);
   return sys;

@@ -21,7 +21,7 @@ TEST(MacrostateMorph, lj) {
   conf->set_model_param("sigma", 1, 0.75);
   conf->set_model_param("cutoff", 1, 1.0);
   System system;
-  system.add(*conf);
+  system.add(conf);
   Configuration * config = system.get_configuration();
   system.add(MakePotential(MakeLennardJones()));
   system.add(MakePotential(MakeLongRangeCorrections()));

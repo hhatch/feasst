@@ -269,7 +269,7 @@ TEST(Ewald, henry_coefficient_LONG) {
     config->set_model_param("cutoff", site_type, 2.5);
   }
   FileXYZ().write_for_vmd("tmp.xyz", *config);
-  system.add(*config);
+  system.add(config);
   system.add(MakePotential(
     MakeEwald({{"kmax_squared", "38"},
                {"alpha", str(5.6/system.configuration().domain().inscribed_sphere_diameter())}})));
@@ -287,7 +287,7 @@ TEST(Ewald, henry_coefficient_LONG) {
 TEST(HardShape, henry_LONG) {
   for (const double length : {10, 20}) {
     System system;
-    system.add(*MakeConfiguration({{"cubic_side_length", str(length)},
+    system.add(MakeConfiguration({{"cubic_side_length", str(length)},
       {"particle_type0", "../particle/hard_sphere.fstprt"},
       {"periodic2", "false"}}));
     system.add(MakePotential(MakeModelHardShape(MakeSlab({
@@ -303,7 +303,7 @@ TEST(HardShape, henry_LONG) {
 TEST(HardShape, henry2_LONG) {
   for (const double length : {10, 20}) {
     System system;
-    system.add(*MakeConfiguration({{"cubic_side_length", str(length)},
+    system.add(MakeConfiguration({{"cubic_side_length", str(length)},
       {"particle_type0", "../particle/hard_sphere.fstprt"},
       {"periodic2", "false"}}));
     system.add(MakePotential(MakeModelHardShape(MakeSlabSine(
@@ -322,7 +322,7 @@ TEST(HardShape, henry_dimer_LONG) {
   for (const double length : {10}) {
   //for (const double length : {10, 20}) {
     System system;
-    system.add(*MakeConfiguration({{"cubic_side_length", str(length)},
+    system.add(MakeConfiguration({{"cubic_side_length", str(length)},
       {"particle_type0", "../particle/dimer.fstprt"}}));
     system.add(MakePotential(MakeModelHardShape(MakeSlab({
       {"dimension", "2"},

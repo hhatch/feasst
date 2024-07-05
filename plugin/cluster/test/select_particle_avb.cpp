@@ -24,7 +24,7 @@ TEST(SelectParticleAVB, serialize) {
       config->update_positions({{0, 0, 0},
                                 {-1.25, 0, 0},
                                 {2.9, 0, 0}});
-      system.add(*config);
+      system.add(config);
     }
     system.add(MakePotential(MakeLennardJones(),
       MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))));

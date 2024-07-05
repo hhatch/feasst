@@ -20,11 +20,11 @@ TEST(ModelTwoBodyTable, lj) {
   auto model = MakeLennardJones();
   //auto model = MakeModelTwoBodyFactory({MakeLennardJones()});
   System no_table;
-  no_table.add(*config);
+  no_table.add(config);
   no_table.add(MakePotential(model));
   no_table.precompute();
   System yes_table;
-  yes_table.add(*config);
+  yes_table.add(config);
   yes_table.add(MakePotential(model, {{"table_size", str(1e3)}}));
   yes_table.precompute();
   EXPECT_NEAR(no_table.energy(), 4*(std::pow(2, -12) - std::pow(2, -6)), NEAR_ZERO);

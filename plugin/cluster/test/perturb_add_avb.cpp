@@ -18,7 +18,7 @@ TEST(PerturbAddAVB, gce_add) {
       {"particle_type", "../particle/lj.fstprt"},
       {"add_particles_of_type0", "1"}});
     config->update_positions({{0, 0, 0}});
-    system.add(*config);
+    system.add(config);
   }
   system.add(MakePotential(MakeLennardJones(),
                        MakeVisitModel(MakeVisitModelInner(MakeEnergyMapAll()))));

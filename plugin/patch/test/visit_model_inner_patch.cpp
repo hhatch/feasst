@@ -45,7 +45,7 @@ TEST(VisitModelInnerPatch, patch_one_2body) {
       {"add_particles_of_type0", "2"},
       {"patch_angle1", "5"}});
     config->add(MakeGroup({{"site_type", "0"}}));
-    system.add(*config);
+    system.add(config);
   }
 
   system.add(MakePotential(MakeSquareWell(),

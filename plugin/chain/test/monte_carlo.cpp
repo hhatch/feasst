@@ -593,7 +593,7 @@ TEST(MonteCarlo, RigidBondAngleDihedral) {
     }) {
     INFO(data);
     System system;
-    system.add(*MakeConfiguration({
+    system.add(MakeConfiguration({
       {"cubic_side_length", "10"},
       {"particle_type", data},
       {"add_particles_of_type0", "1"}}));

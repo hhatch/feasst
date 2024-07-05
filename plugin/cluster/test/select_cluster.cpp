@@ -31,7 +31,7 @@ TEST(SelectCluster, serialize) {
       config->update_positions({{0, 0, 0},
                                {-1.25, 0, 0},
                                {3, 3, 3}});
-      sys.add(*config);
+      sys.add(config);
     }
     std::shared_ptr<EnergyMap> map;
     if (map_type == "all") {

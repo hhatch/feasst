@@ -29,7 +29,7 @@ inline std::shared_ptr<Potential> lj_intra_dual_cut(const Configuration config) 
 
 inline System chain_system() {
   System system;
-  system.add(config());
+  system.add(std::make_shared<Configuration>(config()));
   system.add_to_unoptimized(MakePotential(MakeLennardJones()));
   system.add_to_reference(lj_dual_cut(system.configuration()));
   system.add_to_unoptimized(MakePotential(MakeLennardJones(),

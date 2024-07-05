@@ -16,7 +16,7 @@ namespace feasst {
 // Seems there is an issue with AVBDivalent prefactors
 TEST(TrialTransferAVBDivalent, add_remove) {
   System system;
-  system.add(*MakeConfiguration({{"cubic_side_length", "8"},
+  system.add(MakeConfiguration({{"cubic_side_length", "8"},
     {"particle_type0", "../particle/lj.fstprt"},
     {"particle_type1", "../particle/atom.fstprt"}}));
   const Configuration& config = system.configuration();

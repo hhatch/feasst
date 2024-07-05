@@ -15,7 +15,7 @@ namespace feasst {
 
 TEST(TrialGrowLinear, chain10) {
   System system;
-  system.add(*MakeConfiguration({{"cubic_side_length", "12"},
+  system.add(MakeConfiguration({{"cubic_side_length", "12"},
     {"particle_type", "../particle/chain10.fstprt"},
     {"add_particles_of_type0", "1"}}));
   system.add(MakePotential(MakeLennardJones()));

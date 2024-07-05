@@ -12,7 +12,7 @@ TEST(PerturbLibrary, serialize) {
 
 TEST(PerturbLibrary, dimer) {
   System sys;
-  sys.add(*MakeConfiguration({
+  sys.add(MakeConfiguration({
     {"cubic_side_length", "8"},
     {"particle_type0", "../particle/dimer.fstprt"}}));
   sys.precompute();
