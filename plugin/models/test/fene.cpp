@@ -6,6 +6,7 @@
 #include "system/include/visit_model_bond.h"
 #include "system/include/bond_visitor.h"
 #include "system/include/system.h"
+#include "system/include/potential.h"
 #include "models/include/fene.h"
 #include "models/include/lennard_jones_cut_shift.h"
 

@@ -2,6 +2,8 @@
 #include "math/include/random_mt19937.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/file_xyz.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "system/include/system.h"
 #include "system/include/lennard_jones.h"
 #include "monte_carlo/include/trial_compute_move.h"

@@ -1,6 +1,8 @@
 #include "utils/test/utils.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/group.h"
 #include "system/include/hard_sphere.h"
+#include "system/include/potential.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "steppers/include/log_and_movie.h"
 #include "models/include/square_well.h"

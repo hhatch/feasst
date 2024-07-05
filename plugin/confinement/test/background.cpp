@@ -2,6 +2,7 @@
 #include "configuration/test/config_utils.h"
 #include "system/include/system.h"
 #include "system/include/lennard_jones.h"
+#include "system/include/potential.h"
 #include "confinement/include/background.h"
 
 namespace feasst {

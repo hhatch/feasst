@@ -2,6 +2,7 @@
 //#include "math/include/random_mt19937.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
+#include "system/include/potential.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "morph/include/macrostate_morph.h"

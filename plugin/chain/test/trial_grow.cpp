@@ -1,6 +1,8 @@
 #include "utils/test/utils.h"
 #include "math/include/random_mt19937.h"
 #include "configuration/include/domain.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "system/include/ideal_gas.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"

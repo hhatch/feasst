@@ -3,6 +3,7 @@
 #define FEASST_SYSTEM_VISIT_MODEL_CUTOFF_OUTER_H_
 
 #include <memory>
+#include "configuration/include/model_params.h"
 #include "system/include/visit_model.h"
 #include "system/include/cells.h"
 

@@ -1,6 +1,8 @@
 #include "utils/test/utils.h"
 #include "utils/include/checkpoint.h"
 #include "math/include/random_mt19937.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
 #include "monte_carlo/include/run.h"

@@ -4,6 +4,8 @@
 #include "configuration/include/domain.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "steppers/include/pair_distribution.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"

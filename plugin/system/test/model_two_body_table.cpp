@@ -2,6 +2,7 @@
 #include "utils/test/utils.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/test/sys_utils.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/system.h"
 #include "system/include/model_two_body_factory.h"

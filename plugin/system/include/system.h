@@ -266,7 +266,7 @@ class System {
 
  private:
   std::vector<Configuration> configurations_;
-  std::vector<BondVisitor> bonds_;
+  std::vector<std::shared_ptr<BondVisitor> > bonds_;
   std::vector<PotentialFactory> unoptimized_;
   std::vector<PotentialFactory> optimized_;
   bool is_optimized_ = false;

@@ -3,7 +3,9 @@
 #define FEASST_TEST_SYSTEM_UTILS_H_
 
 #include "utils/include/arguments.h"
+#include "configuration/include/group.h"
 #include "system/include/system.h"
+#include "system/include/potential.h"
 
 namespace feasst {
 

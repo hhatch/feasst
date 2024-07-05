@@ -1,6 +1,8 @@
 #include "utils/test/utils.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/group.h"
+#include "system/include/potential.h"
 #include "models/include/square_well.h"
 #include "monte_carlo/include/perturb_anywhere.h"
 #include "monte_carlo/include/trial_select_particle.h"

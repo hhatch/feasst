@@ -1,7 +1,10 @@
 
 #include "utils/test/utils.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/group.h"
 #include "system/include/hard_sphere.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trial_rotate.h"
 #include "monte_carlo/include/trial_translate.h"

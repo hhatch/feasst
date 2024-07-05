@@ -4,6 +4,8 @@
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "utils/include/io.h"
+#include "utils/include/arguments.h"
+#include "math/include/position.h"
 #include "math/include/constants.h"
 
 /// Return a copy of the object via serialization.

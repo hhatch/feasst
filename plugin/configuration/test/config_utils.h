@@ -4,6 +4,8 @@
 
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/group.h"
+#include "configuration/include/model_params.h"
 
 namespace feasst {
 

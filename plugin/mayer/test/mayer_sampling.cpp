@@ -7,6 +7,8 @@
 #include "system/include/hard_sphere.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/model_two_body_factory.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "models/include/square_well.h"
 #include "steppers/include/log.h"
 #include "steppers/include/log_and_movie.h"

@@ -2,6 +2,7 @@
 #include "math/include/table.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/include/potential.h"
 #include "system/include/model_two_body_table.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/system.h"

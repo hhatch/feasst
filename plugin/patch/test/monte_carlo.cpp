@@ -1,8 +1,11 @@
 
 #include "utils/test/utils.h"
 #include "math/include/random_mt19937.h"
+#include "configuration/include/group.h"
 #include "system/include/hard_sphere.h"
 #include "system/include/visit_model_cell.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trial_transfer.h"
 #include "monte_carlo/include/trial_rotate.h"

@@ -14,7 +14,7 @@ void System::add(std::shared_ptr<Configuration> configuration) {
 
 void System::add(const Configuration& configuration) {
   configurations_.push_back(configuration);
-  bonds_.push_back(BondVisitor());
+  bonds_.push_back(std::make_shared<BondVisitor>());
   unoptimized_.push_back(PotentialFactory());
   optimized_.push_back(PotentialFactory());
 }
@@ -117,8 +117,8 @@ double System::unoptimized_energy(const int config) {
     &configurations_[config]);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  bonds_[config].compute_all(configurations_[config]);
-  return en + bonds_[config].energy();
+  bonds_[config]->compute_all(configurations_[config]);
+  return en + bonds_[config]->energy();
 }
 
 PotentialFactory * System::potentials_(const int config) {
@@ -133,18 +133,18 @@ double System::energy(const int config) {
   finalize(config);
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
-  bonds_[config].compute_all(configurations_[config]);
-  DEBUG("bond en " << bonds_[config].energy());
-  return en + bonds_[config].energy();
+  bonds_[config]->compute_all(configurations_[config]);
+  DEBUG("bond en " << bonds_[config]->energy());
+  return en + bonds_[config]->energy();
 }
 
 double System::perturbed_energy(const Select& select, const int config) {
   ref_used_last_ = -1;
   DEBUG("ref_used_last_ " << ref_used_last_);
   double en = potentials_(config)->select_energy(select, &configurations_[config]);
-  bonds_[config].compute_all(select, configurations_[config]);
-  const double bond_en = bonds_[config].energy();
-  DEBUG("bond en " << bonds_[config].energy());
+  bonds_[config]->compute_all(select, configurations_[config]);
+  const double bond_en = bonds_[config]->energy();
+  DEBUG("bond en " << bonds_[config]->energy());
   ASSERT(!std::isinf(en), "en: " << en << " is inf.");
   ASSERT(!std::isnan(en), "en: " << en << " is nan.");
   ASSERT(!std::isinf(bond_en), "bond_en: " << bond_en << " is inf.");
@@ -172,7 +172,7 @@ double System::reference_energy(const Select& select,
 void System::serialize(std::ostream& sstr) const {
   feasst_serialize_version(7349, sstr);
   feasst_serialize_fstobj(configurations_, sstr);
-  feasst_serialize_fstobj(bonds_, sstr);
+  feasst_serialize(bonds_, sstr);
   feasst_serialize_fstobj(unoptimized_, sstr);
   feasst_serialize_fstobj(optimized_, sstr);
   feasst_serialize(is_optimized_, sstr);
@@ -186,7 +186,7 @@ System::System(std::istream& sstr) {
   const int version = feasst_deserialize_version(sstr);
   ASSERT(version == 7349, "unrecognized verison: " << version);
   feasst_deserialize_fstobj(&configurations_, sstr);
-  feasst_deserialize_fstobj(&bonds_, sstr);
+  feasst_deserialize(&bonds_, sstr);
   feasst_deserialize_fstobj(&unoptimized_, sstr);
   feasst_deserialize_fstobj(&optimized_, sstr);
   feasst_deserialize(&is_optimized_, sstr);

@@ -1,5 +1,7 @@
 #include "utils/test/utils.h"
 #include "system/include/lennard_jones.h"
+#include "system/include/potential.h"
+#include "system/include/thermo_params.h"
 #include "monte_carlo/include/seek_num_particles.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/monte_carlo.h"
