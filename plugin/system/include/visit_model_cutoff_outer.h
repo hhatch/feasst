@@ -5,7 +5,6 @@
 #include <memory>
 #include "configuration/include/model_params.h"
 #include "system/include/visit_model.h"
-#include "system/include/cells.h"
 
 namespace feasst {
 

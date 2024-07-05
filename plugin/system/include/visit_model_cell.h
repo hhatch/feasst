@@ -4,9 +4,11 @@
 
 #include <memory>
 #include "system/include/visit_model.h"
-#include "system/include/cells.h"
 
 namespace feasst {
+
+class Cells;
+class Select;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -39,7 +41,7 @@ class VisitModelCell : public VisitModel {
     argtype args);
 
   /// Return the cells.
-  const Cells& cells() const { return cells_; }
+  const Cells& cells() const;
 
   /// Return the unique cell number for the position.
   int cell_id(const Domain& domain, const Position& position) const;
@@ -79,14 +81,14 @@ class VisitModelCell : public VisitModel {
 
   //@}
  private:
-  Cells cells_;
+  std::shared_ptr<Cells> cells_;
   std::string min_length_;
   int group_index_;
   std::string group_;
   Position opt_origin_, opt_rel_, opt_pbc_;
 
   // temporary and not serialized
-  Select one_site_select_;
+  std::shared_ptr<Select> one_site_select_;
   double opt_r2_;
 
   void position_tracker_(const Select& select, Configuration * config);
