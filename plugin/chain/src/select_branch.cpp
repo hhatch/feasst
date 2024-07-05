@@ -25,7 +25,7 @@ static MapSelectBranch mapper_ = MapSelectBranch();
 
 void SelectBranch::precompute(System * system) {
   TrialSelectAngle::precompute(system);
-  mobile_.add_site(0, mobile_site2_);
+  get_mobile()->add_site(0, mobile_site2_);
 }
 
 std::shared_ptr<TrialSelect> SelectBranch::create(std::istream& istr) const {

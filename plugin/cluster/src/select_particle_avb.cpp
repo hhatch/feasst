@@ -18,8 +18,8 @@ SelectParticleAVB::SelectParticleAVB(argtype * args) : TrialSelect(args) {
   class_name_ = "SelectParticleAVB";
   neighbor_ = integer("neighbor_index", args, 0);
   site_index_ = integer("site", args, 0);
-  mobile_.clear();
-  mobile_.add_site(0, site_index_);
+  get_mobile()->clear();
+  get_mobile()->add_site(0, site_index_);
   grand_canonical_ = boolean("grand_canonical", args);
   inside_ = boolean("inside", args, true);
   is_second_target_ = boolean("second_target", args, false);
@@ -58,8 +58,8 @@ void SelectParticleAVB::precompute(System * system) {
   TrialSelect::precompute(system);
   select_target_.precompute(system);
   select_mobile_.precompute(system);
-  anchor_.clear();
-  anchor_.add_site(0, select_target_.site());
+  get_anchor()->clear();
+  get_anchor()->add_site(0, select_target_.site());
 }
 
 bool SelectParticleAVB::select(const Select& perturbed,
@@ -87,10 +87,10 @@ bool SelectParticleAVB::select(const Select& perturbed,
     const int num2 = select_target_.random_particle(
       config, &target_, &second_target_, random);
     if (num2 <= 0) return false;
-    anchor_.set_particle(0, second_target_.particle_index(0));
+    get_anchor()->set_particle(0, second_target_.particle_index(0));
     DEBUG("second_target " << second_target_.str());
   } else {
-    anchor_.set_particle(0, target_.particle_index(0));
+    get_anchor()->set_particle(0, target_.particle_index(0));
   }
   ASSERT(target_.num_sites() == 1, "Error");
   // HWH update with configuration_index_
@@ -115,22 +115,22 @@ bool SelectParticleAVB::select(const Select& perturbed,
         return false;
       }
     }
-    mobile_.set_particle(0,
+    get_mobile()->set_particle(0,
       random->const_element(neighbors_.particle_indices()));
-    DEBUG("mobile " << mobile_.str());
+    DEBUG("mobile " << mobile().str());
   } else if (!inside_) {
     // only select that is outside: AVB2 out->in
     DEBUG("outside");
     neighbors_.add(target_); // add target to neighbors to exclude.
     num_out = select_mobile_.random_particle(config,
       &neighbors_,
-      &mobile_,
+      get_mobile(),
       random);
     DEBUG("num_out: " << num_out);
     if (num_out == 0) return false;
   }
-  DEBUG("loading coordinates " << mobile_.num_particles());
-  mobile_.load_positions(config.particles());
+  DEBUG("loading coordinates " << mobile().num_particles());
+  get_mobile()->load_positions(config.particles());
 
   // precompute volume terms
   const double volume = config.domain().volume();
@@ -155,7 +155,7 @@ bool SelectParticleAVB::select(const Select& perturbed,
   // GCE add
   if (is_ghost() && grand_canonical_ && inside_ && !is_second_target_) {
     select_mobile_.ghost_particle(
-      system->get_configuration(), &empty_, &mobile_);
+      system->get_configuration(), &empty_, get_mobile());
     DEBUG("num_neighbors " << num_neighbors);
     set_probability_(volume_av/static_cast<double>(num_neighbors + 1));
     DEBUG("target_mobile_same_type_ " << target_mobile_same_type_);
@@ -215,11 +215,11 @@ bool SelectParticleAVB::select(const Select& perturbed,
     DEBUG("avb4 neighbors: " << neighbors_.str());
     DEBUG("avb4 neighbors in second target: " << neighbors_.num_particles());
     int mobile_not_in_both_targets_ = 1;
-    DEBUG("mobile part ind " << mobile_.particle_index(0));
+    DEBUG("mobile part ind " << mobile().particle_index(0));
     DEBUG("mobile k neighs: " << neighbors_.str());
-    DEBUG("mobile: " << mobile_.str());
+    DEBUG("mobile: " << mobile().str());
     DEBUG("second_target: " << second_target_.str());
-    if (find_in_list(mobile_.particle_index(0),
+    if (find_in_list(mobile().particle_index(0),
                      neighbors_.particle_indices())) {
       mobile_not_in_both_targets_ = 0;
     }
@@ -235,12 +235,12 @@ bool SelectParticleAVB::select(const Select& perturbed,
       << " second_target: " << is_second_target_);
   }
 
-  ASSERT(mobile_.particle_index(0) != target_.particle_index(0),
-    "mobile particle: " << mobile_.particle_index(0) <<
+  ASSERT(mobile().particle_index(0) != target_.particle_index(0),
+    "mobile particle: " << mobile().particle_index(0) <<
     " should not be equal to target: " << target_.particle_index(0));
   DEBUG("probability: " << probability());
-  DEBUG("mobile: " << mobile_.str());
-//  printable_["cluster_size"].accumulate(mobile_.num_particles());
+  DEBUG("mobile: " << mobile().str());
+//  printable_["cluster_size"].accumulate(mobile().num_particles());
   remove_unphysical_sites(config);
   set_mobile_original(system);
   return true;

@@ -102,4 +102,8 @@ void PerturbSiteType::serialize(std::ostream& ostr) const {
   feasst_serialize(new_site_type_, ostr);
 }
 
+void PerturbSiteType::precompute(TrialSelect * select, System * system) {
+  select->set_ghost(true);
+}
+
 }  // namespace feasst

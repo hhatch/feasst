@@ -35,7 +35,7 @@ void TrialSelectDihedral::precompute(System * system) {
   DEBUG("anchor3: " << anchor_site3_);
   DEBUG("dihedral_type: " << dihedral_type);
   add_or_set_property("dihedral_type", dihedral_type);
-  anchor_.add_site(0, anchor_site3_);
+  get_anchor()->add_site(0, anchor_site3_);
 }
 
 std::shared_ptr<TrialSelect> TrialSelectDihedral::create(std::istream& istr) const {

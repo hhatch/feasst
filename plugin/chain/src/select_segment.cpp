@@ -96,7 +96,7 @@ bool SelectSegment::select(const Select& perturbed,
     Random * random) {
   const bool is_found = random_segment_in_particle(
     configuration(*system),
-    &mobile_,
+    get_mobile(),
     random,
     max_length()
   );

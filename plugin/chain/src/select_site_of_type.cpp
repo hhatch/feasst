@@ -100,7 +100,7 @@ bool SelectSiteOfType::select(const Select& perturbed,
     Random * random) {
   const int num = random_site_in_particle(
     configuration(*system),
-    &mobile_,
+    get_mobile(),
     random);
   if (num <= 0) return false;
   set_probability_(1./static_cast<double>(num));

@@ -21,12 +21,7 @@ class SelectReptate : public SelectEndSegment {
   void update_anchor(const bool is_endpoint_beginning,
     const System * system) override;
 
-  void mid_stage() override {
-    // exclude the anchor from interactions.
-    // include interactions with site that use to be bonded
-    mobile_.set_new_bond(anchor_);
-    mobile_.set_old_bond(bonded_to_);
-  }
+  void mid_stage() override;
 
   std::shared_ptr<TrialSelect> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;

@@ -29,8 +29,7 @@ class SelectCluster : public TrialSelect {
                       Select * select);
 
   // Same as above, except put selection in mobile.
-  void select_cluster(const int first_particle, const System& system) {
-    select_cluster(first_particle, system, &mobile_); }
+  void select_cluster(const int first_particle, const System& system);
 
   // Return true if the cluster has changed (e.g., increased in size)
   // for detailed balance constraint of rigid cluster moves.

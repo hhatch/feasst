@@ -38,7 +38,7 @@ void TrialSelectAngle::precompute(System * system) {
   DEBUG("anchor2: " << anchor_site2_);
   DEBUG("angle_type: " << angle_type);
   add_or_set_property("angle_type", angle_type);
-  anchor_.add_site(0, anchor_site2_);
+  get_anchor()->add_site(0, anchor_site2_);
 }
 
 std::shared_ptr<TrialSelect> TrialSelectAngle::create(std::istream& istr) const {

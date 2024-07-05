@@ -73,25 +73,25 @@ class TrialSelect {
   virtual void precompute(System * system);
 
   /// Return the mobile selection. These can change during the trial.
-  const Select& mobile() const { return mobile_; }
+  const Select& mobile() const;
 
   // Return a pointer to the mobile selection.
-  Select * get_mobile() { return &mobile_; }
+  Select * get_mobile();
 
   /// Set the mobile selection.
-  void set_mobile(const Select& mobile) { mobile_ = mobile; }
+  void set_mobile(const Select& mobile);
 
   /// Return originally-seleted mobile. These do not change during trial.
-  const Select& mobile_original() const { return mobile_original_; }
+  const Select& mobile_original() const;
 
   /// Set the original mobile, including Euler if anisotropic.
   void set_mobile_original(const System * system);
 
   /// Return the anchor selection.
-  const Select& anchor() const { return anchor_; }
+  const Select& anchor() const;
 
   // Return a pointer to the anchor selection.
-  Select * get_anchor() { return &anchor_; }
+  Select * get_anchor();
 
   /// Return anchor position.
   const Position& anchor_position(
@@ -103,10 +103,10 @@ class TrialSelect {
 
   /// Set the state of the trial for the mobile select (e.g., old, move, add).
   /// See Select::trial_state
-  void set_trial_state(const int state) { mobile_.set_trial_state(state); }
+  void set_trial_state(const int state);
 
   /// Reset the mobile selection to the original.
-  void reset_mobile() { mobile_ = mobile_original_; }
+  void reset_mobile();
 
   /// Return the probability of the selection. For example, if a random particle
   /// type is selected, then the probability is the inverse of the number of
@@ -170,9 +170,9 @@ class TrialSelect {
   //@}
  protected:
   std::string class_name_ = "TrialSelect";
-  Select mobile_original_;
-  Select mobile_;
-  Select anchor_;
+  std::shared_ptr<Select> mobile_original_;
+  std::shared_ptr<Select> mobile_;
+  std::shared_ptr<Select> anchor_;
   std::map<std::string, std::shared_ptr<Accumulator> > printable_;
 
   /// Set the probability of selection.
@@ -192,7 +192,7 @@ class TrialSelect {
 
   // not checkpointed
   double probability_;
-  Select empty_;
+  std::shared_ptr<Select> empty_;
   double exclude_energy_;
 };
 

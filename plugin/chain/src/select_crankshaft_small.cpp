@@ -75,9 +75,9 @@ bool SelectCrankshaftSmall::select(const Select& perturbed,
   const Select& select = config->group_select(group_index);
   const int particle_index = select.particle_index(index);
   set_probability_(1./static_cast<double>(num));
-  mobile_.set_particle(0, particle_index);
-  anchor_.set_particle(0, particle_index);
-  mobile_.load_positions(config->particles());
+  get_mobile()->set_particle(0, particle_index);
+  get_anchor()->set_particle(0, particle_index);
+  get_mobile()->load_positions(config->particles());
   set_mobile_original(system);
   return true;
 }

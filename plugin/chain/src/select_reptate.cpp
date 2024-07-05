@@ -53,15 +53,15 @@ void SelectReptate::precompute(System * system) {
     const int bond_type = part.bond(0, 1).type();  // HWH assume constant bond length
     add_or_set_property("bond_type", bond_type);
   }
-  anchor_.clear();
-  anchor_.add_site(0, 0);
+  get_anchor()->clear();
+  get_anchor()->add_site(0, 0);
   bonded_to_.clear();
   bonded_to_.add_site(0, 0);
 }
 
 void SelectReptate::update_anchor(const bool is_endpoint_beginning,
   const System * system) {
-  const int particle_index = mobile_.particle_indices()[0];
+  const int particle_index = mobile().particle_indices()[0];
   const Configuration& config = configuration(*system);
   const Particle& particle = config.select_particle(particle_index);
   int anchor_index = 0;
@@ -72,10 +72,17 @@ void SelectReptate::update_anchor(const bool is_endpoint_beginning,
     site_bonded_to = 1;
   }
   // for the old configuration, set the anchor to the old bond.
-  anchor_.set_site(0, 0, anchor_index);
-  anchor_.set_particle(0, particle_index);
+  get_anchor()->set_site(0, 0, anchor_index);
+  get_anchor()->set_particle(0, particle_index);
   ASSERT(bonded_to_.replace_indices(particle_index, {site_bonded_to}),
     "bonded_to_ wasn't initialized to proper size on precompute");
+}
+
+void SelectReptate::mid_stage() {
+  // exclude the anchor from interactions.
+  // include interactions with site that use to be bonded
+  get_mobile()->set_new_bond(anchor());
+  get_mobile()->set_old_bond(bonded_to_);
 }
 
 }  // namespace feasst

@@ -35,10 +35,10 @@ void TrialSelectBond::precompute(System * system) {
     const int bond_type = part.bond(mobile_site_, anchor_site_).type();
     add_or_set_property("bond_type", bond_type);
   }
-  anchor_.clear();
-  anchor_.add_site(0, anchor_site_);
-  mobile_.clear();
-  mobile_.add_site(0, mobile_site_);
+  anchor_->clear();
+  anchor_->add_site(0, anchor_site_);
+  get_mobile()->clear();
+  get_mobile()->add_site(0, mobile_site_);
 }
 
 bool TrialSelectBond::select(const Select& perturbed,
@@ -59,11 +59,11 @@ bool TrialSelectBond::select(const Select& perturbed,
     particle_index = select.particle_index(index);
     set_probability_(1./static_cast<double>(num));
   }
-  mobile_.set_particle(0, particle_index);
-  anchor_.set_particle(0, particle_index);
-  mobile_.load_positions(config->particles());
-  DEBUG("mobile: " << mobile_.str());
-  DEBUG("anchor: " << anchor_.str());
+  get_mobile()->set_particle(0, particle_index);
+  get_anchor()->set_particle(0, particle_index);
+  get_mobile()->load_positions(config->particles());
+  DEBUG("mobile: " << mobile().str());
+  DEBUG("anchor: " << anchor().str());
   set_mobile_original(system);
   return true;
 }

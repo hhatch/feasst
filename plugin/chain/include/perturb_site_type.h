@@ -19,8 +19,7 @@ class PerturbSiteType : public Perturb {
   explicit PerturbSiteType(argtype * args);
 
   //initialize ghost selection in TrialSelect?
-  void precompute(TrialSelect * select, System * system) override {
-    select->set_ghost(true); }
+  void precompute(TrialSelect * select, System * system) override;
 
   /// Set the site type.
   void set_site_type(

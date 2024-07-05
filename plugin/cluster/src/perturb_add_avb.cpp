@@ -108,4 +108,8 @@ void PerturbAddAVB::serialize(std::ostream& ostr) const {
   feasst_serialize_fstdr(move_, ostr);
 }
 
+void PerturbAddAVB::precompute(TrialSelect * select, System * system) {
+  select->set_ghost(true);
+}
+
 }  // namespace feasst
