@@ -1,6 +1,8 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
+#include "monte_carlo/include/acceptance.h"
+#include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/trial_compute_translate.h"
 
 namespace feasst {

@@ -4,10 +4,11 @@
 
 #include <vector>
 #include <map>
-#include "math/include/accumulator.h"
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
+
+class Accumulator; // Forward declare for fast compilation.
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -43,11 +44,10 @@ class AnalyzeExample : public Analyze {
   //@{
 
   /// Return the average geometric center of a given dimension.
-  const Accumulator& geometric_center(const int dimension) const {
-    return center_[dimension]; }
+  const Accumulator& geometric_center(const int dimension) const;
 
   /// Return the average geometric center.
-  const std::vector<Accumulator>& geometric_center() const { return center_; }
+  const std::vector<std::shared_ptr<Accumulator> >& geometric_center() const;
 
   /// Write the header for the file.
   std::string header(const Criteria& criteria,
@@ -81,7 +81,7 @@ class AnalyzeExample : public Analyze {
   //@}
  private:
   int group_index_;
-  std::vector<Accumulator> center_;
+  std::vector<std::shared_ptr<Accumulator> > center_;
 };
 
 inline std::shared_ptr<AnalyzeExample> MakeAnalyzeExample(argtype args = argtype()) {

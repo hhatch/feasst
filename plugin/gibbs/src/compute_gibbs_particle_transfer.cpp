@@ -1,9 +1,11 @@
 #include <cmath>
 #include "utils/include/serialize.h"
+#include "utils/include/debug.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_select.h"
+#include "monte_carlo/include/perturb.h"
 #include "gibbs/include/compute_gibbs_particle_transfer.h"
 
 namespace feasst {

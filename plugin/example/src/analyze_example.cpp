@@ -1,6 +1,7 @@
 #include <sstream>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 #include "example/include/analyze_example.h"
@@ -28,14 +29,15 @@ std::string AnalyzeExample::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << "dim," << center_[0].status_header() << std::endl;
+  ss << "dim," << center_[0]->status_header() << std::endl;
   return ss.str();
 }
 
 void AnalyzeExample::initialize(Criteria * criteria,
     System * system,
     TrialFactory * trial_factory) {
-  center_.resize(system->configuration().dimension(), feasst::Accumulator());
+  center_.resize(system->configuration().dimension(),
+                 std::shared_ptr<Accumulator>());
 }
 
 /*
@@ -59,7 +61,7 @@ void AnalyzeExample::update(const Criteria& criteria,
   AveragePosition loop(&average);
   VisitConfiguration().loop(system.configuration(), &loop, group_index_);
   for (int dim = 0; dim < system.configuration().dimension(); ++dim) {
-    center_[dim].accumulate(average.coord(dim));
+    center_[dim]->accumulate(average.coord(dim));
   }
 }
 
@@ -69,23 +71,44 @@ std::string AnalyzeExample::write(const Criteria& criteria,
   std::stringstream ss;
   ss << header(criteria, system, trial_factory);
   for (int dim = 0; dim < system.configuration().dimension(); ++dim) {
-    ss << dim << "," << center_[dim].status() << std::endl;
+    ss << dim << "," << center_[dim]->status() << std::endl;
   }
   return ss.str();
+}
+
+const Accumulator& AnalyzeExample::geometric_center(const int dimension) const {
+  return *center_[dimension];
+}
+
+const std::vector<std::shared_ptr<Accumulator> >& AnalyzeExample::geometric_center() const {
+  return center_;
 }
 
 void AnalyzeExample::serialize(std::ostream& ostr) const {
   Stepper::serialize(ostr);
   feasst_serialize_version(1609, ostr);
   feasst_serialize(group_index_, ostr);
-  feasst_serialize_fstobj(center_, ostr);
+  feasst_serialize(center_, ostr);
 }
 
 AnalyzeExample::AnalyzeExample(std::istream& istr) : Analyze(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 1609, "version mismatch:" << version);
   feasst_deserialize(&group_index_, istr);
-  feasst_deserialize_fstobj(&center_, istr);
+//  feasst_deserialize(center_, istr);
+/// Deserialize vector of shared pointers of feasst objects
+  {
+    int dim1;
+    istr >> dim1;
+    center_.resize(dim1);
+    for (int index = 0; index < dim1; ++index) {
+      int existing;
+      istr >> existing;
+      if (existing != 0) {
+        center_[index] = std::make_shared<Accumulator>(istr);
+      }
+    }
+  }
 }
 
 }  // namespace feasst

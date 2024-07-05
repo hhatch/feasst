@@ -2,6 +2,10 @@
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
+#include "system/include/system.h"
+#include "monte_carlo/include/criteria.h"
+#include "monte_carlo/include/trial_select.h"
+#include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/trial_stage.h"
 
 namespace feasst {
@@ -172,5 +176,35 @@ TrialStage::TrialStage(std::istream& istr) {
   feasst_deserialize_fstobj(&rosenbluth_, istr);
   feasst_deserialize(&is_new_only_, istr);
 }
+
+void TrialStage::set(std::shared_ptr<Perturb> perturb) { perturb_ = perturb; }
+
+const Perturb& TrialStage::perturb() const {
+  return const_cast<Perturb&>(*perturb_);
+}
+
+void TrialStage::revert(System * system) { perturb_->revert(system); }
+  
+void TrialStage::finalize(System * system) { perturb_->finalize(system); }
+
+void TrialStage::tune(const double acceptance) { perturb_->tune(acceptance); }
+
+std::string TrialStage::status_header() const {
+  return perturb_->status_header();
+}
+
+std::string TrialStage::status() const { return perturb_->status(); }
+
+void TrialStage::set_tunable(const double tunable) {
+  perturb_->set_tunable(tunable);
+}
+
+void TrialStage::set(std::shared_ptr<TrialSelect> select) { select_ = select; }
+
+const TrialSelect& TrialStage::select() const {
+  return const_cast<TrialSelect&>(*select_);
+}
+
+TrialSelect * TrialStage::get_trial_select() { return select_.get(); }
 
 }  // namespace feasst

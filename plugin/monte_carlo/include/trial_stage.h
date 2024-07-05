@@ -4,13 +4,15 @@
 
 #include <string>
 #include <memory>
-#include "system/include/system.h"
-#include "monte_carlo/include/perturb.h"
-#include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/rosenbluth.h"
 
 namespace feasst {
+
+class Acceptance;
+class Criteria;
+class Perturb;
+class TrialSelect;
+class System;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -55,11 +57,10 @@ class TrialStage {
   const int num_steps() const { return rosenbluth_.num(); }
 
   /// Set the selection.
-  void set(std::shared_ptr<TrialSelect> select) { select_ = select; }
+  void set(std::shared_ptr<TrialSelect> select);
 
   /// Return the above.
-  const TrialSelect& select() const {
-    return const_cast<TrialSelect&>(*select_); }
+  const TrialSelect& select() const;
 
   // HWH depreciate
   const TrialSelect& trial_select() const { return select(); }
@@ -76,10 +77,10 @@ class TrialStage {
   bool select(System * system, Acceptance * acceptance, Random * random);
 
   /// Set the perturbation.
-  void set(std::shared_ptr<Perturb> perturb) { perturb_ = perturb; }
+  void set(std::shared_ptr<Perturb> perturb);
 
   /// Return the above.
-  const Perturb& perturb() const { return const_cast<Perturb&>(*perturb_); }
+  const Perturb& perturb() const;
 
   /// Set mobile selection physical.
   void set_mobile_physical(const bool physical, System * system);
@@ -104,23 +105,23 @@ class TrialStage {
   bool are_constraints_satisfied(const int old, const System& system) const;
 
   /// Revert the attempt.
-  void revert(System * system) { perturb_->revert(system); }
+  void revert(System * system);
 
   /// Finalize the attempt.
-  void finalize(System * system) { perturb_->finalize(system); }
+  void finalize(System * system);
 
   /// Tune parameters.
-  void tune(const double acceptance) { perturb_->tune(acceptance); }
+  void tune(const double acceptance);
 
   /// Print status header.
-  std::string status_header() const { return perturb_->status_header(); }
+  std::string status_header() const;
 
   /// Print status.
-  std::string status() const { return perturb_->status(); }
+  std::string status() const;
 
   // HWH avoid using this
-  TrialSelect * get_trial_select() { return select_.get(); }
-  void set_tunable(const double tunable) { perturb_->set_tunable(tunable); }
+  TrialSelect * get_trial_select();
+  void set_tunable(const double tunable);
 
   /// Serialize.
   void serialize(std::ostream& ostr) const;

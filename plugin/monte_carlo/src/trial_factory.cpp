@@ -3,6 +3,8 @@
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
+#include "monte_carlo/include/trial_select.h"
+#include "monte_carlo/include/perturb.h"
 #include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_factory.h"
 

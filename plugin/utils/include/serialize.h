@@ -352,16 +352,16 @@ void feasst_serialize(const std::vector<std::shared_ptr<T> >& vector,
 
 //  HWH for unknown reasons, this function template does not work.
 /// Deserialize vector of shared pointers of feasst objects
-template <typename T>
-void feasst_deserialize(std::vector<std::shared_ptr<T> > * vector,
-    std::istream& istr) {
-  int dim1;
-  istr >> dim1;
-  vector->resize(dim1);
-  for (int index = 0; index < dim1; ++index) {
-    feasst_deserialize((*vector)[index], istr);
-  }
-}
+//template <typename T>
+//void feasst_deserialize(std::vector<std::shared_ptr<T> > * vector,
+//    std::istream& istr) {
+//  int dim1;
+//  istr >> dim1;
+//  vector->resize(dim1);
+//  for (int index = 0; index < dim1; ++index) {
+//    feasst_deserialize((*vector)[index], istr);
+//  }
+//}
 
 /// Serialize vector of shared pointers of feasst derived objects
 template <typename T>
