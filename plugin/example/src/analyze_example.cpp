@@ -1,6 +1,8 @@
 #include <sstream>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/configuration.h"
+#include "configuration/include/visit_configuration.h"
 #include "example/include/analyze_example.h"
 
 namespace feasst {

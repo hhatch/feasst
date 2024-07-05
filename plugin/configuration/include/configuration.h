@@ -12,12 +12,12 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 class Domain;
 class ModelParam;
 class ModelParams;
 class PhysicalConstants;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   A Configuration contains both the particles and the spatial Domain/boundaries.

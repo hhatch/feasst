@@ -3,10 +3,13 @@
 #define FEASST_STEPPERS_ANALYZE_EXAMPLE_H_
 
 #include <vector>
-#include "configuration/include/file_xyz.h"
+#include <map>
+#include "math/include/accumulator.h"
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Add an analysis to FEASST by using this file as a template and instruction set.
