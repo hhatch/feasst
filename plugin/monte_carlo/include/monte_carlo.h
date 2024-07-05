@@ -19,6 +19,7 @@ typedef std::map<std::string, std::string> argtype;
 typedef std::vector<std::pair<std::string, argtype> > arglist;
 
 class Checkpoint;
+class Criteria;
 class Random;
 class Action;
 
@@ -138,7 +139,7 @@ class MonteCarlo {
 
   // HWH depreciate: only in rare cases should the system be modified directly.
   System * get_system() { return &system_; }
-  Criteria * get_criteria() { return criteria_.get(); }
+  Criteria * get_criteria();
   Random * get_random() { return random_.get(); }
   TrialFactory * get_trial_factory() { return &trial_factory_; }
   AnalyzeFactory * get_analyze_factory() { return &analyze_factory_; }
@@ -155,7 +156,7 @@ class MonteCarlo {
   void set(std::shared_ptr<Criteria> criteria);
 
   /// Once Criteria is set, it may be accessed on a read-only basis.
-  const Criteria& criteria() const { return const_cast<Criteria&>(*criteria_); }
+  const Criteria& criteria() const;
 
   /// Initialize the criteria. Also initializes system.
   void initialize_criteria();
@@ -270,8 +271,7 @@ class MonteCarlo {
   void before_attempts_();
   void delay_finalize_() {
     trial_factory_.delay_finalize(); }
-  void after_trial_analyze_() {
-    analyze_factory_.trial(*criteria_, system_, trial_factory_); }
+  void after_trial_analyze_();
   void after_trial_modify_();
   // Mimic a rejection by a trial.
   void imitate_trial_rejection_(const int trial_index,
@@ -294,8 +294,7 @@ class MonteCarlo {
     const bool auto_reject,
     const double ln_prob);
   // Finalize changes from previous trial.
-  void finalize_(const int trial_index) {
-    trial_factory_.finalize(trial_index, &system_, criteria_.get()); }
+  void finalize_(const int trial_index);
   // Load random numbers and energy calculations into cache.
   void load_cache_(const bool load);
   // Unload random numbers and energy calculations from cache.

@@ -735,4 +735,18 @@ void MonteCarlo::run_for_hours(const double hours) {
   }
 }
 
+Criteria * MonteCarlo::get_criteria() { return criteria_.get(); }
+
+const Criteria& MonteCarlo::criteria() const {
+  return const_cast<Criteria&>(*criteria_);
+}
+
+void MonteCarlo::after_trial_analyze_() {
+  analyze_factory_.trial(*criteria_, system_, trial_factory_);
+}
+
+void MonteCarlo::finalize_(const int trial_index) {
+  trial_factory_.finalize(trial_index, &system_, criteria_.get());
+}
+
 }  // namespace feasst
