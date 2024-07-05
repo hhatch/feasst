@@ -5,6 +5,7 @@
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/include/system.h"
 #include "system/include/energy_map.h"
 #include "cluster/include/select_particle_avb_divalent.h"
 

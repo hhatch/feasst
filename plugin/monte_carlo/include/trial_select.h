@@ -5,13 +5,14 @@
 #include "math/include/accumulator.h"
 #include "configuration/include/properties.h"
 #include "configuration/include/select.h"
-#include "system/include/system.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
+class Configuration;
 class EnergyMap;
+class System;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Select the mobile particles and sites that are to be perturbed via trials.
@@ -46,12 +47,10 @@ class TrialSelect {
   int configuration_index() const { return configuration_index_; }
 
   /// Given the system, return the configuration.
-  const Configuration& configuration(const System& system) const {
-    return system.configuration(configuration_index_); }
+  const Configuration& configuration(const System& system) const;
 
   /// Given the system pointer, return the configuration pointer.
-  Configuration * get_configuration(System * system) const {
-    return system->get_configuration(configuration_index_); }
+  Configuration * get_configuration(System * system) const;
 
   /// Set the configuration index.
   void set_configuration_index(const int config);
@@ -68,8 +67,7 @@ class TrialSelect {
     Random * random);
 
   /// Same as above but with an empty perturbed.
-  bool sel(System * system, Random * random) {
-    return select(empty_, system, random); }
+  bool sel(System * system, Random * random);
 
   /// Precompute quantities before simulation for optimization.
   virtual void precompute(System * system);

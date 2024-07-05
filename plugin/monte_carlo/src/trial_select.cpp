@@ -6,6 +6,7 @@
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
 #include "system/include/visit_model_inner.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_select.h"
 
 namespace feasst {
@@ -235,4 +236,15 @@ void TrialSelect::set_configuration_index(const int config) {
   configuration_index_ = config;
 }
 
+const Configuration& TrialSelect::configuration(const System& system) const {
+  return system.configuration(configuration_index_);
+}
+
+Configuration * TrialSelect::get_configuration(System * system) const {
+  return system->get_configuration(configuration_index_);
+}
+
+bool TrialSelect::sel(System * system, Random * random) {
+  return select(empty_, system, random);
+}
 }  // namespace feasst

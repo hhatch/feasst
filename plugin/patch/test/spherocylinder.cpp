@@ -3,6 +3,7 @@
 #include "configuration/include/domain.h"
 #include "configuration/include/group.h"
 #include "system/include/visit_model.h"
+#include "system/include/system.h"
 #include "system/include/potential.h"
 #include "models/include/square_well.h"
 #include "monte_carlo/include/perturb_anywhere.h"

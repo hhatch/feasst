@@ -2,6 +2,7 @@
 #include "cluster/include/select_cluster.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "system/include/visit_model_cell.h"
 #include "system/include/visit_model_inner.h"
 #include "system/include/potential.h"

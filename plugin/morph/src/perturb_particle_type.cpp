@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/constants.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_select.h"
 #include "morph/include/perturb_particle_type.h"
 

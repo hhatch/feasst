@@ -9,6 +9,7 @@
 #include "math/include/utils_math.h"  // round
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/trial_select_angle.h"

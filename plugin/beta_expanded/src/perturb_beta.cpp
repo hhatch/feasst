@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/random.h"
 #include "system/include/thermo_params.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_select.h"
 #include "beta_expanded/include/perturb_beta.h"
 

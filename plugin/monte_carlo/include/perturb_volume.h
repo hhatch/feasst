@@ -45,8 +45,7 @@ class PerturbVolume : public Perturb {
   /// Change volume
   void change_volume(const double delta_volume,
       System * system,
-      const Select& select) {
-    system->change_volume(delta_volume, args_); }
+      const Select& select);
 
   void precompute(TrialSelect * select, System * system) override;
   void revert(System * system) override;

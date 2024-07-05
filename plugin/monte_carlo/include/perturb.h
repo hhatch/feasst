@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_H_
 #define FEASST_MONTE_CARLO_PERTURB_H_
 
+#include <map>
 #include <string>
 
 namespace feasst {

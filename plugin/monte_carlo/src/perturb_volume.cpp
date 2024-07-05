@@ -4,6 +4,7 @@
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/perturb_volume.h"
@@ -112,6 +113,12 @@ void PerturbVolume::serialize(std::ostream& ostr) const {
   feasst_serialize(uniform_volume_, ostr);
   feasst_serialize(constrain_volume_change_, ostr);
   feasst_serialize(args_, ostr);
+}
+
+void PerturbVolume::change_volume(const double delta_volume,
+    System * system,
+    const Select& select) {
+  system->change_volume(delta_volume, args_);
 }
 
 }  // namespace feasst

@@ -5,6 +5,7 @@
 #include "configuration/include/domain.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
+#include "system/include/system.h"
 #include "system/include/visit_model_inner.h"
 #include "models/include/square_well.h"
 #include "monte_carlo/include/perturb_anywhere.h"

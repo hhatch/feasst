@@ -3,6 +3,7 @@
 #include "math/include/random.h"
 #include "system/include/potential.h"
 #include "system/include/model.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_select.h"
 #include "model_expanded/include/perturb_model.h"
 

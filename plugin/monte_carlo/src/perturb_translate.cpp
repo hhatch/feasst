@@ -4,6 +4,7 @@
 #include "math/include/random.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/perturb_translate.h"
