@@ -4,6 +4,7 @@
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model_inner.h"
+#include "system/include/energy_map.h"
 #include "cluster/include/calculate_cluster.h"
 
 namespace feasst {

@@ -7,6 +7,7 @@
 #include "math/include/constants.h"
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"
+#include "system/include/model.h"
 #include "system/include/visit_model_inner.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/constraint.h"
