@@ -6,7 +6,7 @@
 #include "math/include/table.h"
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
-#include "system/include/visit_model.h"
+#include "system/include/visit_model_inner.h"
 
 namespace feasst {
 

@@ -9,12 +9,14 @@
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/model_params.h"
-#include "system/include/visit_model.h"
 #include "system/include/model_two_body.h"
 #include "system/include/model_one_body.h"
+#include "system/include/visit_model_inner.h"
+#include "system/include/visit_model.h"
 
 namespace feasst {
 
+VisitModel::VisitModel() : VisitModel(std::make_shared<VisitModelInner>()) {}
 VisitModel::VisitModel(std::shared_ptr<VisitModelInner> inner) {
   set_inner(inner);
   energy_cutoff_ = -1;
@@ -435,5 +437,30 @@ void VisitModel::precompute(Configuration * config) {
   cutoff_index_ = config->model_params().index("cutoff");
   charge_index_ = config->model_params().index("charge");
 }
+
+void VisitModel::set_inner(const std::shared_ptr<VisitModelInner> inner) {
+  inner_ = inner;
+}
+
+const VisitModelInner& VisitModel::inner() const {
+  return const_cast<VisitModelInner&>(*inner_);
+}
+
+void VisitModel::zero_energy() {
+  energy_ = 0.;
+  inner_->set_energy(0.);
+}
+
+void VisitModel::revert(const Select& select) { inner_->revert(select); }
+  
+void VisitModel::finalize(const Select& select, Configuration * config) {
+  inner_->finalize(select);
+}
+
+void VisitModel::check(const Configuration& config) const {
+  inner_->check(config);
+}
+
+VisitModelInner * VisitModel::get_inner_() const { return inner_.get(); }
 
 }  // namespace feasst

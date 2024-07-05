@@ -2,6 +2,7 @@
 #include "math/include/random_mt19937.h"
 #include "configuration/include/domain.h"
 #include "system/include/lennard_jones.h"
+#include "system/include/visit_model_inner.h"
 #include "system/include/model_two_body_factory.h"
 #include "system/include/dont_visit_model.h"
 #include "monte_carlo/include/metropolis.h"

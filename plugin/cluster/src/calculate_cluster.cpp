@@ -3,6 +3,7 @@
 #include "utils/include/utils.h"
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"
+#include "system/include/visit_model_inner.h"
 #include "cluster/include/calculate_cluster.h"
 
 namespace feasst {

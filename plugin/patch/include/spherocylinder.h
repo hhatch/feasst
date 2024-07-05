@@ -2,8 +2,8 @@
 #ifndef FEASST_PATCH_SPHEROCYLINDER_H_
 #define FEASST_PATCH_SPHEROCYLINDER_H_
 
-#include "system/include/visit_model.h"
 #include "patch/include/patch_angle.h"
+#include "system/include/visit_model_inner.h"
 
 namespace feasst {
 

@@ -2,6 +2,7 @@
 #include "math/include/random_mt19937.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
+#include "system/include/visit_model_inner.h"
 #include "system/include/hard_sphere.h"
 #include "system/include/model_two_body_factory.h"
 #include "system/include/dont_visit_model.h"

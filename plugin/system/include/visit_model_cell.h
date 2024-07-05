@@ -85,7 +85,6 @@ class VisitModelCell : public VisitModel {
   std::string min_length_;
   int group_index_;
   std::string group_;
-  //std::shared_ptr<Position> opt_origin_, opt_rel_, opt_pbc_;
 
   // temporary and not serialized
   std::shared_ptr<Select> one_site_select_;

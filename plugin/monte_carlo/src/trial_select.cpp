@@ -5,6 +5,7 @@
 #include "configuration/include/model_params.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
+#include "system/include/visit_model_inner.h"
 #include "monte_carlo/include/trial_select.h"
 
 namespace feasst {

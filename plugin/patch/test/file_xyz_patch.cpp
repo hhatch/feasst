@@ -3,6 +3,8 @@
 #include "configuration/include/group.h"
 #include "system/include/hard_sphere.h"
 #include "system/include/potential.h"
+#include "system/include/visit_model.h"
+#include "system/include/visit_model_inner.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "steppers/include/log_and_movie.h"
 #include "models/include/square_well.h"

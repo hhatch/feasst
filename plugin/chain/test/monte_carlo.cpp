@@ -5,6 +5,7 @@
 #include "math/include/accumulator.h"
 #include "math/include/random_mt19937.h"
 #include "configuration/include/domain.h"
+#include "system/include/visit_model_inner.h"
 #include "system/include/thermo_params.h"
 #include "system/include/potential.h"
 #include "system/include/ideal_gas.h"

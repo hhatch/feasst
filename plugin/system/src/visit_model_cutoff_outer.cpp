@@ -6,9 +6,10 @@
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
-#include "system/include/visit_model_cutoff_outer.h"
 #include "system/include/model_two_body.h"
 #include "system/include/model_one_body.h"
+#include "system/include/visit_model_inner.h"
+#include "system/include/visit_model_cutoff_outer.h"
 
 namespace feasst {
 
