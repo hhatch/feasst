@@ -28,7 +28,7 @@ void VisitModelIntra::compute(
     "need to implement site1 loop filtering particles by group");
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   for (int sp1index = 0;
        sp1index < static_cast<int>(selection.particle_indices().size());
        ++sp1index) {
@@ -86,8 +86,8 @@ void VisitModelIntra::compute(
                (!exclude) ) {
             TRACE("sites: " << site1_index << " " << site2_index);
             get_inner_()->compute(part1_index, site1_index, part1_index,
-              site2_index, config, model_params, model, false, &relative_,
-              &pbc_);
+              site2_index, config, model_params, model, false, relative_.get(),
+              pbc_.get());
           }
         }
       }

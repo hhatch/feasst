@@ -55,12 +55,13 @@ int VisitModelCell::cell_id_opt_(const Domain& domain,
 //  Position scaled(position);
 //  DEBUG("scaled before wrap " << scaled.str() << " pos " << position.str() <<
 //    " box " << side_lengths().str());
-  domain.wrap_opt(position, opt_origin_, &opt_rel_, &opt_pbc_, &opt_r2_);
+  init_relative_(domain);
+  domain.wrap_opt(position, *origin_, relative_.get(), pbc_.get(), &opt_r2_);
   //wrap(&scaled);
-  DEBUG("opt_rel_ after wrap " << opt_rel_.str() << " pos " << position.str());
-  opt_rel_.divide(domain.side_lengths());
-  DEBUG("opt_rel_ " << opt_rel_.str() << " pos " << position.str());
-  return cells_->id(opt_rel_.coord());
+  DEBUG("relative_ after wrap " << relative_->str() << " pos " << position.str());
+  relative_->divide(domain.side_lengths());
+  DEBUG("relative_ " << relative_->str() << " pos " << position.str());
+  return cells_->id(relative_->coord());
 }
 
 double VisitModelCell::min_len_(const Configuration& config) const {
@@ -86,9 +87,7 @@ void VisitModelCell::precompute(Configuration * config) {
   if (cells_->type() == -1) {
     rebuild_(*config);
     config->increment_num_cell_lists();
-    opt_origin_.set_to_origin(config->dimension());
-    opt_rel_.set_to_origin(config->dimension());
-    opt_pbc_.set_to_origin(config->dimension());
+    init_relative_(config->domain());
     position_tracker_(config->group_selects()[group_index_], config);
   }
   check(*config);
@@ -133,7 +132,7 @@ void VisitModelCell::compute(
   zero_energy();
   const Domain& domain = config->domain();
   ASSERT(group_index == group_index_, "not equivalent");
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
 
   /*
     Loop index nomenclature
@@ -165,7 +164,7 @@ void VisitModelCell::compute(
                 for (int site2_index : select2.site_indices(select2_index)) {
                   get_inner_()->compute(part1_index, site1_index, part2_index,
                                         site2_index, config, model_params,
-                                        model, false, &relative_, &pbc_);
+                                        model, false, relative_.get(), pbc_.get());
                   if ((energy_cutoff() != -1) && (inner().energy() > energy_cutoff())) {
                     set_energy(inner().energy());
                     return;
@@ -195,7 +194,7 @@ void VisitModelCell::compute(
             for (int site2_index : select.site_indices(select2_index)) {
               get_inner_()->compute(part1_index, site1_index, part2_index,
                                     site2_index, config, model_params, model,
-                                    false, &relative_, &pbc_);
+                                    false, relative_.get(), pbc_.get());
               if ((energy_cutoff() != -1) && (inner().energy() > energy_cutoff())) {
                 set_energy(inner().energy());
                 return;
@@ -219,7 +218,7 @@ void VisitModelCell::compute(
   zero_energy();
   const Domain& domain = config->domain();
   ASSERT(group_index == group_index_, "not equivalent");
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
 
   // If only one particle in selection, simply exclude part1==part2
   DEBUG("num particles in selection " << selection.num_particles());
@@ -246,7 +245,7 @@ void VisitModelCell::compute(
                      site1_index << " " << site2_index);
                 get_inner_()->compute(part1_index, site1_index, part2_index,
                                       site2_index, config, model_params, model,
-                                      false, &relative_, &pbc_);
+                                      false, relative_.get(), pbc_.get());
                 if ((energy_cutoff() != -1) && (inner().energy() > energy_cutoff())) {
                   set_energy(inner().energy());
                   return;
@@ -283,7 +282,7 @@ void VisitModelCell::compute(
                      site1_index << " " << site2_index);
                 get_inner_()->compute(part1_index, site1_index, part2_index,
                                       site2_index, config, model_params, model,
-                                      false, &relative_, &pbc_);
+                                      false, relative_.get(), pbc_.get());
                 if ((energy_cutoff() != -1) && (inner().energy() > energy_cutoff())) {
                   set_energy(inner().energy());
                   return;
@@ -297,7 +296,7 @@ void VisitModelCell::compute(
 
     // In the second loop, compute interactions between different particles in select.
     compute_between_selection(model, model_params, selection,
-      config, false, &relative_, &pbc_);
+      config, false, relative_.get(), pbc_.get());
   }
   set_energy(inner().energy());
 }
@@ -427,9 +426,9 @@ VisitModelCell::VisitModelCell(std::istream& istr) : VisitModel(istr) {
   feasst_deserialize(&min_length_, istr);
   feasst_deserialize(&group_index_, istr);
   feasst_deserialize(&group_, istr);
-  feasst_deserialize_fstobj(&opt_origin_, istr);
-  feasst_deserialize_fstobj(&opt_rel_, istr);
-  feasst_deserialize_fstobj(&opt_pbc_, istr);
+//  feasst_deserialize_fstobj(&opt_origin_, istr);
+//  feasst_deserialize_fstobj(&opt_rel_, istr);
+//  feasst_deserialize_fstobj(&opt_pbc_, istr);
 // HWH for unknown reasons, this function template does not work.
   //feasst_deserialize(cells_, istr);
   {
@@ -448,9 +447,9 @@ void VisitModelCell::serialize(std::ostream& ostr) const {
   feasst_serialize(min_length_, ostr);
   feasst_serialize(group_index_, ostr);
   feasst_serialize(group_, ostr);
-  feasst_serialize_fstobj(opt_origin_, ostr);
-  feasst_serialize_fstobj(opt_rel_, ostr);
-  feasst_serialize_fstobj(opt_pbc_, ostr);
+//  feasst_serialize_fstobj(opt_origin_, ostr);
+//  feasst_serialize_fstobj(opt_rel_, ostr);
+//  feasst_serialize_fstobj(opt_pbc_, ostr);
   feasst_serialize(cells_, ostr);
   DEBUG("size: " << ostr.tellp());
 }

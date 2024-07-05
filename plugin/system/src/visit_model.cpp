@@ -4,6 +4,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "math/include/position.h"
 #include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
@@ -36,7 +37,7 @@ void VisitModel::compute(
     const int group_index) {
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   double r2;
   const Select& selection = config->group_selects()[group_index];
   for (int select_index = 0;
@@ -47,8 +48,8 @@ void VisitModel::compute(
     for (int site_index : selection.site_indices(select_index)) {
       const Site& site = part.site(site_index);
       if (site.is_physical()) {
-        domain.wrap_opt(site.position(), origin_, &relative_, &pbc_, &r2);
-        energy_ += model->energy(relative_, site, *config, model_params);
+        domain.wrap_opt(site.position(), *origin_, relative_.get(), pbc_.get(), &r2);
+        energy_ += model->energy(*relative_, site, *config, model_params);
       }
     }
   }
@@ -63,7 +64,7 @@ void VisitModel::compute(
   ASSERT(group_index == 0, "not implemented because redundant to selection");
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   double r2;
   for (int sel_index = 0; sel_index < selection.num_particles(); ++sel_index) {
     const int particle_index = selection.particle_index(sel_index);
@@ -71,8 +72,8 @@ void VisitModel::compute(
     for (int site_index : selection.site_indices(sel_index)) {
       const Site& site = part.site(site_index);
       if (site.is_physical()) {
-        domain.wrap_opt(site.position(), origin_, &relative_, &pbc_, &r2);
-        energy_ += model->energy(relative_, site, *config, model_params);
+        domain.wrap_opt(site.position(), *origin_, relative_.get(), pbc_.get(), &r2);
+        energy_ += model->energy(*relative_, site, *config, model_params);
       }
     }
   }
@@ -87,7 +88,7 @@ void VisitModel::compute(
   TRACE("VisitModelInner: " << get_inner_()->class_name());
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   TRACE("group index " << group_index);
   const Select& selection = config->group_selects()[group_index];
   TRACE("num p " << selection.num_particles());
@@ -103,7 +104,7 @@ void VisitModel::compute(
       for (int site1_index : selection.site_indices(select1_index)) {
         for (int site2_index : selection.site_indices(select2_index)) {
           get_inner_()->compute(part1_index, site1_index, part2_index,
-            site2_index, config, model_params, model, false, &relative_, &pbc_);
+            site2_index, config, model_params, model, false, relative_.get(), pbc_.get());
           if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
             set_energy(inner().energy());
             return;
@@ -125,7 +126,7 @@ void VisitModel::compute(
   DEBUG("visiting model");
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   const Select& select_all = config->group_selects()[group_index];
   bool is_old_config = false;
   if (selection.trial_state() == 0 ||
@@ -167,7 +168,7 @@ void VisitModel::compute(
                                     part2_index, site2_index,
                                     config, model_params, model,
                                     is_old_config,
-                                    &relative_, &pbc_);
+                                    relative_.get(), pbc_.get());
               if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
                 set_energy(inner().energy());
                 return;
@@ -181,7 +182,7 @@ void VisitModel::compute(
   //} else if (selection.num_particles() == config->num_particles()) {
     DEBUG("computing entire select");
     compute_between_selection(model, model_params, selection,
-      config, is_old_config, &relative_, &pbc_);
+      config, is_old_config, relative_.get(), pbc_.get());
 
   // If selection is more than one particle but not all particles, skip those in selection
   // Calculate energy in two separate loops.
@@ -208,7 +209,7 @@ void VisitModel::compute(
                                     part2_index, site2_index,
                                     config, model_params, model,
                                     is_old_config,
-                                    &relative_, &pbc_);
+                                    relative_.get(), pbc_.get());
               if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
                 set_energy(inner().energy());
                 return;
@@ -221,7 +222,7 @@ void VisitModel::compute(
 
     // In the second loop, compute interactions between different particles in select.
     compute_between_selection(model, model_params, selection,
-      config, is_old_config, &relative_, &pbc_);
+      config, is_old_config, relative_.get(), pbc_.get());
   }
   set_energy(inner().energy());
 }
@@ -256,7 +257,7 @@ void VisitModel::compute_between_selection(
                                   part2_index, site2_index,
                                   config, model_params, model,
                                   is_old_config,
-                                  &relative_, &pbc_);
+                                  relative_.get(), pbc_.get());
             if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
               set_energy(inner().energy());
               return;
@@ -366,12 +367,16 @@ void VisitModel::compute(
   FATAL("not implemented");
 }
 
-void VisitModel::init_relative_(const Domain& domain, Position * relative,
-                                Position * pbc) {
-  if (relative->dimension() != domain.dimension()) {
-    relative->set_vector(domain.side_lengths().coord());
-    pbc->set_vector(domain.side_lengths().coord());
-    origin_ = Position(domain.dimension());
+void VisitModel::init_relative_(const Domain& domain) {
+  if (!relative_) {
+    relative_ = std::make_shared<Position>();
+    pbc_ = std::make_shared<Position>();
+    origin_ = std::make_shared<Position>();
+  }
+  if (relative_->dimension() != domain.dimension()) {
+    relative_->set_vector(domain.side_lengths().coord());
+    pbc_->set_vector(domain.side_lengths().coord());
+    origin_ = std::make_shared<Position>(domain.dimension());
   }
 }
 

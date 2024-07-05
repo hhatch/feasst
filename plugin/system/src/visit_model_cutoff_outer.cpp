@@ -39,7 +39,7 @@ void VisitModelCutoffOuter::compute(
   DEBUG("visiting model");
   zero_energy();
   const Domain& domain = config->domain();
-  init_relative_(domain, &relative_, &pbc_);
+  init_relative_(domain);
   const Select& select_all = config->group_selects()[group_index];
   bool is_old_config = false;
   if (selection.trial_state() == 0 ||
@@ -83,7 +83,7 @@ void VisitModelCutoffOuter::compute(
                                       part2_index, site2_index,
                                       config, model_params, model,
                                       is_old_config,
-                                      &relative_, &pbc_);
+                                      relative_.get(), pbc_.get());
                 if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
                   set_energy(inner().energy());
                   return;
@@ -96,7 +96,7 @@ void VisitModelCutoffOuter::compute(
     }
   } else if (selection.is_equal(config->selection_of_all())) {
     compute_between_selection(model, model_params, selection,
-      config, is_old_config, &relative_, &pbc_);
+      config, is_old_config, relative_.get(), pbc_.get());
 
   // If selection is more than one particle but not all particles, skip those in selection
   // Calculate energy in two separate loops.
@@ -125,7 +125,7 @@ void VisitModelCutoffOuter::compute(
                                       part2_index, site2_index,
                                       config, model_params, model,
                                       is_old_config,
-                                      &relative_, &pbc_);
+                                      relative_.get(), pbc_.get());
                 if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
                   set_energy(inner().energy());
                   return;
@@ -139,7 +139,7 @@ void VisitModelCutoffOuter::compute(
 
     // In the second loop, compute interactions between different particles in select.
     compute_between_selection(model, model_params, selection,
-      config, is_old_config, &relative_, &pbc_);
+      config, is_old_config, relative_.get(), pbc_.get());
   }
   set_energy(inner().energy());
 }
@@ -176,7 +176,7 @@ void VisitModelCutoffOuter::compute_between_selection(
                                     part2_index, site2_index,
                                     config, model_params, model,
                                     is_old_config,
-                                    &relative_, &pbc_);
+                                    relative_.get(), pbc_.get());
               if ((energy_cutoff_ != -1) && (inner().energy() > energy_cutoff_)) {
                 set_energy(inner().energy());
                 return;

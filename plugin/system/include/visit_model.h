@@ -17,6 +17,9 @@ class Configuration;
 class ModelOneBody;
 class ModelTwoBody;
 class ModelThreeBody;
+class Position;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   This class loops a Model over a Configuration or Select.
@@ -193,9 +196,8 @@ class VisitModel {
   // HWH hacky addition for optimization: also, prep inner for reverting,
   // because this is called at beginning of every pair-wise selection compute
   // optimization to avoid repeated construction of Position.
-  Position relative_, pbc_, origin_;
-  void init_relative_(const Domain& domain, Position * relative,
-                      Position * pbc);
+  std::shared_ptr<Position> relative_, pbc_, origin_;
+  void init_relative_(const Domain& domain);
 
   SynchronizeData data_;  // all data is copied at synchronization
   SynchronizeData manual_data_;  // data is manually copied
