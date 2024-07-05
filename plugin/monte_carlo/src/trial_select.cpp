@@ -247,4 +247,13 @@ Configuration * TrialSelect::get_configuration(System * system) const {
 bool TrialSelect::sel(System * system, Random * random) {
   return select(empty_, system, random);
 }
+
+const std::map<std::string, std::shared_ptr<Accumulator> >& TrialSelect::printable() const {
+  return printable_;
+}
+
+const Accumulator& TrialSelect::printable(const std::string str) const {
+  return const_cast<const Accumulator&>(*printable_.at(str));
+}
+
 }  // namespace feasst

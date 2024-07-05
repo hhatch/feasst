@@ -123,9 +123,8 @@ class TrialSelect {
   bool is_ghost() const { return is_ghost_; }
 
   /// Return printable properties.
-  const std::map<std::string, Accumulator>& printable() const { return printable_; }
-  const Accumulator& printable(const std::string str) const {
-    return const_cast<const Accumulator&>(printable_.at(str)); }
+  const std::map<std::string, std::shared_ptr<Accumulator> >& printable() const;
+  const Accumulator& printable(const std::string str) const;
 
   /// Return true if constraints are satisfied.
   virtual bool are_constraints_satisfied(const int old,
@@ -177,7 +176,7 @@ class TrialSelect {
   Select mobile_original_;
   Select mobile_;
   Select anchor_;
-  std::map<std::string, Accumulator> printable_;
+  std::map<std::string, std::shared_ptr<Accumulator> > printable_;
 
   /// Set the probability of selection.
   void set_probability_(const double prob = 1) { probability_ = prob; }
