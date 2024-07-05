@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/select.h"
 #include "chain/include/select_branch.h"
 
 namespace feasst {

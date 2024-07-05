@@ -2,6 +2,7 @@
 #ifndef FEASST_CHAIN_SELECT_REPTATE_H_
 #define FEASST_CHAIN_SELECT_REPTATE_H_
 
+#include "configuration/include/select.h"
 #include "chain/include/select_end_segment.h"
 
 namespace feasst {

@@ -4,6 +4,7 @@
 
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
+#include "math/include/position.h"
 #include "monte_carlo/include/perturb_move.h"
 
 namespace feasst {

@@ -1,6 +1,7 @@
 #include "utils/include/debug.h"
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/position.h"
 #include "chain/include/select_crankshaft_small.h"
 #include "chain/include/perturb_crankshaft_small.h"
 #include "chain/include/trial_crankshaft_small.h"

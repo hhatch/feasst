@@ -2,14 +2,15 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 #define FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 
-#include "configuration/include/select.h"
-
 namespace feasst {
 
 class Accumulator;
 class Configuration;
 class EnergyMap;
+class Position;
 class Properties;
+class Random;
+class Select;
 class System;
 
 typedef std::map<std::string, std::string> argtype;

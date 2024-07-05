@@ -4,6 +4,7 @@
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/properties.h"
+#include "configuration/include/select.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
 #include "system/include/visit_model_inner.h"

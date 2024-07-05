@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <memory>
+#include "configuration/include/select.h"
 #include "monte_carlo/include/trial_select_particle.h"
 
 namespace feasst {
