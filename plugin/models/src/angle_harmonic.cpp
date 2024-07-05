@@ -3,6 +3,8 @@
 #include "math/include/utils_math.h" // round
 #include "math/include/constants.h"
 #include "math/include/random.h" // normal
+#include "math/include/position.h"
+#include "configuration/include/bond.h"
 #include "models/include/angle_harmonic.h"
 
 namespace feasst {

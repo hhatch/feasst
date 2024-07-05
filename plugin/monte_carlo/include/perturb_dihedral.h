@@ -3,7 +3,7 @@
 #define FEASST_MONTE_CARLO_PERTURB_DIHEDRAL_H_
 
 #include "math/include/matrix.h"
-#include "system/include/rigid_angle.h"
+#include "system/include/rigid_dihedral.h"
 #include "monte_carlo/include/perturb_distance_angle.h"
 
 namespace feasst {

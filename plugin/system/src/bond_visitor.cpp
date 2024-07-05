@@ -5,6 +5,9 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/configuration.h"
+#include "system/include/rigid_bond.h"
+#include "system/include/rigid_angle.h"
+#include "system/include/rigid_dihedral.h"
 #include "system/include/bond_visitor.h"
 
 namespace feasst {
@@ -29,6 +32,9 @@ BondVisitor::BondVisitor(argtype args) {
   verbose_ = boolean("verbose", &args, false);
   if (VERBOSE_LEVEL == 5) verbose_ = true;
   feasst_check_all_used(args);
+  bond_ = std::make_shared<RigidBond>();
+  angle_ = std::make_shared<RigidAngle>();
+  dihedral_ = std::make_shared<RigidDihedral>();
 }
 
 void BondVisitor::serialize(std::ostream& ostr) const {
@@ -87,9 +93,9 @@ void BondVisitor::compute_two(const Select& selection,
             const Position& rj = site1.position();
             const Bond& bond_type = part_type.bond(site0_index, site1_index);
             const Bond& bond = unique_part.bond(bond_type.type());
-            ASSERT(bond_.deserialize_map().count(bond.model()) == 1,
+            ASSERT(bond_->deserialize_map().count(bond.model()) == 1,
               "bond model " << bond.model() << " not recognized.");
-            en += bond_.deserialize_map()[bond.model()]->energy(
+            en += bond_->deserialize_map()[bond.model()]->energy(
               ri, rj, bond);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
@@ -142,7 +148,7 @@ void BondVisitor::compute_three(
             const Angle& angle_type = part_type.angle(site0_index,
               site1_index, site2_index);
             const Angle& angle = unique_part.angle(angle_type.type());
-            ASSERT(angle_.deserialize_map().count(angle.model()) == 1,
+            ASSERT(angle_->deserialize_map().count(angle.model()) == 1,
               "angle model " << angle.model() << " not recognized.");
 
             // In 2D, angle i-j-k is not the same as k-j-i.
@@ -154,7 +160,7 @@ void BondVisitor::compute_three(
                 rk = &site0.position();
               }
             }
-            en += angle_.deserialize_map()[angle.model()]->energy(
+            en += angle_->deserialize_map()[angle.model()]->energy(
               *ri, *rj, *rk, angle);
             if (verbose_) {
               if (std::abs(en) > NEAR_ZERO) {
@@ -221,9 +227,9 @@ void BondVisitor::compute_four(
             TRACE("type of dihedral " << dihedral_type.type());
             const Dihedral& dihedral = unique_part.dihedral(dihedral_type.type());
             TRACE("model of dihedral " << dihedral.model());
-            ASSERT(dihedral_.deserialize_map().count(dihedral.model()) == 1,
+            ASSERT(dihedral_->deserialize_map().count(dihedral.model()) == 1,
               "dihedral model " << dihedral.model() << " not recognized.");
-            en += dihedral_.deserialize_map()[dihedral.model()]->energy(
+            en += dihedral_->deserialize_map()[dihedral.model()]->energy(
               ri, rj, rk, rl, dihedral);
             TRACE("en: " << en << " sites " << site0_index << " " << site1_index << " " << site2_index << " " << site3_index);
             if (verbose_) {

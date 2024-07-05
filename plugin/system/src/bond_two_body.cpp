@@ -1,6 +1,7 @@
 
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "math/include/position.h"
 #include "system/include/bond_two_body.h"
 
 namespace feasst {

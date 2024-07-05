@@ -3,6 +3,7 @@
 #include "math/include/constants.h"  // PI
 #include "math/include/random.h"
 #include "math/include/utils_math.h"  // round
+#include "configuration/include/bond.h"
 #include "monte_carlo/include/perturb_dihedral.h"
 
 namespace feasst {
