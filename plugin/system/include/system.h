@@ -5,12 +5,12 @@
 #include <vector>
 #include <memory>
 #include "configuration/include/configuration.h"
-#include "configuration/include/neighbor_criteria.h"
 #include "system/include/potential_factory.h"
-#include "system/include/bond_visitor.h"
 
 namespace feasst {
 
+class BondVisitor;
+class NeighborCriteria;
 class ThermoParams;
 
 /**
