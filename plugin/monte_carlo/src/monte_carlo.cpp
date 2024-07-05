@@ -4,6 +4,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/file.h"
 #include "utils/include/checkpoint.h"
+#include "system/include/visit_model.h"
 #include "system/include/potential.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/action.h"

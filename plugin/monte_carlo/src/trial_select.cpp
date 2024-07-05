@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "system/include/potential.h"
+#include "system/include/visit_model.h"
 #include "monte_carlo/include/trial_select.h"
 
 namespace feasst {

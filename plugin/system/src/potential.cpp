@@ -1,12 +1,15 @@
 #include <memory>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "utils/include/cache.h"
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "math/include/table.h"
+#include "configuration/include/select.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/potential.h"
+#include "system/include/visit_model.h"
 #include "system/include/model_empty.h"
 #include "system/include/model_two_body.h"
 #include "system/include/model_two_body_table.h"
@@ -145,21 +148,21 @@ const ModelParams& Potential::model_params(const Configuration& config) const {
 
 double Potential::energy(Configuration * config) {
   ASSERT(visit_model_, "visitor must be set.");
-  if (prevent_cache_ || !cache_.is_unloading(&stored_energy_)) {
+  if (prevent_cache_ || !cache_->is_unloading(&stored_energy_)) {
     if (model_params_override_) {
       stored_energy_ = model_->compute(model_params_, group_index_, config,
                                        visit_model_.get());
     } else {
       stored_energy_ = model_->compute(group_index_, config, visit_model_.get());
     }
-    cache_.load(stored_energy_);
+    cache_->load(stored_energy_);
   }
   return stored_energy_;
 }
 
 double Potential::select_energy(const Select& select, Configuration * config) {
   ASSERT(visit_model_, "visitor must be set.");
-  if (prevent_cache_ || !cache_.is_unloading(&stored_energy_)) {
+  if (prevent_cache_ || !cache_->is_unloading(&stored_energy_)) {
     if (model_params_override_) {
       stored_energy_ = model_->compute(model_params_, select, group_index_,
                                        config, visit_model_.get());
@@ -167,7 +170,7 @@ double Potential::select_energy(const Select& select, Configuration * config) {
       stored_energy_ = model_->compute(select, group_index_, config,
                                        visit_model_.get());
     }
-    cache_.load(stored_energy_);
+    cache_->load(stored_energy_);
   }
   return stored_energy_;
 }
@@ -251,7 +254,7 @@ void Potential::serialize(std::ostream& ostr) const {
   if (model_params_override_) {
     feasst_serialize_fstobj(model_params_, ostr);
   }
-  feasst_serialize_fstobj(cache_, ostr);
+  feasst_serialize(cache_, ostr);
   feasst_serialize(prevent_cache_, ostr);
   feasst_serialize(table_size_, ostr);
   feasst_serialize(override_args_, ostr);
@@ -283,7 +286,7 @@ Potential::Potential(std::istream& istr) {
   if (model_params_override_) {
     feasst_deserialize_fstobj(&model_params_, istr);
   }
-  feasst_deserialize_fstobj(&cache_, istr);
+  feasst_deserialize(cache_, istr);
   feasst_deserialize(&prevent_cache_, istr);
   feasst_deserialize(&table_size_, istr);
   feasst_deserialize(&override_args_, istr);
@@ -299,4 +302,29 @@ void Potential::synchronize_(const Potential& potential,
   stored_energy_ = potential.stored_energy_;
 }
 
+const Cache& Potential::cache() const { return *cache_; }
+  
+void Potential::load_cache(const bool load) { cache_->set_load(load); }
+
+void Potential::unload_cache(const Potential& potential) {
+  cache_->set_unload(potential.cache());
+}
+
+const VisitModel& Potential::visit_model() const {
+  return const_cast<VisitModel&>(*visit_model_); }
+
+void Potential::set_visit_model_(std::shared_ptr<VisitModel> visit) {
+  visit_model_ = visit;
+}
+
+void Potential::change_volume(const double delta_volume, const int dimension,
+    Configuration * config) {
+  visit_model_->change_volume(delta_volume, dimension, config);
+}
+
+void Potential::revert(const Select& select) { visit_model_->revert(select); }
+
+void Potential::finalize(const Select& select, Configuration * config) {
+  visit_model_->finalize(select, config);
+}
 }  // namespace feasst

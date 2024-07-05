@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
+#include "system/include/visit_model.h"
 #include "system/include/potential.h"
 #include "cluster/include/calculate_cluster.h"
 
