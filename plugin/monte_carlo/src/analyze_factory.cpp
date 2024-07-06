@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_factory.h"

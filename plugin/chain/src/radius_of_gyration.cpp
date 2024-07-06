@@ -41,7 +41,7 @@ std::string RadiusOfGyration::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << ",rgu,rguu" << std::endl;
+  ss << accumulator().status_header() << ",rgu,rguu" << std::endl;
   return ss.str();
 }
 
@@ -66,7 +66,7 @@ void RadiusOfGyration::update(const Criteria& criteria,
       rg += site.position().squared_distance(r_cm);
     }
     const double rgn = std::sqrt(rg/selection.num_sites());
-    accumulator_.accumulate(rgn);
+    get_accumulator()->accumulate(rgn);
     if (hist_) {
       hist_->add(rgn);
     }
@@ -83,7 +83,7 @@ std::string RadiusOfGyration::write(const Criteria& criteria,
   if (rewrite_header()) {
     ss << header(criteria, system, trial_factory);
   }
-  ss << accumulator_.status() << "," << rg_e_.average();
+  ss << accumulator().status() << "," << rg_e_.average();
   ss << "," << rg_e2_.average();
   ss << std::endl;
   DEBUG(ss.str());

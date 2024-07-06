@@ -1,5 +1,6 @@
 #include <cmath>
 #include "utils/test/utils.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "example/include/analyze_example.h"

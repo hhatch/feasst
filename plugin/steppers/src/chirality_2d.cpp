@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "steppers/include/chirality_2d.h"
@@ -31,7 +32,7 @@ std::string Chirality2D::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << std::endl;
+  ss << accumulator_->status_header() << std::endl;
   return ss.str();
 }
 
@@ -67,14 +68,14 @@ void Chirality2D::update(const Criteria& criteria,
       if (sign_error_ < 0 && cross_z < 0) FATAL("negative chirality");
     }
   }
-  accumulator_.accumulate(num_positive);
+  accumulator_->accumulate(num_positive);
 }
 
 std::string Chirality2D::write(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) {
   std::stringstream ss;
-  ss << accumulator_.status() << std::endl;
+  ss << accumulator_->status() << std::endl;
   return ss.str();
 }
 

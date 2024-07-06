@@ -3,10 +3,10 @@
 #define FEASST_MONTE_CARLO_STEPPER_H_
 
 #include <string>
-#include "math/include/accumulator.h"
 
 namespace feasst {
 
+class Accumulator;
 class Configuration;
 class Criteria;
 class System;
@@ -116,7 +116,10 @@ class Stepper {
   int state() const { return state_; }
 
   /// Return the accumulator.
-  const Accumulator& accumulator() const { return accumulator_; }
+  const Accumulator& accumulator() const;
+
+  /// Get the accumulator.
+  Accumulator * get_accumulator();
 
   /// Return the number of trials since update.
   int trials_since_update() const { return trials_since_update_; }
@@ -138,14 +141,14 @@ class Stepper {
   virtual std::string class_name() const { return std::string("Stepper"); }
 
   void serialize(std::ostream& ostr) const;
-  Stepper(std::istream& istr);
+  explicit Stepper(std::istream& istr);
   virtual ~Stepper() {}
 
   //@}
  protected:
   int trials_since_update_ = 0;
   int trials_since_write_ = 0;
-  Accumulator accumulator_;
+  std::shared_ptr<Accumulator> accumulator_;
 
   /// Note that this should not be called after set_state, which appends name.
   void set_output_file(const std::string& output_file) {

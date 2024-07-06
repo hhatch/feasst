@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "steppers/include/num_particles.h"
@@ -50,12 +51,12 @@ void NumParticles::update(const Criteria& criteria,
   DEBUG(group_);
   if (particle_type_ == -1) {
     if (group_ == -1) {
-      accumulator_.accumulate(config.num_particles(0));
+      accumulator_->accumulate(config.num_particles(0));
     } else {
-      accumulator_.accumulate(config.num_particles(group_));
+      accumulator_->accumulate(config.num_particles(group_));
     }
   } else {
-    accumulator_.accumulate(config.num_particles_of_type(particle_type_));
+    accumulator_->accumulate(config.num_particles_of_type(particle_type_));
   }
 }
 

@@ -1,5 +1,6 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "steppers/include/volume.h"
@@ -32,7 +33,7 @@ std::string Volume::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << std::endl;
+  ss << accumulator_->status_header() << std::endl;
   return ss.str();
 }
 
@@ -42,7 +43,7 @@ void Volume::update(const Criteria& criteria,
   const double volume = configuration(system).domain().volume();
   DEBUG("volume: " << volume);
   DEBUG("state: " << state());
-  accumulator_.accumulate(volume);
+  get_accumulator()->accumulate(volume);
 }
 
 std::string Volume::write(const Criteria& criteria,
@@ -52,7 +53,7 @@ std::string Volume::write(const Criteria& criteria,
   if (rewrite_header()) {
     ss << header(criteria, system, trial_factory);
   }
-  ss << accumulator_.status() << std::endl;
+  ss << accumulator().status() << std::endl;
   DEBUG(ss.str());
   return ss.str();
 }

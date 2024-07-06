@@ -46,7 +46,7 @@ std::string HenryCoefficient::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << std::endl;
+  ss << accumulator().status_header() << std::endl;
   return ss.str();
 }
 
@@ -55,14 +55,14 @@ void HenryCoefficient::update(const Criteria& criteria,
     const TrialFactory& trial_factory) {
   const double en = trial_factory.trial(0).accept().energy_new();
   DEBUG("en: " << en);
-  accumulator_.accumulate(std::exp(-system.thermo_params().beta()*en));
+  get_accumulator()->accumulate(std::exp(-system.thermo_params().beta()*en));
 }
 
 std::string HenryCoefficient::write(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) {
   std::stringstream ss;
-  ss << accumulator_.status() << std::endl;
+  ss << accumulator().status() << std::endl;
   DEBUG(ss.str());
   return ss.str();
 }

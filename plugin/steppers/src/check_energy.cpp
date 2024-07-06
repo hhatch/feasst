@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"
@@ -42,7 +43,7 @@ void CheckEnergy::update(Criteria * criteria,
        << "diff: " << energy - current_energy
     );
     // HWH configuration_index_
-    accumulator_.accumulate(energy - current_energy);
+    accumulator_->accumulate(energy - current_energy);
 
     // loop over each profile and perform the energy check
     const std::vector<double>& energy_profile = system->unoptimized(config).stored_energy_profile();

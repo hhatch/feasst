@@ -37,7 +37,7 @@ std::string EndToEndDistance::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << std::endl;
+  ss << accumulator().status_header() << std::endl;
   return ss.str();
 }
 
@@ -53,7 +53,7 @@ void EndToEndDistance::update(const Criteria& criteria,
     const Position& site0pos = part.site(0).position();
     const Position& sitenpos = part.site(part.num_sites() - 1).position();
     const double distance = site0pos.distance(sitenpos);
-    accumulator_.accumulate(distance);
+    get_accumulator()->accumulate(distance);
   }
 }
 
@@ -64,7 +64,7 @@ std::string EndToEndDistance::write(const Criteria& criteria,
   if (rewrite_header()) {
     ss << header(criteria, system, trial_factory);
   }
-  ss << accumulator_.status() << std::endl;
+  ss << accumulator().status() << std::endl;
   DEBUG(ss.str());
   return ss.str();
 }

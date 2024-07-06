@@ -38,7 +38,7 @@ std::string CalculateCluster::header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
-  ss << accumulator_.status_header() << std::endl;
+  ss << accumulator().status_header() << std::endl;
   return ss.str();
 }
 
@@ -72,7 +72,7 @@ void CalculateCluster::update(Criteria * criteria,
         frame_of_reference
       );
       INFO(select.str());
-      accumulator_.accumulate(select.num_particles());
+      get_accumulator()->accumulate(select.num_particles());
       sel_all.add(select);
       cluster.push_back(select);
     }
@@ -89,7 +89,7 @@ std::string CalculateCluster::write(Criteria * criteria,
   if (rewrite_header()) {
     ss << header(*criteria, *system, *trial_factory);
   }
-  ss << accumulator_.status() << std::endl;
+  ss << accumulator().status() << std::endl;
   DEBUG(ss.str());
   return ss.str();
 }

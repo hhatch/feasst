@@ -1,6 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "math/include/accumulator.h"
 #include "configuration/include/select.h"
 #include "configuration/include/particle.h"
 #include "configuration/include/configuration.h"
