@@ -2,6 +2,7 @@
 #include "utils/include/serialize.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/trial_select.h"
 #include "cluster/include/compute_remove_avb.h"
 

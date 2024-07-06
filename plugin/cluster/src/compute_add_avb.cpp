@@ -3,6 +3,7 @@
 #include "monte_carlo/include/trial_select.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/include/acceptance.h"
 #include "cluster/include/compute_add_avb.h"
 
 namespace feasst {

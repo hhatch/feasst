@@ -5,6 +5,7 @@
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/perturb.h"
+#include "monte_carlo/include/acceptance.h"
 #include "steppers/include/tune.h"
 
 namespace feasst {

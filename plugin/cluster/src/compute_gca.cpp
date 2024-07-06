@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "monte_carlo/include/acceptance.h"
 #include "cluster/include/compute_gca.h"
 
 namespace feasst {

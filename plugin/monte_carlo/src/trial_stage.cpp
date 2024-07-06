@@ -4,6 +4,7 @@
 #include "system/include/thermo_params.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/rosenbluth.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/perturb.h"

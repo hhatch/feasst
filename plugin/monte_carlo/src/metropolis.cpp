@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/random.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/metropolis.h"
 
 namespace feasst {

@@ -8,6 +8,7 @@
 #include "system/include/potential.h"
 #include "system/include/visit_model.h"
 #include "system/include/system.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/metropolis.h"

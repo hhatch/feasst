@@ -4,12 +4,12 @@
 
 #include <vector>
 #include "system/include/synchronize_data.h"
-#include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
+class Acceptance;
 class Bias;
 class Constraint;
 class FlatHistogram;

@@ -4,6 +4,7 @@
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/trial_select.h"
+#include "monte_carlo/include/acceptance.h"
 #include "morph/include/compute_morph.h"
 
 namespace feasst {
