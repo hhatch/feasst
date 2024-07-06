@@ -3,6 +3,8 @@
 #define FEASST_MONTE_CARLO_STEPPER_H_
 
 #include <string>
+#include <map>
+#include <memory>
 
 namespace feasst {
 
