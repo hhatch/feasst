@@ -1,4 +1,5 @@
 #include "utils/include/serialize.h"
+#include "configuration/include/select.h"
 #include "cluster/include/compute_move_cluster.h"
 
 namespace feasst {

@@ -28,6 +28,7 @@
 #include "monte_carlo/include/trial_compute_move.h"
 #include "monte_carlo/include/trial_select_dihedral.h"
 #include "monte_carlo/include/perturb_dihedral.h"
+#include "monte_carlo/include/rosenbluth.h"
 #include "steppers/include/log.h"
 #include "steppers/include/tune.h"
 #include "steppers/include/log_and_movie.h"

@@ -3,16 +3,18 @@
 #define FEASST_MONTE_CARLO_TRIAL_STAGE_H_
 
 #include <string>
+#include <map>
 #include <memory>
-#include "monte_carlo/include/rosenbluth.h"
 
 namespace feasst {
 
 class Acceptance;
 class Criteria;
 class Perturb;
-class TrialSelect;
+class Random;
+class Rosenbluth;
 class System;
+class TrialSelect;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -51,10 +53,10 @@ class TrialStage {
   bool is_new_only() const { return is_new_only_; }
 
   /// Return the Rosenbluth.
-  const Rosenbluth& rosenbluth() const { return rosenbluth_; }
+  const Rosenbluth& rosenbluth() const;
 
   /// Return the number of steps in Rosenbluth.
-  const int num_steps() const { return rosenbluth_.num(); }
+  const int num_steps() const;
 
   /// Set the selection.
   void set(std::shared_ptr<TrialSelect> select);
@@ -136,7 +138,7 @@ class TrialStage {
   int reference_ = -1;
   std::shared_ptr<Perturb> perturb_;
   std::shared_ptr<TrialSelect> select_;
-  Rosenbluth rosenbluth_;
+  std::shared_ptr<Rosenbluth> rosenbluth_;
   bool is_new_only_;
   void set_rosenbluth_energy_(const int step, System * system);
 };

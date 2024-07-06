@@ -4,12 +4,14 @@
 
 #include <map>
 #include <string>
+#include <memory>
 #include <vector>
-#include "system/include/system.h"
-#include "monte_carlo/include/trial_stage.h"
-#include "monte_carlo/include/criteria.h"
 
 namespace feasst {
+
+class Criteria;
+class System;
+class TrialStage;
 
 typedef std::map<std::string, std::string> argtype;
 
