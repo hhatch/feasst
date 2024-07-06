@@ -6,6 +6,7 @@
 #include "system/include/hard_sphere.h"
 #include "system/include/model_two_body_factory.h"
 #include "system/include/dont_visit_model.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_transfer.h"

@@ -3,7 +3,11 @@
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
+#include "system/include/system.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/include/criteria.h"
+#include "monte_carlo/include/acceptance.h"
+#include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_compute_add.h"
 #include "monte_carlo/include/trial_select.h"
 

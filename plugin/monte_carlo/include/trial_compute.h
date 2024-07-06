@@ -9,7 +9,9 @@
 
 namespace feasst {
 
+class Acceptance;
 class Criteria;
+class Random;
 class System;
 class TrialStage;
 

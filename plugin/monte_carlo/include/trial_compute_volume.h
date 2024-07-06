@@ -4,9 +4,6 @@
 
 #include <memory>
 #include <vector>
-#include "system/include/system.h"
-#include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_compute.h"
 
 namespace feasst {

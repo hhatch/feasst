@@ -3,10 +3,7 @@
 #define FEASST_MONTE_CARLO_TRIAL_COMPUTE_TRANSLATE_H_
 
 #include <vector>
-#include "system/include/system.h"
 #include "configuration/include/select.h"
-#include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/trial_stage.h"
 #include "monte_carlo/include/trial_compute.h"
 
 namespace feasst {
