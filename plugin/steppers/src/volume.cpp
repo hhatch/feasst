@@ -1,5 +1,6 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "steppers/include/volume.h"
 

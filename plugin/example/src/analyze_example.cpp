@@ -4,6 +4,7 @@
 #include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
+#include "system/include/system.h"
 #include "example/include/analyze_example.h"
 
 namespace feasst {

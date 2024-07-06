@@ -1,5 +1,10 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/position.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle.h"
+#include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "chain/include/end_to_end_distance.h"
 
 namespace feasst {

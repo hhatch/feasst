@@ -6,6 +6,7 @@
 #include "utils/include/debug.h"
 #include "utils/include/serialize.h"
 #include "math/include/accumulator.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/stepper.h"
 #include "monte_carlo/include/criteria.h"
 
@@ -153,6 +154,10 @@ Stepper::Stepper(std::istream& istr) {
   feasst_deserialize(&rewrite_header_, istr);
   feasst_deserialize_fstobj(&accumulator_, istr);
   feasst_deserialize_endcap("Stepper", istr);
+}
+
+const Configuration& Stepper::configuration(const System& system) const {
+  return system.configuration(configuration_index_);
 }
 
 }  // namespace feasst

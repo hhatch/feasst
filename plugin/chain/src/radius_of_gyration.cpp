@@ -1,6 +1,10 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/histogram.h"
+#include "math/include/position.h"
+#include "configuration/include/select.h"
+#include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"
 #include "chain/include/radius_of_gyration.h"
 

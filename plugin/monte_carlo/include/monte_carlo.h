@@ -7,10 +7,9 @@
 #include <memory>
 #include <map>
 //#include "utils/include/timer.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_factory.h"
-#include "monte_carlo/include/analyze.h"
 #include "monte_carlo/include/analyze_factory.h"
-#include "monte_carlo/include/modify.h"
 #include "monte_carlo/include/modify_factory.h"
 
 namespace feasst {
@@ -18,10 +17,12 @@ namespace feasst {
 typedef std::map<std::string, std::string> argtype;
 typedef std::vector<std::pair<std::string, argtype> > arglist;
 
+class Action;
 class Checkpoint;
 class Criteria;
+class NeighborCriteria;
 class Random;
-class Action;
+class ThermoParams;
 
 // HWH consider a constructor-based initialization of MonteCarlo..
 // HWH something where order doesn't need to be enforced?

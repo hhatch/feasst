@@ -4,16 +4,15 @@
 
 #include <string>
 #include "math/include/accumulator.h"
-#include "configuration/include/configuration.h"
-#include "system/include/system.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
+class Configuration;
 class Criteria;
 class System;
 class TrialFactory;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Perform an action (update or write) every so many trials.
@@ -105,8 +104,7 @@ class Stepper {
   int configuration_index() const { return configuration_index_; }
 
   /// Given the system, return the configuration.
-  const Configuration& configuration(const System& system) const {
-    return system.configuration(configuration_index_); }
+  const Configuration& configuration(const System& system) const;
 
   /// Set the state. Append file name if not empty.
   void set_state(const int state = 0);

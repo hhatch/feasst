@@ -3,6 +3,7 @@
 #include "utils/include/io.h"
 #include "math/include/accumulator.h"
 #include "math/include/random_mt19937.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "system/include/long_range_corrections.h"
 #include "system/include/visit_model_intra.h"

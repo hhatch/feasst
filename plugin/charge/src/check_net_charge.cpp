@@ -1,6 +1,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "system/include/system.h"
 #include "charge/include/check_net_charge.h"
 
 namespace feasst {

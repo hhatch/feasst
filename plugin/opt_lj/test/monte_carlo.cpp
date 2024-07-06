@@ -1,5 +1,6 @@
 #include "utils/test/utils.h"
 #include "math/include/random_mt19937.h"
+#include "configuration/include/configuration.h"
 #include "system/include/potential.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/thermo_params.h"

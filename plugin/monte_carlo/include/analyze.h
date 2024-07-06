@@ -10,6 +10,7 @@
 
 namespace feasst {
 
+class Configuration;
 class TrialFactory;
 
 /**

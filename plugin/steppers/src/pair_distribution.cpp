@@ -4,6 +4,8 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "system/include/ideal_gas.h"
 #include "steppers/include/pair_distribution.h"
 

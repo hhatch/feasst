@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "configuration/include/configuration.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
 #include "system/include/potential.h"

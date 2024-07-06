@@ -1,6 +1,7 @@
 #include "utils/test/utils.h"
 #include "threads/include/thread_omp.h"
 #include "math/include/random_mt19937.h"
+#include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"
 #include "system/include/visit_model_inner.h"
 #include "system/include/lennard_jones.h"

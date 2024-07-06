@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/configuration.h"
 #include "steppers/include/density.h"
 
 namespace feasst {

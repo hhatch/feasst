@@ -4,6 +4,8 @@
 #include "math/include/constants.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "steppers/include/scattering.h"
 
 namespace feasst {
