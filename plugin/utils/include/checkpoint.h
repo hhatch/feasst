@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <map>
 #include "utils/include/timer.h"
 #include "utils/include/file.h"
 #include "utils/include/debug.h"

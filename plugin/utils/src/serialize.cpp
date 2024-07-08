@@ -115,7 +115,8 @@ void feasst_deserialize(std::vector<double> * vector, std::istream& istr) {
   }
 }
 
-void feasst_serialize(const std::vector<long double>& vector, std::ostream& ostr) {
+void feasst_serialize(const std::vector<long double>& vector,
+    std::ostream& ostr) {
   ostr << MAX_PRECISION;
   ostr << vector.size() << " ";
   for (const long double& element : vector) {

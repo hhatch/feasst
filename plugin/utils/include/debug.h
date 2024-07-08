@@ -64,7 +64,7 @@ std::string feasst_dir_trim_(const char* file_name);
 /// If the assertion condition is not true, throw exception with message.
 # define ASSERT(condition, message) \
 { \
-  if (!(condition) and feasst::VERBOSE_LEVEL >= 1) { \
+  if (!(condition) && feasst::VERBOSE_LEVEL >= 1) { \
     FEASST_MACRO_EXCEPTION(message, "Assertion `" #condition "` failed") \
   } \
 }

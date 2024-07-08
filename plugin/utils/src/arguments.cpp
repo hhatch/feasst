@@ -25,15 +25,6 @@ std::string str(const std::string& key, argtype * args) {
   return second;
 }
 
-//argtype get(const std::string& key, arglist * args) {
-//  auto pair = args->find(key);
-//  ASSERT(pair != args->end(), "key(" << key << ") is required for args but " <<
-//    "not found");// << str(*args));
-//  const argtype second = pair->second;
-//  args->erase(pair);
-//  return second;
-//}
-
 std::string str(const std::string& key, argtype * args,
     const std::string dflt) {
   std::string return_str;
@@ -165,7 +156,8 @@ void replace_in_value(const std::string& from, const std::string& to,
   }
 }
 
-std::vector<double> parse_dimensional(const std::string& key, argtype * args, const int max) {
+std::vector<double> parse_dimensional(const std::string& key, argtype * args,
+    const int max) {
   int dim = 0;
   std::stringstream ss;
   ss << key << dim;
@@ -188,16 +180,16 @@ std::pair<std::string, argtype> parse_line(const std::string line,
   ss >> major;
   argtype args;
   int num_pairs = 0;
-  while(!ss.eof()) {
+  while (!ss.eof()) {
     std::string minor, value;
     ss >> minor >> value;
     if (minor.empty()) {
-      break; // skip trailing whitespace
+      break;  // skip trailing whitespace
     }
     ASSERT(!value.empty(), "Error parsing text file on line: \"" << ss.str()
       << "\". Line syntax typically requires an odd number of space-separated "
-      << "strings (e.g., Object key0 value0 ... keyN valueN."
-      << " This error typically occurs when one of a key/value pair is missing.");
+      << "strings (e.g., Object key0 value0 ... keyN valueN. This error "
+      << "typically occurs when one of a key/value pair is missing.");
     DEBUG("major " << major << " minor " << minor << " value " << value);
     if (major == "set_variable") {
       DEBUG("setting variable");

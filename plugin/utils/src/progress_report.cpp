@@ -82,7 +82,8 @@ void ProgressReport::write() {
     DEBUG("percent_per_hours " << percent_per_hours);
     const double remaining_hours = (1. - percent())/percent_per_hours;
     ss << std::setprecision(3) << percent() << ","
-       << elapsed_hours << "," << remaining_hours << "," << elapsed_hours + remaining_hours;
+       << elapsed_hours << "," << remaining_hours << ","
+       << elapsed_hours + remaining_hours;
   }
   DEBUG("filename? " << file_name_);
   if (file_name_.empty()) {

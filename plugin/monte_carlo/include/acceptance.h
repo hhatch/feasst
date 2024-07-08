@@ -2,6 +2,9 @@
 #ifndef FEASST_MONTE_CARLO_ACCEPTANCE_H_
 #define FEASST_MONTE_CARLO_ACCEPTANCE_H_
 
+#include <memory>
+#include <vector>
+
 namespace feasst {
 
 class Select;
