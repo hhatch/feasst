@@ -2,7 +2,6 @@
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
-#include "math/include/formula.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
@@ -34,25 +33,13 @@ void PairDistributionInner::serialize(std::ostream& ostr) const {
 void PairDistributionInner::serialize_pair_distribution_inner_(std::ostream& ostr) const {
   serialize_model_(ostr);
   feasst_serialize_version(2947, ostr);
-//  feasst_serialize_fstobj(radial_, ostr);
+  feasst_serialize_fstobj(radial_, ostr);
 }
 
 PairDistributionInner::PairDistributionInner(std::istream& istr) : ModelTwoBody(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(2947 == version, version);
-  //feasst_deserialize_fstobj(&radial_, istr);
-  int dim1;
-  istr >> dim1;
-//  radial_.resize(dim1);
-  for (int index = 0; index < dim1; ++index) {
-    int dim2;
-    istr >> dim2;
-//    radial_[index].resize(dim1);
-    for (int index2 = 0; index2 < dim1; ++index2) {
-//      radial_[index][index2] = std::move(Histogram(istr));
-      //feasst_deserialize_fstobj(&radial_[index][index2], istr);
-    }
-  }
+  feasst_deserialize_fstobj(&radial_, istr);
 }
 
 double PairDistributionInner::energy(
@@ -62,8 +49,8 @@ double PairDistributionInner::energy(
     const ModelParams& model_params) {
   //DEBUG(squared_distance << " " << type1 << " " << type2);
   const double distance = std::sqrt(squared_distance);
-  radial_[type1][type2]->add(distance);
-  radial_[type2][type1]->add(distance);
+  radial_[type1][type2].add(distance);
+  radial_[type2][type1].add(distance);
   return 0.;
 }
 
@@ -103,12 +90,10 @@ void PairDistribution::initialize(Criteria * criteria,
   resize(num_site_types, num_site_types, &intra_.radial_);
   for (int itype = 0; itype < num_site_types; ++itype) {
     for (int jtype = 0; jtype < num_site_types; ++jtype) {
-      auto hist = MakeHistogram();
-      hist->set_width_center(dr_, 0.5*dr_);
-      inter_.radial_[itype][jtype] = std::move(hist);
-      auto hist2 = MakeHistogram();
-      hist2->set_width_center(dr_, 0.5*dr_);
-      intra_.radial_[itype][jtype] = std::move(hist2);
+      Histogram hist;
+      hist.set_width_center(dr_, 0.5*dr_);
+      inter_.radial_[itype][jtype] = hist;
+      intra_.radial_[itype][jtype] = hist;
     }
   }
 
@@ -165,7 +150,7 @@ std::string PairDistribution::write(Criteria * criteria,
   std::stringstream ss;
   ss << header(*criteria, *system, *trial_factory);
   const grtype& rad = radial(system->configuration());
-  const std::vector<std::vector<std::unique_ptr<Histogram> > >& hr = intra_.radial_;
+  const std::vector<std::vector<Histogram> >& hr = intra_.radial_;
   //ASSERT(static_cast<int>(rad.size()) == hr[0][0].size(), "err");
   //for (const grbintype& gr : rad) {
   for (int bin = 0; bin < static_cast<int>(rad.size()); ++bin) {
@@ -176,9 +161,9 @@ std::string PairDistribution::write(Criteria * criteria,
         ss << gr.second[itype][jtype] << ",";
         if (print_intra_) {
           int h = 0;
-          const std::unique_ptr<Histogram>& hrij = hr[itype][jtype];
-          if (bin < hrij->size()) {
-            h = hrij->histogram()[bin]
+          const Histogram& hrij = hr[itype][jtype];
+          if (bin < hrij.size()) {
+            h = hrij.histogram()[bin]
               /static_cast<double>(num_updates_)
               /static_cast<double>(system->configuration().num_particles());
           }
@@ -198,11 +183,11 @@ const grtype& PairDistribution::radial(const Configuration& config) {
   std::vector<std::vector<int> > num_sites_of_type_in_particle =
     config.num_site_types_per_particle_type();
   const int max_bin = static_cast<int>(0.5*config.domain().inscribed_sphere_diameter()/dr_);
-  for (int bin = 0; bin < max_bin && bin < inter_.radial_[0][0]->size(); ++bin) {
+  for (int bin = 0; bin < max_bin && bin < inter_.radial_[0][0].size(); ++bin) {
     DEBUG("bin: " << bin << " of " << max_bin);
-    const double distance = inter_.radial_[0][0]->center_of_bin(bin);
-    const double lower = inter_.radial_[0][0]->edges()[bin];
-    const double upper = inter_.radial_[0][0]->edges()[bin + 1];
+    const double distance = inter_.radial_[0][0].center_of_bin(bin);
+    const double lower = inter_.radial_[0][0].edges()[bin];
+    const double upper = inter_.radial_[0][0].edges()[bin + 1];
     const double dv = spherical_shell_volume(lower, upper, config.dimension())/
                       config.domain().volume();
     if (static_cast<int>(radial_.size()) <= bin) {
@@ -220,10 +205,10 @@ const grtype& PairDistribution::radial(const Configuration& config) {
           norm_fac = num_sites_of_type_in_particle[ipart_type][itype];
         }
         const double num_jtype = num_sites_of_type[jtype];
-        const std::unique_ptr<Histogram>& hist = inter_.radial_[itype][jtype];
+        const Histogram& hist = inter_.radial_[itype][jtype];
         double grbin = 0;
-        if (bin < hist->size()) {
-          grbin = hist->histogram()[bin]
+        if (bin < hist.size()) {
+          grbin = hist.histogram()[bin]
             /(num_itype - norm_fac)
             /num_jtype
             /static_cast<double>(num_updates_)
@@ -242,9 +227,9 @@ void PairDistribution::serialize(std::ostream& ostr) const {
   feasst_serialize(dr_, ostr);
   feasst_serialize(print_intra_, ostr);
   feasst_serialize_fstobj(inter_visit_, ostr);
- // feasst_serialize_fstobj(inter_, ostr);
+  feasst_serialize_fstobj(inter_, ostr);
   feasst_serialize_fstobj(intra_visit_, ostr);
- // feasst_serialize_fstobj(intra_, ostr);
+  feasst_serialize_fstobj(intra_, ostr);
   feasst_serialize_fstobj(params_, ostr);
   feasst_serialize(num_updates_, ostr);
 }
@@ -255,17 +240,17 @@ PairDistribution::PairDistribution(std::istream& istr) : Modify(istr) {
   feasst_deserialize(&dr_, istr);
   feasst_deserialize(&print_intra_, istr);
   feasst_deserialize_fstobj(&inter_visit_, istr);
-//  feasst_deserialize_fstobj(&inter_, istr);
+  feasst_deserialize_fstobj(&inter_, istr);
   feasst_deserialize_fstobj(&intra_visit_, istr);
-//  feasst_deserialize_fstobj(&intra_, istr);
+  feasst_deserialize_fstobj(&intra_, istr);
   feasst_deserialize_fstobj(&params_, istr);
   feasst_deserialize(&num_updates_, istr);
 }
 
 PairDistribution::PairDistribution(const Modify& pair_distribution) {
-//  std::stringstream ss;
-//  pair_distribution.serialize(ss);
-//  *this = PairDistribution(ss);
+  std::stringstream ss;
+  pair_distribution.serialize(ss);
+  *this = PairDistribution(ss);
 }
 
 }  // namespace feasst
