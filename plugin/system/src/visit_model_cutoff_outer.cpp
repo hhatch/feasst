@@ -42,7 +42,7 @@ void VisitModelCutoffOuter::compute(
   zero_energy();
   const Domain& domain = config->domain();
   init_relative_(domain);
-  const Select& select_all = config->group_selects()[group_index];
+  const Select& select_all = config->group_select(group_index);
   bool is_old_config = false;
   if (selection.trial_state() == 0 ||
       selection.trial_state() == 2) {

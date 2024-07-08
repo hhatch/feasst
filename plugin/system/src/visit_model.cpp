@@ -42,7 +42,7 @@ void VisitModel::compute(
   const Domain& domain = config->domain();
   init_relative_(domain);
   double r2;
-  const Select& selection = config->group_selects()[group_index];
+  const Select& selection = config->group_select(group_index);
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {
@@ -93,7 +93,7 @@ void VisitModel::compute(
   const Domain& domain = config->domain();
   init_relative_(domain);
   TRACE("group index " << group_index);
-  const Select& selection = config->group_selects()[group_index];
+  const Select& selection = config->group_select(group_index);
   TRACE("num p " << selection.num_particles());
   for (int select1_index = 0;
        select1_index < selection.num_particles() - 1;
@@ -130,7 +130,7 @@ void VisitModel::compute(
   zero_energy();
   const Domain& domain = config->domain();
   init_relative_(domain);
-  const Select& select_all = config->group_selects()[group_index];
+  const Select& select_all = config->group_select(group_index);
   bool is_old_config = false;
   if (selection.trial_state() == 0 ||
       selection.trial_state() == 2) {

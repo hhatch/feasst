@@ -257,25 +257,25 @@ void BondVisitor::compute_all(const Select& selection,
 
 void BondVisitor::compute_all(const Configuration& config,
                               const int group_index) {
-  const Select& selection = config.group_selects()[group_index];
+  const Select& selection = config.group_select(group_index);
   compute_all(selection, config);
 }
 
 void BondVisitor::compute_two(const Configuration& config,
                               const int group_index) {
-  const Select& selection = config.group_selects()[group_index];
+  const Select& selection = config.group_select(group_index);
   compute_two(selection, config);
 }
 
 void BondVisitor::compute_three(const Configuration& config,
                                 const int group_index) {
-  const Select& selection = config.group_selects()[group_index];
+  const Select& selection = config.group_select(group_index);
   compute_three(selection, config);
 }
 
 void BondVisitor::compute_four(const Configuration& config,
                                const int group_index) {
-  const Select& selection = config.group_selects()[group_index];
+  const Select& selection = config.group_select(group_index);
   compute_four(selection, config);
 }
 

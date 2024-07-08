@@ -89,7 +89,7 @@ void VisitModelCell::precompute(Configuration * config) {
     rebuild_(*config);
     config->increment_num_cell_lists();
     init_relative_(config->domain());
-    position_tracker_(config->group_selects()[group_index_], config);
+    position_tracker_(config->group_select(group_index_), config);
   }
   check(*config);
 }
@@ -121,7 +121,7 @@ void VisitModelCell::change_volume(const double delta_volume, const int dimensio
   bool rebuild = true;
   if (rebuild) {
     rebuild_(*config);
-    position_tracker_(config->group_selects()[group_index_], config);
+    position_tracker_(config->group_select(group_index_), config);
   }
 }
 
@@ -319,10 +319,10 @@ void VisitModelCell::position_tracker_(const Select& select,
       ASSERT(config, "error");
       DEBUG("group_index: " << group_index);
       DEBUG("group selects size: " << config->group_selects().size());
-      const Select& sel = config->group_selects()[group_index];
+      const Select& sel = config->group_select(group_index);
       DEBUG("sel " << sel.str());
       DEBUG("is group empty: " << sel.is_group_empty());
-      const Group& group = config->group_selects()[group_index].group();
+      const Group& group = config->group_select(group_index).group();
       if (group.is_in(part, particle_index)) {
         const Site& site = part.site(site_index);
         if (group.is_in(site)) {
@@ -369,7 +369,7 @@ void VisitModelCell::finalize(const Select& select, Configuration * config) {
       // note: somewhat derivative of position_tracker
       const int group_index = cells_->group();
       const Particle& part = config->select_particle(particle_index);
-      const Group& group = config->group_selects()[group_index].group();
+      const Group& group = config->group_select(group_index).group();
       if (group.is_in(part, particle_index)) {
         for (int site_index = 0; site_index < part.num_sites(); ++site_index) {
           const Site& site = part.site(site_index);

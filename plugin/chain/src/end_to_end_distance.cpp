@@ -44,7 +44,7 @@ std::string EndToEndDistance::header(const Criteria& criteria,
 void EndToEndDistance::update(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) {
-  const Select& selection = system.configuration().group_selects()[group_index_];
+  const Select& selection = system.configuration().group_select(group_index_);
   for (int select_index = 0;
        select_index < selection.num_particles();
        ++select_index) {

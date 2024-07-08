@@ -218,7 +218,7 @@ class Configuration {
     std::string name = "");
 
   /// Return the number of group selections.
-  int num_groups() const { return static_cast<int>(group_selects_.size()); }
+  int num_groups() const;
 
   /// Return the index of the group based on particle types.
   /// If the group does not exist, return -1.
@@ -231,12 +231,10 @@ class Configuration {
   int group_index(const std::string& name) const;
 
   /// Return the group-based selections.
-  const std::vector<Select>& group_selects() const {
-    return group_selects_; }
+  const std::vector<std::shared_ptr<Select> >& group_selects() const;
 
   /// Return the group-based selections by index.
-  const Select& group_select(const int index) const {
-    return group_selects_[index]; }
+  const Select& group_select(const int index) const;
 
   //@}
   /** @name Particles
@@ -264,7 +262,7 @@ class Configuration {
 
   /// Return selection of all particles and sites in the configuration.
   /// This selection does not include ghost particles.
-  const Select& selection_of_all() const { return group_selects_[0]; }
+  const Select& selection_of_all() const;
 
   /// Return the number of particles.
   int num_particles(
@@ -293,11 +291,11 @@ class Configuration {
 
   /// Return the number of sites of each type in group.
   std::vector<int> num_sites_of_type(const int group_index = 0.) const {
-    return num_sites_of_type(group_selects()[group_index]); }
+    return num_sites_of_type(*group_selects()[group_index]); }
 
   /// Same as above, but optimized to use existing data structure.
   void num_sites_of_type(const int group_index, std::vector<int> * num) const {
-    num_sites_of_type(group_selects()[group_index], num); }
+    num_sites_of_type(*group_selects()[group_index], num); }
 
   //@}
   /** @name Modifications
@@ -553,7 +551,7 @@ class Configuration {
   // HWH currently only updated when adding and removing particles
   // HWH but at some point it should check for positional changes
   // HWH if groups are defined based on positions.
-  std::vector<Select> group_selects_;
+  std::vector<std::shared_ptr<Select> > group_selects_;
 
   /// Add particle.
   void add_(const Particle particle);

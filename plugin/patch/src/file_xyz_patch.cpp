@@ -124,7 +124,7 @@ void FileXYZPatch::write(const std::string file_name,
     file->open(file_name, std::ofstream::app);
   }
   const Domain& domain = config.domain();
-  (*file.get()) << config.group_selects()[group_index_].num_sites() << std::endl
+  (*file.get()) << config.group_select(group_index_).num_sites() << std::endl
     << "-1 ";
   (*file.get()) << std::setprecision(num_places);
   for (int dim = 0; dim < domain.dimension(); ++dim) {

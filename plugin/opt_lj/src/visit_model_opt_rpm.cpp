@@ -35,7 +35,7 @@ void VisitModelOptRPM::compute(
   const double lx = domain.side_length(0),
                ly = domain.side_length(1),
                lz = domain.side_length(2);
-  const Select& select_all = config->group_selects()[group_index];
+  const Select& select_all = config->group_select(group_index);
   bool is_old_config = false;
   if (selection.trial_state() == 0 ||
       selection.trial_state() == 2) {

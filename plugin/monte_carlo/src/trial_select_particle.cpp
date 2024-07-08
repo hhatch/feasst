@@ -247,7 +247,7 @@ void TrialSelectParticle::serialize(std::ostream& ostr) const {
 
 void TrialSelectParticle::select_particle(const int index,
     const Configuration& config) {
-  const Select& select = config.group_selects()[group_index()];
+  const Select& select = config.group_select(group_index());
   ASSERT(index < select.num_particles(), "error");
   bool fast = get_mobile()->replace_indices(select.particle_index(index),
                                       select.site_indices(index));

@@ -50,7 +50,7 @@ void Chirality2D::update(const Criteria& criteria,
     const TrialFactory& trial_factory) {
     const Configuration& config = system.configuration();
   int num_positive = 0;
-  for (int part_index : config.group_selects()[0].particle_indices()) {
+  for (int part_index : config.group_select(0).particle_indices()) {
     const Particle& part = config.select_particle(part_index);
     const Bond& bond1 = config.particle_type(part.type()).bond(bond1_);
     const Bond& bond2 = config.particle_type(part.type()).bond(bond2_);
