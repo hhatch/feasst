@@ -44,7 +44,7 @@ class Histogram {
   /// Set the size of the bins according to a formula, where the initial bin is
   /// defined by the formula evaluated at zero.
   /// This makes the histogram expandable.
-  void set_bin_size(const std::shared_ptr<Formula> bin_size);
+  void set_bin_size(std::unique_ptr<Formula> bin_size);
 
   /// Set a constant bin width and fix the center of the initial bin.
   /// This makes the histogram expandable.
@@ -106,7 +106,7 @@ class Histogram {
   std::deque<double> histogram_;
   std::deque<double> edges_;
   bool expandable_ = false;
-  std::shared_ptr<Formula> bin_size_;
+  std::unique_ptr<Formula> bin_size_;
 
   // optimization for constant width
   int is_constant_width_ = 0;
@@ -114,8 +114,8 @@ class Histogram {
   void set_expandable_() { expandable_ = true; }
 };
 
-inline std::shared_ptr<Histogram> MakeHistogram(argtype args = argtype()) {
-  return std::make_shared<Histogram>(args); }
+inline std::unique_ptr<Histogram> MakeHistogram(argtype args = argtype()) {
+  return std::make_unique<Histogram>(args); }
 
 }  // namespace feasst
 

@@ -25,9 +25,9 @@ Histogram::Histogram(argtype * args) {
   }
 }
 
-void Histogram::set_bin_size(const std::shared_ptr<Formula> bin_size) {
+void Histogram::set_bin_size(std::unique_ptr<Formula> bin_size) {
   set_expandable_();
-  bin_size_ = bin_size;
+  bin_size_ = std::move(bin_size);
   ASSERT(edges_.size() == 0 && size() == 0, "formula cannot be changed");
   histogram_.push_back(0.);
   const double fabove = bin_size_->evaluate(1);
@@ -35,12 +35,18 @@ void Histogram::set_bin_size(const std::shared_ptr<Formula> bin_size) {
   const double fbelow = bin_size_->evaluate(-1);
   edges_.push_back(0.5*(fbelow + f0));
   edges_.push_back(0.5*(fabove + f0));
+  std::stringstream ss;
+  bin_size_->serialize(ss);
 }
 
 void Histogram::set_width_center(const double width, const double center) {
-  auto bin_size = MakeFormulaPolynomial({{"x0", "0"}});
-  bin_size->set_A(0, center).set_A(1, width);
-  set_bin_size(bin_size);
+//  std::unique_ptr<FormulaPolynomial> bin_size = MakeFormulaPolynomial({
+  std::unique_ptr<Formula> bin_size = MakeFormulaPolynomial({
+    {"x0", "0"}, {"coeff0", feasst::str(center)}, {"coeff1", feasst::str(width)}});
+  //bin_size->set_A(0, center).set_A(1, width);
+  //set_bin_size(static_cast<std::unique_ptr<Formula> >(bin_size));
+  //set_bin_size(bin_size);
+  set_bin_size(std::move(bin_size));
   is_constant_width_ = 1;
 }
 
@@ -169,14 +175,7 @@ Histogram::Histogram(std::istream& istr) {
   feasst_deserialize(&histogram_, istr);
   feasst_deserialize(&edges_, istr);
   feasst_deserialize(&expandable_, istr);
-  // feasst_deserialize_fstdr(bin_size_, istr);
-  { // HWH for unknown reasons the above template function does not work
-    int existing;
-    istr >> existing;
-    if (existing != 0) {
-      bin_size_ = bin_size_->deserialize(istr);
-    }
-  }
+  feasst_deserialize_fstdr(bin_size_, istr);
   feasst_deserialize(&is_constant_width_, istr);
 }
 

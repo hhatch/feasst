@@ -363,6 +363,21 @@ void feasst_serialize_fstdr(std::shared_ptr<T> ptr, std::ostream& ostr) {
 //   }
 // }
 
+/// Serialize feasst derived object stored as unique pointer
+template <typename T>
+void feasst_serialize_fstdr(const std::unique_ptr<T>& ptr, std::ostream& ostr) {
+  feasst_serialize(ptr, ostr);
+}
+/// Deserialize feasst derived object stored as unique pointer
+template <typename T>
+void feasst_deserialize_fstdr(std::unique_ptr<T>& ptr, std::istream& istr) {
+  int existing;
+  istr >> existing;
+  if (existing != 0) {
+    ptr = ptr->deserialize(istr);
+  }
+}
+
 /// Serialize vector of shared pointers of feasst objects
 template <typename T>
 void feasst_serialize(const std::vector<std::shared_ptr<T> >& vector,
@@ -442,6 +457,39 @@ std::shared_ptr<T> template_deserialize(
   return obj;
 }
 
+/// Return a shared pointer to the base class of model after construction of
+/// the full derived class.
+/// see https://isocpp.org/wiki/faq/serialization
+template <typename T>
+std::unique_ptr<T> template_deserialize(
+    std::map<std::string, std::unique_ptr<T> >& map,
+    std::istream& istr,
+    /// Rewind istr position to read class name again (default: false).
+    bool rewind = false) {
+  std::string class_name;
+  int pos = istr.tellg();  // record position before reading
+  istr >> class_name;      // read class name
+
+  // rewind position so constructors can reread class name.
+  if (rewind) {
+    istr.seekg(pos, istr.beg);  // rewind to before reading the class name.
+  }
+  DEBUG("deserializing: " << class_name << " rewind? " << rewind);
+  if (map.count(class_name) == 0) {
+    FATAL("The class name \"" << class_name << "\" "
+    << "is not recognized during deserialization. "
+    << "If the above class name is empty, there was a mis-match in stream. "
+    << "Perhaps the plugin was not included during compilation. "
+    << "If that's not it, its likely due to the lack of a static mapper "
+    << "which is typically implemented within the cpp file. "
+    << "In rare cases, the absence of a constructor implementation inside "
+    << "the cpp file possibly leads optimization to ignore the mapper.");
+  }
+  std::unique_ptr<T> obj = map[class_name]->create(istr);
+  //DEBUG("obj " << obj);
+  return obj;
+}
+
 /// Return a deep copy of a feasst derived class object.
 /// This is implemented via serialization/deserialization.
 template <typename T>
@@ -488,6 +536,25 @@ std::shared_ptr<T> template_factory(
   }
   std::shared_ptr<T> obj = map[class_name]->create(args);
   DEBUG("obj " << obj);
+  return obj;
+}
+
+/// A factory method to construct objects from argtype
+template <typename T>
+std::unique_ptr<T> template_factory(
+    std::map<std::string, std::unique_ptr<T> >& map,
+    std::string class_name,
+    argtype * args) {
+  DEBUG("deserializing: " << class_name);
+  if (map.count(class_name) == 0) {
+    INFO("candidates:");
+    for (const auto& ele : map) {
+      INFO(ele.first);
+    }
+    FATAL("The class name \"" << class_name << "\" is not recognized.");
+  }
+  std::unique_ptr<T> obj = map[class_name]->create(args);
+  //DEBUG("obj " << obj);
   return obj;
 }
 

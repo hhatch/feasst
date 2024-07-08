@@ -28,7 +28,7 @@ class FormulaExponential : public Formula {
   void set_A(const double A) { A_ = A; }
   void set_B(const double B) { B_ = B; }
   double evaluate(const double x) const override;
-  std::shared_ptr<Formula> create(std::istream& istr) const override;
+  std::unique_ptr<Formula> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit FormulaExponential(std::istream& istr);
   virtual ~FormulaExponential() {}
@@ -39,9 +39,9 @@ class FormulaExponential : public Formula {
   double B_;
 };
 
-inline std::shared_ptr<FormulaExponential> MakeFormulaExponential(
+inline std::unique_ptr<FormulaExponential> MakeFormulaExponential(
     argtype args = argtype()) {
-  return std::make_shared<FormulaExponential>(args);
+  return std::make_unique<FormulaExponential>(args);
 }
 
 }  // namespace feasst

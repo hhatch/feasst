@@ -7,24 +7,38 @@
 
 namespace feasst {
 
-FormulaPolynomial::FormulaPolynomial(argtype args) : FormulaPolynomial(&args) {
-  feasst_check_all_used(args); }
 FormulaPolynomial::FormulaPolynomial(argtype * args) : Formula(args) {
   class_name_ = "FormulaPolynomial";
+  std::string start = "coeff";
+  int cof = 0;
+  std::stringstream ss;
+  ss << start << cof;
+  DEBUG("ss.str() " << ss.str());
+  while (used(ss.str(), *args)) {
+    set_A(cof, dble(ss.str(), args));
+    ++cof;
+    ss.str("");
+    ss << start << cof;
+    DEBUG("ss.str() " << ss.str());
+    ASSERT(cof < 1e6, "big polynomial");
+  }
+}
+FormulaPolynomial::FormulaPolynomial(argtype args) : FormulaPolynomial(&args) {
+  feasst_check_all_used(args);
 }
 
 class MapFormulaPolynomial {
  public:
   MapFormulaPolynomial() {
     FormulaPolynomial().deserialize_map()["FormulaPolynomial"] =
-      std::make_shared<FormulaPolynomial>();
+      std::make_unique<FormulaPolynomial>();
   }
 };
 
 static MapFormulaPolynomial mapper_ = MapFormulaPolynomial();
 
-std::shared_ptr<Formula> FormulaPolynomial::create(std::istream& istr) const {
-  return std::make_shared<FormulaPolynomial>(istr);
+std::unique_ptr<Formula> FormulaPolynomial::create(std::istream& istr) const {
+  return std::make_unique<FormulaPolynomial>(istr);
 }
 
 FormulaPolynomial::FormulaPolynomial(std::istream& istr)
