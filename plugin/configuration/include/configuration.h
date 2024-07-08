@@ -8,13 +8,13 @@
 #include "math/include/table.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
-#include "configuration/include/neighbor_criteria.h"
 
 namespace feasst {
 
 class Domain;
 class ModelParam;
 class ModelParams;
+class NeighborCriteria;
 class PhysicalConstants;
 
 typedef std::map<std::string, std::string> argtype;

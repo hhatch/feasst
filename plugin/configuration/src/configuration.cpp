@@ -6,6 +6,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
+#include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/group.h"
 #include "configuration/include/file_xyz.h"
