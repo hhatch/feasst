@@ -398,7 +398,7 @@ const NeighborCriteria& System::neighbor_criteria(const int index,
   return configurations_[config]->neighbor_criteria(index);
 }
 
-const std::vector<NeighborCriteria>& System::neighbor_criteria(
+const std::vector<std::shared_ptr<NeighborCriteria> >& System::neighbor_criteria(
     const int config) const {
   return configurations_[config]->neighbor_criteria();
 }

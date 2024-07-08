@@ -25,7 +25,7 @@ class Solver {
     - upper: optional upper bound.
     - guess: initial guess for the root.
    */
-  Solver(argtype args = argtype());
+  explicit Solver(argtype args = argtype());
 
   /// Return the tolerance
   double tolerance() const { return tolerance_; }

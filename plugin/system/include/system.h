@@ -138,7 +138,7 @@ class System {
     const int config) const;
 
   /// Return a NeighborCriteria by index in order added.
-  const std::vector<NeighborCriteria>& neighbor_criteria(
+  const std::vector<std::shared_ptr<NeighborCriteria> >& neighbor_criteria(
     const int config) const;
 
   // Return a NeighborCriteria by index in order added.

@@ -774,7 +774,7 @@ void Configuration::serialize(std::ostream& ostr) const {
   feasst_serialize(num_particles_of_type_, ostr);
   feasst_serialize(wrap_, ostr);
   feasst_serialize(num_cell_lists_, ostr);
-  feasst_serialize_fstobj(neighbor_criteria_, ostr);
+  feasst_serialize(neighbor_criteria_, ostr);
   feasst_serialize_endcap("Configuration", ostr);
   DEBUG("size: " << ostr.tellp());
 }
@@ -806,7 +806,20 @@ Configuration::Configuration(std::istream& istr) {
   feasst_deserialize(&num_particles_of_type_, istr);
   feasst_deserialize(&wrap_, istr);
   feasst_deserialize(&num_cell_lists_, istr);
-  feasst_deserialize_fstobj(&neighbor_criteria_, istr);
+//  feasst_deserialize(neighbor_criteria_, istr);
+// HWH for unknown reasons, this function template does not work.
+  {
+    int dim1;
+    istr >> dim1;
+    neighbor_criteria_.resize(dim1);
+    for (int index = 0; index < dim1; ++index) {
+      int existing;
+      istr >> existing;
+      if (existing != 0) {
+        neighbor_criteria_[index] = std::make_shared<NeighborCriteria>(istr);
+      }
+    }
+  }
   feasst_deserialize_endcap("Configuration", istr);
 }
 
@@ -992,6 +1005,22 @@ std::vector<std::vector<int> > Configuration::num_site_types_per_particle_type()
 
 const PhysicalConstants& Configuration::physical_constants() const {
   return model_params().physical_constants();
+}
+
+void Configuration::add(std::shared_ptr<NeighborCriteria> neighbor_criteria) {
+  neighbor_criteria_.push_back(neighbor_criteria);
+}
+
+const NeighborCriteria& Configuration::neighbor_criteria(const int index) const {
+  return *neighbor_criteria_[index];
+}
+
+const std::vector<std::shared_ptr<NeighborCriteria> >& Configuration::neighbor_criteria() const {
+  return neighbor_criteria_;
+}
+
+NeighborCriteria * Configuration::get_neighbor_criteria(const int index) {
+  return neighbor_criteria_[index].get();
 }
 
 }  // namespace feasst

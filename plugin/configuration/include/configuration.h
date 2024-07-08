@@ -492,20 +492,16 @@ class Configuration {
   //@{
 
   /// Add a NeighborCriteria.
-  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria) {
-    neighbor_criteria_.push_back(*neighbor_criteria); }
+  void add(std::shared_ptr<NeighborCriteria> neighbor_criteria);
 
   /// Return a NeighborCriteria by index in order added.
-  const NeighborCriteria& neighbor_criteria(const int index) const {
-    return neighbor_criteria_[index]; }
+  const NeighborCriteria& neighbor_criteria(const int index) const;
 
   /// Return a NeighborCriteria by index in order added.
-  const std::vector<NeighborCriteria>& neighbor_criteria() const {
-    return neighbor_criteria_; }
+  const std::vector<std::shared_ptr<NeighborCriteria> >& neighbor_criteria() const;
 
   // Return a NeighborCriteria by index in order added.
-  NeighborCriteria * get_neighbor_criteria(const int index) {
-    return &neighbor_criteria_[index]; }
+  NeighborCriteria * get_neighbor_criteria(const int index);
 
   //@}
   /** @name Checks
@@ -655,7 +651,7 @@ class Configuration {
 
   /// Store the number of particles of each type.
   std::vector<int> num_particles_of_type_;
-  std::vector<NeighborCriteria> neighbor_criteria_;
+  std::vector<std::shared_ptr<NeighborCriteria> > neighbor_criteria_;
 
   // Do not serialize possibly huge tables.
   std::vector<std::vector<Table3D> > table3d_;
