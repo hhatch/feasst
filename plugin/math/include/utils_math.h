@@ -2,6 +2,7 @@
 #ifndef FEASST_MATH_UTILS_MATH_H_
 #define FEASST_MATH_UTILS_MATH_H_
 
+#include <cmath>
 #include <vector>
 #include <deque>
 #include <numeric>  // accumulate
@@ -306,6 +307,26 @@ inline void add(const std::vector<std::vector<std::vector<std::vector<T> > > >& 
 
 /// Return the factorial of an integer.
 int factorial(const int num);
+
+/// Return if the value is bad (i.e., nan or inf).
+template<class T>
+bool has_bad_value(const T& value) {
+  if (std::isnan(value) || std::isinf(value)) {
+    return true;
+  }
+  return false;
+}
+
+/// Return if the vector has a bad value (i.e., nan or inf).
+template<class T>
+int has_bad_value(const std::vector<T>& vec) {
+  for (const T& element : vec) {
+    if (has_bad_value(element)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 }  // namespace feasst
 

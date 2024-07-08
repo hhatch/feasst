@@ -4,12 +4,13 @@
 
 #include <vector>
 #include <memory>
-#include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
 #include "math/include/histogram.h"
 #include "monte_carlo/include/modify.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Compute pressure using test volume changes.

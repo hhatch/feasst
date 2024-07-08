@@ -1,7 +1,6 @@
 #ifndef FEASST_MATH_TABLE_H_
 #define FEASST_MATH_TABLE_H_
 
-#include <cmath>
 #include <vector>
 #include <map>
 #include <string>
@@ -32,26 +31,6 @@ class Table {
 
   virtual ~Table() {}
 };
-
-/// Return if the value is bad (i.e., nan or inf).
-template<class T>
-bool has_bad_value(const T& value) {
-  if (std::isnan(value) || std::isinf(value)) {
-    return true;
-  }
-  return false;
-}
-
-/// Return if the vector has a bad value (i.e., nan or inf).
-template<class T>
-int has_bad_value(const std::vector<T>& vec) {
-  for (const T& element : vec) {
-    if (has_bad_value(element)) {
-      return true;
-    }
-  }
-  return false;
-}
 
 /**
   This is a one-dimensional implementation of a table.

@@ -9,6 +9,7 @@ namespace feasst {
 
 class Matrix;
 class RotationMatrix;
+
 /**
   There are many ambiguities in Euler angle and rotation matrix definitions.
   See https://en.wikipedia.org/wiki/Euler_angles
