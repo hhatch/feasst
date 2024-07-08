@@ -48,8 +48,8 @@ void PerturbAdd::add(
     select->mobile().particle_index(0)
   ).type();
   DEBUG("type " << particle_type);
-  for (const Select& ghost : config->ghosts()) {
-    DEBUG("ghost " << ghost.str());
+  for (const std::shared_ptr<Select>& ghost : config->ghosts()) {
+    DEBUG("ghost " << ghost->str());
   }
   if (center.dimension() == 0) {
     anywhere_.perturb(system, select, random, is_position_held);

@@ -204,15 +204,15 @@ void EnergyMapAll::check(const Configuration& config) const {
 
   // check if ghost particles are in the neighbor list
   for (const int part : config.group_select(0).particle_indices()) {
-    for (const Select& ghost : config.ghosts()) {
-      for (int ghost_part : ghost.particle_indices()) {
+    for (const std::shared_ptr<Select>& ghost : config.ghosts()) {
+      for (int ghost_part : ghost->particle_indices()) {
         if (ghost_part < static_cast<int>(map()[part].size())) {
           for (int n_site = 0; n_site < static_cast<int>(map()[part][ghost_part].size()); ++n_site) {
             for (int g_site = 0; g_site < static_cast<int>(map()[part][ghost_part][n_site].size()); ++g_site) {
               if (map()[part][ghost_part][n_site][g_site][0] != 0) {
                 INFO("existing particles: " << config.group_select(0).str());
-                for (const Select& ghost2 : config.ghosts()) {
-                  INFO("ghosts: " << ghost2.str());
+                for (const std::shared_ptr<Select>& ghost2 : config.ghosts()) {
+                  INFO("ghosts: " << ghost2->str());
                 }
                 FATAL("ghost particle " << ghost_part << " in map for p " << part << " s " << n_site);
               }

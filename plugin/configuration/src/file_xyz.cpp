@@ -5,6 +5,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
 #include "math/include/constants.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/select.h"
 #include "configuration/include/file_vmd.h"
@@ -98,6 +99,8 @@ bool FileXYZ::load_frame(std::ifstream& xyz_file, Configuration * config) const 
   if (num_sites != config->num_sites()) {
     DEBUG("update number of particles");
     const int particle_type = 0;
+    INFO("config->num_sites() " << config->num_sites());
+    INFO("config->num_particle_types() " << config->num_particle_types());
     ASSERT(config->num_particle_types() == 1, "assumes 1 particle type");
     if (num_sites < config->num_sites()) {
       int spi = config->num_particles() - 1;

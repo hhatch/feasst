@@ -15,6 +15,7 @@ class Domain;
 class ModelParam;
 class ModelParams;
 class NeighborCriteria;
+class ParticleFactory;
 class PhysicalConstants;
 
 typedef std::map<std::string, std::string> argtype;
@@ -110,30 +111,29 @@ class Configuration {
     const std::string append = "");
 
   /// Return the number of particle types.
-  int num_particle_types() const { return particle_types_.num(); }
+  int num_particle_types() const;
 
   /// Return the number of site types.
-  int num_site_types() const { return unique_types_.num_sites(); }
+  int num_site_types() const;
 
   /// Return the number of bond types.
-  int num_bond_types() const { return unique_types_.num_bonds(); }
+  int num_bond_types() const;
 
   /// Return the number of angle types.
-  int num_angle_types() const { return unique_types_.num_angles(); }
+  int num_angle_types() const;
 
   /// Return the number of dihedral types.
-  int num_dihedral_types() const { return unique_types_.num_dihedrals(); }
+  int num_dihedral_types() const;
 
   /// Return the particle associated with the type.
-  const Particle& particle_type(const int type) const {
-    return particle_types_.particle(type); }
+  const Particle& particle_type(const int type) const;
 
   /// Return the file name used to initialize the particle types.
   const std::string& type_to_file_name(const int type) const {
     return type_to_file_[type]; }
 
   /// Return the particle types.
-  const ParticleFactory& particle_types() const { return particle_types_; }
+  const ParticleFactory& particle_types() const;
 
   /// Add a custom type of model parameter.
   /// Name it the same as an atom property before reading file to
@@ -141,39 +141,30 @@ class Configuration {
   void add(std::shared_ptr<ModelParam> param);
 
   /// Return the model parameters (e.g., sigma, epsilon, etc).
-  const ModelParams& model_params() const {
-    return unique_types_.model_params(); }
+  const ModelParams& model_params() const;
 
   /// Modify model parameter of a given site type and name to value.
   void set_model_param(const std::string name,
                        const int site_type,
-                       const double value) {
-    unique_types_.set_model_param(name, site_type, value); }
+                       const double value);
 
   /// Modify a mixed model parameter of given site types and name to value.
   void set_model_param(const std::string name,
                        const int site_type1,
                        const int site_type2,
-                       const double value) {
-    unique_types_.set_model_param(name, site_type1, site_type2, value); }
+                       const double value);
 
   /// Set mixed model parameters using a file.
-  void set_model_param(const std::string name, const std::string filename) {
-    unique_types_.set_model_param(name, filename); }
+  void set_model_param(const std::string name, const std::string filename);
 
   /// Add model parameter of a given name to value.
-  void add_model_param(const std::string name,
-                       const double value) {
-    unique_types_.add_model_param(name, value); }
+  void add_model_param(const std::string name, const double value);
 
   /// Add or set model parameter of a given name to value.
-  void add_or_set_model_param(const std::string name,
-                              const double value) {
-    unique_types_.add_or_set_model_param(name, value); }
+  void add_or_set_model_param(const std::string name, const double value);
 
   /// Set the physical constants.
-  void set_physical_constants(std::shared_ptr<PhysicalConstants> constants) {
-    unique_types_.set_physical_constants(constants); }
+  void set_physical_constants(std::shared_ptr<PhysicalConstants> constants);
 
   /// Return the physical constants.
   const PhysicalConstants& physical_constants() const;
@@ -182,11 +173,10 @@ class Configuration {
   /// Thus, the site index is the same as the numeric value for the site type.
   /// And the same for bonds.
   /// This serves as a container for properties based on site or bond type.
-  const ParticleFactory& unique_types() const { return unique_types_; }
+  const ParticleFactory& unique_types() const;
 
   /// Return the unique type by individual particle.
-  const Particle& unique_type(const int type) const {
-    return unique_types_.particle(type); }
+  const Particle& unique_type(const int type) const;
 
   /// Return the site of unique type by individual particle and site type.
   const Site& unique_type(const int ptype, const int stype) const;
@@ -403,22 +393,21 @@ class Configuration {
 
   /// Return the particles.
   /// Warning: typically not for users because it may include ghost particles.
-  const ParticleFactory& particles() const { return particles_; }
+  const ParticleFactory& particles() const;
 
   // Return the particles.
-  ParticleFactory * get_particles_() { return &particles_; }
+  ParticleFactory * get_particles_();
 
   /// Return particle by index provided in selection.
   /// Warning: typically not for users because it may include ghost particles.
-  const Particle& select_particle(const int index) const {
-    return particles_.particle(index); }
+  const Particle& select_particle(const int index) const;
 
   /// Return the selection-based index (includes ghosts) of the last particle
   /// added.
   int newest_particle_index() const { return newest_particle_index_; }
 
   /// Return ghost particles.
-  const std::vector<Select>& ghosts() const { return ghosts_; }
+  const std::vector<std::shared_ptr<Select> >& ghosts() const;
 
   /// Wrap particle position. The index may include ghost particles.
   void wrap_particle(const int particle_index);
@@ -437,49 +426,30 @@ class Configuration {
   void set_selection_physical(const Select& select, const bool phys);
 
   /// Set particle property.
-  void set_property(const std::string name,
-      const double value,
-      const int particle_index) {
-    particles_.set_property(name, value, particle_index); }
+  void set_property(const std::string name, const double value,
+    const int particle_index);
 
   /// Add the property to a site in a particle.
-  void add_site_property(const std::string name,
-      const double value,
-      const int particle_index,
-      const int site_index) {
-    particles_.add_site_property(name, value, particle_index, site_index); }
+  void add_site_property(const std::string name, const double value,
+    const int particle_index,  const int site_index);
 
   /// Add or set the property of a site in a particle.
-  void add_or_set_site_property(const std::string name,
-      const double value,
-      const int particle_index,
-      const int site_index) {
-    particles_.add_or_set_site_property(name, value,
-      particle_index, site_index);
-  }
+  void add_or_set_site_property(const std::string name, const double value,
+      const int particle_index, const int site_index);
 
   /// Add or set the property of a site in a particle type.
   void add_or_set_particle_type_site_property(const std::string name,
       const double value,
       const int particle_type,
-      const int site_index) {
-    particle_types_.add_or_set_site_property(name, value, particle_type,
-                                             site_index);
-  }
+      const int site_index);
 
   /// Set the property of a site in a particle by name.
-  void set_site_property(const std::string name,
-      const double value,
-      const int particle_index,
-      const int site_index) {
-    particles_.set_site_property(name, value, particle_index, site_index); }
+  void set_site_property(const std::string name, const double value,
+    const int particle_index, const int site_index);
 
   /// Set the property of a site in a particle by index.
-  void set_site_property(const int index,
-      const double value,
-      const int particle_index,
-      const int site_index) {
-    particles_.set_site_property(index, value, particle_index, site_index); }
+  void set_site_property(const int index, const double value,
+    const int particle_index, const int site_index);
 
   /// Change select to a given particle type.
   void set_particle_type(const int particle_type,
@@ -559,9 +529,9 @@ class Configuration {
   explicit Configuration(std::istream& istr);
 
  private:
-  ParticleFactory particle_types_;
-  ParticleFactory unique_types_;
-  ParticleFactory particles_;
+  std::shared_ptr<ParticleFactory> particle_types_;
+  std::shared_ptr<ParticleFactory> unique_types_;
+  std::shared_ptr<ParticleFactory> particles_;
   std::shared_ptr<Domain> domain_;
   bool wrap_;
   int num_cell_lists_ = 0;
@@ -602,8 +572,7 @@ class Configuration {
   /// Replace properties of site in particle.
   void replace_properties_(const int particle_index,
                            const int site_index,
-                           const Properties& prop) {
-    particles_.replace_properties(particle_index, site_index, prop); }
+                           const Properties& prop);
 
   /// Update position trackers of a particle (e.g., cell, neighbor, etc).
   void position_tracker_(const int particle_index, const int site_index);
@@ -638,13 +607,12 @@ class Configuration {
   // the grand canonical ensemble.
   // ghosts are removed from selections and can be brought back by adding.
   // each index represents the particle type.
-  std::vector<Select> ghosts_;
+  std::vector<std::shared_ptr<Select> > ghosts_;
 
   /// Return the number of ghost particles.
   int num_ghosts_() const;
 
-  const Particle& particle_(const int index) {
-    return particles_.particle(index); }
+  const Particle& particle_(const int index);
 
   /// Store the files used to initialize particle types.
   std::vector<std::string> type_to_file_;

@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "system/include/energy_map.h"
 

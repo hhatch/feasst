@@ -1,4 +1,5 @@
 #include <vector>
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 

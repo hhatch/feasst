@@ -119,8 +119,8 @@ void TrialSelectParticle::ghost_particle(Configuration * config,
   // if no ghosts, create one
   DEBUG("particle_type: " << particle_type());
   DEBUG("nump " << config->num_particles());
-  DEBUG("num ghosts " << config->ghosts()[particle_type()].num_particles());
-  const Select& ghosts = config->ghosts()[particle_type()];
+  DEBUG("num ghosts " << config->ghosts()[particle_type()]->num_particles());
+  const Select& ghosts = *(config->ghosts()[particle_type()]);
   const int num_excluded = num_excluded_(
     const_cast<const Configuration&>(*config), exclude);
   int pindex = -1;
