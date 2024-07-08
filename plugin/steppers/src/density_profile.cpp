@@ -4,6 +4,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
+#include "math/include/formula.h"
 #include "configuration/include/site.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/visit_configuration.h"
@@ -45,7 +46,7 @@ void DensityProfile::initialize(Criteria * criteria,
     hist.set_width_center(dr_, center_);
     hist.add(-0.5*max_side, false);
     hist.add(0.5*max_side, false);
-    data_[type] = hist;
+    data_[type] = std::move(hist);
   }
 }
 

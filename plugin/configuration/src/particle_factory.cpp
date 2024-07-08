@@ -1,6 +1,7 @@
 #include "utils/include/debug.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
+#include "math/include/formula.h"
 #include "math/include/histogram.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/model_params.h"
@@ -60,10 +61,12 @@ void ParticleFactory::check_types(int * num_site_types,
     return;
   }
 
-  Histogram site_type;
+  Histogram site_type, particle_type, bond_type, angle_type, dihedral_type;
   site_type.set_width_center(1, 0);
-  Histogram particle_type(site_type), bond_type(site_type),
-    angle_type(site_type), dihedral_type(site_type);
+  particle_type.set_width_center(1, 0);
+  bond_type.set_width_center(1, 0);
+  angle_type.set_width_center(1, 0);
+  dihedral_type.set_width_center(1, 0);
   for (const Particle& particle : particles_) {
     TRACE("particle type " << particle.type());
     particle_type.add(particle.type());

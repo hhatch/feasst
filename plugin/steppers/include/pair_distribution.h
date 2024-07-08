@@ -23,7 +23,7 @@ class PairDistributionInner : public ModelTwoBody {
       const int type2,
       const ModelParams& model_params) override;
 
-  std::vector<std::vector<Histogram> > radial_;
+  std::vector<std::vector<std::unique_ptr<Histogram> > > radial_;
 
   std::shared_ptr<Model> create(std::istream& istr) const override {
     return std::make_shared<PairDistributionInner>(istr); }
