@@ -8,6 +8,8 @@
 #include "math/include/constants.h"
 #include "math/include/formula.h"
 #include "math/include/golden_search.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/run.h"

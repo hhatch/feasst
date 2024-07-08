@@ -5,6 +5,7 @@
 #include "math/include/utils_math.h" // factorial
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"
 #include "system/include/system.h"

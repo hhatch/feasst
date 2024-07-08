@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "utils/include/progress_report.h"
 #include "math/include/random_mt19937.h"
 #include "system/include/visit_model.h"

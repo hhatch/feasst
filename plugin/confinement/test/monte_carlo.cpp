@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "utils/include/checkpoint.h"
 #include "utils/include/progress_report.h"
 #include "math/include/table.h"

@@ -3,6 +3,7 @@
 #include "utils/include/utils.h"  // find_in_list
 #include "utils/include/io.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "cluster/include/energy_map_neighbor.h"

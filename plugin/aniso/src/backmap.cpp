@@ -2,6 +2,8 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "monte_carlo/include/perturb_rotate.h"

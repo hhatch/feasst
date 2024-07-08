@@ -4,6 +4,8 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"

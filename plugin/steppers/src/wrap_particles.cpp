@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "steppers/include/wrap_particles.h"

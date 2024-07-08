@@ -3,6 +3,7 @@
 #include "utils/include/utils.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/domain.h"

@@ -1,6 +1,8 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/random.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "chain/include/select_site_of_type.h"
 

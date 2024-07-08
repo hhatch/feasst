@@ -1,6 +1,8 @@
 #include <cmath>
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/thermo_params.h"

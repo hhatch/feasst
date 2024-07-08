@@ -4,6 +4,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/utils_math.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "system/include/model_two_body.h"
 #include "aniso/include/visit_model_inner_nn.h"

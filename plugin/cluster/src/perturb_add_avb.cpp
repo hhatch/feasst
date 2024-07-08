@@ -39,7 +39,7 @@ void PerturbAddAVB::perturb(
     const bool is_position_held,
     Acceptance * acceptance) {
   DEBUG("is_position_held " << is_position_held);
-  DEBUG(select->mobile().str());
+  //DEBUG(select->mobile().str());
   if (!delay_add_) {
     system->get_configuration()->revive(select->mobile());
   }

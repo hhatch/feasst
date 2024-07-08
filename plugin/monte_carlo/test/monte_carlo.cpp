@@ -1,5 +1,6 @@
 #include <memory>
 #include <cmath>
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "utils/test/utils.h"
 #include "utils/include/io.h"
 #include "utils/include/checkpoint.h"

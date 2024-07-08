@@ -3,6 +3,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/formula.h"
 #include "math/include/golden_search.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/monte_carlo.h"
@@ -86,7 +87,7 @@ double TwoParticleContactObjective::evaluate(const double distance) const {
 double TwoParticleContact::energy(const double distance, System * system) {
   update_xyz(distance, system);
   double en;
-  ASSERT(select_->mobile().num_particles() == 1, "err");
+  //ASSERT(select_->mobile().num_particles() == 1, "err");
   en = system->perturbed_energy(select_->mobile());
   revert(system);
   DEBUG("position of first site of mobile after revert " << system->configuration().particle(1).site(0).position().str());

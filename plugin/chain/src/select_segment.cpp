@@ -2,6 +2,8 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "math/include/random.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "chain/include/select_segment.h"
 

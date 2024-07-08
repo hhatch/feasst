@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
+#include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "system/include/energy_map.h"

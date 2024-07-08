@@ -4,6 +4,7 @@
 #include "math/include/histogram.h"
 #include "math/include/position.h"
 #include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"

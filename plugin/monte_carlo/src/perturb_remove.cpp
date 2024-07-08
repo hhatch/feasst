@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/select.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/perturb_remove.h"
 

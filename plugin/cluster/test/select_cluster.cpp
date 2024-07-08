@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "cluster/include/select_cluster.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"

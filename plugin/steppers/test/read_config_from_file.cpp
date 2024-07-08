@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/physical_constants.h"
 #include "monte_carlo/include/monte_carlo.h"

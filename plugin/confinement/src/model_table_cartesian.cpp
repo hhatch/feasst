@@ -11,6 +11,8 @@
 #include "math/include/random_mt19937.h"
 #include "shape/include/shape.h"
 #include "shape/include/shape_file.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/site.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"

@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "confinement/include/model_square_well_shape.h"
 #include "configuration/include/model_params.h"
 #include "shape/include/half_space.h"

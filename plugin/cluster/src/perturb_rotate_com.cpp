@@ -1,6 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/select.h"
 #include "monte_carlo/include/trial_select.h"
 #include "cluster/include/perturb_rotate_com.h"
 

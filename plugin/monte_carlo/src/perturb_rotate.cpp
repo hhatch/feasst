@@ -3,6 +3,8 @@
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_select.h"

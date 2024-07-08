@@ -6,8 +6,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "configuration/include/particle_factory.h"
-#include "configuration/include/select.h"
 
 namespace feasst {
 
@@ -17,11 +15,11 @@ class ModelParam;
 class ModelParams;
 class NeighborCriteria;
 class Particle;
-//class ParticleFactory;
+class ParticleFactory;
 class PhysicalConstants;
 class Position;
 class Properties;
-//class Select;
+class Select;
 class Site;
 class Table3D;
 class Table4D;

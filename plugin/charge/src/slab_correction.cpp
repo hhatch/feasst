@@ -2,6 +2,8 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "configuration/include/select.h"
+#include "configuration/include/particle_factory.h"
 #include "configuration/include/particle.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/model_params.h"

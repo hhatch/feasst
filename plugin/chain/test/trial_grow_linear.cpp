@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "math/include/random_mt19937.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/file_xyz.h"

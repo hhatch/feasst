@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "configuration/include/configuration.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "aniso/include/visit_model_inner_table.h"

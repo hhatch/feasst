@@ -3,6 +3,7 @@
 #include "utils/include/serialize.h"
 #include "math/include/random.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/select.h"
 #include "configuration/include/domain.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/tunable.h"

@@ -1,4 +1,5 @@
 #include "utils/test/utils.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "math/include/random_mt19937.h"
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
