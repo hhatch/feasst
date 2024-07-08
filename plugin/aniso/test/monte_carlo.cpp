@@ -15,10 +15,10 @@ TEST(MonteCarlo, VisitModelInnerTable) {
 //  EXPECT_NEAR(vis->outer()[0][0].maximum(), 1.5, NEAR_ZERO);
   auto config = MakeConfiguration({{"particle_type0", "../particle/atom.fstprt"}});
   vis->precompute(config.get());
-  EXPECT_NEAR(config->table5d()[0][0].minimum(), 1.0, NEAR_ZERO);
-  EXPECT_NEAR(config->table5d()[0][0].maximum(), 1.0, NEAR_ZERO);
-  EXPECT_NEAR(config->table6d()[0][0].minimum(), -1, 1e-3);
-  EXPECT_NEAR(config->table6d()[0][0].maximum(), -1., 1e-3);
+  EXPECT_NEAR(config->table5d()[0][0]->minimum(), 1.0, NEAR_ZERO);
+  EXPECT_NEAR(config->table5d()[0][0]->maximum(), 1.0, NEAR_ZERO);
+  EXPECT_NEAR(config->table6d()[0][0]->minimum(), -1, 1e-3);
+  EXPECT_NEAR(config->table6d()[0][0]->maximum(), -1., 1e-3);
   auto mc = MakeMonteCarlo({{
     {"Configuration", {{"cubic_side_length", "8"}, {"particle_type0", "../plugin/aniso/particle/aniso_tabular.fstprt"},
       {"xyz_file", "../plugin/aniso/test/data/two.xyz"}}},

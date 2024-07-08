@@ -94,7 +94,7 @@ class VisitModelInnerTable : public VisitModelInner {
   //@{
 
   /// Return true if there is an energy table.
-  bool is_energy_table(const std::vector<std::vector<Table6D> >& energy) const;
+  bool is_energy_table(const std::vector<std::vector<std::shared_ptr<Table6D> > >& energy) const;
 
   /**
     Compute the second virial coefficient between anisotropic sites by table
