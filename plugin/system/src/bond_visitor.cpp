@@ -5,6 +5,7 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/particle_factory.h"
+#include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "system/include/rigid_bond.h"
 #include "system/include/rigid_angle.h"

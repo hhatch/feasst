@@ -8,6 +8,7 @@
 #include "math/include/utils_math.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/select.h"
 #include "system/include/system.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model_cell.h"

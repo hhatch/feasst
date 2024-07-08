@@ -4,6 +4,7 @@
 #include "utils/include/serialize.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/particle_factory.h"
+#include "configuration/include/select.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/configuration.h"
 #include "system/include/bond_visitor.h"

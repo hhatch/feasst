@@ -3,20 +3,30 @@
 #define FEASST_CONFIGURATION_CONFIGURATION_H_
 
 #include <memory>
+#include <map>
 #include <string>
 #include <vector>
-#include "math/include/table.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
 
 namespace feasst {
 
 class Domain;
+class Group;
 class ModelParam;
 class ModelParams;
 class NeighborCriteria;
-class ParticleFactory;
+class Particle;
+//class ParticleFactory;
 class PhysicalConstants;
+class Position;
+class Properties;
+//class Select;
+class Site;
+class Table3D;
+class Table4D;
+class Table5D;
+class Table6D;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -508,14 +518,14 @@ class Configuration {
    */
   //@{
 
-  const std::vector<std::vector<std::shared_ptr<Table3D> > >& table3d() const { return table3d_; }
-  const std::vector<std::vector<std::shared_ptr<Table4D> > >& table4d() const { return table4d_; }
-  const std::vector<std::vector<std::shared_ptr<Table5D> > >& table5d() const { return table5d_; }
-  const std::vector<std::vector<std::shared_ptr<Table6D> > >& table6d() const { return table6d_; }
-  std::vector<std::vector<std::shared_ptr<Table3D> > > * get_table3d() { return &table3d_; }
-  std::vector<std::vector<std::shared_ptr<Table4D> > > * get_table4d() { return &table4d_; }
-  std::vector<std::vector<std::shared_ptr<Table5D> > > * get_table5d() { return &table5d_; }
-  std::vector<std::vector<std::shared_ptr<Table6D> > > * get_table6d() { return &table6d_; }
+  const std::vector<std::vector<std::shared_ptr<Table3D> > >& table3d() const;
+  const std::vector<std::vector<std::shared_ptr<Table4D> > >& table4d() const;
+  const std::vector<std::vector<std::shared_ptr<Table5D> > >& table5d() const;
+  const std::vector<std::vector<std::shared_ptr<Table6D> > >& table6d() const;
+  std::vector<std::vector<std::shared_ptr<Table3D> > > * get_table3d();
+  std::vector<std::vector<std::shared_ptr<Table4D> > > * get_table4d();
+  std::vector<std::vector<std::shared_ptr<Table5D> > > * get_table5d();
+  std::vector<std::vector<std::shared_ptr<Table6D> > > * get_table6d();
 
   //@}
 

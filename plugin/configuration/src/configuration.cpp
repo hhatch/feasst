@@ -6,12 +6,15 @@
 #include "utils/include/serialize.h"
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
+#include "math/include/table.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/neighbor_criteria.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/group.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/particle_factory.h"
+#include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 
 namespace feasst {
@@ -1158,5 +1161,14 @@ const Particle& Configuration::particle_(const int index) {
   return particles_->particle(index); }
 
 const std::vector<std::shared_ptr<Select> >& Configuration::ghosts() const { return ghosts_; }
+
+const std::vector<std::vector<std::shared_ptr<Table3D> > >& Configuration::table3d() const { return table3d_; }
+const std::vector<std::vector<std::shared_ptr<Table4D> > >& Configuration::table4d() const { return table4d_; }
+const std::vector<std::vector<std::shared_ptr<Table5D> > >& Configuration::table5d() const { return table5d_; }
+const std::vector<std::vector<std::shared_ptr<Table6D> > >& Configuration::table6d() const { return table6d_; }
+std::vector<std::vector<std::shared_ptr<Table3D> > > * Configuration::get_table3d() { return &table3d_; }
+std::vector<std::vector<std::shared_ptr<Table4D> > > * Configuration::get_table4d() { return &table4d_; }
+std::vector<std::vector<std::shared_ptr<Table5D> > > * Configuration::get_table5d() { return &table5d_; }
+std::vector<std::vector<std::shared_ptr<Table6D> > > * Configuration::get_table6d() { return &table6d_; }
 
 }  // namespace feasst

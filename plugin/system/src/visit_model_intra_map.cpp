@@ -2,6 +2,8 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/utils.h"
+#include "configuration/include/particle_factory.h"
+#include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
 #include "system/include/model_two_body.h"
 #include "system/include/visit_model_inner.h"
