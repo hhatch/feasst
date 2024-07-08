@@ -70,7 +70,7 @@ class VisitModelInnerServer : public VisitModelInner {
   int aniso_index_ = -1;
   std::vector<int> site_types_;
   std::vector<int> t2index_;
-  std::shared_ptr<Server> server_;
+  std::unique_ptr<Server> server_;
 
   // no serialized optimization variables
   Position pos1_, pos2_, sph_;

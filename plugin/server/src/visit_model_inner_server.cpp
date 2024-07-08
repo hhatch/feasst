@@ -17,7 +17,7 @@ namespace feasst {
 
 VisitModelInnerServer::VisitModelInnerServer(argtype * args) : VisitModelInner(args) {
   class_name_ = "VisitModelInnerServer";
-  server_ = std::make_shared<Server>(args);
+  server_ = std::make_unique<Server>(args);
   int type = 0;
   std::string start = "server_site";
   std::stringstream key;
@@ -205,14 +205,15 @@ VisitModelInnerServer::VisitModelInnerServer(std::istream& istr) : VisitModelInn
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 2670, "unrecognized version: " << version);
   feasst_deserialize(&aniso_index_, istr);
-  //feasst_deserialize(server_, istr);
+  feasst_deserialize(server_, istr);
+//  feasst_deserialize2(std::move(server_), istr);
   //HWH for unknown reasons, this does not deserialize properly
-  { int existing;
-    istr >> existing;
-    if (existing != 0) {
-      server_ = std::make_shared<Server>(istr);
-    }
-  }
+//  { int existing;
+//    istr >> existing;
+//    if (existing != 0) {
+//      server_ = std::make_unique<Server>(istr);
+//    }
+//  }
 }
 
 void VisitModelInnerServer::serialize(std::ostream& ostr) const {

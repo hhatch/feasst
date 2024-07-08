@@ -58,3 +58,26 @@ std::shared_ptr<T2> test_serialize(T1 object,
   }
   return object2;
 }
+
+/// Return a copy of the object via serialization.
+/// Test that the serialization of the new object is the same.
+template <typename T>
+std::unique_ptr<T> test_serialize(const std::unique_ptr<T>& object,
+    /// If not empty, check that the serialization matches expectation.
+    std::string expected = "",
+    /// Set to true to compare serialization of new object with old.
+    bool compare = true) {
+  std::stringstream ss, ss2;
+  object->serialize(ss);
+  DEBUG(ss.str());
+  if (!expected.empty()) {
+    EXPECT_EQ(ss.str(), expected);
+  }
+  std::unique_ptr<T> object2 = std::make_unique<T>(ss);
+  object2->serialize(ss2);
+  DEBUG(ss.str());
+  if (compare) {
+    EXPECT_EQ(ss.str(), ss2.str());
+  }
+  return object2;
+}

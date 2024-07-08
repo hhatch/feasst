@@ -369,4 +369,4 @@ To Do List
 * Add option to not serialize neighbor lists to reduce checkpoint size.
 * Allow one script to contain multiple MonteCarlo, CollectionMatrixSplice, Prefetch in any order? (checkpointing is difficult)
 * When trials start, check to see if there is a trial that uses weight_per_number_fraction but there are fixed particles (or, see if there are weight_per_number for all types unless excluded?)
-* Speed up compilation. Try... https://stackoverflow.com/a/373179 .. pimpl, less includes, forward declare, etc. Remove Propertied and Typed entities, etc.
+* Speed up compilation. Try... https://stackoverflow.com/a/373179 .. pimpl, less includes, forward declare, etc. Remove Propertied entities, etc.

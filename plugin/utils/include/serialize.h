@@ -325,6 +325,27 @@ void feasst_serialize(const std::shared_ptr<T> ptr, std::ostream& ostr) {
 //   }
 // }
 
+/// Serialize feasst object stored as unique pointer
+template <typename T>
+void feasst_serialize(const std::unique_ptr<T>& ptr, std::ostream& ostr) {
+  if (ptr) {
+    ostr << "1 ";
+    ptr->serialize(ostr);
+  } else {
+    ostr << "0 ";
+  }
+}
+
+/// Deserialize feasst object stored as unique pointer
+template <typename T>
+void feasst_deserialize(std::unique_ptr<T>& ptr, std::istream& istr) {
+  int existing;
+  istr >> existing;
+  if (existing != 0) {
+    ptr = std::make_unique<T>(istr);
+  }
+}
+
 /// Serialize feasst derived object stored as shared pointer
 template <typename T>
 void feasst_serialize_fstdr(std::shared_ptr<T> ptr, std::ostream& ostr) {
