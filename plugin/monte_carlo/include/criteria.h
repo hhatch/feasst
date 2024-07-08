@@ -3,11 +3,12 @@
 #define FEASST_MONTE_CARLO_CRITERIA_H_
 
 #include <vector>
+#include <map>
+#include <string>
+#include <memory>
 #include "system/include/synchronize_data.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 class Acceptance;
 class Bias;
@@ -16,6 +17,8 @@ class FlatHistogram;
 class Macrostate;
 class Random;
 class System;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Determine whether to accept or reject a trial.
