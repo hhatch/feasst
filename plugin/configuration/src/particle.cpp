@@ -265,8 +265,8 @@ int Particle::num_sites_of_type(const int type) const {
 
 void Particle::serialize(std::ostream& ostr) const {
   PropertiedEntity::serialize(ostr);
-  TypedEntity::serialize(ostr);
   feasst_serialize_version(366, ostr);
+  feasst_serialize(type_, ostr);
   feasst_serialize_fstobj(sites_, ostr);
   feasst_serialize_fstobj(bonds_, ostr);
   feasst_serialize_fstobj(angles_, ostr);
@@ -279,11 +279,10 @@ void Particle::serialize(std::ostream& ostr) const {
   feasst_serialize(dihedral_neighbors_, ostr);
 }
 
-Particle::Particle(std::istream& istr)
-  : PropertiedEntity(istr),
-    TypedEntity(istr) {
+Particle::Particle(std::istream& istr) : PropertiedEntity(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 365 || version == 366, "version mismatch: " << version);
+  feasst_deserialize(&type_, istr);
   feasst_deserialize_fstobj(&sites_, istr);
   feasst_deserialize_fstobj(&bonds_, istr);
   feasst_deserialize_fstobj(&angles_, istr);
