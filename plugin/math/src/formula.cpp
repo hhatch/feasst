@@ -6,30 +6,30 @@
 
 namespace feasst {
 
-std::map<std::string, std::unique_ptr<Formula> >& Formula::deserialize_map() {
-  static std::map<std::string, std::unique_ptr<Formula> >* ans =
-     new std::map<std::string, std::unique_ptr<Formula> >();
+std::map<std::string, std::shared_ptr<Formula> >& Formula::deserialize_map() {
+  static std::map<std::string, std::shared_ptr<Formula> >* ans =
+     new std::map<std::string, std::shared_ptr<Formula> >();
   return *ans;
 }
 
 void Formula::serialize(std::ostream& ostr) const { FATAL("not implemented"); }
 
-std::unique_ptr<Formula> Formula::create(std::istream& istr) const {
+std::shared_ptr<Formula> Formula::create(std::istream& istr) const {
   FATAL("not implemented");
 }
 
-std::unique_ptr<Formula> Formula::create(argtype * args) const {
+std::shared_ptr<Formula> Formula::create(argtype * args) const {
   FATAL("not implemented");
 }
 
-std::unique_ptr<Formula> Formula::deserialize(std::istream& istr) {
+std::shared_ptr<Formula> Formula::deserialize(std::istream& istr) {
   return template_deserialize(deserialize_map(), istr,
     // true argument denotes rewinding to reread class name
     // this allows derived class constructor to read class name.
     true);
 }
 
-std::unique_ptr<Formula> Formula::factory(const std::string name, argtype * args) {
+std::shared_ptr<Formula> Formula::factory(const std::string name, argtype * args) {
   return template_factory(deserialize_map(), name, args);
 }
 

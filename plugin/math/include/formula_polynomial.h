@@ -15,19 +15,8 @@ namespace feasst {
  */
 class FormulaPolynomial : public Formula {
  public:
-  //@{
-  /** @name Arguments
-    - coeff[i]: add the i-th coefficient where i corresponds with the power of
-      the polynomial.
-      The "[i]" is to be substituted for an integer 0, 1, 2, ...
-   */
   explicit FormulaPolynomial(argtype args = argtype());
   explicit FormulaPolynomial(argtype * args);
-
-  //@}
-  /** @name Public Functions
-   */
-  //@{
 
   FormulaPolynomial& set_A(const int index, const double A) {
     // resize A coefficients if necessary
@@ -41,19 +30,18 @@ class FormulaPolynomial : public Formula {
   double evaluate(const double x) const override;
   double derivative(const double x) const override;
 
-  std::unique_ptr<Formula> create(std::istream& istr) const override;
+  std::shared_ptr<Formula> create(std::istream& istr) const override;
   void serialize(std::ostream& ostr) const override;
   explicit FormulaPolynomial(std::istream& istr);
   virtual ~FormulaPolynomial() {}
 
-  //@}
  private:
   std::vector<double> A_;
 };
 
-inline std::unique_ptr<FormulaPolynomial> MakeFormulaPolynomial(
+inline std::shared_ptr<FormulaPolynomial> MakeFormulaPolynomial(
     argtype args = argtype()) {
-  return std::make_unique<FormulaPolynomial>(args);
+  return std::make_shared<FormulaPolynomial>(args);
 }
 
 }  // namespace feasst

@@ -12,14 +12,14 @@ class MapFormulaExponential {
  public:
   MapFormulaExponential() {
     FormulaExponential().deserialize_map()["FormulaExponential"] =
-      std::make_unique<FormulaExponential>();
+      std::make_shared<FormulaExponential>();
   }
 };
 
 static MapFormulaExponential mapper_ = MapFormulaExponential();
 
-std::unique_ptr<Formula> FormulaExponential::create(std::istream& istr) const {
-  return std::make_unique<FormulaExponential>(istr);
+std::shared_ptr<Formula> FormulaExponential::create(std::istream& istr) const {
+  return std::make_shared<FormulaExponential>(istr);
 }
 
 FormulaExponential::FormulaExponential(std::istream& istr)

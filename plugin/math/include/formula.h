@@ -31,11 +31,11 @@ class Formula {
   // serialization
   virtual std::string class_name() const { return class_name_; }
   virtual void serialize(std::ostream& ostr) const;
-  virtual std::unique_ptr<Formula> create(std::istream& istr) const;
-  virtual std::unique_ptr<Formula> create(argtype * args) const;
-  std::map<std::string, std::unique_ptr<Formula> >& deserialize_map();
-  std::unique_ptr<Formula> deserialize(std::istream& istr);
-  std::unique_ptr<Formula> factory(const std::string name, argtype * args);
+  virtual std::shared_ptr<Formula> create(std::istream& istr) const;
+  virtual std::shared_ptr<Formula> create(argtype * args) const;
+  std::map<std::string, std::shared_ptr<Formula> >& deserialize_map();
+  std::shared_ptr<Formula> deserialize(std::istream& istr);
+  std::shared_ptr<Formula> factory(const std::string name, argtype * args);
   explicit Formula(std::istream& istr);
   virtual ~Formula() {}
 
