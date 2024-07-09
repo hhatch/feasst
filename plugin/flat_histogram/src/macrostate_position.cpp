@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/particle_factory.h"
 #include "system/include/system.h"
@@ -8,6 +9,8 @@
 
 namespace feasst {
 
+MacrostatePosition::MacrostatePosition(argtype * args) :
+    MacrostatePosition(Histogram(args), args) {}
 MacrostatePosition::MacrostatePosition(const Histogram& histogram,
     argtype * args) : Macrostate(histogram, args) {
   class_name_ = "MacrostatePosition";

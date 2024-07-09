@@ -20,8 +20,7 @@ class MacrostatePosition : public Macrostate {
     - Macrostate arguments.
   */
   explicit MacrostatePosition(argtype args = argtype());
-  explicit MacrostatePosition(argtype * args) :
-    MacrostatePosition(Histogram(args), args) {}
+  explicit MacrostatePosition(argtype * args);
 
   //@}
   /** @name Public Functions

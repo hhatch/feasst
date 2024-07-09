@@ -5,6 +5,7 @@
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
 #include "system/include/potential.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_select_particle.h"

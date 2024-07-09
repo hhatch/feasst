@@ -10,6 +10,7 @@ namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
+class Histogram;
 class MonteCarlo;
 class FlatHistogram;
 class Clones;

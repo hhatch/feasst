@@ -1,5 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/accumulator.h"
+#include "math/include/histogram.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/criteria.h"
@@ -7,6 +9,8 @@
 
 namespace feasst {
 
+MacrostateEnergy::MacrostateEnergy(argtype * args) :
+    MacrostateEnergy(Histogram(args), args) {}
 MacrostateEnergy::MacrostateEnergy(const Histogram& histogram,
     argtype * args) : Macrostate(histogram, args) {
   class_name_ = "MacrostateEnergy";

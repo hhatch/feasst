@@ -2,12 +2,11 @@
 #ifndef FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 #define FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 
-#include "math/include/histogram.h"
-
 namespace feasst {
 
 class Acceptance;
 class Criteria;
+class Histogram;
 class System;
 
 typedef std::map<std::string, std::string> argtype;
@@ -49,10 +48,10 @@ class Macrostate {
     The histogram only serves to determine the bins, and should not be
     expanded or have values added during the course of the simulation.
    */
-  void set(const Histogram histogram) { histogram_ = histogram; }
+  void set(const Histogram histogram);
 
   /// Return the histogram.
-  const Histogram& histogram() const { return histogram_; }
+  const Histogram& histogram() const;
 
   /// Return the soft maximum as an integer bin index, not a macrostate.
   const int soft_max() const { return soft_max_; }
@@ -72,8 +71,7 @@ class Macrostate {
   /// Return the current bin of the macrostate.
   int bin(const System& system,
       const Criteria& criteria,
-      const Acceptance& acceptance) const {
-    return histogram_.bin(value(system, criteria, acceptance)); }
+      const Acceptance& acceptance) const;
 
   /// Return the value of the bin.
   double value(const int bin) const;
@@ -109,7 +107,7 @@ class Macrostate {
   std::string class_name_;
 
  private:
-  Histogram histogram_;
+  std::unique_ptr<Histogram> histogram_;
   int soft_max_;
   int soft_min_;
 };

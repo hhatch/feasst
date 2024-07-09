@@ -19,8 +19,7 @@ class MacrostateNumParticles : public Macrostate {
     - Macrostate arguments.
   */
   explicit MacrostateNumParticles(argtype args = argtype());
-  explicit MacrostateNumParticles(argtype * args) :
-    MacrostateNumParticles(Histogram(args), args) {}
+  explicit MacrostateNumParticles(argtype * args);
 
   //@}
   /** @name Public Functions

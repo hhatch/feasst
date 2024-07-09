@@ -1,5 +1,6 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "model_expanded/include/macrostate_model.h"
 
 namespace feasst {

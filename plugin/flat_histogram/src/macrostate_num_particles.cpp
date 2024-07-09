@@ -1,11 +1,14 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/criteria.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 
 namespace feasst {
 
+MacrostateNumParticles::MacrostateNumParticles(argtype * args) :
+    MacrostateNumParticles(Histogram(args), args) {}
 MacrostateNumParticles::MacrostateNumParticles(const Histogram& histogram,
     argtype * args) : Macrostate(histogram, args) {
   class_name_ = "MacrostateNumParticles";

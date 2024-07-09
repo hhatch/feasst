@@ -20,8 +20,7 @@ class MacrostateEnergy : public Macrostate {
     - Macrostate arguments.
   */
   explicit MacrostateEnergy(argtype args = argtype());
-  explicit MacrostateEnergy(argtype * args) :
-    MacrostateEnergy(Histogram(args), args) {}
+  explicit MacrostateEnergy(argtype * args);
 
   //@}
   /** @name Public Functions
