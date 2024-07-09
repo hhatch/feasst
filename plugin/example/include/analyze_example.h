@@ -49,7 +49,7 @@ class AnalyzeExample : public Analyze {
   const Accumulator& geometric_center(const int dimension) const;
 
   /// Return the average geometric center.
-  const std::vector<std::shared_ptr<Accumulator> >& geometric_center() const;
+  const std::vector<std::unique_ptr<Accumulator> >& geometric_center() const;
 
   /// Write the header for the file.
   std::string header(const Criteria& criteria,
@@ -84,7 +84,7 @@ class AnalyzeExample : public Analyze {
   //@}
  private:
   int group_index_;
-  std::vector<std::shared_ptr<Accumulator> > center_;
+  std::vector<std::unique_ptr<Accumulator> > center_;
 };
 
 inline std::shared_ptr<AnalyzeExample> MakeAnalyzeExample(

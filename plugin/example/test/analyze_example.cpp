@@ -9,7 +9,7 @@ namespace feasst {
 
 TEST(AnalyzeExample, serialize) {
   auto movie = MakeAnalyzeExample({{"output_file", "tmp"}});
-  auto movie2 = test_serialize<AnalyzeExample, Analyze>(*movie);
+  auto movie2 = test_serialize(*movie);
 }
 
 TEST(AnalyzeExample, ideal_gas_fluid_geometric_center_LONG) {

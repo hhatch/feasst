@@ -346,6 +346,28 @@ void feasst_deserialize(std::unique_ptr<T>& ptr, std::istream& istr) {  // NOLIN
   }
 }
 
+/// Serialize vector of unique pointers of feasst objects
+template <typename T>
+void feasst_serialize(const std::vector<std::unique_ptr<T>>& vector,
+    std::ostream& ostr) {
+  ostr << vector.size() << " ";
+  for (const std::unique_ptr<T>& element : vector) {
+    feasst_serialize(element, ostr);
+  }
+}
+
+/// Deserialize vector of unique pointers of feasst objects
+template <typename T>
+void feasst_deserialize(std::vector<std::unique_ptr<T> > * vector,
+    std::istream& istr) {
+  int dim1;
+  istr >> dim1;
+  vector->resize(dim1);
+  for (int index = 0; index < dim1; ++index) {
+    feasst_deserialize((*vector)[index], istr);
+  }
+}
+
 /// Serialize feasst derived object stored as shared pointer
 template <typename T>
 void feasst_serialize_fstdr(std::shared_ptr<T> ptr, std::ostream& ostr) {

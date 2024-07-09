@@ -38,8 +38,10 @@ std::string AnalyzeExample::header(const Criteria& criteria,
 void AnalyzeExample::initialize(Criteria * criteria,
     System * system,
     TrialFactory * trial_factory) {
-  center_.resize(system->configuration().dimension(),
-                 std::shared_ptr<Accumulator>());
+  center_.resize(system->configuration().dimension());
+  for (std::unique_ptr<Accumulator>& acc : center_) {
+    acc = std::make_unique<Accumulator>();
+  }
 }
 
 /*
@@ -82,7 +84,7 @@ const Accumulator& AnalyzeExample::geometric_center(const int dimension) const {
   return *center_[dimension];
 }
 
-const std::vector<std::shared_ptr<Accumulator> >&
+const std::vector<std::unique_ptr<Accumulator> >&
   AnalyzeExample::geometric_center() const { return center_; }
 
 void AnalyzeExample::serialize(std::ostream& ostr) const {
@@ -96,20 +98,7 @@ AnalyzeExample::AnalyzeExample(std::istream& istr) : Analyze(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 1609, "version mismatch:" << version);
   feasst_deserialize(&group_index_, istr);
-//  feasst_deserialize(center_, istr);
-/// Deserialize vector of shared pointers of feasst objects
-  {
-    int dim1;
-    istr >> dim1;
-    center_.resize(dim1);
-    for (int index = 0; index < dim1; ++index) {
-      int existing;
-      istr >> existing;
-      if (existing != 0) {
-        center_[index] = std::make_shared<Accumulator>(istr);
-      }
-    }
-  }
+  feasst_deserialize(&center_, istr);
 }
 
 }  // namespace feasst
