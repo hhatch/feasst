@@ -21,7 +21,7 @@ namespace feasst {
 
 Listen::Listen(argtype * args) {
   class_name_ = "Listen";
-  server_ = std::make_shared<Server>(args);
+  server_ = std::make_unique<Server>(args);
 }
 Listen::Listen(argtype args) : Listen(&args) {
   feasst_check_all_used(args);
@@ -31,7 +31,8 @@ class MapListen {
  public:
   MapListen() {
     auto obj = MakeListen();
-    obj->deserialize_map()["Listen"] = obj;
+    obj->deserialize_map()["Listen"] = std::move(obj);
+    //obj->deserialize_map()["Listen"] = obj;
   }
 };
 
@@ -40,14 +41,7 @@ static MapListen mapper_Listen = MapListen();
 Listen::Listen(std::istream& istr) : Action(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version >= 3204 && version <= 3204, "mismatch version: " << version);
-  //feasst_deserialize(server_, istr);
-  //HWH for unknown reasons, this does not deserialize properly
-  { int existing;
-    istr >> existing;
-    if (existing != 0) {
-      server_ = std::make_shared<Server>(istr);
-    }
-  }
+  feasst_deserialize(server_, istr);
 }
 
 void Listen::serialize(std::ostream& ostr) const {

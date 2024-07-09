@@ -2,11 +2,16 @@
 #ifndef FEASST_STEPPERS_MOVIE_H_
 #define FEASST_STEPPERS_MOVIE_H_
 
+#include <memory>
+#include <string>
+#include <map>
 #include "configuration/include/file_vmd.h"
 #include "configuration/include/file_xyz.h"
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
+
+typedef std::map<std::string, std::string> argtype;
 
 // HWH allow different formats.
 // HWH for example, incorportate FileXYZPatch
@@ -52,8 +57,8 @@ class Movie : public AnalyzeWriteOnly {
 
   //@}
  private:
-  FileXYZ xyz_;
-  FileVMD vmd_;
+  std::unique_ptr<FileXYZ> xyz_;
+  std::unique_ptr<FileVMD> vmd_;
 };
 
 inline std::shared_ptr<Movie> MakeMovie(argtype args = argtype()) {

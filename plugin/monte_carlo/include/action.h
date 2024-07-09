@@ -3,6 +3,7 @@
 #define FEASST_MONTE_CARLO_ACTION_H_
 
 #include <memory>
+#include <map>
 #include <string>
 
 namespace feasst {
