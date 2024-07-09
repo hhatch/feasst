@@ -9,6 +9,7 @@
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
 #include "configuration/include/particle.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/model_params.h"
 
 namespace feasst {
@@ -541,6 +542,14 @@ void Charge::serialize(std::ostream& ostr) const {
 Charge::Charge(std::istream& istr) : ModelParam(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 1094, "mismatch version: " << version);
+}
+
+const PhysicalConstants& ModelParams::physical_constants() const {
+  return const_cast<PhysicalConstants&>(*physical_constants_);
+}
+
+void ModelParams::set_physical_constants() {
+  set_physical_constants(MakeCODATA2018());
 }
 
 }  // namespace feasst

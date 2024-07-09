@@ -4,6 +4,7 @@
 
 #include "utils/include/arguments.h"
 #include "configuration/include/select.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/group.h"

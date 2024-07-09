@@ -3,6 +3,7 @@
 #include "utils/include/debug.h"
 #include "math/include/constants.h"
 #include "configuration/include/domain.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/model_params.h"
 #include "system/include/lennard_jones.h"

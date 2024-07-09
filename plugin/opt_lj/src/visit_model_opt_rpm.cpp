@@ -7,6 +7,7 @@
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
+#include "configuration/include/physical_constants.h"
 #include "system/include/visit_model_inner.h"
 #include "opt_lj/include/visit_model_opt_rpm.h"
 

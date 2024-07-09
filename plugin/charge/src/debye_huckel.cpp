@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/model_params.h"
 #include "charge/include/debye_huckel.h"
 

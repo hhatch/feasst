@@ -3,6 +3,7 @@
 #define FEASST_TEST_CHARGE_CHARGE_UTILS_H_
 
 #include "utils/include/arguments.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/model_params.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"

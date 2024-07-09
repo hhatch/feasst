@@ -3,7 +3,9 @@
 #include "utils/include/serialize.h"
 #include "math/include/constants.h"
 #include "math/include/table.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/model_params.h"
+#include "configuration/include/physical_constants.h"
 #include "charge/include/charge_screened.h"
 
 namespace feasst {

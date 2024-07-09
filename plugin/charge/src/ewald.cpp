@@ -5,6 +5,7 @@
 #include "math/include/constants.h"
 #include "configuration/include/select.h"
 #include "configuration/include/particle_factory.h"
+#include "configuration/include/physical_constants.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/visit_configuration.h"
