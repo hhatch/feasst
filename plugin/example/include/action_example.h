@@ -57,7 +57,8 @@ class ActionExample : public Action {
   std::string modify_name_;
 };
 
-inline std::shared_ptr<ActionExample> MakeActionExample(argtype args = argtype()) {
+inline std::shared_ptr<ActionExample> MakeActionExample(
+    argtype args = argtype()) {
   return std::make_shared<ActionExample>(args);
 }
 

@@ -2,13 +2,15 @@
 #ifndef FEASST_STEPPERS_ANALYZE_EXAMPLE_H_
 #define FEASST_STEPPERS_ANALYZE_EXAMPLE_H_
 
-#include <vector>
+#include <memory>
 #include <map>
+#include <string>
+#include <vector>
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
 
-class Accumulator; // Forward declare for fast compilation.
+class Accumulator;  // Forward declare for fast compilation.
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -70,13 +72,14 @@ class AnalyzeExample : public Analyze {
       const TrialFactory& trial_factory) override;
 
   // serialize
-  std::string class_name() const override { return std::string("AnalyzeExample"); }
+  std::string class_name() const override {
+    return std::string("AnalyzeExample"); }
   void serialize(std::ostream& ostr) const override;
   std::shared_ptr<Analyze> create(std::istream& istr) const override {
     return std::make_shared<AnalyzeExample>(istr); }
   std::shared_ptr<Analyze> create(argtype * args) const override {
     return std::make_shared<AnalyzeExample>(args); }
-  AnalyzeExample(std::istream& istr);
+  explicit AnalyzeExample(std::istream& istr);
 
   //@}
  private:
@@ -84,7 +87,8 @@ class AnalyzeExample : public Analyze {
   std::vector<std::shared_ptr<Accumulator> > center_;
 };
 
-inline std::shared_ptr<AnalyzeExample> MakeAnalyzeExample(argtype args = argtype()) {
+inline std::shared_ptr<AnalyzeExample> MakeAnalyzeExample(
+    argtype args = argtype()) {
   return std::make_shared<AnalyzeExample>(args);
 }
 

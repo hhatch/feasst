@@ -48,7 +48,7 @@ void AnalyzeExample::initialize(Criteria * criteria,
  */
 class AveragePosition : public LoopConfigOneBody {
  public:
-  AveragePosition(Position * average) { average_ = average; }
+  explicit AveragePosition(Position * average) { average_ = average; }
   void work(const Site& site,
     const Configuration& config,
     const LoopDescriptor& data) override { average_->add(site.position()); }
@@ -82,9 +82,8 @@ const Accumulator& AnalyzeExample::geometric_center(const int dimension) const {
   return *center_[dimension];
 }
 
-const std::vector<std::shared_ptr<Accumulator> >& AnalyzeExample::geometric_center() const {
-  return center_;
-}
+const std::vector<std::shared_ptr<Accumulator> >&
+  AnalyzeExample::geometric_center() const { return center_; }
 
 void AnalyzeExample::serialize(std::ostream& ostr) const {
   Stepper::serialize(ostr);

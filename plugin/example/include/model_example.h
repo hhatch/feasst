@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <map>
+#include <string>
 #include "system/include/model_two_body.h"
 
 namespace feasst {
@@ -111,7 +112,8 @@ class ModelExample : public ModelTwoBody {
   int gamma_index_ = -1;
 };
 
-inline std::shared_ptr<ModelExample> MakeModelExample(argtype args = argtype()) {
+inline std::shared_ptr<ModelExample> MakeModelExample(
+    argtype args = argtype()) {
   return std::make_shared<ModelExample>(args);
 }
 
