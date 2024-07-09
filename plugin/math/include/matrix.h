@@ -21,7 +21,8 @@ class Matrix {
   void set_size(const int num_rows, const int num_columns);
 
   /// Alternatively, construct with 2d vector data.
-  explicit Matrix(std::vector<std::vector<double> > matrix) { matrix_ = matrix; }
+  explicit Matrix(std::vector<std::vector<double> > matrix) {
+    matrix_ = matrix; }
 
   /// Return the number of rows.
   int num_rows() const { return static_cast<int>(matrix_.size()); }

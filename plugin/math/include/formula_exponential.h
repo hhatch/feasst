@@ -2,6 +2,7 @@
 #ifndef FEASST_MATH_FORMULA_EXPONENTIAL_H_
 #define FEASST_MATH_FORMULA_EXPONENTIAL_H_
 
+#include <map>
 #include <memory>
 #include <string>
 #include <sstream>

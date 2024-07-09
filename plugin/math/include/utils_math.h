@@ -77,9 +77,11 @@ T minimum(const std::vector<std::vector<std::vector<std::vector<T> > > > &vec) {
 
 /// Return the minimum element of a 5D vector.
 template<class T>
-T minimum(const std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > > &vec) {
+T minimum(const std::vector<std::vector<std::vector<std::vector<std::vector<T>
+    > > > > &vec) {
   std::vector<T> mins;
-  for (const std::vector<std::vector<std::vector<std::vector<T> > > >& vec1 : vec) {
+  for (const std::vector<std::vector<std::vector<std::vector<T> > > >& vec1 :
+      vec) {
     mins.push_back(minimum(vec1));
   }
   return *std::min_element(mins.begin(), mins.end());
@@ -87,9 +89,11 @@ T minimum(const std::vector<std::vector<std::vector<std::vector<std::vector<T> >
 
 /// Return the minimum element of a 6D vector.
 template<class T>
-T minimum(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > > > &vec) {
+T minimum(const std::vector<std::vector<std::vector<std::vector<std::vector<
+    std::vector<T> > > > > > &vec) {
   std::vector<T> mins;
-  for (const std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > >& vec1 : vec) {
+  for (const std::vector<std::vector<std::vector<std::vector<std::vector<T> > >
+      > >& vec1 : vec) {
     mins.push_back(minimum(vec1));
   }
   return *std::min_element(mins.begin(), mins.end());
@@ -133,9 +137,11 @@ T maximum(const std::vector<std::vector<std::vector<std::vector<T> > > > &vec) {
 
 /// Return the maximum element of a 5D vector.
 template<class T>
-T maximum(const std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > > &vec) {
+T maximum(const std::vector<std::vector<std::vector<std::vector<std::vector<T>
+    > > > > &vec) {
   std::vector<T> maxs;
-  for (const std::vector<std::vector<std::vector<std::vector<T> > > >& vec1 : vec) {
+  for (const std::vector<std::vector<std::vector<std::vector<T> > > >& vec1 :
+      vec) {
     maxs.push_back(maximum(vec1));
   }
   return *std::max_element(maxs.begin(), maxs.end());
@@ -143,9 +149,11 @@ T maximum(const std::vector<std::vector<std::vector<std::vector<std::vector<T> >
 
 /// Return the maximum element of a 6D vector.
 template<class T>
-T maximum(const std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > > > &vec) {
+T maximum(const std::vector<std::vector<std::vector<std::vector<std::vector<
+    std::vector<T> > > > > > &vec) {
   std::vector<T> maxs;
-  for (const std::vector<std::vector<std::vector<std::vector<std::vector<T> > > > >& vec1 : vec) {
+  for (const std::vector<std::vector<std::vector<std::vector<std::vector<T> > >
+      > >& vec1 : vec) {
     maxs.push_back(maximum(vec1));
   }
   return *std::max_element(maxs.begin(), maxs.end());
@@ -298,8 +306,8 @@ inline void add(const std::vector<std::vector<std::vector<T> > >& vec1,
 
 /// Add vec1 to vec2
 template <typename T>
-inline void add(const std::vector<std::vector<std::vector<std::vector<T> > > >& vec1,
-    std::vector<std::vector<std::vector<std::vector<T> > > > * vec2) {
+inline void add(const std::vector<std::vector<std::vector<std::vector<T> > > >&
+    vec1, std::vector<std::vector<std::vector<std::vector<T> > > > * vec2) {
   for (int i = 0; i < static_cast<int>(vec1.size()); ++i) {
     add(vec1[i], &(*vec2)[i]);
   }

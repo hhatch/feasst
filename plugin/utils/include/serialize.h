@@ -47,7 +47,7 @@ void feasst_serialize(const double val, std::ostream& ostr);
 void feasst_deserialize(double * val, std::istream& istr);
 
 /// Serialize long double.
-void feasst_serialize(const long double& val, std::ostream& ostr);
+void feasst_serialize(long const double& val, std::ostream& ostr);
 
 /// Deserialize long double. Handle inf.
 void feasst_deserialize(long double * val, std::istream& istr);
@@ -338,7 +338,7 @@ void feasst_serialize(const std::unique_ptr<T>& ptr, std::ostream& ostr) {
 
 /// Deserialize feasst object stored as unique pointer
 template <typename T>
-void feasst_deserialize(std::unique_ptr<T>& ptr, std::istream& istr) {
+void feasst_deserialize(std::unique_ptr<T>& ptr, std::istream& istr) {  // NOLINT
   int existing;
   istr >> existing;
   if (existing != 0) {
@@ -414,7 +414,7 @@ void feasst_serialize_fstdr(const std::vector<std::shared_ptr<T> >& vector,
 /// see https://isocpp.org/wiki/faq/serialization
 template <typename T>
 std::shared_ptr<T> template_deserialize(
-    std::map<std::string, std::shared_ptr<T> >& map,
+    std::map<std::string, std::shared_ptr<T> >& map,  // NOLINT
     std::istream& istr,
     /// Rewind istr position to read class name again (default: false).
     bool rewind = false) {
@@ -475,7 +475,7 @@ void feasst_deserialize_endcap(const std::string name, std::istream& istr);
 /// A factory method to construct objects from argtype
 template <typename T>
 std::shared_ptr<T> template_factory(
-    std::map<std::string, std::shared_ptr<T> >& map,
+    std::map<std::string, std::shared_ptr<T> >& map,  // NOLINT
     std::string class_name,
     argtype * args) {
   DEBUG("deserializing: " << class_name);

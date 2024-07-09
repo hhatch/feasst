@@ -97,7 +97,8 @@ class Accumulator {
   long double sum_of_squared() const { return val_moment_[2]; }
 
   /// Same as above, but truncated to double precision for Python interface.
-  double sum_of_squared_dble() const { return static_cast<double>(val_moment_[2]); }
+  double sum_of_squared_dble() const {
+    return static_cast<double>(val_moment_[2]); }
 
   /// Zero all accumulated values.
   void reset();

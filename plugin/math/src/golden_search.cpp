@@ -9,7 +9,7 @@
 
 namespace feasst {
 
-GoldenSearch::GoldenSearch(const argtype& args) : Minimize(args) {
+GoldenSearch::GoldenSearch(argtype args) : Minimize(args) {
   class_name_ = "GoldenSearch";
 }
 

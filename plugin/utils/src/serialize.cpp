@@ -78,7 +78,7 @@ void feasst_deserialize(double * val, std::istream& ostr) {
   }
 }
 
-void feasst_serialize(const long double& val, std::ostream& ostr) {
+void feasst_serialize(long const double& val, std::ostream& ostr) {
   ostr << std::setprecision(std::numeric_limits<long double>::digits10+2)
        << val << " ";
 }

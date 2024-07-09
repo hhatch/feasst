@@ -8,7 +8,7 @@
 
 namespace feasst {
 
-SolverBisection::SolverBisection(const argtype& args) : Solver(args) {
+SolverBisection::SolverBisection(argtype args) : Solver(args) {
   class_name_ = "SolverBisection";
 }
 

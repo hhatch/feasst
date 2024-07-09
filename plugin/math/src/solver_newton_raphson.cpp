@@ -9,7 +9,7 @@
 
 namespace feasst {
 
-SolverNewtonRaphson::SolverNewtonRaphson(const argtype& args) : Solver(args) {
+SolverNewtonRaphson::SolverNewtonRaphson(argtype args) : Solver(args) {
   class_name_ = "SolverNewtonRaphson";
 }
 

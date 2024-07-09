@@ -1,10 +1,11 @@
 #ifndef FEASST_MATH_TABLE_H_
 #define FEASST_MATH_TABLE_H_
 
-#include <vector>
 #include <map>
+#include <memory>
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace feasst {
 
@@ -359,7 +360,8 @@ inline std::shared_ptr<Table4D> MakeTable4D(const std::string file_name) {
   return std::make_shared<Table4D>(file_name);
 }
 
-typedef std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > fvec5;
+typedef std::vector<std::vector<std::vector<std::vector<float> > > > fvec4;
+typedef std::vector<fvec4> fvec5;
 
 /**
   This is a five-dimensional implementation of a table.

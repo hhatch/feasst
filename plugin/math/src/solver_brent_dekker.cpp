@@ -10,7 +10,7 @@
 
 namespace feasst {
 
-SolverBrentDekker::SolverBrentDekker(const argtype& args) : Solver(args) {
+SolverBrentDekker::SolverBrentDekker(argtype args) : Solver(args) {
   class_name_ = "SolverBrentDekker";
 }
 
