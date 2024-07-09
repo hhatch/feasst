@@ -14,6 +14,7 @@
 #include "system/include/visit_model_cell.h"
 #include "system/include/dont_visit_model.h"
 #include "system/include/ideal_gas.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"

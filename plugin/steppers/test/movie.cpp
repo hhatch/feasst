@@ -1,4 +1,6 @@
 #include "utils/test/utils.h"
+#include "configuration/include/file_vmd.h"
+#include "configuration/include/file_xyz.h"
 #include "steppers/include/movie.h"
 
 namespace feasst {

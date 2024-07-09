@@ -1,5 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "configuration/include/file_vmd.h"
+#include "configuration/include/file_xyz.h"
 #include "steppers/include/log.h"
 #include "steppers/include/movie.h"
 #include "steppers/include/log_and_movie.h"
@@ -11,7 +13,7 @@ LogAndMovie::LogAndMovie(argtype args) : AnalyzeFactory() {
   feasst::append("file_name", &log_args, ".txt");
   add(MakeLog(log_args));
   feasst::append("file_name", &args, ".xyz");
-  add(MakeMovie(args));
+  add(std::move(MakeMovie(args)));
   WARN("LogAndMovie is depreciated. Please use Log and Movie separately.");
 }
 

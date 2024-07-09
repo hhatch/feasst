@@ -4,6 +4,7 @@
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"
 #include "system/include/ideal_gas.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_stage.h"

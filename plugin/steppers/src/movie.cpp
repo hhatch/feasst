@@ -1,5 +1,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
+#include "configuration/include/file_vmd.h"
+#include "configuration/include/file_xyz.h"
 #include "monte_carlo/include/criteria.h"
 #include "steppers/include/movie.h"
 

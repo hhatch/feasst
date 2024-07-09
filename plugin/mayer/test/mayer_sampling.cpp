@@ -10,6 +10,7 @@
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"
 #include "models/include/square_well.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "steppers/include/log.h"
 #include "steppers/include/log_and_movie.h"
 #include "steppers/include/movie.h"

@@ -5,11 +5,12 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "configuration/include/file_vmd.h"
-#include "configuration/include/file_xyz.h"
 #include "monte_carlo/include/analyze.h"
 
 namespace feasst {
+
+class FileVMD;
+class FileXYZ;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -38,13 +39,13 @@ class Movie : public AnalyzeWriteOnly {
 
   /// Write the sample VMD files and the initial configuration.
   void initialize(Criteria * criteria,
-      System * system,
-      TrialFactory * trial_factory) override;
+    System * system,
+    TrialFactory * trial_factory) override;
 
   /// Write the configuration.
   std::string write(const Criteria& criteria,
-      const System& system,
-      const TrialFactory& trial_factory) override;
+    const System& system,
+    const TrialFactory& trial_factory) override;
 
   // serialize
   std::string class_name() const override { return std::string("Movie"); }
@@ -53,7 +54,7 @@ class Movie : public AnalyzeWriteOnly {
     return std::make_shared<Movie>(istr); }
   std::shared_ptr<Analyze> create(argtype * args) const override {
     return std::make_shared<Movie>(args); }
-  Movie(std::istream& istr);
+  explicit Movie(std::istream& istr);
 
   //@}
  private:

@@ -3,6 +3,7 @@
 #include "system/include/long_range_corrections.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/trial_translate.h"
