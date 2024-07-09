@@ -2,13 +2,12 @@
 #ifndef FEASST_MONTE_CARLO_REMOVE_TRIAL_H_
 #define FEASST_MONTE_CARLO_REMOVE_TRIAL_H_
 
-#include <vector>
 #include <memory>
+#include <string>
+#include <vector>
 #include "monte_carlo/include/action.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   Remove a Trial.

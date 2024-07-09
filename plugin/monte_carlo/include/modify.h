@@ -3,6 +3,7 @@
 #define FEASST_MONTE_CARLO_MODIFY_H_
 
 #include <memory>
+#include <vector>
 #include <string>
 #include <map>
 #include "monte_carlo/include/stepper.h"

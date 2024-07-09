@@ -2,13 +2,11 @@
 #ifndef FEASST_MONTE_CARLO_REF_POTENTIAL_H_
 #define FEASST_MONTE_CARLO_REF_POTENTIAL_H_
 
-#include <vector>
 #include <memory>
+#include <vector>
 #include "monte_carlo/include/action.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   Add a reference potential.

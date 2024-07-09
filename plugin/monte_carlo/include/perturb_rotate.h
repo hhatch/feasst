@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_ROTATE_H_
 #define FEASST_MONTE_CARLO_PERTURB_ROTATE_H_
 
+#include <memory>
 #include "math/include/matrix.h"
 #include "math/include/euler.h"
 #include "math/include/position.h"
@@ -50,9 +51,7 @@ class PerturbRotate : public PerturbMove {
             Random * random, Acceptance * acceptance) override;
 
   /// Rotate the selected particles using the tuning parameter.
-  void move(System * system,
-      TrialSelect * select,
-      Random * random,
+  void move(System * system, TrialSelect * select, Random * random,  // NOLINT
       /// If pivot is empty, use first particle position.
       const Position& pivot);
 

@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_COMPUTE_MOVE_H_
 #define FEASST_MONTE_CARLO_TRIAL_COMPUTE_MOVE_H_
 
+#include <memory>
 #include <vector>
 #include "monte_carlo/include/trial_compute.h"
 
@@ -10,8 +11,6 @@ namespace feasst {
 class Criteria;
 class System;
 class TrialStage;
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
 Move a selection of particles and sites.

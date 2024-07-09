@@ -2,10 +2,12 @@
 #ifndef FEASST_MONTE_CARLO_MONTE_CARLO_H_
 #define FEASST_MONTE_CARLO_MONTE_CARLO_H_
 
+#include <utility>
 #include <vector>
+#include <string>
 #include <memory>
 #include <map>
-//#include "utils/include/timer.h"
+// #include "utils/include/timer.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze_factory.h"
@@ -13,15 +15,15 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-typedef std::vector<std::pair<std::string, argtype> > arglist;
-
 class Action;
 class Checkpoint;
 class Criteria;
 class NeighborCriteria;
 class Random;
 class ThermoParams;
+
+typedef std::map<std::string, std::string> argtype;
+typedef std::vector<std::pair<std::string, argtype> > arglist;
 
 // HWH consider a constructor-based initialization of MonteCarlo..
 // HWH something where order doesn't need to be enforced?
@@ -316,7 +318,8 @@ class MonteCarlo {
 //  const Timer& timer() const { return timer_; }
 //  std::string timer_str() const {
 //    std::stringstream ss;
-//    const double trial_missing = timer_.missing_percent("trial", trial_factory_.timer());
+//    const double trial_missing =
+//      timer_.missing_percent("trial", trial_factory_.timer());
 //    ss << timer_.str()
 //       << "*** TrialFactory Profile ***" << std::endl
 //       << trial_factory_.timer().str()

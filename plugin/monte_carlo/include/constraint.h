@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_CONSTRAINT_H_
 #define FEASST_MONTE_CARLO_CONSTRAINT_H_
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -10,6 +11,8 @@ namespace feasst {
 class Acceptance;
 class Criteria;
 class System;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Impose constraints on the System and Criteria.

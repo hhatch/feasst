@@ -6,8 +6,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /// Attempt to add a particle.
 class TrialAdd : public Trial {
  public:

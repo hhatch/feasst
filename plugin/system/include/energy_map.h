@@ -10,13 +10,13 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 class Random;
 class Position;
 class Configuration;
 class Select;
 class NeighborCriteria;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Define a generic interface for derived classes to track interaction energy.
@@ -113,8 +113,8 @@ class EnergyMap {
 
   virtual void check(const Configuration& config) const {}
 
-  //virtual const std::vector<double>& map(const int part1, const int part2,
-  //  const int site1, const int site2) const;
+  // virtual const std::vector<double>& map(const int part1, const int part2,
+  //   const int site1, const int site2) const;
 
   // Synchronize with another object of the same type.
   // Typically used with prefetch.

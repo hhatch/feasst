@@ -8,8 +8,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 // HWH add CB+https://hhatch.com/papers/C6SM00473C.pdf
 /**
 Attempt to add a particle.

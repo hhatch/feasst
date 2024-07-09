@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_COMPUTE_TRANSLATE_H_
 #define FEASST_MONTE_CARLO_TRIAL_COMPUTE_TRANSLATE_H_
 
+#include <memory>
 #include <vector>
 #include "monte_carlo/include/trial_compute.h"
 

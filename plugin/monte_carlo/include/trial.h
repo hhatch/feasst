@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_H_
 #define FEASST_MONTE_CARLO_TRIAL_H_
 
+#include <map>
 #include <vector>
 #include <string>
 #include <memory>
@@ -163,7 +164,7 @@ class Trial {
   /// Attempt a trial. Return true if accepted.
   virtual bool attempt(Criteria * criteria, System * system, Random * random);
 
-  //HWH Depreciate description once all Trials are derived classes again.
+  // HWH Depreciate description once all Trials are derived classes again.
   /// Return the description, as used in Log
   const std::string& description() const { return description_; }
 
@@ -212,7 +213,7 @@ class Trial {
  private:
   std::vector<std::shared_ptr<TrialStage> > stages_;
   std::shared_ptr<TrialCompute> compute_;
-  //double weight_;
+  // double weight_;
   double * get_weight_() { return &((*data_.get_dble_1D())[0]); }
   double weight_per_number_fraction_;
   int number_fraction_exclude_type_;

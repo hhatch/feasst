@@ -2,6 +2,8 @@
 #ifndef FEASST_SYSTEM_VISIT_MODEL_BOND_H_
 #define FEASST_SYSTEM_VISIT_MODEL_BOND_H_
 
+#include <map>
+#include <string>
 #include <memory>
 #include "system/include/visit_model.h"
 

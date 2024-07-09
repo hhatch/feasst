@@ -31,7 +31,7 @@ typedef std::map<std::string, std::string> argtype;
  */
 class VisitModel {
  public:
-  VisitModel(); // use the default VisitModelInner
+  VisitModel();  // use the default VisitModelInner
   explicit VisitModel(std::shared_ptr<VisitModelInner> inner);
 
   //@{

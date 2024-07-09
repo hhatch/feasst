@@ -2,6 +2,8 @@
 #ifndef FEASST_SYSTEM_VISIT_MODEL_INTRA_MAP_H_
 #define FEASST_SYSTEM_VISIT_MODEL_INTRA_MAP_H_
 
+#include <map>
+#include <string>
 #include <vector>
 #include <memory>
 #include "system/include/visit_model.h"

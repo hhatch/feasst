@@ -52,7 +52,7 @@ class TrialCompute {
  protected:
   std::string class_name_ = "TrialCompute";
   void serialize_trial_compute_(std::ostream& ostr) const;
-  TrialCompute(std::istream& istr);
+  explicit TrialCompute(std::istream& istr);
 };
 
 }  // namespace feasst

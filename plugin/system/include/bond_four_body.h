@@ -22,7 +22,7 @@ class BondFourBody {
   virtual double energy(const Position& ri, const Position& rj,
     const Position& rk, const Position& rl, const Dihedral& dihedral) const;
   virtual double energy(
-    const double dihedral_radians, // See Position::torsion_angle_radians
+    const double dihedral_radians,  // See Position::torsion_angle_radians
     const Bond& dihedral) const = 0;
   virtual double random_dihedral_radians(const Dihedral& dihedral,
     const double beta, const int dimension, Random * random) const;

@@ -2,6 +2,8 @@
 #ifndef FEASST_SYSTEM_VISIT_MODEL_CELL_H_
 #define FEASST_SYSTEM_VISIT_MODEL_CELL_H_
 
+#include <map>
+#include <string>
 #include <memory>
 #include "system/include/visit_model.h"
 
@@ -52,7 +54,8 @@ class VisitModelCell : public VisitModel {
   /// Same as base class, but also prepare the cells.
   void precompute(Configuration * config) override;
 
-  void change_volume(const double delta_volume, const int dimension, Configuration * config) override;
+  void change_volume(const double delta_volume, const int dimension,
+                     Configuration * config) override;
 
   void compute(
       ModelTwoBody * model,
@@ -76,7 +79,7 @@ class VisitModelCell : public VisitModel {
     return std::make_shared<VisitModelCell>(args); }
   void serialize(std::ostream& ostr) const override;
   explicit VisitModelCell(std::istream& istr);
-  VisitModelCell() {} // for mapper only
+  VisitModelCell() {}  // for mapper only
   virtual ~VisitModelCell() {}
 
   //@}

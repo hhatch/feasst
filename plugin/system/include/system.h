@@ -2,6 +2,7 @@
 #ifndef FEASST_SYSTEM_SYSTEM_H_
 #define FEASST_SYSTEM_SYSTEM_H_
 
+#include <string>
 #include <map>
 #include <vector>
 #include <memory>
@@ -115,7 +116,8 @@ class System {
     const int config = 0) const;
 
   /// Return the list of reference potentials.
-  const std::vector<std::vector<PotentialFactory> > references() const { return references_; }
+  const std::vector<std::vector<PotentialFactory> > references() const {
+    return references_; }
 
   /// Return a constant reference to the full potentials.
   const PotentialFactory& potentials(const int config = 0) const;
@@ -274,7 +276,7 @@ class System {
   // In order to finalize or restart the correct reference potential utilized
   // in a trial, this temporarily stores that reference potential index.
   int ref_used_last_ = -1;
-  double delta_volume_previous_ = 1e30; // implemented for Gibbs ensemble.
+  double delta_volume_previous_ = 1e30;  // implemented for Gibbs ensemble.
 
   PotentialFactory * reference_(const int index, const int config);
   PotentialFactory * potentials_(const int config);

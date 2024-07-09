@@ -8,8 +8,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /**
   Make a new reference potential based on an existing potential.
  */

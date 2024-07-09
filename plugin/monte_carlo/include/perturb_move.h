@@ -7,8 +7,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /**
   Only perturb the positions of the particles and/or sites.
  */

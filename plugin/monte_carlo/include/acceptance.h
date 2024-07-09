@@ -63,7 +63,8 @@ class Acceptance {
   const std::vector<double>& energy_profile_new(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_profile_new(const std::vector<double>& energy, const int config = 0);
+  void set_energy_profile_new(const std::vector<double>& energy,
+                              const int config = 0);
 
   /// Add to the above quantity.
   void add_to_energy_profile_new(const std::vector<double>& energy,
@@ -86,7 +87,8 @@ class Acceptance {
   const std::vector<double>& energy_profile_old(const int config = 0) const;
 
   /// Set the above quantity.
-  void set_energy_profile_old(const std::vector<double>& energy, const int config = 0);
+  void set_energy_profile_old(const std::vector<double>& energy,
+                              const int config = 0);
 
   /// Add to the above quantity.
   void add_to_energy_profile_old(const std::vector<double>& energy,
@@ -103,8 +105,10 @@ class Acceptance {
   /// This assumes a particular macrostate is used for the given trial.
   // HWH refactor this so that perturb_remove shows deleted particle but
   // cell lists, etc are only updated upon finalization (optimization).
-  int macrostate_shift(const int config = 0) const { return macrostate_shift_[config]; }
-  int macrostate_shift_type(const int config = 0) const { return macrostate_shift_type_[config]; }
+  int macrostate_shift(const int config = 0) const {
+    return macrostate_shift_[config]; }
+  int macrostate_shift_type(const int config = 0) const {
+    return macrostate_shift_type_[config]; }
 
   /// Add to the above.
   void add_to_macrostate_shift(const int shift, const int config = 0);

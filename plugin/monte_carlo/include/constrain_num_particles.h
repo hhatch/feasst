@@ -7,8 +7,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /**
   Constrain the number of the number of particles.
  */

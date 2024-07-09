@@ -8,9 +8,9 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 class MonteCarlo;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   An Action is for use with the MonteCarlo(arglist) constructor.

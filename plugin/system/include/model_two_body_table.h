@@ -2,16 +2,18 @@
 #ifndef FEASST_SYSTEM_MODEL_TWO_BODY_TABLE_H_
 #define FEASST_SYSTEM_MODEL_TWO_BODY_TABLE_H_
 
+#include <vector>
+#include <memory>
 #include <map>
 #include <string>
 #include "system/include/model_two_body.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 class ModelParams;
 class Table1D;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Tabulate two-body models and interpolate their interactions during the
@@ -24,8 +26,8 @@ class ModelTwoBodyTable : public ModelTwoBody {
     - hard_sphere_threshold: when r < threshold, return NEAR_INFINITY
       (default: 0.2).
    */
-  ModelTwoBodyTable(argtype args = argtype());
-  ModelTwoBodyTable(argtype * args);
+  explicit ModelTwoBodyTable(argtype args = argtype());
+  explicit ModelTwoBodyTable(argtype * args);
 
   /// Resize the table based on the number of site types
   void resize(const int num_site_types);

@@ -93,7 +93,8 @@ class VisitModelInner {
     return std::make_shared<VisitModelInner>(args); }
   std::map<std::string, std::shared_ptr<VisitModelInner> >& deserialize_map();
   std::shared_ptr<VisitModelInner> deserialize(std::istream& istr);
-  std::shared_ptr<VisitModelInner> factory(const std::string name, argtype * args);
+  std::shared_ptr<VisitModelInner> factory(const std::string name,
+                                           argtype * args);
   explicit VisitModelInner(std::istream& istr);
   virtual ~VisitModelInner() {}
 

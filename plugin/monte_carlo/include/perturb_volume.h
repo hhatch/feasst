@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_VOLUME_H_
 #define FEASST_MONTE_CARLO_PERTURB_VOLUME_H_
 
+#include <memory>
 #include "monte_carlo/include/perturb.h"
 
 namespace feasst {

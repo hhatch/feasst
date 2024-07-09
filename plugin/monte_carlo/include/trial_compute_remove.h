@@ -8,8 +8,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /**
   Attempt to remove a particle.
   See TrialComputeAdd for derivation of the acceptance probability that is

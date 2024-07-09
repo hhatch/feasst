@@ -2,13 +2,12 @@
 #ifndef FEASST_MONTE_CARLO_RUN_H_
 #define FEASST_MONTE_CARLO_RUN_H_
 
-#include <vector>
 #include <memory>
+#include <string>
+#include <vector>
 #include "monte_carlo/include/action.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   Perform a number of trials.

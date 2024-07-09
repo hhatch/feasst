@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_H_
 #define FEASST_MONTE_CARLO_PERTURB_H_
 
+#include <memory>
 #include <map>
 #include <string>
 
@@ -118,7 +119,7 @@ class Perturb {
  protected:
   std::string class_name_ = "Perturb";
   void serialize_perturb_(std::ostream& ostr) const;
-  Perturb(std::istream& istr);
+  explicit Perturb(std::istream& istr);
 
  private:
   std::shared_ptr<Tunable> tunable_;

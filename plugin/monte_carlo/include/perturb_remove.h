@@ -2,6 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_REMOVE_H_
 #define FEASST_MONTE_CARLO_PERTURB_REMOVE_H_
 
+#include <memory>
 #include "monte_carlo/include/perturb_anywhere.h"
 
 namespace feasst {
