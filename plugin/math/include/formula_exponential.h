@@ -2,15 +2,10 @@
 #ifndef FEASST_MATH_FORMULA_EXPONENTIAL_H_
 #define FEASST_MATH_FORMULA_EXPONENTIAL_H_
 
-#include <map>
 #include <memory>
-#include <string>
-#include <sstream>
 #include "math/include/formula.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   \f$ f(x) = f(x_0) \exp[A(x - x_0)^B] \f$

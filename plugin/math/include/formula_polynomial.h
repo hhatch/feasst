@@ -2,16 +2,11 @@
 #ifndef FEASST_MATH_FORMULA_POLYNOMIAL_H_
 #define FEASST_MATH_FORMULA_POLYNOMIAL_H_
 
-#include <map>
 #include <memory>
-#include <string>
-#include <sstream>
 #include <vector>
 #include "math/include/formula.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   \f$ f(x) = \sum_{i=0}^n A_n(x - x_0)^i \f$

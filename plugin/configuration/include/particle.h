@@ -237,7 +237,8 @@ class Particle : public PropertiedEntity {
                            const int site_index3, const int site_index4) const;
 
   /// List the site indices that form dihedrals with the given site.
-  const std::vector<std::vector<int> >& dihedral_neighbors(const int site) const;
+  const std::vector<std::vector<int> >& dihedral_neighbors(
+    const int site) const;
 
 //  //@}
 //  /** @name Impropers

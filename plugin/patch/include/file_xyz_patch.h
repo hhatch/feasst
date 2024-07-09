@@ -4,7 +4,6 @@
 
 #include <string>
 #include <fstream>
-#include <sstream>
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 #include "configuration/include/file_xyz.h"

@@ -3,7 +3,6 @@
 #define FEASST_UTILS_INCLUDE_CHECKPOINT_H_
 
 #include <fstream>
-#include <sstream>
 #include <string>
 #include <memory>
 #include <map>

@@ -2,7 +2,9 @@
 #ifndef FEASST_CONFIGURATION_NEIGHBOR_CRITERIA_H_
 #define FEASST_CONFIGURATION_NEIGHBOR_CRITERIA_H_
 
+#include <map>
 #include <memory>
+#include <string>
 
 namespace feasst {
 

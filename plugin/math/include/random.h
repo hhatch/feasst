@@ -10,11 +10,11 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 class Cache;
 class Position;
 class RotationMatrix;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Psuedo random number generator class.

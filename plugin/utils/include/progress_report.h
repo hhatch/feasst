@@ -2,10 +2,9 @@
 #ifndef FEASST_UTILS_PROGRESS_REPORT_H_
 #define FEASST_UTILS_PROGRESS_REPORT_H_
 
-#include <string>
-#include <sstream>
-#include <memory>
 #include <map>
+#include <memory>
+#include <string>
 
 namespace feasst {
 

@@ -3,7 +3,6 @@
 #define FEASST_FLAT_HISTOGRAM_CLONES_H_
 
 #include <string>
-#include <sstream>
 #include <memory>
 #include <vector>
 #include "monte_carlo/include/monte_carlo.h"

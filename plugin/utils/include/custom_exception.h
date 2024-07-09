@@ -16,7 +16,7 @@
 
 #include <exception>
 #include <string>
-#include <sstream>
+#include <iosfwd>
 
 namespace feasst {
 

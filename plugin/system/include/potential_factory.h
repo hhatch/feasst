@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <sstream>
 // #include "utils/include/timer.h"
 
 namespace feasst {
@@ -36,7 +35,8 @@ class PotentialFactory {
     return const_cast<Potential&>(*potentials_[index]); }
 
   // Return a potential by index of order added.
-  Potential * get_potential(const int index) { return potentials_[index].get(); }
+  Potential * get_potential(const int index) {
+    return potentials_[index].get(); }
 
   /// Return the number of potentials.
   int num() const { return static_cast<int>(potentials_.size()); }

@@ -2,7 +2,6 @@
 #ifndef FEASST_ANISO_BACKMAP_H_
 #define FEASST_ANISO_BACKMAP_H_
 
-#include <sstream>
 #include "configuration/include/file_vmd.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/configuration.h"

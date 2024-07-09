@@ -3,7 +3,6 @@
 #define FEASST_SYSTEM_SYNCHRONIZE_DATA_H_
 
 #include <vector>
-#include <sstream>
 
 namespace feasst {
 

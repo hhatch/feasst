@@ -2,7 +2,6 @@
 #ifndef FEASST_MONTE_CARLO_MONTE_CARLO_H_
 #define FEASST_MONTE_CARLO_MONTE_CARLO_H_
 
-#include <sstream>
 #include <vector>
 #include <memory>
 #include <map>

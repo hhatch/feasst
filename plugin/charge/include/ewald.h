@@ -3,7 +3,6 @@
 #define FEASST_EWALD_EWALD_H_
 
 #include <vector>
-#include <sstream>
 #include <algorithm>
 #include "configuration/include/configuration.h"
 #include "system/include/visit_model.h"

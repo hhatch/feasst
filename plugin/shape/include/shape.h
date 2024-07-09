@@ -2,14 +2,13 @@
 #ifndef FEASST_SHAPE_SHAPE_H_
 #define FEASST_SHAPE_SHAPE_H_
 
-#include <memory>
 #include <map>
-#include <sstream>
+#include <memory>
+#include <string>
+#include <vector>
 #include "math/include/position.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 class Random;
 class Sphere;
@@ -112,7 +111,7 @@ class Shape {
 class ShapedEntity {
  public:
   ShapedEntity() {}
-  ShapedEntity(std::shared_ptr<Shape> shape) { shape_ = shape; }
+  explicit ShapedEntity(std::shared_ptr<Shape> shape) { shape_ = shape; }
 
   void set_shape(std::shared_ptr<Shape> shape) { shape_ = shape; }
   /// Return the shape.

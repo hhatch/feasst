@@ -2,7 +2,6 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_FACTORY_H_
 #define FEASST_MONTE_CARLO_TRIAL_FACTORY_H_
 
-#include <sstream>
 #include <memory>
 #include "monte_carlo/include/trial.h"
 // #include "utils/include/timer.h"

@@ -2,10 +2,10 @@
 #ifndef FEASST_SYSTEM_THERM_PARAMS_H_
 #define FEASST_SYSTEM_THERM_PARAMS_H_
 
+#include <map>
 #include <vector>
 #include <memory>
 #include <string>
-#include <sstream>
 
 namespace feasst {
 

@@ -32,10 +32,10 @@ class VisitConfiguration : public VisitParticles {
 
 class LoopConfigOneBody {
  public:
-  void visit(VisitConfiguration& visitor,
+  void visit(VisitConfiguration * visitor,
              const Configuration& configuration,
              const Select& select) {
-    visitor.loop(configuration, this, select);
+    visitor->loop(configuration, this, select);
   }
   virtual void work(const Site& site,
       const Configuration& config,

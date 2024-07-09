@@ -2,7 +2,6 @@
 #ifndef FEASST_CONFIGURATION_PHYSICAL_CONSTANTS_H_
 #define FEASST_CONFIGURATION_PHYSICAL_CONSTANTS_H_
 
-#include <sstream>
 #include <memory>
 #include <map>
 #include <string>
@@ -58,12 +57,13 @@ class PhysicalConstants {
   //@{
 
   /// Convert the number density (1/A^3) to g/cm^3
-  inline double number_density_to_grams_per_cm3(const double density, /// 1/A^3
+  inline double number_density_to_grams_per_cm3(const double density,  /// 1/A^3
       const double molecular_weight) {
     return density*molecular_weight/avogadro_constant()*1e24; }
 
   /// Convert the density in g/cm^3 to number density (1/A^3)
-  inline double grams_per_cm3_to_number_density(const double density, /// g/cm^3
+  inline double grams_per_cm3_to_number_density(
+      const double density,  /// g/cm^3
       const double molecular_weight) {
     return density/number_density_to_grams_per_cm3(1., molecular_weight); }
 

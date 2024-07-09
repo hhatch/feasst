@@ -464,4 +464,9 @@ void VisitModel::check(const Configuration& config) const {
 
 VisitModelInner * VisitModel::get_inner_() const { return inner_.get(); }
 
+void VisitModel::serialize(std::ostream& ostr) const {
+  ostr << class_name_ << " ";
+  serialize_visit_model_(ostr);
+}
+
 }  // namespace feasst

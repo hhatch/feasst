@@ -255,7 +255,6 @@ class Select {
 
   /// Return sites to become bonded.
   const Select * new_bond() const { return new_bond_.get(); }
-  //const Select& new_bond() const { return *new_bond_; }
 
   /// Sites which are bonded.
   void set_old_bond(const Select& select);

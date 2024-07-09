@@ -5,7 +5,6 @@
 #include <memory>
 #include <string>
 #include <map>
-#include <sstream>
 #include "system/include/synchronize_data.h"
 
 namespace feasst {
@@ -168,10 +167,7 @@ class VisitModel {
 
   // serialization
   std::string class_name() const { return class_name_; }
-  virtual void serialize(std::ostream& ostr) const {
-    ostr << class_name_ << " ";
-    serialize_visit_model_(ostr);
-  }
+  virtual void serialize(std::ostream& ostr) const;
   virtual std::shared_ptr<VisitModel> create(std::istream& istr) const {
     return std::make_shared<VisitModel>(istr); }
   virtual std::shared_ptr<VisitModel> create(argtype * args) const {
