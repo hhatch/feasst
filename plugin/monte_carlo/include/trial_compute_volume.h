@@ -2,6 +2,8 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_COMPUTE_VOLUME_H_
 #define FEASST_MONTE_CARLO_TRIAL_COMPUTE_VOLUME_H_
 
+#include <map>
+#include <string>
 #include <memory>
 #include <vector>
 #include "monte_carlo/include/trial_compute.h"

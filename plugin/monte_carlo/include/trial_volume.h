@@ -1,6 +1,8 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_VOLUME_H_
 #define FEASST_MONTE_CARLO_TRIAL_VOLUME_H_
 
+#include <map>
+#include <string>
 #include <memory>
 #include "monte_carlo/include/trial.h"
 

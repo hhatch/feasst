@@ -2,8 +2,10 @@
 #ifndef FEASST_MONTE_CARLO_WRITE_MODEL_PARAMS_H_
 #define FEASST_MONTE_CARLO_WRITE_MODEL_PARAMS_H_
 
-#include <vector>
+#include <map>
 #include <memory>
+#include <string>
+#include <vector>
 #include "monte_carlo/include/action.h"
 
 namespace feasst {

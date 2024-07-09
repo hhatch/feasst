@@ -2,6 +2,9 @@
 #ifndef FEASST_MONTE_CARLO_TUNABLE_H_
 #define FEASST_MONTE_CARLO_TUNABLE_H_
 
+#include <map>
+#include <string>
+
 namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;

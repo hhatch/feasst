@@ -2,6 +2,8 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_SELECT_ALL_H_
 #define FEASST_MONTE_CARLO_TRIAL_SELECT_ALL_H_
 
+#include <map>
+#include <string>
 #include <vector>
 #include <memory>
 #include "monte_carlo/include/trial_select.h"

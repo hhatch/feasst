@@ -1,6 +1,8 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_TRANSLATE_H_
 #define FEASST_MONTE_CARLO_TRIAL_TRANSLATE_H_
 
+#include <map>
+#include <string>
 #include <memory>
 #include "monte_carlo/include/trial.h"
 #include "monte_carlo/include/trial_move.h"
@@ -38,7 +40,8 @@ class TrialTranslate : public TrialMove {
   //@}
 };
 
-inline std::shared_ptr<TrialTranslate> MakeTrialTranslate(argtype args = argtype()) {
+inline std::shared_ptr<TrialTranslate> MakeTrialTranslate(
+    argtype args = argtype()) {
   return std::make_shared<TrialTranslate>(args); }
 
 }  // namespace feasst

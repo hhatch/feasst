@@ -2,6 +2,10 @@
 #ifndef FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 #define FEASST_MONTE_CARLO_TRIAL_SELECT_H_
 
+#include <memory>
+#include <map>
+#include <string>
+
 namespace feasst {
 
 class Accumulator;
@@ -180,7 +184,7 @@ class TrialSelect {
   void set_probability_(const double prob = 1) { probability_ = prob; }
 
   void serialize_trial_select_(std::ostream& ostr) const;
-  TrialSelect(std::istream& istr);
+  explicit TrialSelect(std::istream& istr);
 
  private:
   int group_index_;
