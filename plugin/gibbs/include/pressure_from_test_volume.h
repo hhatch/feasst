@@ -4,11 +4,11 @@
 
 #include <vector>
 #include <memory>
-#include "math/include/accumulator.h"
-#include "math/include/histogram.h"
 #include "monte_carlo/include/modify.h"
 
 namespace feasst {
+
+class Accumulator;
 
 typedef std::map<std::string, std::string> argtype;
 
@@ -72,7 +72,7 @@ class PressureFromTestVolume : public Modify {
   //@}
  private:
   double delta_volume_;
-  Accumulator term_;
+  std::unique_ptr<Accumulator> term_;
 };
 
 inline std::shared_ptr<PressureFromTestVolume> MakePressureFromTestVolume(

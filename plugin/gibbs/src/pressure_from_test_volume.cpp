@@ -3,6 +3,7 @@
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/accumulator.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
@@ -27,17 +28,18 @@ void PressureFromTestVolume::serialize(std::ostream& ostr) const {
   Stepper::serialize(ostr);
   feasst_serialize_version(8947, ostr);
   feasst_serialize(delta_volume_, ostr);
-  feasst_serialize_fstobj(term_, ostr);
+  feasst_serialize(term_, ostr);
 }
 
 PressureFromTestVolume::PressureFromTestVolume(std::istream& istr) : Modify(istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(8947 == version, version);
   feasst_deserialize(&delta_volume_, istr);
-  feasst_deserialize_fstobj(&term_, istr);
+  feasst_deserialize(term_, istr);
 }
 
 PressureFromTestVolume::PressureFromTestVolume(argtype * args) : Modify(args) {
+  term_ = std::make_unique<Accumulator>();
   delta_volume_ = dble("delta_volume", args, 1e-4);
 }
 PressureFromTestVolume::PressureFromTestVolume(argtype args) : PressureFromTestVolume(&args) {
@@ -64,7 +66,7 @@ void PressureFromTestVolume::update(Criteria * criteria,
   const double volume = configuration(*system).domain().volume();
   const double num_particles = configuration(*system).num_particles();
   const double beta = system->thermo_params().beta();
-  term_.accumulate(
+  term_->accumulate(
     std::pow((volume + delta_volume_)/volume, num_particles)*
     std::exp(-beta*(en_new - en_old))
   );
@@ -84,8 +86,8 @@ std::string PressureFromTestVolume::write(Criteria * criteria,
   std::stringstream ss;
   ss << header(*criteria, *system, *trial_factory);
   const double beta = system->thermo_params().beta();
-  ss << std::log(term_.average())/beta/delta_volume_ << ","
-     << term_.block_stdev()/std::abs(term_.average()*beta*delta_volume_);
+  ss << std::log(term_->average())/beta/delta_volume_ << ","
+     << term_->block_stdev()/std::abs(term_->average()*beta*delta_volume_);
   return ss.str();
 }
 

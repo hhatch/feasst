@@ -2,9 +2,18 @@
 #ifndef FEASST_BETA_EXPANDED_MACROSTATE_BETA_H_
 #define FEASST_BETA_EXPANDED_MACROSTATE_BETA_H_
 
+#include <memory>
+#include <string>
+#include <map>
 #include "flat_histogram/include/macrostate.h"
 
 namespace feasst {
+
+class Acceptance;
+class Criteria;
+class System;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Defines the macrostate to be the inverse temperature, \f$\beta\f$.
