@@ -25,8 +25,8 @@ class MacrostateBeta : public Macrostate {
     - Macrostate arguments.
    */
   explicit MacrostateBeta(argtype args = argtype());
-  explicit MacrostateBeta(argtype * args) :
-    MacrostateBeta(Histogram(args), args) {}
+  explicit MacrostateBeta(argtype * args);
+
   //@}
   /** @name Public Functions
    */

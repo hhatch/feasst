@@ -14,6 +14,8 @@ class ModelParams;
 class ModelTwoBody;
 class Select;
 
+typedef std::map<std::string, std::string> argtype;
+
 // HWH rename to VisitInner (consider it can be used by BondVisitor, etc)
 class VisitModelInner {
  public:

@@ -2,6 +2,8 @@
 #ifndef FEASST_SYSTEM_POTENTIAL_H_
 #define FEASST_SYSTEM_POTENTIAL_H_
 
+#include <map>
+#include <string>
 #include <memory>
 
 namespace feasst {

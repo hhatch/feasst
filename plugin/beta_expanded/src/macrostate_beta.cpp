@@ -19,6 +19,8 @@ MacrostateBeta::MacrostateBeta(argtype args) :
     MacrostateBeta(Histogram(&args), &args) {
   feasst_check_all_used(args);
 }
+MacrostateBeta::MacrostateBeta(argtype * args) :
+  MacrostateBeta(Histogram(args), args) {}
 
 class MapMacrostateBeta {
  public:
