@@ -29,4 +29,9 @@ CriteriaUpdater::CriteriaUpdater(std::istream& istr) : ModifyUpdateOnly(istr) {
   ASSERT(version == 743, "version mismatch:" << version);
 }
 
+void CriteriaUpdater::update(Criteria * criteria,
+  System * system,
+  Random * random,
+  TrialFactory * trial_factory) { criteria->update(); }
+
 }  // namespace feasst
