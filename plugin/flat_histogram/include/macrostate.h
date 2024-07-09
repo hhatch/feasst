@@ -2,12 +2,15 @@
 #ifndef FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 #define FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 
-#include "system/include/system.h"
-#include "monte_carlo/include/criteria.h"
 #include "math/include/histogram.h"
-#include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
+
+class Acceptance;
+class Criteria;
+class System;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   The macrostate is the statistical mechanical variable to which we apply bias

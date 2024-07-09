@@ -1,8 +1,11 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "flat_histogram/include/macrostate.h"
 #include "math/include/utils_math.h"
+#include "system/include/system.h"
+#include "monte_carlo/include/criteria.h"
+#include "monte_carlo/include/acceptance.h"
+#include "flat_histogram/include/macrostate.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 #include "flat_histogram/include/macrostate_energy.h"
 

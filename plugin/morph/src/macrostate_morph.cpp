@@ -2,6 +2,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "morph/include/macrostate_morph.h"
 
 namespace feasst {

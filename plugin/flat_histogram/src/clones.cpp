@@ -17,6 +17,7 @@
 #include "math/include/histogram.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/configuration.h"
+#include "monte_carlo/include/acceptance.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/clones.h"
 

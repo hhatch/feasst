@@ -1,5 +1,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "system/include/system.h"
+#include "monte_carlo/include/criteria.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 
 namespace feasst {

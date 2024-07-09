@@ -2,6 +2,8 @@
 #include "utils/include/arguments.h"
 #include "configuration/include/configuration.h"
 #include "configuration/include/particle_factory.h"
+#include "system/include/system.h"
+#include "monte_carlo/include/criteria.h"
 #include "flat_histogram/include/macrostate_position.h"
 
 namespace feasst {

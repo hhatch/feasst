@@ -4,6 +4,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"
+#include "system/include/system.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "flat_histogram/include/transition_matrix.h"
