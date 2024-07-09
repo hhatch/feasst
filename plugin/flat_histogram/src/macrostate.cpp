@@ -53,8 +53,8 @@ bool Macrostate::is_allowed(const System& system,
 }
 
 //void Macrostate::swap_soft_bounds(Macrostate * macrostate) {
-//  swap(&soft_max_, &(macrostate->soft_max_));
-//  swap(&soft_min_, &(macrostate->soft_min_));
+//  feasst_swap(&soft_max_, &(macrostate->soft_max_));
+//  feasst_swap(&soft_min_, &(macrostate->soft_min_));
 //}
 
 std::map<std::string, std::shared_ptr<Macrostate> >& Macrostate::deserialize_map() {

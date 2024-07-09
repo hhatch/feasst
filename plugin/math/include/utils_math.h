@@ -243,7 +243,7 @@ double degrees_to_radians(const double degrees);
 
 /// Swap the values.
 template <typename T>
-inline void swap(T * val1, T * val2) {
+inline void feasst_swap(T * val1, T * val2) {
   const T temp = *val1;
   *val1 = *val2;
   *val2 = temp;
@@ -251,9 +251,9 @@ inline void swap(T * val1, T * val2) {
 
 /// Sort the values in order of increasing size.
 template <typename T>
-inline void sort(T * min, T * max) {
+inline void feasst_sort(T * min, T * max) {
   if (*min > *max) {
-    swap(min, max);
+    feasst_swap(min, max);
   }
 }
 

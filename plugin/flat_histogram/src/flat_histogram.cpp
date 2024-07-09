@@ -242,7 +242,7 @@ bool FlatHistogram::is_fh_equal(const FlatHistogram& flat_histogram,
 std::unique_ptr<FlatHistogram> FlatHistogram::flat_histogram(const Criteria& criteria) {
   std::stringstream ss;
   criteria.serialize(ss);
-  return std::move(std::make_unique<FlatHistogram>(ss));
+  return std::make_unique<FlatHistogram>(ss);
 }
 
 int FlatHistogram::set_soft_max(const int index, const System& sys) {

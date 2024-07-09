@@ -339,7 +339,7 @@ void VisitModelInnerTable::compute(
     }
   }
   if (flip) {
-    swap(&type1, &type2);
+    feasst_swap(&type1, &type2);
   }
   TRACE("flip " << flip);
 

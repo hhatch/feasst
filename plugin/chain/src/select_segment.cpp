@@ -85,7 +85,7 @@ bool SelectSegment::random_segment_in_particle(
   }
 
   // swap for meaningful min/max
-  feasst::sort(&min, &max);
+  feasst_sort(&min, &max);
 
   // remove sites not in min/max, from highest to lowest
   select->remove_last_sites(num_sites - max - 1);

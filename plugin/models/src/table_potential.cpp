@@ -126,7 +126,7 @@ double TablePotential:: energy(
     flip = true;
   }
   if (flip) {
-    swap(&ttype1, &ttype2);
+    feasst_swap(&ttype1, &ttype2);
   }
   DEBUG("flip " << flip);
 

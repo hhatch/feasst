@@ -57,9 +57,9 @@ double SolverBrentDekker::root(Formula * formula) {
   double s = -1, d = -1;
   ASSERT(fa*fb < 0, "fa: " << fa << " fb: " << fb << " fa*fb: " << fa*fb);
   if (absfa < absfb) {
-    swap(&a, &b);
-    swap(&fa, &fb);
-    swap(&absfa, &absfb);
+    feasst_swap(&a, &b);
+    feasst_swap(&fa, &fb);
+    feasst_swap(&absfa, &absfb);
   }
   double c = a;
   double fc = fa;
@@ -106,9 +106,9 @@ double SolverBrentDekker::root(Formula * formula) {
       absfa = absfs;
     }
     if (absfa < absfb) {
-      swap(&a, &b);
-      swap(&fa, &fb);
-      swap(&absfa, &absfb);
+      feasst_swap(&a, &b);
+      feasst_swap(&fa, &fb);
+      feasst_swap(&absfa, &absfb);
     }
   }
 }

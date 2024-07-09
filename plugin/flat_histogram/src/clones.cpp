@@ -219,7 +219,7 @@ void Clones::initialize_and_run_until_complete(argtype run_args,
 std::unique_ptr<FlatHistogram> Clones::flat_histogram(const int index) const {
   std::stringstream ss;
   clone(index).criteria().serialize(ss);
-  return std::move(std::make_unique<FlatHistogram>(ss));
+  return std::make_unique<FlatHistogram>(ss);
 }
 
 LnProbability Clones::ln_prob(Histogram * macrostates,

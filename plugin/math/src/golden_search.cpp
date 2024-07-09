@@ -44,7 +44,7 @@ void GoldenSearch::bracket(double * a, double * b, Formula * formula) {
   const double tol = tolerance();
   *a = lower();
   *b = upper();
-  sort(a, b);
+  feasst_sort(a, b);
   const double invphi = 2./(std::sqrt(5.) + 1.);
   DEBUG("invphi " << invphi);
   double c = *b - (*b - *a)*invphi;

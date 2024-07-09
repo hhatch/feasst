@@ -24,7 +24,7 @@ Slab::Slab(argtype * args) : ShapeIntersect() {
   int dimension = integer("dimension", args);
   double upper = dble("bound0", args);
   double lower = dble("bound1", args);
-  sort(&lower, &upper);
+  feasst_sort(&lower, &upper);
   ASSERT(upper - lower > NEAR_ZERO, "slab is infinitesimally thin");
   auto half0 = MakeHalfSpace({
     {"dimension", str(dimension)},
