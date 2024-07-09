@@ -2,6 +2,7 @@
 #ifndef FEASST_CONFIGURATION_FILE_VMD_H_
 #define FEASST_CONFIGURATION_FILE_VMD_H_
 
+#include <map>
 #include <string>
 #include <fstream>
 #include "configuration/include/configuration.h"

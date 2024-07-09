@@ -6,13 +6,15 @@
 
 namespace feasst {
 
-std::map<std::string, std::shared_ptr<PhysicalConstants> >& PhysicalConstants::deserialize_map() {
+std::map<std::string, std::shared_ptr<PhysicalConstants> >&
+    PhysicalConstants::deserialize_map() {
   static std::map<std::string, std::shared_ptr<PhysicalConstants> >* ans =
      new std::map<std::string, std::shared_ptr<PhysicalConstants> >();
   return *ans;
 }
 
-std::shared_ptr<PhysicalConstants> PhysicalConstants::deserialize(std::istream& istr) {
+std::shared_ptr<PhysicalConstants> PhysicalConstants::deserialize(
+    std::istream& istr) {
   return template_deserialize(deserialize_map(), istr,
     // true argument denotes rewinding to reread class name
     // this allows derived class constructor to read class name.
@@ -79,7 +81,8 @@ class MapPhysicalConstantsCustom {
   }
 };
 
-static MapPhysicalConstantsCustom mapper_physical_constants_custom_ = MapPhysicalConstantsCustom();
+static MapPhysicalConstantsCustom mapper_physical_constants_custom_ =
+  MapPhysicalConstantsCustom();
 
 PhysicalConstantsCustom::PhysicalConstantsCustom(argtype args)
   : PhysicalConstants() {
@@ -109,4 +112,4 @@ PhysicalConstantsCustom::PhysicalConstantsCustom(std::istream& istr)
   compute_derived_();
 }
 
-} // namespace feasst
+}  // namespace feasst

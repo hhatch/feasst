@@ -70,7 +70,9 @@ void ParticleFactory::check_types(int * num_site_types,
     for (const Site& site : particle.sites()) site_type.add(site.type());
     for (const Bond& bond : particle.bonds()) bond_type.add(bond.type());
     for (const Angle& angle : particle.angles()) angle_type.add(angle.type());
-    for (const Dihedral& dihedral : particle.dihedrals()) dihedral_type.add(dihedral.type());
+    for (const Dihedral& dihedral : particle.dihedrals()) {
+      dihedral_type.add(dihedral.type());
+    }
   }
   if (unique_particles_) {
     for (const double& value : site_type.histogram()) {
@@ -221,7 +223,7 @@ void ParticleFactory::remove(const Group& group) {
     Particle * part = &particles_[index];
     if (group.is_in(*part, index)) {
       group.remove_sites(part);
-      //*part = group.remove_sites(*part);
+      // *part = group.remove_sites(*part);
     } else {
       particles_.erase(particles_.begin() + index);
     }
@@ -299,7 +301,9 @@ void ParticleFactory::replace_properties(const int particle_index,
   particles_[particle_index].replace_properties(site_index, replacement);
 }
 
-const ModelParams& ParticleFactory::model_params() const { return *model_params_; }
+const ModelParams& ParticleFactory::model_params() const {
+  return *model_params_;
+}
 
 void ParticleFactory::add(const std::shared_ptr<ModelParam> param) {
   model_params_->add(param);
@@ -318,10 +322,11 @@ void ParticleFactory::set_model_param(const std::string name,
   model_params_->set(name, site_type1, site_type2, value);
 }
 
-void ParticleFactory::set_model_param(const std::string name, const std::string filename) {
+void ParticleFactory::set_model_param(const std::string name,
+                                      const std::string filename) {
   model_params_->set(name, filename);
 }
-  
+
 void ParticleFactory::add_model_param(const std::string name,
                      const double value) {
   model_params_->add_property(name, value);
@@ -335,8 +340,9 @@ void ParticleFactory::add_or_set_model_param(const std::string name,
 void ParticleFactory::set_cutoff_min_to_sigma() {
   model_params_->set_cutoff_min_to_sigma();
 }
-  
-void ParticleFactory::set_physical_constants(std::shared_ptr<PhysicalConstants> constants) {
+
+void ParticleFactory::set_physical_constants(
+    std::shared_ptr<PhysicalConstants> constants) {
   model_params_->set_physical_constants(constants);
 }
 

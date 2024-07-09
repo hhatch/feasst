@@ -474,7 +474,8 @@ class Configuration {
   const NeighborCriteria& neighbor_criteria(const int index) const;
 
   /// Return a NeighborCriteria by index in order added.
-  const std::vector<std::shared_ptr<NeighborCriteria> >& neighbor_criteria() const;
+  const std::vector<std::shared_ptr<NeighborCriteria> >& neighbor_criteria()
+    const;
 
   // Return a NeighborCriteria by index in order added.
   NeighborCriteria * get_neighbor_criteria(const int index);

@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <string>
 #include "configuration/include/properties.h"
 
 namespace feasst {
@@ -74,7 +75,7 @@ class Group : public PropertiedEntity {
   /// If no types or indices are listed, do not screen by types or indices.
   std::vector<int> site_types_;
   std::vector<int> particle_types_;
-  //std::vector<int> site_indices_;
+  // std::vector<int> site_indices_;
   std::vector<int> particle_indices_;
   bool dynamic_;
   bool spatial_;

@@ -2,8 +2,10 @@
 #ifndef FEASST_CONFIGURATION_FILE_XYZ_H_
 #define FEASST_CONFIGURATION_FILE_XYZ_H_
 
-#include <string>
 #include <fstream>
+#include <map>
+#include <memory>
+#include <string>
 #include "configuration/include/configuration.h"
 #include "configuration/include/visit_configuration.h"
 

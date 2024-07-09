@@ -31,7 +31,8 @@ FileXYZ::FileXYZ(argtype args) : FileXYZ(&args) {
   feasst_check_all_used(args);
 }
 
-bool FileXYZ::load_frame(std::ifstream& xyz_file, Configuration * config) const {
+bool FileXYZ::load_frame(std::ifstream& xyz_file,
+                         Configuration * config) const {
   ASSERT(xyz_file, "xyz_file is empty");
   if (xyz_file.peek() == EOF) {
     return false;
@@ -46,8 +47,6 @@ bool FileXYZ::load_frame(std::ifstream& xyz_file, Configuration * config) const 
   { std::stringstream iss(line);
     double id;
     iss >> id >> coord[0] >> coord[1] >> coord[2]; }
-  //cout << "line " << line << " is " << iss.str() << endl;
-//      cout << "cord " << str(coord) << endl;
   // If third coordinate, z, is zero, then its a 2d simulation.
   if (coord[2] < NEAR_ZERO) {
     coord.pop_back();

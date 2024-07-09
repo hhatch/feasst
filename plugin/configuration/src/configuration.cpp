@@ -13,7 +13,6 @@
 #include "configuration/include/group.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/domain.h"
-#include "configuration/include/particle_factory.h"
 #include "configuration/include/select.h"
 #include "configuration/include/physical_constants.h"
 #include "configuration/include/configuration.h"
@@ -102,7 +101,9 @@ Configuration::Configuration(argtype * args) {
 
   DEBUG("parse ModelParam");
   if (args->size() != 0) {
-    for (std::map<std::string, std::shared_ptr<ModelParam>>::iterator iter = ModelParam().deserialize_map().begin(); iter != ModelParam().deserialize_map().end(); ++iter) {
+    for (std::map<std::string, std::shared_ptr<ModelParam>>::iterator iter =
+         ModelParam().deserialize_map().begin();
+         iter != ModelParam().deserialize_map().end(); ++iter) {
       const std::string param = iter->first;
       if (args->size() != 0) {
         if (used(param, *args)) {
@@ -123,7 +124,8 @@ Configuration::Configuration(argtype * args) {
       if (args->size() != 0) {
         for (int site1 = 0; site1 < num_site_types(); ++site1) {
           for (int site2 = site1; site2 < num_site_types(); ++site2) {
-            std::string param_arg = param + feasst::str(site1) + "_" + feasst::str(site2);
+            std::string param_arg = param + feasst::str(site1) + "_" +
+                                    feasst::str(site2);
             if (used(param_arg, *args)) {
               set_model_param(param, site1, site2, dble(param_arg, args));
             }
@@ -315,13 +317,14 @@ void Configuration::check() const {
   particles_->check();
   particle_types_->check();
   unique_types_->check();
-  //selection_of_all().check();
+  // selection_of_all().check();
 
   ASSERT(particle_types_->num() == num_particle_types(), "er");
   ASSERT(unique_types_->num_sites() == num_site_types(), "er");
 
   // check that the first group is all particles in the configuration.
-  ASSERT(static_cast<int>(group_selects_[0]->num_particles()) == num_particles(),
+  ASSERT(static_cast<int>(group_selects_[0]->num_particles())
+    == num_particles(),
     "The number of particles in the first group(" <<
     group_selects_[0]->num_particles() << ") is not equal to the number of " <<
     "particles: " << num_particles());
@@ -384,9 +387,9 @@ void Configuration::update_positions(
   DEBUG("num sites " << coords.size());
   DEBUG("num sites in config  " << num_sites());
   DEBUG("num particles in config " << num_particles());
-  ASSERT(static_cast<int>(coords[0].size()) == dimension(), "the dimensions: " <<
-    coords[0].size() << " of the coordinates do not match the dimensions: " <<
-    dimension() << " of the configuration.");
+  ASSERT(static_cast<int>(coords[0].size()) == dimension(), "the dimensions: "
+    << coords[0].size() << " of the coordinates do not match the dimensions: "
+    << dimension() << " of the configuration.");
   Position position;
   int iter_site = 0;
   for (int part_index : group_selects_[0]->particle_indices()) {
@@ -635,13 +638,15 @@ int Configuration::num_particles_of_type(const int type) const {
 
 void Configuration::wrap_particle(const int particle_index) {
   if (wrap_) {
-    const Position& site0_position = select_particle(particle_index).site(0).position();
+    const Position& site0_position =
+      select_particle(particle_index).site(0).position();
     const Position& pbc_shift = domain_->shift_opt(site0_position);
     DEBUG("site0_position " << site0_position.str());
     DEBUG("pbc " << pbc_shift.str());
     if (pbc_shift.squared_distance() > NEAR_ZERO) {
       displace_particle_(particle_index, pbc_shift);
-      DEBUG("new pos " << select_particle(particle_index).site(0).position().str());
+      DEBUG("new pos " <<
+        select_particle(particle_index).site(0).position().str());
     }
   }
 }
@@ -827,7 +832,7 @@ Configuration::Configuration(std::istream& istr) {
     istr >> existing;
     if (existing != 0) domain_ = std::make_shared<Domain>(istr);
   }
-  //feasst_deserialize(group_selects_, istr);
+  // feasst_deserialize(group_selects_, istr);
 //  HWH for unknown reasons, this function template does not work.
   {
     int dim1;
@@ -843,7 +848,7 @@ Configuration::Configuration(std::istream& istr) {
   }
   feasst_deserialize(&group_store_particle_type_, istr);
   feasst_deserialize(&group_store_group_index_, istr);
-  //feasst_deserialize(ghosts_, istr);
+  // feasst_deserialize(ghosts_, istr);
 //  HWH for unknown reasons, this function template does not work.
   {
     int dim1;
@@ -924,10 +929,8 @@ void Configuration::synchronize_(const Configuration& config,
 //    DEBUG("part_index " << part_index);
 //    const Particle& part = config.select_particle(part_index);
 //    for (int sindex : perturbed.site_indices(spindex)) {
-////      DEBUG("old pos: " << select_particle(part_index).site(sindex).position().str());
 ////      Site * site = particles_->get_particle(part_index)->get_site(sindex);
 ////      *site = part.site(sindex);
-////      DEBUG("new pos: " << select_particle(part_index).site(sindex).position().str());
 ////      position_tracker_(part_index, sindex);
 ////    }
 //    *particles_->get_particle(part_index) = part;
@@ -984,7 +987,8 @@ void Configuration::change_volume(const double delta_volume,
 }
 
 int Configuration::group_index(const std::string& name) const {
-  for (int index = 0; index < static_cast<int>(group_selects_.size()); ++index) {
+  for (int index = 0; index < static_cast<int>(group_selects_.size());
+       ++index) {
     const Select& sel = *group_selects_[index];
     if (sel.group().has_property(name)) {
       return index;
@@ -1042,7 +1046,8 @@ const Site& Configuration::unique_type(const int ptype, const int stype) const {
   return unique_type(ptype).site(index);
 }
 
-std::vector<std::vector<int> > Configuration::num_site_types_per_particle_type() const {
+std::vector<std::vector<int> >
+    Configuration::num_site_types_per_particle_type() const {
   int prev = 0;
   std::vector<std::vector<int> > nstppt(num_particle_types());
   for (int ptype = 0; ptype < num_particle_types(); ++ptype) {
@@ -1066,13 +1071,13 @@ void Configuration::add(std::shared_ptr<NeighborCriteria> neighbor_criteria) {
   neighbor_criteria_.push_back(neighbor_criteria);
 }
 
-const NeighborCriteria& Configuration::neighbor_criteria(const int index) const {
+const NeighborCriteria& Configuration::neighbor_criteria(
+    const int index) const {
   return *neighbor_criteria_[index];
 }
 
-const std::vector<std::shared_ptr<NeighborCriteria> >& Configuration::neighbor_criteria() const {
-  return neighbor_criteria_;
-}
+const std::vector<std::shared_ptr<NeighborCriteria> >&
+  Configuration::neighbor_criteria() const { return neighbor_criteria_; }
 
 NeighborCriteria * Configuration::get_neighbor_criteria(const int index) {
   return neighbor_criteria_[index].get();
@@ -1081,11 +1086,15 @@ NeighborCriteria * Configuration::get_neighbor_criteria(const int index) {
 int Configuration::num_particle_types() const { return particle_types_->num(); }
 int Configuration::num_site_types() const { return unique_types_->num_sites(); }
 int Configuration::num_bond_types() const { return unique_types_->num_bonds(); }
-int Configuration::num_angle_types() const { return unique_types_->num_angles(); }
-int Configuration::num_dihedral_types() const { return unique_types_->num_dihedrals(); }
+int Configuration::num_angle_types() const {
+  return unique_types_->num_angles(); }
+int Configuration::num_dihedral_types() const {
+  return unique_types_->num_dihedrals(); }
 const Particle& Configuration::particle_type(const int type) const {
   return particle_types_->particle(type); }
-const ParticleFactory& Configuration::particle_types() const { return *particle_types_; }
+const ParticleFactory& Configuration::particle_types() const {
+  return *particle_types_;
+}
 const ModelParams& Configuration::model_params() const {
   return unique_types_->model_params(); }
 
@@ -1100,7 +1109,8 @@ void Configuration::set_model_param(const std::string name,
                      const double value) {
   unique_types_->set_model_param(name, site_type1, site_type2, value); }
 
-void Configuration::set_model_param(const std::string name, const std::string filename) {
+void Configuration::set_model_param(const std::string name,
+                                    const std::string filename) {
   unique_types_->set_model_param(name, filename); }
 
 void Configuration::add_model_param(const std::string name,
@@ -1111,10 +1121,13 @@ void Configuration::add_or_set_model_param(const std::string name,
                             const double value) {
   unique_types_->add_or_set_model_param(name, value); }
 
-void Configuration::set_physical_constants(std::shared_ptr<PhysicalConstants> constants) {
+void Configuration::set_physical_constants(
+    std::shared_ptr<PhysicalConstants> constants) {
   unique_types_->set_physical_constants(constants); }
 
-const ParticleFactory& Configuration::unique_types() const { return *unique_types_; }
+const ParticleFactory& Configuration::unique_types() const {
+  return *unique_types_;
+}
 
 /// Return the unique type by individual particle.
 const Particle& Configuration::unique_type(const int type) const {
@@ -1174,24 +1187,42 @@ void Configuration::replace_properties_(const int particle_index,
 const Particle& Configuration::particle_(const int index) {
   return particles_->particle(index); }
 
-const std::vector<std::shared_ptr<Select> >& Configuration::ghosts() const { return ghosts_; }
+const std::vector<std::shared_ptr<Select> >& Configuration::ghosts() const {
+  return ghosts_;
+}
 
-const std::vector<std::vector<std::shared_ptr<Table3D> > >& Configuration::table3d() const { return table3d_; }
-const std::vector<std::vector<std::shared_ptr<Table4D> > >& Configuration::table4d() const { return table4d_; }
-const std::vector<std::vector<std::shared_ptr<Table5D> > >& Configuration::table5d() const { return table5d_; }
-const std::vector<std::vector<std::shared_ptr<Table6D> > >& Configuration::table6d() const { return table6d_; }
-std::vector<std::vector<std::shared_ptr<Table3D> > > * Configuration::get_table3d() { return &table3d_; }
-std::vector<std::vector<std::shared_ptr<Table4D> > > * Configuration::get_table4d() { return &table4d_; }
-std::vector<std::vector<std::shared_ptr<Table5D> > > * Configuration::get_table5d() { return &table5d_; }
-std::vector<std::vector<std::shared_ptr<Table6D> > > * Configuration::get_table6d() { return &table6d_; }
+const std::vector<std::vector<std::shared_ptr<Table3D> > >&
+  Configuration::table3d() const { return table3d_; }
+const std::vector<std::vector<std::shared_ptr<Table4D> > >&
+  Configuration::table4d() const { return table4d_; }
+const std::vector<std::vector<std::shared_ptr<Table5D> > >&
+  Configuration::table5d() const { return table5d_; }
+const std::vector<std::vector<std::shared_ptr<Table6D> > >&
+  Configuration::table6d() const { return table6d_; }
+std::vector<std::vector<std::shared_ptr<Table3D> > > *
+  Configuration::get_table3d() { return &table3d_; }
+std::vector<std::vector<std::shared_ptr<Table4D> > > *
+  Configuration::get_table4d() { return &table4d_; }
+std::vector<std::vector<std::shared_ptr<Table5D> > > *
+  Configuration::get_table5d() { return &table5d_; }
+std::vector<std::vector<std::shared_ptr<Table6D> > > *
+  Configuration::get_table6d() { return &table6d_; }
 
-int Configuration::num_groups() const { return static_cast<int>(group_selects_.size()); }
-const std::vector<std::shared_ptr<Select> >& Configuration::group_selects() const {
+int Configuration::num_groups() const {
+  return static_cast<int>(group_selects_.size());
+}
+
+const std::vector<std::shared_ptr<Select> >& Configuration::group_selects()
+    const {
   return group_selects_;
 }
+
 const Select& Configuration::group_select(const int index) const {
   return *group_selects_[index];
 }
-const Select& Configuration::selection_of_all() const { return *group_selects_[0]; }
+
+const Select& Configuration::selection_of_all() const {
+  return *group_selects_[0];
+}
 
 }  // namespace feasst

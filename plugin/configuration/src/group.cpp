@@ -59,7 +59,8 @@ Group::Group(argtype * args) : PropertiedEntity() {
     while (used(key.str(), *args)) {
       particle_indices_.push_back(integer(key.str(), args));
       ++index;
-      ASSERT(index < 1e8, "index(" << index << ") is very high. Infinite loop?");
+      ASSERT(index < 1e8,
+             "index(" << index << ") is very high. Infinite loop?");
       key.str("");
       key << start << index;
     }
@@ -74,8 +75,7 @@ Group::Group(argtype args) : Group(&args) {
 }
 
 bool Group::is_empty() const {
-  if ( (particle_types_.size() == 0) and
-       (site_types_.size() == 0) ) {
+  if ( (particle_types_.size() == 0) && (site_types_.size() == 0) ) {
     return true;
   }
   return false;
@@ -129,13 +129,13 @@ void Group::remove_sites(Particle * particle) const {
   }
 }
 
-//Particle Group::remove_sites(const Particle& particle) const {
-////                             std::vector<int> * full_to_partial,
-////                             std::vector<int> * partial_to_full) const {
-//  Particle filtered(particle);
-//  remove_sites(&filtered);//, full_to_partial, partial_to_full);
-//  return filtered;
-//}
+// Particle Group::remove_sites(const Particle& particle) const {
+// //                             std::vector<int> * full_to_partial,
+// //                             std::vector<int> * partial_to_full) const {
+//   Particle filtered(particle);
+//   remove_sites(&filtered);//, full_to_partial, partial_to_full);
+//   return filtered;
+// }
 
 std::vector<int> Group::site_indices(const Particle& particle) const {
   std::vector<int> indices;
@@ -152,7 +152,7 @@ void Group::serialize(std::ostream& ostr) const {
   feasst_serialize_version(1035, ostr);
   feasst_serialize(site_types_, ostr);
   feasst_serialize(particle_types_, ostr);
-  //feasst_serialize(site_indices_, ostr);
+  // feasst_serialize(site_indices_, ostr);
   feasst_serialize(particle_indices_, ostr);
   ostr << dynamic_ << " " << spatial_ << " ";
 }
@@ -162,7 +162,7 @@ Group::Group(std::istream& istr) : PropertiedEntity(istr) {
   ASSERT(version == 1035, "unrecognized version: " << version);
   feasst_deserialize(&site_types_, istr);
   feasst_deserialize(&particle_types_, istr);
-  //feasst_deserialize(&site_indices_, istr);
+  // feasst_deserialize(&site_indices_, istr);
   feasst_deserialize(&particle_indices_, istr);
   istr >> dynamic_ >> spatial_;
 }

@@ -100,13 +100,12 @@ void Particle::replace_position(const int site_index,
   sites_[site_index].set_position(replacement);
 }
 
-//void Particle::add_or_set_site_property(const std::string name,
-//                                        const double value) {
-//  for (int site_index = 0; site_index < num_sites(); ++site_index) {
-//    TRACE("name " << name << " value " << value << " site index " << site_index);
-//    add_or_set_site_property(name, value, site_index);
-//  }
-//}
+// void Particle::add_or_set_site_property(const std::string name,
+//                                         const double value) {
+//   for (int site_index = 0; site_index < num_sites(); ++site_index) {
+//     add_or_set_site_property(name, value, site_index);
+//   }
+// }
 
 void Particle::add_bond_(const Bond& bond, const int index,
     std::vector<std::vector<int> > * list) {
@@ -134,7 +133,6 @@ void Particle::add_bond(const Bond& bond) {
       bond_neighbors_[site2].push_back(site1);
     }
   }
-
 }
 
 void Particle::add_angle(const Angle& angle) {
@@ -203,7 +201,8 @@ const Bond& Particle::bond(const int site_index1, const int site_index2) const {
       return bond;
     }
   }
-  FATAL("bond between " << site_index1 << " and " << site_index2 << " not found.");
+  FATAL("bond between " << site_index1 << " and " << site_index2 <<
+        " not found.");
 }
 
 const Angle& Particle::angle(const int site_index1,
@@ -300,23 +299,28 @@ Particle::Particle(std::istream& istr) : PropertiedEntity(istr) {
 }
 
 const std::vector<int>& Particle::bond_neighbors(const int site) const {
-  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " <<
+         num_sites());
   if (site >= static_cast<int>(bond_neighbors_.size())) {
     return empty_;
   }
   return bond_neighbors_[site];
 }
 
-const std::vector<std::vector<int> >& Particle::angle_neighbors(const int site) const {
-  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+const std::vector<std::vector<int> >& Particle::angle_neighbors(
+    const int site) const {
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " <<
+         num_sites());
   if (site >= static_cast<int>(angle_neighbors_.size())) {
     return empty2d_;
   }
   return angle_neighbors_[site];
 }
 
-const std::vector<std::vector<int> >& Particle::dihedral_neighbors(const int site) const {
-  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " << num_sites());
+const std::vector<std::vector<int> >& Particle::dihedral_neighbors(
+    const int site) const {
+  ASSERT(site < num_sites(), "site:" << site << " > num_sites: " <<
+         num_sites());
   if (site >= static_cast<int>(dihedral_neighbors_.size())) {
     return empty2d_;
   }

@@ -55,7 +55,8 @@ void ModelParam::set_max_and_mixed() {
   }
 }
 
-std::map<std::string, std::shared_ptr<ModelParam> >& ModelParam::deserialize_map() {
+std::map<std::string, std::shared_ptr<ModelParam> >&
+    ModelParam::deserialize_map() {
   static std::map<std::string, std::shared_ptr<ModelParam> >* ans =
      new std::map<std::string, std::shared_ptr<ModelParam> >();
   return *ans;
@@ -167,7 +168,8 @@ std::string ModelParam::str() const {
       ss << "type" << type2 << "," << value(type2) << ",";
       if (type1 < static_cast<int>(mixed_values().size())) {
         if (type2 < static_cast<int>(mixed_values()[type1].size())) {
-          ss << "type" << type1 << "-" << type2 << "," << mixed_value(type1, type2);
+          ss << "type" << type1 << "-" << type2 << ","
+             << mixed_value(type1, type2);
         }
       }
       ss << std::endl;
@@ -192,26 +194,26 @@ ModelParams::ModelParams() : PropertiedEntity() {
   set_physical_constants();
 }
 
-//void ModelParams::add(const Site site) {
-//  std::vector<std::string> names = site.properties().names();
-//  DEBUG("adding: " << feasst_str(names));
-//  for (const std::string name : names) {
-//    DEBUG("name: " << name);
-//    std::shared_ptr<ModelParam> param = select_(name);
-//    if (!param) {
-//      // search for param in deserialize_map and add it
-//      param = ModelParam().factory(name, NULL);
-//    }
-//    if (param) {
-//      param->add(site);
-////    } else {
-////      auto param = std::make_shared<ModelParam>();
-////      param->set_name(name);
-////      param->add(site);
-////      add(param);
-//    }
-//  }
-//}
+// void ModelParams::add(const Site site) {
+//   std::vector<std::string> names = site.properties().names();
+//   DEBUG("adding: " << feasst_str(names));
+//   for (const std::string name : names) {
+//     DEBUG("name: " << name);
+//     std::shared_ptr<ModelParam> param = select_(name);
+//     if (!param) {
+//       // search for param in deserialize_map and add it
+//       param = ModelParam().factory(name, NULL);
+//     }
+//     if (param) {
+//       param->add(site);
+// //    } else {
+// //      auto param = std::make_shared<ModelParam>();
+// //      param->set_name(name);
+// //      param->add(site);
+// //      add(param);
+//     }
+//   }
+// }
 
 void ModelParams::add(const Particle& particle) {
   DEBUG("adding");
@@ -227,11 +229,12 @@ void ModelParams::add(const Particle& particle) {
         }
         if (!found) {
           DEBUG("automatically adding " << name);
-          auto model_param = deep_copy_derived(ModelParam().deserialize_map()[name]);
+          auto model_param =
+            deep_copy_derived(ModelParam().deserialize_map()[name]);
           // INFO(particle.num_sites());
           // INFO(size());
           for (int i = 0; i < size(); ++i) {
-            model_param->add(0.); // add the default placeholder value
+            model_param->add(0.);  // add the default placeholder value
           }
           add(model_param);
         }
@@ -241,8 +244,6 @@ void ModelParams::add(const Particle& particle) {
 
   for (std::shared_ptr<ModelParam> param : params_) {
     param->add(particle);
-//for (const Site& site : particle.sites()) {
-//    add(site);
   }
   mix();
 }
@@ -435,15 +436,15 @@ std::string ModelParams::str() const {
   return ss.str();
 }
 
-//ModelParams::ModelParams(const ModelParams& params) : PropertiedEntity() {
-//  FATAL("ModelParams copy constructor seems to have issues with shared_ptr");
-//  for (int param = 0; param < static_cast<int>(params.params_.size());
-//       ++param) {
-//    add(params.params_[param]);
-//  }
-//  set_properties(params.properties());
-//  set_physical_constants(params.physical_constants_);
-//}
+// ModelParams::ModelParams(const ModelParams& params) : PropertiedEntity() {
+//   FATAL("ModelParams copy constructor seems to have issues with shared_ptr");
+//   for (int param = 0; param < static_cast<int>(params.params_.size());
+//        ++param) {
+//     add(params.params_[param]);
+//   }
+//   set_properties(params.properties());
+//   set_physical_constants(params.physical_constants_);
+// }
 
 ModelParams ModelParams::deep_copy() const {
   return feasst::deep_copy(*this);
@@ -456,7 +457,8 @@ std::shared_ptr<ModelParam> ModelParam::deserialize(std::istream& istr) {
     true);
 }
 
-std::shared_ptr<ModelParam> ModelParam::factory(const std::string name, argtype * args) {
+std::shared_ptr<ModelParam> ModelParam::factory(const std::string name,
+    argtype * args) {
   return template_factory(deserialize_map(), name, args);
 }
 

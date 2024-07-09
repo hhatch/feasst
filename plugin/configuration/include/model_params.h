@@ -2,6 +2,7 @@
 #ifndef FEASST_CONFIGURATION_MODEL_PARAMS_H_
 #define FEASST_CONFIGURATION_MODEL_PARAMS_H_
 
+#include <map>
 #include <memory>
 #include <vector>
 #include <string>
@@ -13,6 +14,8 @@ class ModelParams;
 class Particle;
 class PhysicalConstants;
 class Site;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Model parameters depend upon site types, such as epsilon, sigma, etc.
@@ -208,11 +211,6 @@ class Charge : public ModelParam {
 class ModelParams : public PropertiedEntity {
  public:
   ModelParams();
-
-  //ModelParams(const ModelParams& params);
-
-  /// Add all properties in site.
-//  void add(const Site site);
 
   /// Add all site types in particle.
   void add(const Particle& particle);
