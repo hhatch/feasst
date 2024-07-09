@@ -319,7 +319,8 @@ void Position::spherical(Position * result) const {
   }
 }
 
-double Position::vertex_angle_radians(const Position& ri, const Position& rk) const {
+double Position::vertex_angle_radians(const Position& ri,
+                                      const Position& rk) const {
   Position rij = ri;
   rij.subtract(*this);
   Position rkj = rk;

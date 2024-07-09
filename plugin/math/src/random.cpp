@@ -86,7 +86,8 @@ std::shared_ptr<Random> Random::deserialize(std::istream& istr) {
     true);
 }
 
-std::shared_ptr<Random> Random::factory(const std::string name, argtype * args) {
+std::shared_ptr<Random> Random::factory(const std::string name,
+                                        argtype * args) {
   return template_factory(deserialize_map(), name, args);
 }
 
@@ -95,7 +96,7 @@ Random::Random(std::istream& istr) {
   const int version = feasst_deserialize_version(istr);
   ASSERT(version == 979, "mismatch version: " << version);
   // HWH for unknown reasons, the below does not work
-  //feasst_deserialize(cache_, istr);
+  // feasst_deserialize(cache_, istr);
   {
     int existing;
     istr >> existing;
@@ -305,26 +306,26 @@ double Random::standard_normal() {
 //  return v1*std::sqrt(-2*std::log(r)/r);
 }
 
-//double Random::bond_angle(const double theta0,
-//    const double beta_spring_constant,
-//    const int exponent,
-//    const int dimension,
-//    const double minimum_angle) {
-//  if (dimension == 2) {
-//    FATAL("implmement flexible bonds in 2D.");
-//  } else if (dimension != 3) {
-//    FATAL("unrecognized dimension: " << dimension);
-//  }
-//  int attempt = 0;
-//  while (attempt < 1e6) {
-//    const double theta = minimum_angle + (PI - minimum_angle)*uniform();
-//    const double dtheta = radians_to_degrees(theta - theta0);
-//    const double beta_delta_U = beta_spring_constant*pow(dtheta, exponent);
-//    if (uniform() < std::sin(theta)*std::exp(-beta_delta_U)) return theta;
-//    ++attempt;
-//  }
-//  FATAL("max attempts reached");
-//}
+// double Random::bond_angle(const double theta0,
+//     const double beta_spring_constant,
+//     const int exponent,
+//     const int dimension,
+//     const double minimum_angle) {
+//   if (dimension == 2) {
+//     FATAL("implmement flexible bonds in 2D.");
+//   } else if (dimension != 3) {
+//     FATAL("unrecognized dimension: " << dimension);
+//   }
+//   int attempt = 0;
+//   while (attempt < 1e6) {
+//     const double theta = minimum_angle + (PI - minimum_angle)*uniform();
+//     const double dtheta = radians_to_degrees(theta - theta0);
+//     const double beta_delta_U = beta_spring_constant*pow(dtheta, exponent);
+//     if (uniform() < std::sin(theta)*std::exp(-beta_delta_U)) return theta;
+//     ++attempt;
+//   }
+//   FATAL("max attempts reached");
+// }
 
 int Random::gen_uniform_(const int min, const int max) {
   return min + static_cast<int>(gen_uniform_()*(max - min));

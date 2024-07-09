@@ -12,8 +12,8 @@ double RandomModulo::gen_uniform_() {
   TRACE("M " << M_);
   TRACE("a " << a_)
   TRACE("X " << X_)
-  //X_ = (a_*X_) % M_;
-  X_ = a_*X_ - M_*int(a_*X_/M_);
+  // X_ = (a_*X_) % M_;
+  X_ = a_*X_ - M_*static_cast<int>(a_*X_/M_);
   TRACE("X " << X_)
   return static_cast<double>(X_)/static_cast<double>(M_);
 }
