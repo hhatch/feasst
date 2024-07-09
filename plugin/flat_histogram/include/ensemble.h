@@ -3,6 +3,7 @@
 #define FEASST_FLAT_HISTOGRAM_ENSEMBLE_H_
 
 #include <vector>
+#include "math/include/histogram.h"
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/macrostate.h"
 
@@ -10,7 +11,6 @@ namespace feasst {
 
 typedef std::map<std::string, std::string> argtype;
 
-class Histogram;
 class MonteCarlo;
 class FlatHistogram;
 class Clones;

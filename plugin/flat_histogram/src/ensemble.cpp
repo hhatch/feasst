@@ -3,6 +3,7 @@
 #include "utils/include/arguments.h"
 #include "math/include/constants.h"
 #include "math/include/histogram.h"
+#include "math/include/accumulator.h"
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "flat_histogram/include/ensemble.h"

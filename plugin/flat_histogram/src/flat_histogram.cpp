@@ -2,15 +2,19 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "math/include/constants.h"
 #include "math/include/random.h"
 #include "system/include/system.h"
-#include "flat_histogram/include/flat_histogram.h"
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/wltm.h"
 #include "flat_histogram/include/macrostate_energy.h"
 #include "flat_histogram/include/wang_landau.h"
+#include "flat_histogram/include/bias.h"
+#include "flat_histogram/include/macrostate.h"
+#include "flat_histogram/include/flat_histogram.h"
 
 namespace feasst {
 
@@ -380,5 +384,23 @@ int FlatHistogram::soft_max() const { return macrostate_->soft_max(); }
 void FlatHistogram::update_state(const System& system, const Acceptance& accept) {
   macrostate_current_ = macrostate_->bin(system, *this, accept);
 }
+
+int FlatHistogram::num_states() const { return macrostate_->histogram().size(); }
+int FlatHistogram::phase() const { return bias_->phase(); }
+void FlatHistogram::increment_phase() { bias_->increment_phase(); }
+void FlatHistogram::set_ln_prob(const LnProbability& ln_prob) {
+  bias_->set_ln_prob(ln_prob); }
+const LnProbability& FlatHistogram::ln_prob() const { return bias_->ln_prob(); }
+void FlatHistogram::update() { bias_->infrequent_update(*macrostate_); }
+const Bias& FlatHistogram::bias() const { return const_cast<Bias&>(*bias_); }
+void FlatHistogram::set_bias(std::shared_ptr<Bias> bias) { bias_ = bias; }
+int FlatHistogram::num_iterations_to_complete() const {
+  return bias_->num_iterations_to_complete(); }
+void FlatHistogram::set_num_iterations_to_complete(const int num) {
+  bias_->set_num_iterations_to_complete(num); }
+int FlatHistogram::num_iterations(const int state) const {
+  return bias_->num_iterations(state, *macrostate_); }
+bool FlatHistogram::is_complete() const { return bias_->is_complete(); }
+void FlatHistogram::set_complete() { bias_->set_complete_(); }
 
 }  // namespace feasst

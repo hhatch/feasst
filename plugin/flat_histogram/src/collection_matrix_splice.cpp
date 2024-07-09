@@ -19,6 +19,7 @@
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/wltm.h"
+#include "flat_histogram/include/macrostate.h"
 #include "flat_histogram/include/collection_matrix_splice.h"
 #include "monte_carlo/include/run.h"
 

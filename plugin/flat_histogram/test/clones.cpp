@@ -1,6 +1,8 @@
 #include "utils/test/utils.h"
 #include "utils/include/checkpoint.h"
+#include "math/include/histogram.h"
 #include "math/include/random_mt19937.h"
+#include "math/include/histogram.h"
 #include "configuration/include/configuration.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"

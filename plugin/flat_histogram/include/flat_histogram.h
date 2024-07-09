@@ -3,19 +3,19 @@
 #define FEASST_FLAT_HISTOGRAM_FLAT_HISTOGRAM_H_
 
 #include <memory>
-#include "math/include/accumulator.h"
-#include "math/include/histogram.h"
+#include <map>
+#include <string>
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/acceptance.h"
-#include "flat_histogram/include/macrostate.h"
-#include "flat_histogram/include/ln_probability.h"
-#include "flat_histogram/include/bias.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
+class Bias;
+class LnProbability;
+class Macrostate;
 class Random;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Flat histogram acceptance criteria uses a bias to improve sampling and attempt
@@ -55,17 +55,14 @@ class FlatHistogram : public Criteria {
     return const_cast<Macrostate&>(*macrostate_); }
 
   /// Return the bias.
-  const Bias& bias() const override { return const_cast<Bias&>(*bias_); }
-  void set_bias(std::shared_ptr<Bias> bias) { bias_ = bias; }
+  const Bias& bias() const override;
+  void set_bias(std::shared_ptr<Bias> bias);
 
-  int num_iterations_to_complete() const override {
-    return bias_->num_iterations_to_complete(); }
-  void set_num_iterations_to_complete(const int num) override {
-    bias_->set_num_iterations_to_complete(num); }
-  int num_iterations(const int state = -1) const override {
-    return bias_->num_iterations(state, *macrostate_); }
-  bool is_complete() const override { return bias_->is_complete(); }
-  void set_complete() override { bias_->set_complete_(); } 
+  int num_iterations_to_complete() const override;
+  void set_num_iterations_to_complete(const int num) override;
+  int num_iterations(const int state = -1) const override;
+  bool is_complete() const override;
+  void set_complete() override;
 
   void before_attempt(const System& system) override;
 
@@ -75,22 +72,21 @@ class FlatHistogram : public Criteria {
     Random * random) override;
 
   std::string write() const override;
-  int phase() const override { return bias_->phase(); }
-  void increment_phase() override { bias_->increment_phase(); }
+  int phase() const override;
+  void increment_phase() override;
 
   /// Return the state. Return -1 if state is not determined.
   int state() const override { return macrostate_current_; }
-  int num_states() const override { return macrostate_->histogram().size(); }
+  int num_states() const override;
   int state_old() const override { return macrostate_old_; }
   int state_new() const override { return macrostate_new_; }
   void update_state(const System& system, const Acceptance& accept) override;
 
   /// Set the macrostate probability distribution.
-  void set_ln_prob(const LnProbability& ln_prob) {
-    bias_->set_ln_prob(ln_prob); }
+  void set_ln_prob(const LnProbability& ln_prob);
 
   /// Return the macrostate probability distribution.
-  const LnProbability& ln_prob() const { return bias_->ln_prob(); }
+  const LnProbability& ln_prob() const;
 
   // HWH hackish implementation for prefetch
   // Revert changes from previous trial.
@@ -102,9 +98,7 @@ class FlatHistogram : public Criteria {
       const int state_old,
       const int state_new,
       const bool endpoint) override;
-
-  void update() override { bias_->infrequent_update(*macrostate_); }
-
+  void update() override;
   bool is_fh_equal(const FlatHistogram& flat_histogram,
     const double tolerance) const;
 

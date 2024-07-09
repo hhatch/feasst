@@ -1,6 +1,7 @@
 
 #include "utils/test/utils.h"
 #include "math/include/random_mt19937.h"
+#include "math/include/histogram.h"
 #include "configuration/include/group.h"
 #include "system/include/hard_sphere.h"
 #include "system/include/visit_model_cell.h"
