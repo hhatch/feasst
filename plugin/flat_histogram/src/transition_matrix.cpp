@@ -7,6 +7,7 @@
 #include "utils/include/utils.h"  // is_equal
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
+#include "math/include/histogram.h"
 #include "math/include/utils_math.h"
 #include "math/include/accumulator.h"
 #include "flat_histogram/include/macrostate.h"
@@ -312,4 +313,7 @@ bool TransitionMatrix::is_adjust_allowed(const Macrostate& macro) const {
   }
 }
 
+void TransitionMatrix::resize(const Histogram& histogram) {
+  resize(histogram.size());
+}
 }  // namespace feasst

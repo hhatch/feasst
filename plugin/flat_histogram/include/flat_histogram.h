@@ -4,6 +4,7 @@
 
 #include <memory>
 #include "math/include/accumulator.h"
+#include "math/include/histogram.h"
 #include "monte_carlo/include/criteria.h"
 #include "monte_carlo/include/acceptance.h"
 #include "flat_histogram/include/macrostate.h"

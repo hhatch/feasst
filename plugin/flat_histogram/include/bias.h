@@ -5,15 +5,15 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "math/include/histogram.h"
-#include "flat_histogram/include/ln_probability.h"
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
-class Macrostate;
 class CollectionMatrix;
+class Histogram;
+class LnProbability;
+class Macrostate;
+
+typedef std::map<std::string, std::string> argtype;
 
 /**
   Bias for flat histogram Monte Carlo.
@@ -25,8 +25,7 @@ class Bias {
 
   /// Return the natural log of the bias for a transition from a macrostate
   /// in the old bin to a new bin.
-  double ln_bias(const int bin_new, const int bin_old) const {
-    return ln_prob().value(bin_old) - ln_prob().value(bin_new); }
+  double ln_bias(const int bin_new, const int bin_old) const;
 
   /// Update only.
   virtual void update(

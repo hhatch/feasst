@@ -9,6 +9,8 @@
 
 namespace feasst {
 
+class Histogram;
+
 typedef std::map<std::string, std::string> argtype;
 
 /**
@@ -84,8 +86,7 @@ class TransitionMatrix : public Bias {
   const LnProbability& ln_prob() const override {
     return ln_prob_; }
   void resize(const int size);
-  void resize(const Histogram& histogram) override {
-    resize(histogram.size()); }
+  void resize(const Histogram& histogram) override;
   std::string write() const override;
   std::string write_per_bin(const int bin) const override;
   std::string write_per_bin_header() const override;

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <memory>
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/bias.h"
 
 namespace feasst {

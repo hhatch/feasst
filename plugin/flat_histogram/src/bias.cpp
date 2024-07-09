@@ -6,6 +6,7 @@
 #include "utils/include/io.h"
 #include "utils/include/arguments.h"
 #include "math/include/accumulator.h"
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/bias.h"
 
 namespace feasst {
@@ -87,6 +88,10 @@ const CollectionMatrix& Bias::cm() const {
 
 const int Bias::visits(const int macro, const int index) const {
   FATAL("not implemented");
+}
+
+double Bias::ln_bias(const int bin_new, const int bin_old) const {
+  return ln_prob().value(bin_old) - ln_prob().value(bin_new);
 }
 
 }  // namespace feasst

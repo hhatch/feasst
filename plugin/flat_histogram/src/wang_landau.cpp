@@ -2,6 +2,7 @@
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
 #include "utils/include/arguments.h"
+#include "math/include/histogram.h"
 #include "math/include/utils_math.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "flat_histogram/include/macrostate.h"
