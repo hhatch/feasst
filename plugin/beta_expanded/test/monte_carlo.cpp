@@ -8,6 +8,7 @@
 #include "system/include/long_range_corrections.h"
 #include "system/include/dont_visit_model.h"
 #include "monte_carlo/include/monte_carlo.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/remove_trial.h"
 #include "monte_carlo/include/trial_translate.h"

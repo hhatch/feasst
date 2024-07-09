@@ -7,6 +7,7 @@
 #include "system/include/visit_model_cell.h"
 #include "system/include/potential.h"
 #include "system/include/thermo_params.h"
+#include "monte_carlo/test/monte_carlo_utils.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/trial_transfer.h"
 #include "monte_carlo/include/trial_rotate.h"

@@ -6,6 +6,7 @@
 #include "math/include/constants.h"
 #include "math/include/random.h"
 #include "system/include/system.h"
+#include "monte_carlo/include/acceptance.h"
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "flat_histogram/include/transition_matrix.h"
@@ -405,5 +406,10 @@ int FlatHistogram::num_iterations(const int state) const {
   return bias_->num_iterations(state, *macrostate_); }
 bool FlatHistogram::is_complete() const { return bias_->is_complete(); }
 void FlatHistogram::set_complete() { bias_->set_complete_(); }
+const Macrostate& FlatHistogram::macrostate() const {
+  return const_cast<Macrostate&>(*macrostate_); }
+int FlatHistogram::state() const { return macrostate_current_; }
+int FlatHistogram::state_old() const { return macrostate_old_; }
+int FlatHistogram::state_new() const { return macrostate_new_; }
 
 }  // namespace feasst

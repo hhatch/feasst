@@ -12,6 +12,7 @@
 #include "system/include/lennard_jones.h"
 #include "system/include/long_range_corrections.h"
 #include "monte_carlo/include/monte_carlo.h"
+#include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/metropolis.h"
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/remove_trial.h"

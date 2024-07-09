@@ -6,10 +6,10 @@
 #include <map>
 #include <string>
 #include "monte_carlo/include/criteria.h"
-#include "monte_carlo/include/acceptance.h"
 
 namespace feasst {
 
+class Acceptance;
 class Bias;
 class LnProbability;
 class Macrostate;
@@ -51,8 +51,7 @@ class FlatHistogram : public Criteria {
       std::shared_ptr<Constraint> constraint);
 
   /// Return the macrostate.
-  const Macrostate& macrostate() const override {
-    return const_cast<Macrostate&>(*macrostate_); }
+  const Macrostate& macrostate() const override;
 
   /// Return the bias.
   const Bias& bias() const override;
@@ -76,10 +75,10 @@ class FlatHistogram : public Criteria {
   void increment_phase() override;
 
   /// Return the state. Return -1 if state is not determined.
-  int state() const override { return macrostate_current_; }
+  int state() const override;
   int num_states() const override;
-  int state_old() const override { return macrostate_old_; }
-  int state_new() const override { return macrostate_new_; }
+  int state_old() const override;
+  int state_new() const override;
   void update_state(const System& system, const Acceptance& accept) override;
 
   /// Set the macrostate probability distribution.
