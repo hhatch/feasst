@@ -9,7 +9,6 @@
 #include "steppers/include/mean_squared_displacement.h"
 #include "steppers/include/tune.h"
 #include "steppers/include/check_energy.h"
-#include "steppers/include/log_and_movie.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/run.h"
 #include "monte_carlo/include/remove_trial.h"

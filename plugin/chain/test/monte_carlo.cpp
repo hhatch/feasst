@@ -33,7 +33,6 @@
 #include "monte_carlo/include/rosenbluth.h"
 #include "steppers/include/log.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/movie.h"
 #include "steppers/include/wrap_particles.h"
 #include "steppers/include/tune.h"

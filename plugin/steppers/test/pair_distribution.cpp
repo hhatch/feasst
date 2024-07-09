@@ -10,7 +10,6 @@
 #include "steppers/include/pair_distribution.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/energy.h"
 #include "steppers/include/seek_analyze.h"
 #include "steppers/include/seek_modify.h"

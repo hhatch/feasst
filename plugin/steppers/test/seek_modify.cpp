@@ -10,7 +10,6 @@
 #include "steppers/include/wall_clock_limit.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/seek_modify.h"
 
 namespace feasst {

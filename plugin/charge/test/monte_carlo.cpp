@@ -19,7 +19,6 @@
 #include "steppers/include/cpu_time.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/energy.h"
 #include "steppers/include/num_particles.h"
 #include "charge/include/trial_transfer_multiple.h"

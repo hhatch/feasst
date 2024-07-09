@@ -32,7 +32,6 @@
 #include "steppers/include/check_physicality.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "charge/include/ewald.h"
 #include "charge/include/charge_screened.h"
 #include "charge/include/charge_self.h"

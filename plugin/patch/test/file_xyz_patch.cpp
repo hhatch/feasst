@@ -6,7 +6,6 @@
 #include "system/include/visit_model.h"
 #include "system/include/visit_model_inner.h"
 #include "monte_carlo/include/monte_carlo.h"
-#include "steppers/include/log_and_movie.h"
 #include "models/include/square_well.h"
 #include "mayer/include/mayer_sampling.h"
 #include "patch/include/visit_model_inner_patch.h"

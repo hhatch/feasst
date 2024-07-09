@@ -12,7 +12,6 @@
 #include "models/include/square_well.h"
 #include "monte_carlo/test/monte_carlo_utils.h"
 #include "steppers/include/log.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/movie.h"
 #include "steppers/include/tune.h"
 #include "monte_carlo/include/trial_rotate.h"

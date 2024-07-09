@@ -19,7 +19,6 @@
 #include "steppers/include/criteria_updater.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "morph/include/trial_morph.h"
 #include "morph/include/trial_morph_expanded.h"
 #include "morph/include/macrostate_morph.h"

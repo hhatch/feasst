@@ -244,7 +244,7 @@ double degrees_to_radians(const double degrees);
 /// Swap the values.
 template <typename T>
 inline void swap(T * val1, T * val2) {
-  const double temp = *val1;
+  const T temp = *val1;
   *val1 = *val2;
   *val2 = temp;
 }

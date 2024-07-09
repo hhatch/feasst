@@ -22,7 +22,6 @@
 #include "steppers/include/check_energy.h"
 #include "steppers/include/num_particles.h"
 #include "steppers/include/energy.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/check_properties.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 #include "flat_histogram/include/transition_matrix.h"

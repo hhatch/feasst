@@ -17,7 +17,6 @@
 #include "steppers/include/tune.h"
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
-#include "steppers/include/log_and_movie.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 #include "flat_histogram/include/flat_histogram.h"

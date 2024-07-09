@@ -16,7 +16,6 @@
 #include "steppers/include/check_energy.h"
 #include "steppers/include/tune.h"
 #include "steppers/include/energy.h"
-#include "steppers/include/log_and_movie.h"
 #include "steppers/include/criteria_writer.h"
 #include "steppers/include/criteria_updater.h"
 #include "flat_histogram/include/flat_histogram.h"
