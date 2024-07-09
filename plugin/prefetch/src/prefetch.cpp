@@ -561,4 +561,9 @@ Prefetch::Prefetch(std::istream& istr) : MonteCarlo(istr) {
   feasst_deserialize(&ghost_, istr);
 }
 
+const std::string Pool::str() const {
+  std::stringstream ss;
+  ss << index_ << " " << ln_prob_ << " " << accepted_;
+  return ss.str();
+}
 }  // namespace feasst

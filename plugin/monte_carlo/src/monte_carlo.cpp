@@ -756,4 +756,14 @@ void MonteCarlo::finalize_(const int trial_index) {
   trial_factory_.finalize(trial_index, &system_, criteria_.get());
 }
 
+std::string MonteCarlo::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+MonteCarlo MonteCarlo::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return MonteCarlo(ss);
+}
+
 }  // namespace feasst

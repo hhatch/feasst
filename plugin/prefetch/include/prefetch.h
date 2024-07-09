@@ -33,13 +33,7 @@ class Pool {
   bool auto_rejected() const { return auto_rejected_; }
   void set_endpoint(const bool endpoint) { endpoint_ = endpoint; }
   bool endpoint() const { return endpoint_; }
-
-  const std::string str() const {
-    std::stringstream ss;
-    ss << index_ << " " << ln_prob_ << " " << accepted_;
-    return ss.str();
-  }
-
+  const std::string str() const;
   MonteCarlo mc;
 
  private:

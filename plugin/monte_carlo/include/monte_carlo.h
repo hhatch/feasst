@@ -308,15 +308,8 @@ class MonteCarlo {
   explicit MonteCarlo(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  MonteCarlo deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return MonteCarlo(ss);
-  }
+  std::string serialize() const;
+  MonteCarlo deserialize(const std::string str);
 
   virtual ~MonteCarlo() {}
 

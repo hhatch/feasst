@@ -125,15 +125,8 @@ class Clones {
   /// Deserialize
   explicit Clones(std::istream& istr);
 
-  std::string serialize() {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Clones deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Clones(ss);
-  }
+  std::string serialize() const;
+  Clones deserialize(const std::string str);
 
  private:
   std::vector<std::shared_ptr<MonteCarlo> > clones_;

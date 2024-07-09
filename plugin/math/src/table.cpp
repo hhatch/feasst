@@ -978,4 +978,58 @@ Table6D::Table6D(const std::string file_name) {
   *this = deserialize(line);
 }
 
+std::string Table1D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table1D Table1D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table1D(ss);
+}
+std::string Table2D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table2D Table2D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table2D(ss);
+}
+std::string Table3D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table3D Table3D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table3D(ss);
+}
+std::string Table4D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table4D Table4D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table4D(ss);
+}
+std::string Table5D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table5D Table5D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table5D(ss);
+}
+std::string Table6D::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Table6D Table6D::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Table6D(ss);
+}
 }  // namespace feasst

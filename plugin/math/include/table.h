@@ -78,15 +78,8 @@ class Table1D : public Table {
   explicit Table1D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table1D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table1D(ss);
-  }
+  std::string serialize() const;
+  Table1D deserialize(const std::string str);
 
   virtual ~Table1D() {}
 
@@ -153,15 +146,8 @@ class Table2D : public Table {
   explicit Table2D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table2D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table2D(ss);
-  }
+  std::string serialize() const;
+  Table2D deserialize(const std::string str);
 
   virtual ~Table2D() {}
 
@@ -239,15 +225,8 @@ class Table3D : public Table {
   explicit Table3D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() const {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table3D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table3D(ss);
-  }
+  std::string serialize() const;
+  Table3D deserialize(const std::string str);
 
   virtual ~Table3D() {}
 
@@ -334,15 +313,8 @@ class Table4D : public Table {
   explicit Table4D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() const {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table4D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table4D(ss);
-  }
+  std::string serialize() const;
+  Table4D deserialize(const std::string str);
 
   virtual ~Table4D() {}
 
@@ -436,15 +408,8 @@ class Table5D : public Table {
   explicit Table5D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() const {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table5D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table5D(ss);
-  }
+  std::string serialize() const;
+  Table5D deserialize(const std::string str);
 
   virtual ~Table5D() {}
 
@@ -542,15 +507,8 @@ class Table6D : public Table {
   explicit Table6D(std::istream& istr);
 
   // HWH python interface cannot handle stringstreams with serialization.
-  std::string serialize() const {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  Table6D deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return Table6D(ss);
-  }
+  std::string serialize() const;
+  Table6D deserialize(const std::string str);
 
   virtual ~Table6D() {}
 

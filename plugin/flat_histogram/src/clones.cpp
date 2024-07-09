@@ -389,4 +389,14 @@ void Clones::set_num_iterations_to_complete(const int iterations) {
   }
 }
 
+std::string Clones::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+Clones Clones::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return Clones(ss);
+}
+
 }  // namespace feasst

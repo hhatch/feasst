@@ -119,15 +119,8 @@ class CollectionMatrixSplice {
   /// write to file
   void write(const std::string& file_name) const;
 
-  std::string serialize() {
-    std::stringstream ss;
-    serialize(ss);
-    return ss.str();
-  }
-  CollectionMatrixSplice deserialize(const std::string str) {
-    std::stringstream ss(str);
-    return CollectionMatrixSplice(ss);
-  }
+  std::string serialize() const;
+  CollectionMatrixSplice deserialize(const std::string str);
 
   //@}
  private:

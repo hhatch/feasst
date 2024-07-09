@@ -309,4 +309,14 @@ std::shared_ptr<CollectionMatrixSplice> MakeCollectionMatrixSplice(
   return std::make_shared<CollectionMatrixSplice>(ss);
 }
 
+std::string CollectionMatrixSplice::serialize() const {
+  std::stringstream ss;
+  serialize(ss);
+  return ss.str();
+}
+CollectionMatrixSplice CollectionMatrixSplice::deserialize(const std::string str) {
+  std::stringstream ss(str);
+  return CollectionMatrixSplice(ss);
+}
+
 }  // namespace feasst
