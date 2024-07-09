@@ -2,14 +2,13 @@
 #ifndef FEASST_FLAT_HISTOGRAM_WANG_LANDAU_H_
 #define FEASST_FLAT_HISTOGRAM_WANG_LANDAU_H_
 
-#include <vector>
 #include <memory>
+#include <string>
+#include <vector>
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/bias.h"
 
 namespace feasst {
-
-typedef std::map<std::string, std::string> argtype;
 
 /**
   Wang Landau flat histogram bias.
@@ -50,7 +49,8 @@ class WangLandau : public Bias {
     const Macrostate& macro) override;
   int num_iterations_to_complete() const override { return min_flatness_; }
   void set_num_iterations_to_complete(const int flatness) override;
-  int num_iterations(const int state, const Macrostate& macro) const override { return num_flatness_;}
+  int num_iterations(const int state, const Macrostate& macro) const override {
+    return num_flatness_;}
   const LnProbability& ln_prob() const override {
     return ln_prob_; }
   void resize(const Histogram& histogram) override;
