@@ -104,8 +104,8 @@ TEST(Clones, lj_fh) {
   DEBUG("num " << clones2.clone(0).configuration().num_particles());
   DEBUG("num " << clones2.clone(1).configuration().num_particles());
   clones2.initialize_and_run_until_complete({{"omp_batch", str(1e1)}});
-  DEBUG("0: " << feasst_str(clones2.flat_histogram(0).bias().ln_prob().values()));
-  DEBUG("1: " << feasst_str(clones2.flat_histogram(1).bias().ln_prob().values()));
+  DEBUG("0: " << feasst_str(clones2.flat_histogram(0)->bias().ln_prob().values()));
+  DEBUG("1: " << feasst_str(clones2.flat_histogram(1)->bias().ln_prob().values()));
   EXPECT_NEAR(clones2.ln_prob().value(0), -36.9, 0.7);
   MakeCheckpoint({{"checkpoint_file", "tmp/rstclone"}})->write(clones2);
   Clones clones3;

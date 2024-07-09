@@ -121,7 +121,7 @@ class FlatHistogram : public Criteria {
     return std::make_shared<FlatHistogram>(args); }
   void serialize(std::ostream& ostr) const override;
   FlatHistogram(std::istream& istr);
-  FlatHistogram(const Criteria& criteria);
+  std::unique_ptr<FlatHistogram> flat_histogram(const Criteria& criteria);
   ~FlatHistogram() {}
 
   //@}
@@ -134,7 +134,7 @@ class FlatHistogram : public Criteria {
   bool is_macrostate_set_ = false;
 
   // temporary
-  Acceptance empty_;
+  std::unique_ptr<Acceptance> empty_;
 
   void init_(std::shared_ptr<Macrostate> macrostate,
     std::shared_ptr<Bias> bias);

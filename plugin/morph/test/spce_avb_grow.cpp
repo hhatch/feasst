@@ -147,8 +147,8 @@ MonteCarlo test_spce_avb_grow_fh(std::shared_ptr<Bias> bias,
     {-13.499, 0.5},
     {-22.27, 1.0}};
 
-  FlatHistogram fh(mc.criteria());
-  const LnProbability& lnpi = fh.bias().ln_prob();
+  std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc.criteria());
+  const LnProbability& lnpi = fh->bias().ln_prob();
   for (int macro = 0; macro < lnpi.size(); ++macro) {
     EXPECT_NEAR(lnpi.value(macro), lnpi_srsw[macro][0],
       15*lnpi_srsw[macro][1]);

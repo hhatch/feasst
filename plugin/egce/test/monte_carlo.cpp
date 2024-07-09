@@ -347,7 +347,7 @@ void compare_lnpi(const MonteCarlo& mc, const int min) {
   int shift = 0;
   if (min == 1) shift = -1;
   const LnProbability lnpi =
-    FlatHistogram(mc.criteria()).bias().ln_prob().reduce(3, shift);
+    FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob().reduce(3, shift);
   INFO(feasst_str(lnpi.values()));
   int index = 0;
   if (min != 1) {
@@ -522,7 +522,7 @@ TEST(MonteCarlo, rpm_divalent_avb_VERY_LONG) {
     {"particle_type_b", "1"},
     {"reference_index", "0"}}));
   mc.run_until_complete();
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -6.7005955776549158, 0.14);
   EXPECT_NEAR(lnpi.value(1), -3.6523345299136007, 0.07);
   EXPECT_NEAR(lnpi.value(2), -2.1178631459398805, 0.04);
@@ -582,7 +582,7 @@ TEST(MonteCarlo, rpm_divalent_morph_LONG) {
     {"trials_per_write", str(trials_per)},
     {"multistate", "true"}}));
   mc.run_until_complete();
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob().reduce(2);
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob().reduce(2);
 //  EXPECT_NEAR(lnpi.value(0), -6.6615, 0.1);
 //  EXPECT_NEAR(lnpi.value(1), -3.6256, 0.1);
 //  EXPECT_NEAR(lnpi.value(2), -2.02966, 0.1);
@@ -640,7 +640,7 @@ double energy_av467(const int macro, const MonteCarlo& mc) {
 //    {"trials_per_write", "1e3"},
 //    {"multistate", "true"}}));
 //  mc.run_until_complete();
-//  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  //const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
 //  EXPECT_NEAR(lnpi.value(0), -14.037373358321800000, 0.02);
 //  EXPECT_NEAR(lnpi.value(1), -10.050312091655200000, 0.02);
 //  EXPECT_NEAR(lnpi.value(2), -6.458920624988570000, 0.02);
@@ -687,7 +687,7 @@ TEST(MonteCarlo, lj_fh_trial_grow_liquid_LONG) {
     {"trials_per_write", trials_per},
     {"multistate", "true"}}));
   mc.run_until_complete();
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -4.92194963175925, 0.025);
   EXPECT_NEAR(lnpi.value(1), -4.03855513175926, 0.02);
   EXPECT_NEAR(lnpi.value(2), -3.15822813175925, 0.02);

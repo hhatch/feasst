@@ -227,13 +227,13 @@ MonteCarlo test_lj_fh(const int num_steps,
 TEST(MonteCarlo, lj_fh_01) {
   MonteCarlo mc = test_lj_fh(1, "TM", 10, false, 0, 1);
   mc.run_until_complete();
-  FlatHistogram fh(mc.criteria());
-  const LnProbability lnpi = fh.bias().ln_prob();
+  std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc.criteria());
+  const LnProbability lnpi = fh->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(1) - lnpi.value(0), 4.67, 0.2);
 
   // obtain tm/cm
   std::stringstream ss;
-  fh.bias().serialize(ss);
+  fh->bias().serialize(ss);
   TransitionMatrix tm(ss);
   INFO(tm.collection().min_blocks());
   std::vector<LnProbability> ln_probs = tm.collection().ln_prob_blocks();
@@ -244,7 +244,7 @@ TEST(MonteCarlo, lj_fh_01) {
     //INFO(feasst_str(ln_prob.values()));
   }
 //  INFO(acc.stdev_of_av());
-//  INFO(fh.write());
+//  INFO(fh->write());
 }
 
 TEST(MonteCarlo, lj_fh_10sweep_LONG) {
@@ -261,7 +261,7 @@ TEST(MonteCarlo, lj_fh_10sweep_LONG) {
 
       // compare with known values of lnpi
       //const LnProbability * lnpi = &criteria->bias().ln_prob();
-      const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+      const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
       //EXPECT_NEAR(lnpi.value(0), -18.707570324988800000, 0.55);
       EXPECT_NEAR(lnpi.value(0), -14.037373358321800000, 0.75);
       EXPECT_NEAR(lnpi.value(1), -10.050312091655200000, 0.6);
@@ -297,8 +297,8 @@ TEST(MonteCarlo, soft_min_macro) {
       {"max", "5"}, {"min", "0"}, {"soft_macro_min", "1"}, {"soft_macro_max", "4"},
       {"Bias", "TransitionMatrix"}, {"min_sweeps", "10"}}},
   }});
-  const FlatHistogram& fh = FlatHistogram(mc->criteria());
-  EXPECT_NEAR(1, fh.macrostate().value(0), NEAR_ZERO);
+  std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc->criteria());
+  EXPECT_NEAR(1, fh->macrostate().value(0), NEAR_ZERO);
 }
 
 TEST(MonteCarlo, lj_fh_with0) {
@@ -315,7 +315,7 @@ TEST(MonteCarlo, lj_fh_with0) {
 
         // compare with known values of lnpi
         //const LnProbability * lnpi = &criteria->bias().ln_prob();
-        const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+        const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
         //INFO(feasst_str(lnpi.values()));
         EXPECT_NEAR(lnpi.value(0), -18.707570324988800000, 0.55);
         EXPECT_NEAR(lnpi.value(1), -14.037373358321800000, 0.75);
@@ -340,7 +340,7 @@ TEST(MonteCarlo, lj_fh_with0) {
 TEST(MonteCarlo, lj_fh_LONG) {
   MonteCarlo mc = test_serialize(test_lj_fh(4, "TM", 1000));
   mc.run_until_complete();
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -14.037373358321800000, 0.02);
   EXPECT_NEAR(lnpi.value(1), -10.050312091655200000, 0.02);
   EXPECT_NEAR(lnpi.value(2), -6.458920624988570000, 0.02);
@@ -375,7 +375,7 @@ TEST(MonteCarlo, lj_fh_LONG) {
 TEST(MonteCarlo, lj_fh_liquid_LONG) {
   MonteCarlo mc = test_serialize(test_lj_fh(4, "TM", 1000, false, 100, 105));
   mc.run_until_complete();
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -4.92194963175925, 0.025);
   EXPECT_NEAR(lnpi.value(1), -4.03855513175926, 0.02);
   EXPECT_NEAR(lnpi.value(2), -3.15822813175925, 0.02);
@@ -397,7 +397,7 @@ TEST(MonteCarlo, lj_fh_multi_LONG) {
   //mc.set(MakeRandomMT19937({{"seed", "123"}}));
   mc.run_until_complete();
   INFO(mc.criteria().write());
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -13.9933350923078, 0.0225);
   EXPECT_NEAR(lnpi.value(1), -6.41488235897456, 0.02);
   EXPECT_NEAR(lnpi.value(2), -0.00163919230786818, 0.005);
@@ -481,8 +481,8 @@ MonteCarlo test_spce_fh(std::shared_ptr<Bias> bias,
     {-13.499, 0.5},
     {-22.27, 1.0}};
 
-  FlatHistogram fh(mc2.criteria());
-  const LnProbability& lnpi = fh.bias().ln_prob();
+  std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc2.criteria());
+  const LnProbability& lnpi = fh->bias().ln_prob();
   for (int macro = 0; macro < lnpi.size(); ++macro) {
     EXPECT_NEAR(lnpi.value(macro), lnpi_srsw[macro][0],
       15*lnpi_srsw[macro][1]);
@@ -514,9 +514,9 @@ TEST(MonteCarlo, spce_fh_VERY_LONG) {
       MakeTransitionMatrix({{"min_sweeps", "1000"}}),
       num_steps,
       false); // test
-    FlatHistogram fh(mc.criteria());
-    INFO(feasst_str(fh.bias().ln_prob().values()));
-    const LnProbability& lnpi = fh.bias().ln_prob();
+    std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc.criteria());
+    INFO(feasst_str(fh->bias().ln_prob().values()));
+    const LnProbability& lnpi = fh->bias().ln_prob();
     EXPECT_NEAR(lnpi.value(0), -2.72070275309203, 0.02);
     EXPECT_NEAR(lnpi.value(1), -1.85234049431879, 0.02);
     EXPECT_NEAR(lnpi.value(2), -1.54708325224374, 0.02);
@@ -548,9 +548,9 @@ TEST(MonteCarlo, spce_fh_liquid_VERY_LONG) {
       100,   // min
       105,   // max
       1e4);  // trials_per
-    FlatHistogram fh(mc.criteria());
-    INFO(feasst_str(fh.bias().ln_prob().values()));
-    const LnProbability& lnpi = fh.bias().ln_prob();
+    std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc.criteria());
+    INFO(feasst_str(fh->bias().ln_prob().values()));
+    const LnProbability& lnpi = fh->bias().ln_prob();
     EXPECT_NEAR(lnpi.value(0), -1.9471154, 0.15);
     EXPECT_NEAR(lnpi.value(1), -1.898168, 0.15);
     EXPECT_NEAR(lnpi.value(2), -1.8426095, 0.15);
@@ -648,8 +648,8 @@ MonteCarlo rpm_fh_test(
 
 TEST(MonteCarlo, rpm_fh_LONG) {
   MonteCarlo mc2 = rpm_fh_test();
-  FlatHistogram fh(mc2.criteria());
-  const LnProbability& lnpi = fh.bias().ln_prob();
+  std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc2.criteria());
+  const LnProbability& lnpi = fh->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -1.2994315780357, 0.1);
   EXPECT_NEAR(lnpi.value(1), -1.08646312498868, 0.15);
   EXPECT_NEAR(lnpi.value(2), -0.941850889679828, 0.2);
@@ -719,7 +719,7 @@ TEST(MonteCarlo, rpm_fh_divalent_VERY_LONG) {
   mc.run_until_complete();
   // mc.attempt(1e7);
 
-  const LnProbability lnpi = FlatHistogram(mc.criteria()).bias().ln_prob();
+  const LnProbability lnpi = FlatHistogram().flat_histogram(mc.criteria())->bias().ln_prob();
   EXPECT_NEAR(lnpi.value(0), -6.7005955776549158, 0.09);
   EXPECT_NEAR(lnpi.value(1), -3.6523345299136007, 0.07);
   EXPECT_NEAR(lnpi.value(2), -2.1178631459398805, 0.05);
@@ -792,9 +792,9 @@ TEST(MonteCarlo, nvtw) {
   std::vector<std::vector<std::vector<Accumulator> > > data;
   for (int num = min; num <= max; ++num) {
     MonteCarlo mc = nvtw(num);
-    FlatHistogram fh = FlatHistogram(mc.criteria());
+    std::unique_ptr<FlatHistogram> fh = FlatHistogram().flat_histogram(mc.criteria());
     std::stringstream ss;
-    fh.bias().serialize(ss);
+    fh->bias().serialize(ss);
     TransitionMatrix tm(ss);
     //INFO(feasst_str(tm.collection().matrix()));
     data.push_back(tm.collection().matrix());

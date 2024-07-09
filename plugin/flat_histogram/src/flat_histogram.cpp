@@ -216,7 +216,10 @@ void FlatHistogram::serialize(std::ostream& ostr) const {
 }
 
 void FlatHistogram::before_attempt(const System& system) {
-  macrostate_old_ = macrostate_->bin(system, *this, empty_);
+  if (!empty_) {
+    empty_ = std::make_unique<Acceptance>();
+  }
+  macrostate_old_ = macrostate_->bin(system, *this, *empty_);
   DEBUG("macro old " << macrostate_old_);
   ASSERT(macrostate_old_ >= macrostate_->soft_min() &&
          macrostate_old_ <= macrostate_->soft_max(),
@@ -235,10 +238,10 @@ bool FlatHistogram::is_fh_equal(const FlatHistogram& flat_histogram,
   return true;
 }
 
-FlatHistogram::FlatHistogram(const Criteria& criteria) {
+std::unique_ptr<FlatHistogram> FlatHistogram::flat_histogram(const Criteria& criteria) {
   std::stringstream ss;
   criteria.serialize(ss);
-  *this = FlatHistogram(ss);
+  return std::move(std::make_unique<FlatHistogram>(ss));
 }
 
 int FlatHistogram::set_soft_max(const int index, const System& sys) {

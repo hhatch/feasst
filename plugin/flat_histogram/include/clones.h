@@ -93,7 +93,7 @@ class Clones {
   void set_num_iterations_to_complete(const int iterations);
 
   /// Return the FlatHistogram of a given clone index.
-  FlatHistogram flat_histogram(const int index) const;
+  std::unique_ptr<FlatHistogram> flat_histogram(const int index) const;
 
   /// Stitch together and return the LnProbability of all clones.
   LnProbability ln_prob(
