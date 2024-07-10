@@ -9,6 +9,7 @@
 #include "threads/include/thread_omp.h"
 #include "configuration/include/select.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/action.h"
 #include "monte_carlo/include/criteria.h"

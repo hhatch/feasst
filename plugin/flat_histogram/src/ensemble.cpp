@@ -5,6 +5,7 @@
 #include "math/include/histogram.h"
 #include "math/include/accumulator.h"
 #include "system/include/thermo_params.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/acceptance.h"
 #include "flat_histogram/include/ensemble.h"

@@ -18,6 +18,7 @@
 #include "math/include/utils_math.h"
 #include "math/include/accumulator.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "flat_histogram/include/bias.h"
 #include "flat_histogram/include/macrostate.h"

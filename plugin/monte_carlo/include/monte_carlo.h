@@ -8,7 +8,6 @@
 #include <memory>
 #include <map>
 // #include "utils/include/timer.h"
-#include "system/include/system.h"
 #include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/analyze_factory.h"
 #include "monte_carlo/include/modify_factory.h"
@@ -19,7 +18,10 @@ class Action;
 class Checkpoint;
 class Criteria;
 class NeighborCriteria;
+class Potential;
 class Random;
+class Select;
+class System;
 class ThermoParams;
 
 typedef std::map<std::string, std::string> argtype;
@@ -94,8 +96,7 @@ class MonteCarlo {
   void add(std::shared_ptr<Configuration> config);
 
   /// The configuration may be accessed read-only.
-  const Configuration& configuration(const int index = 0) const {
-    return system_->configuration(index); }
+  const Configuration& configuration(const int index = 0) const;
 
   /// The second action is to add Potentials.
   void add(std::shared_ptr<Potential> potential, const int config = 0);
@@ -107,26 +108,23 @@ class MonteCarlo {
   void set(const int index, std::shared_ptr<Potential> potential);
 
   /// Add potential to optimized.
-  void add_to_optimized(std::shared_ptr<Potential> potential) {
-    system_->add_to_optimized(potential); }
+  void add_to_optimized(std::shared_ptr<Potential> potential);
 
   /// Add potential to reference.
   void add_to_reference(std::shared_ptr<Potential> potential,
     /// Store different references by index.
     const int index = 0,
-    const int config = 0) {
-    system_->add_to_reference(potential, index, config); }
+    const int config = 0);
 
   /// Add NeighborCriteria.
   void add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
-      const int config = 0) {
-    system_->add(neighbor_criteria, config); }
+    const int config = 0);
 
   /// The third action is to set the ThermoParams.
   void set(std::shared_ptr<ThermoParams> thermo_params);
 
   /// Return the ThermoParams.
-  const ThermoParams& thermo_params() const { return system_->thermo_params(); }
+  const ThermoParams& thermo_params() const;
 
   /// Alternatively, the first, second and third actions may be combined by
   /// setting the system directly.
@@ -134,13 +132,13 @@ class MonteCarlo {
   void set(const System& system);
 
   /// Once the System is set, it may be accessed on a read-only basis.
-  const System& system() const { return *system_; }
+  const System& system() const;
 
   /// Reinitialize the system. Return total energy.
   double initialize_system(const int config);
 
   // HWH depreciate: only in rare cases should the system be modified directly.
-  System * get_system() { return system_.get(); }
+  System * get_system();
   Criteria * get_criteria();
   Random * get_random() { return random_.get(); }
   TrialFactory * get_trial_factory() { return &trial_factory_; }

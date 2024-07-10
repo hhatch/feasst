@@ -8,6 +8,7 @@
 #include "configuration/include/file_vmd.h"
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/particle_factory.h"
+#include "system/include/system.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/acceptance.h"
 

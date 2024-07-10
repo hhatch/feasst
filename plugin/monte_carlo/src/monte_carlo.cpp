@@ -9,6 +9,7 @@
 #include "system/include/system.h"
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"
+#include "system/include/system.h"
 #include "system/include/thermo_params.h"
 #include "monte_carlo/include/acceptance.h"
 #include "monte_carlo/include/rosenbluth.h"
@@ -768,4 +769,18 @@ std::string MonteCarlo::serialize() const {
 //  return MonteCarlo(ss);
 //}
 
+const Configuration& MonteCarlo::configuration(const int index) const {
+  return system_->configuration(index); }
+void MonteCarlo::add_to_optimized(std::shared_ptr<Potential> potential) {
+  system_->add_to_optimized(potential); }
+void MonteCarlo::add_to_reference(std::shared_ptr<Potential> potential,
+    const int index, const int config) {
+  system_->add_to_reference(potential, index, config); }
+void MonteCarlo::add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
+    const int config) {
+  system_->add(neighbor_criteria, config); }
+const ThermoParams& MonteCarlo::thermo_params() const {
+  return system_->thermo_params(); }
+const System& MonteCarlo::system() const { return *system_; }
+System * MonteCarlo::get_system() { return system_.get(); }
 }  // namespace feasst

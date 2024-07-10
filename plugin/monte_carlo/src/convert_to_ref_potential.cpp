@@ -1,6 +1,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model_cell.h"
 #include "monte_carlo/include/monte_carlo.h"

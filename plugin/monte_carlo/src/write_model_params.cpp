@@ -6,6 +6,7 @@
 #include "math/include/utils_math.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/configuration.h"
+#include "system/include/system.h"
 #include "system/include/potential.h"
 #include "system/include/visit_model_cell.h"
 #include "monte_carlo/include/monte_carlo.h"
