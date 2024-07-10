@@ -30,6 +30,7 @@ FileXYZ::FileXYZ(argtype * args) {
 FileXYZ::FileXYZ(argtype args) : FileXYZ(&args) {
   feasst_check_all_used(args);
 }
+FileXYZ::~FileXYZ() {}
 
 bool FileXYZ::load_frame(std::ifstream& xyz_file,
                          Configuration * config) const {

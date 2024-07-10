@@ -94,6 +94,7 @@ class FileXYZ {
 
   void serialize(std::ostream& ostr) const;
   explicit FileXYZ(std::istream& istr);
+  ~FileXYZ();
 
   //@}
  private:

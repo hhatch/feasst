@@ -25,6 +25,7 @@ Movie::Movie(argtype * args) : AnalyzeWriteOnly(args) {
   vmd_ = std::make_unique<FileVMD>(args);
 }
 Movie::Movie(argtype args) : Movie(&args) { feasst_check_all_used(args); }
+Movie::~Movie() {}
 
 void Movie::initialize(Criteria * criteria,
     System * system,

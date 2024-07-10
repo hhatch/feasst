@@ -55,6 +55,7 @@ class Movie : public AnalyzeWriteOnly {
   std::shared_ptr<Analyze> create(argtype * args) const override {
     return std::make_shared<Movie>(args); }
   explicit Movie(std::istream& istr);
+  virtual ~Movie();
 
   //@}
  private:
