@@ -34,7 +34,7 @@ class Pool {
   void set_endpoint(const bool endpoint) { endpoint_ = endpoint; }
   bool endpoint() const { return endpoint_; }
   const std::string str() const;
-  MonteCarlo mc;
+  std::unique_ptr<MonteCarlo> mc;
 
  private:
   int index_;

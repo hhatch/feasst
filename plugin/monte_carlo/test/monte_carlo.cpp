@@ -78,11 +78,11 @@ TEST(MonteCarlo, serialize) {
   mc.add(MakeMovie({{"trials_per_write", str(1e4)}, {"output_file", "tmp/lj.xyz"}}));
   mc.add(MakeCheckEnergy({{"trials_per_update", str(1e4)}, {"tolerance", str(1e-9)}}));
   mc.add(MakeTune());
-  MonteCarlo mc2 = test_serialize(mc);
-  EXPECT_EQ(mc2.analyze(0).class_name(), "Log");
-  EXPECT_EQ(mc2.analyze(1).class_name(), "Movie");
-  EXPECT_EQ(mc2.modify(0).class_name(), "CheckEnergy");
-  EXPECT_EQ(mc2.modify(1).class_name(), "Tune");
+  auto mc2 = test_serialize_unique(mc);
+  EXPECT_EQ(mc2->analyze(0).class_name(), "Log");
+  EXPECT_EQ(mc2->analyze(1).class_name(), "Movie");
+  EXPECT_EQ(mc2->modify(0).class_name(), "CheckEnergy");
+  EXPECT_EQ(mc2->modify(1).class_name(), "Tune");
 
   auto mc3 = MakeMonteCarlo({{
     {"Configuration", {{"cubic_side_length", "8"}, {"particle_type0", "../particle/lj.fstprt"}}},
@@ -98,17 +98,17 @@ TEST(MonteCarlo, serialize) {
     {"Tune", {{}}},
   }});
 
-  MonteCarlo mc4 = test_serialize(*mc3);
-  EXPECT_EQ(mc4.trial(0).class_name(), "TrialTranslate");
-  EXPECT_EQ(mc4.trial(0).weight(), 1.);
-  EXPECT_EQ(mc4.trial(1).class_name(), "TrialAdd");
-  EXPECT_EQ(mc4.trial(1).weight(), 2.);
-  EXPECT_EQ(mc4.trial(2).class_name(), "TrialRemove");
-  EXPECT_EQ(mc4.trial(2).weight(), 2.);
-  EXPECT_EQ(mc4.analyze(0).class_name(), "Log");
-  EXPECT_EQ(mc4.analyze(1).class_name(), "Movie");
-  EXPECT_EQ(mc4.modify(0).class_name(), "CheckEnergy");
-  EXPECT_EQ(mc4.modify(1).class_name(), "Tune");
+  auto mc4 = test_serialize_unique(*mc3);
+  EXPECT_EQ(mc4->trial(0).class_name(), "TrialTranslate");
+  EXPECT_EQ(mc4->trial(0).weight(), 1.);
+  EXPECT_EQ(mc4->trial(1).class_name(), "TrialAdd");
+  EXPECT_EQ(mc4->trial(1).weight(), 2.);
+  EXPECT_EQ(mc4->trial(2).class_name(), "TrialRemove");
+  EXPECT_EQ(mc4->trial(2).weight(), 2.);
+  EXPECT_EQ(mc4->analyze(0).class_name(), "Log");
+  EXPECT_EQ(mc4->analyze(1).class_name(), "Movie");
+  EXPECT_EQ(mc4->modify(0).class_name(), "CheckEnergy");
+  EXPECT_EQ(mc4->modify(1).class_name(), "Tune");
 }
 
 TEST(MonteCarlo, NVT_NO_FEASST_BENCHMARK_LONG) {

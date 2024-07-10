@@ -72,7 +72,7 @@ TEST(MonteCarlo, rigid_body_connector) {
     {"CheckEnergy", {{"trials_per_update", str(1e2)}, {"tolerance", "1e-8"}}},
   }});
   mc->attempt(1e3);
-  MonteCarlo mc2 = test_serialize(*mc);
+  test_serialize_unique(*mc);
 }
 
 TEST(MonteCarlo, 4lyt_smoothing) {

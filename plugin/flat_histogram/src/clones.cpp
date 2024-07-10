@@ -43,6 +43,9 @@ namespace feasst {
 //    clone->set(MakeFlatHistogram(
 //  }
 //}
+  
+Clones::Clones() {}
+Clones::~Clones() {}
 
 const MonteCarlo& Clones::clone(const int index) const {
   ASSERT(index < num(), "index: " << index << " >= num: " << num());
@@ -117,7 +120,7 @@ void Clones::run_until_complete(argtype args) {
 
 void Clones::run_until_complete_serial_() {
   DEBUG("run_until_complete_serial_");
-  for (auto clone : clones_) {
+  for (std::unique_ptr<MonteCarlo>& clone : clones_) {
     clone->run_until_complete();
   }
 }
@@ -329,31 +332,31 @@ void Clones::serialize(std::ostream& ostr) const {
   feasst_serialize_endcap("Clones", ostr);
 }
 
-Clones::Clones(std::istream& istr) {
-  const int version = feasst_deserialize_version(istr);
-  ASSERT(version == 2845, "version: " << version);
-  // HWH for unknown reasons, this does not work
-  //feasst_deserialize(&clones_, istr);
-  int dim1;
-  istr >> dim1;
-  clones_.resize(dim1);
-  for (int index = 0; index < dim1; ++index) {
-    int existing;
-    istr >> existing;
-    if (existing != 0) {
-      clones_[index] = std::make_shared<MonteCarlo>(istr);
-    }
-  }
-//  // HWH for unknown reasons, this function template does not work.
-//  //feasst_deserialize(checkpoint_, istr);
-//  { int existing;
+//Clones::Clones(std::istream& istr) {
+//  const int version = feasst_deserialize_version(istr);
+//  ASSERT(version == 2845, "version: " << version);
+//  // HWH for unknown reasons, this does not work
+//  //feasst_deserialize(&clones_, istr);
+//  int dim1;
+//  istr >> dim1;
+//  clones_.resize(dim1);
+//  for (int index = 0; index < dim1; ++index) {
+//    int existing;
 //    istr >> existing;
 //    if (existing != 0) {
-//      checkpoint_ = std::make_shared<Checkpoint>(istr);
+//      clones_[index] = std::make_unique<MonteCarlo>(istr);
 //    }
 //  }
-  feasst_deserialize_endcap("Clones", istr);
-}
+////  // HWH for unknown reasons, this function template does not work.
+////  //feasst_deserialize(checkpoint_, istr);
+////  { int existing;
+////    istr >> existing;
+////    if (existing != 0) {
+////      checkpoint_ = std::make_shared<Checkpoint>(istr);
+////    }
+////  }
+//  feasst_deserialize_endcap("Clones", istr);
+//}
 
 void Clones::set(std::shared_ptr<Checkpoint> checkpoint) {
   checkpoint_ = checkpoint;
@@ -367,7 +370,8 @@ std::shared_ptr<Clones> MakeClones(const std::vector<std::string> file_names) {
     std::getline(file, line);
     ASSERT(!line.empty(), "file: " << file_name << " is empty.");
     std::stringstream ss(line);
-    clones->add(std::make_shared<MonteCarlo>(ss));
+    clones->get_clones()->push_back(std::make_unique<MonteCarlo>(ss));
+//    clones->add(std::make_unique<MonteCarlo>(ss));
   }
   return clones;
 }
@@ -394,9 +398,13 @@ std::string Clones::serialize() const {
   serialize(ss);
   return ss.str();
 }
-Clones Clones::deserialize(const std::string str) {
-  std::stringstream ss(str);
-  return Clones(ss);
-}
+//Clones Clones::deserialize(const std::string str) {
+//  std::stringstream ss(str);
+//  return Clones(ss);
+//}
+
+//void Clones::add(std::unique_ptr<MonteCarlo>& mc) {
+//  clones_.push_back(std::move(mc));
+//}
 
 }  // namespace feasst

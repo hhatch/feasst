@@ -22,10 +22,11 @@ class Histogram;
  */
 class Clones {
  public:
-  Clones() {}
+  Clones();
+  ~Clones();
 
   /// Add a MonteCarlo.
-  void add(std::shared_ptr<MonteCarlo> mc) { clones_.push_back(mc); }
+//  void add(std::unique_ptr<MonteCarlo>& mc);
 
   // HWH this becomes too complicated with deep copies
   // HWH user functional creation of MonteCarlo is less complex
@@ -42,7 +43,7 @@ class Clones {
   MonteCarlo * get_clone(const int index);
 
   /// Return the clones.
-  std::vector<std::shared_ptr<MonteCarlo> > get_clones() { return clones_; }
+  std::vector<std::unique_ptr<MonteCarlo> > * get_clones() { return &clones_; }
 
   /// Add a checkpoint.
   void set(std::shared_ptr<Checkpoint> checkpoint);
@@ -122,14 +123,14 @@ class Clones {
   /// Serialize
   void serialize(std::ostream& ostr) const;
 
-  /// Deserialize
-  explicit Clones(std::istream& istr);
+//  /// Deserialize
+//  explicit Clones(std::istream& istr);
 
   std::string serialize() const;
   Clones deserialize(const std::string str);
 
  private:
-  std::vector<std::shared_ptr<MonteCarlo> > clones_;
+  std::vector<std::unique_ptr<MonteCarlo> > clones_;
   std::shared_ptr<Checkpoint> checkpoint_;
 
   void run_until_complete_omp_(argtype run_args,

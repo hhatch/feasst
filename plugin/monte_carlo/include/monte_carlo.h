@@ -95,7 +95,7 @@ class MonteCarlo {
 
   /// The configuration may be accessed read-only.
   const Configuration& configuration(const int index = 0) const {
-    return system_.configuration(index); }
+    return system_->configuration(index); }
 
   /// The second action is to add Potentials.
   void add(std::shared_ptr<Potential> potential, const int config = 0);
@@ -108,25 +108,25 @@ class MonteCarlo {
 
   /// Add potential to optimized.
   void add_to_optimized(std::shared_ptr<Potential> potential) {
-    system_.add_to_optimized(potential); }
+    system_->add_to_optimized(potential); }
 
   /// Add potential to reference.
   void add_to_reference(std::shared_ptr<Potential> potential,
     /// Store different references by index.
     const int index = 0,
     const int config = 0) {
-    system_.add_to_reference(potential, index, config); }
+    system_->add_to_reference(potential, index, config); }
 
   /// Add NeighborCriteria.
   void add(std::shared_ptr<NeighborCriteria> neighbor_criteria,
       const int config = 0) {
-    system_.add(neighbor_criteria, config); }
+    system_->add(neighbor_criteria, config); }
 
   /// The third action is to set the ThermoParams.
   void set(std::shared_ptr<ThermoParams> thermo_params);
 
   /// Return the ThermoParams.
-  const ThermoParams& thermo_params() const { return system_.thermo_params(); }
+  const ThermoParams& thermo_params() const { return system_->thermo_params(); }
 
   /// Alternatively, the first, second and third actions may be combined by
   /// setting the system directly.
@@ -134,13 +134,13 @@ class MonteCarlo {
   void set(const System& system);
 
   /// Once the System is set, it may be accessed on a read-only basis.
-  const System& system() const { return system_; }
+  const System& system() const { return *system_; }
 
   /// Reinitialize the system. Return total energy.
   double initialize_system(const int config);
 
   // HWH depreciate: only in rare cases should the system be modified directly.
-  System * get_system() { return &system_; }
+  System * get_system() { return system_.get(); }
   Criteria * get_criteria();
   Random * get_random() { return random_.get(); }
   TrialFactory * get_trial_factory() { return &trial_factory_; }
@@ -311,9 +311,9 @@ class MonteCarlo {
 
   // HWH python interface cannot handle stringstreams with serialization.
   std::string serialize() const;
-  MonteCarlo deserialize(const std::string str);
+//  MonteCarlo deserialize(const std::string str);
 
-  virtual ~MonteCarlo() {}
+  virtual ~MonteCarlo();
 
 //  const Timer& timer() const { return timer_; }
 //  std::string timer_str() const {
@@ -335,7 +335,7 @@ class MonteCarlo {
                                    Random * random);
 
  private:
-  System system_;
+  std::unique_ptr<System> system_;
   std::shared_ptr<Criteria> criteria_;
   TrialFactory trial_factory_;
   AnalyzeFactory analyze_factory_;
