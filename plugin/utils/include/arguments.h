@@ -6,7 +6,6 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <memory>
 
 namespace feasst {
 
@@ -34,21 +33,8 @@ typedef std::vector<std::pair<std::string, argtype> > arglist;
   for a working example of how to implement arguments in a class.
  */
 
-/// Return true if key is used in args (templated for arglist or argtype).
-template <typename T>
-bool used(const std::string& key, const T& args) {
-  const auto pair = args.find(key);
-  if (pair != args.end()) {
-    return true;
-  }
-  return false;
-}
-
-/**
-  Read an argument, but do not remove it.
-  WARNING: This should typically only be used for error checking.
- */
-std::string str(const std::string& key, const argtype& args);
+/// Return true if key is used in args.
+bool used(const std::string& key, const argtype& args);
 
 /// Read an argument and remove it
 std::string str(const std::string& key, argtype * args);
@@ -83,57 +69,8 @@ bool boolean(const std::string& key, argtype * args);
 bool boolean(const std::string& key, argtype * args,
   const bool dflt);
 
-/// Append to given key
-void append(const std::string& key, argtype * args, const std::string& append);
-
 /// Check that all arguments are used.
 void feasst_check_all_used(const argtype& args);
-
-/// If args contains derived class of T, return factory pointer and remove from
-/// args.
-template <class T>
-std::shared_ptr<T> parse(T * obj, arglist * args) {
-  std::shared_ptr<T> new_obj;
-  const auto& map = obj->deserialize_map();
-  // INFO("parsing " << args->begin()->first);
-  if (map.count(args->begin()->first) > 0) {
-    new_obj = obj->factory(args->begin()->first, &args->begin()->second);
-    // INFO(new_obj->class_name());
-    feasst_check_all_used(args->begin()->second);
-    args->erase(args->begin());
-    return new_obj;
-  }
-  return new_obj;
-}
-
-/// If an argument is not used, add it.
-void add_if_not_used(const std::string& key, argtype * args,
-  const std::string& value);
-
-/// convert a space-delimited string into argtype
-argtype line_to_argtype(const std::string line);
-
-/// Find all values equal to "search" in args and replace with "replace"
-void replace_value(const std::string search, const std::string replace,
-                   arglist * args);
-
-/// Find all values that contain "search" in args and replace with "replace"
-void replace_in_value(const std::string& from, const std::string& to,
-                      arglist * args);
-
-/// Read data from arguments beginning with key and counting from 0 up.
-/// For example, "{{"x0", "1"}, {"x1", "2"}}" will return {1, 2} vector.
-std::vector<double> parse_dimensional(const std::string& key, argtype * args,
-  const int max);
-
-/// Parse a text interface line.
-/// These typically begin with an object Name, then space-separated arguments.
-/// First, look for set_variable, to generate a list of variables to use for
-/// name substitution.
-/// Finally, replace any value beginnig with /feasst with the install_dir().
-std::pair<std::string, argtype> parse_line(const std::string line,
-  argtype * variables,
-  bool * assign_to_list);
 
 }  // namespace feasst
 

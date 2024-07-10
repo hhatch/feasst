@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string.h>
-#include "utils/include/arguments.h"
+#include "utils/include/arguments_extra.h"
 #include "utils/include/serialize.h"
 #include "utils/include/debug.h"
 #include "monte_carlo/include/monte_carlo.h"

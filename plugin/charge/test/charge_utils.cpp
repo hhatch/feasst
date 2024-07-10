@@ -24,6 +24,13 @@
 
 namespace feasst {
 
+void add_if_not_used(const std::string& key, argtype * args,
+  const std::string& value) {
+  if (!used(key, *args)) {
+    args->insert({key, value});
+  }
+}
+
 System spce(argtype args) {
   System system;
   double dual_cut = dble("dual_cut", &args, -1);

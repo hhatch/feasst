@@ -27,6 +27,23 @@
 
 namespace feasst {
 
+/// If args contains derived class of T, return factory pointer and remove from
+/// args.
+template <class T>
+std::shared_ptr<T> parse(T * obj, arglist * args) {
+  std::shared_ptr<T> new_obj;
+  const auto& map = obj->deserialize_map();
+  // INFO("parsing " << args->begin()->first);
+  if (map.count(args->begin()->first) > 0) {
+    new_obj = obj->factory(args->begin()->first, &args->begin()->second);
+    // INFO(new_obj->class_name());
+    feasst_check_all_used(args->begin()->second);
+    args->erase(args->begin());
+    return new_obj;
+  }
+  return new_obj;
+}
+
 MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
   set(random);
 //    timer_other_ = timer_.add("other");

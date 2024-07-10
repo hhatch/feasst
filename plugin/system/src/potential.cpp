@@ -1,5 +1,5 @@
 #include <memory>
-#include "utils/include/arguments.h"
+#include "utils/include/arguments_extra.h"
 #include "utils/include/serialize.h"
 #include "utils/include/cache.h"
 #include "math/include/constants.h"
@@ -50,7 +50,7 @@ Potential::Potential(argtype * args) {
       DEBUG("key " << key);
       DEBUG("param " << param);
       if (key.substr(0, size) == param) {
-        DEBUG("** extracting sigma");
+        DEBUG("** extracting param");
         override_args_.insert({key, str(key, *args)});
         it = args->erase(it);
       } else {
