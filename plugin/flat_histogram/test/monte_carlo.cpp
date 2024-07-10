@@ -40,6 +40,7 @@
 #include "charge/test/charge_utils.h"
 #include "charge/include/trial_transfer_multiple.h"
 #include "flat_histogram/include/flat_histogram.h"
+#include "flat_histogram/include/collection_matrix.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/wang_landau.h"
@@ -235,8 +236,8 @@ TEST(MonteCarlo, lj_fh_01) {
   std::stringstream ss;
   fh->bias().serialize(ss);
   TransitionMatrix tm(ss);
-  INFO(tm.collection().min_blocks());
-  std::vector<LnProbability> ln_probs = tm.collection().ln_prob_blocks();
+  INFO(tm.cm().min_blocks());
+  std::vector<LnProbability> ln_probs = tm.cm().ln_prob_blocks();
   Accumulator acc;
   for (const auto& ln_prob : ln_probs) {
     acc.accumulate(ln_prob.value(1) - ln_prob.value(0));
@@ -796,8 +797,8 @@ TEST(MonteCarlo, nvtw) {
     std::stringstream ss;
     fh->bias().serialize(ss);
     TransitionMatrix tm(ss);
-    //INFO(feasst_str(tm.collection().matrix()));
-    data.push_back(tm.collection().matrix());
+    //INFO(feasst_str(tm.cm().matrix()));
+    data.push_back(tm.cm().matrix());
   }
   CollectionMatrix cm(data);
   LnProbability lnp;

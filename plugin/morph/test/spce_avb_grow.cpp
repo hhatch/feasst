@@ -19,6 +19,7 @@
 #include "steppers/include/tune.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/macrostate_num_particles.h"
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "charge/include/utils.h"
 #include "charge/test/charge_utils.h"

@@ -9,6 +9,7 @@
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "math/include/accumulator.h"
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/collection_matrix.h"
 
 namespace feasst {

@@ -179,7 +179,7 @@ void WLTM::set_cm(const int macro, const Bias& bias) {
   transition_matrix_->set_cm(macro, bias); }
 
 const CollectionMatrix& WLTM::cm() const {
-  return transition_matrix().collection(); }
+  return transition_matrix().cm(); }
 
 const int WLTM::visits(const int macro, const int index) const {
   return transition_matrix().visits(macro, index); }

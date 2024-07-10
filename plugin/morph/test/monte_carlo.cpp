@@ -13,6 +13,7 @@
 #include "monte_carlo/include/trial_add.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/transition_matrix.h"
+#include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/wang_landau.h"
 #include "steppers/include/criteria_writer.h"
 #include "steppers/include/energy.h"

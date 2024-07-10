@@ -5,9 +5,10 @@
 #include <vector>
 #include <memory>
 #include "math/include/accumulator.h"
-#include "flat_histogram/include/ln_probability.h"
 
 namespace feasst {
+
+class LnProbability;
 
 typedef std::map<std::string, std::string> argtype;
 
