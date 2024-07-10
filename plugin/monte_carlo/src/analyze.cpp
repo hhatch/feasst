@@ -1,6 +1,6 @@
 #include "utils/include/debug.h"
 #include "utils/include/arguments.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "configuration/include/select.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"

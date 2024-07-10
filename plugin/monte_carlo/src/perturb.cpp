@@ -1,4 +1,4 @@
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "utils/include/arguments.h"
 #include "monte_carlo/include/tunable.h"
 #include "monte_carlo/include/trial_select.h"

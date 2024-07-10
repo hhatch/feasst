@@ -4,7 +4,7 @@
 #include "utils/include/file.h"
 #include "utils/include/arguments.h"
 #include "utils/include/debug.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "utils/include/utils.h"  // resize
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"

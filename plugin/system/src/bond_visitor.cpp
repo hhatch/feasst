@@ -1,7 +1,7 @@
 #include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "math/include/constants.h"
 #include "math/include/utils_math.h"
 #include "configuration/include/particle_factory.h"

@@ -1,6 +1,6 @@
 
 #include "utils/include/debug.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "math/include/position.h"
 #include "system/include/bond_two_body.h"
 

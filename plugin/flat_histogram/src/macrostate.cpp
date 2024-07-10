@@ -1,6 +1,6 @@
 #include <cmath>
 #include "utils/include/arguments.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "math/include/utils_math.h"
 #include "math/include/histogram.h"
 #include "system/include/system.h"

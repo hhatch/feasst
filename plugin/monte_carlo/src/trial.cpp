@@ -1,7 +1,7 @@
 #include <string>
 #include <memory>
 #include "utils/include/arguments.h"
-#include "utils/include/serialize.h"
+#include "utils/include/serialize_extra.h"
 #include "math/include/random.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/configuration.h"
