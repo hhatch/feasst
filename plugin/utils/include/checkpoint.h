@@ -94,15 +94,6 @@ class Checkpoint {
     std::stringstream ss(line);
     *obj = T(ss);
   }
-  template <typename T>
-  void read_unique(std::unique_ptr<T>& obj) {
-    std::ifstream file(checkpoint_file_.c_str());
-    ASSERT(file.good(), "cannot find " << checkpoint_file_);
-    std::string line;
-    std::getline(file, line);
-    std::stringstream ss(line);
-    obj = std::make_unique<T>(ss);
-  }
 
   /// Serialize object.
   void serialize(std::ostream& ostr) const;

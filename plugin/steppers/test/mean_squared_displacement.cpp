@@ -40,7 +40,7 @@ TEST(MeanSquaredDisplacement, msd) {
     {"output_file", "tmp/msd.txt"},
   }));
   mc.attempt(1e3);
-  auto mc2 = test_serialize_unique(mc);
+  MonteCarlo mc2 = test_serialize(mc);
 }
 
 }  // namespace feasst

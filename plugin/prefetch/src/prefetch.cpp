@@ -35,7 +35,7 @@ Prefetch::Prefetch(argtype args) {
 void Prefetch::reset_trial_stats() {
   MonteCarlo::reset_trial_stats();
   for (Pool& pool : pool_) {
-    pool.mc->reset_trial_stats();
+    pool.mc.reset_trial_stats();
   }
 }
 
@@ -43,7 +43,7 @@ MonteCarlo * Prefetch::clone_(const int ithread) {
   if (ithread == 0) {
     return this;
   }
-  return pool_[ithread].mc.get();
+  return &pool_[ithread].mc;
 }
 
 void Prefetch::create(std::vector<Pool> * pool) {
@@ -70,7 +70,7 @@ void Prefetch::create(std::vector<Pool> * pool) {
   for (int thread = 1; thread < num_threads_; ++thread) {
     std::stringstream clone_ss;
     MonteCarlo::serialize(clone_ss);
-    pool_[thread].mc = std::make_unique<MonteCarlo>(clone_ss);
+    pool_[thread].mc = MonteCarlo(clone_ss);
   }
 
   // seed random number generators so that clones are not equal
@@ -317,8 +317,8 @@ void Prefetch::attempt_(
               after_trial_analyze_();
             }
           }
-          DEBUG("num attempts " << pool->mc->trials().num_attempts() << " "
-                                << pool->mc->trials().num_success() << " " << &pool->mc);
+          DEBUG("num attempts " << pool->mc.trials().num_attempts() << " "
+                                << pool->mc.trials().num_success() << " " << &pool->mc);
         }
         DEBUG("num attempts main " << trials().num_attempts() << " "
                                      << trials().num_success() << " " << this);

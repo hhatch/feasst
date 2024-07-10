@@ -61,8 +61,8 @@ TEST(MonteCarlo, ShapeUnion) {
 //  const int trials_per = 1e0;
 //  mc.add(MakeLogAndMovie({{"trials_per_write", str(trials_per)},
 //                          {"output_file", "tmp/confine"}}));
-  auto mc2 = test_serialize_unique(mc);
-  mc2->attempt(1e3);
+  MonteCarlo mc2 = test_serialize(mc);
+  mc2.attempt(1e3);
 }
 
 TEST(MonteCarlo, ShapeUnion_LONG) {
@@ -80,8 +80,8 @@ TEST(MonteCarlo, ShapeUnion_LONG) {
 //  const int trials_per = 1e3;
 //  mc.add(MakeLogAndMovie({{"trials_per_write", str(trials_per)},
 //                          {"output_file", "tmp/confine"}}));
-  auto mc2 = test_serialize_unique(mc);
-  mc2->attempt(1e4);
+  MonteCarlo mc2 = test_serialize(mc);
+  mc2.attempt(1e4);
 }
 
 TEST(MonteCarlo, ShapeTable_LONG) {
@@ -389,8 +389,8 @@ TEST(MonteCarlo, SineSlab) {
 //  const int trials_per = 1e2;
 //  mc.add(MakeLogAndMovie({{"trials_per_write", str(trials_per)},
 //                          {"output_file", "tmp/sine"}}));
-  auto mc2 = test_serialize_unique(mc);
-  mc2->attempt(1e3);
+  MonteCarlo mc2 = test_serialize(mc);
+  mc2.attempt(1e3);
 }
 
 TEST(MonteCarlo, SineSlabTable_LONG) {
@@ -439,8 +439,8 @@ TEST(MonteCarlo, SineSlabTable_LONG) {
 //  const int trials_per = 1e2;
 //  mc.add(MakeLogAndMovie({{"trials_per_write", str(trials_per)},
 //                          {"output_file", "tmp/sine"}}));
-  auto mc2 = test_serialize_unique(mc);
-  mc2->attempt(1e3);
+  MonteCarlo mc2 = test_serialize(mc);
+  mc2.attempt(1e3);
 }
 
 }  // namespace feasst

@@ -33,7 +33,7 @@
 
 namespace feasst {
 
-std::unique_ptr<MonteCarlo> patchmc(const int min, const int max) {
+MonteCarlo patchmc(const int min, const int max) {
   const double chi = 0.7;
   const double patch_angle_degrees = 2*std::asin(std::sqrt(chi/2))*180/PI;
   //DEBUG("patch_angle_degrees " << patch_angle_degrees);
@@ -75,21 +75,21 @@ std::unique_ptr<MonteCarlo> patchmc(const int min, const int max) {
   mc.add(MakeMoviePatch({{"trials_per_write", trials_per}, {"output_file", "tmp/patch_nvt_vis.xyz"}}));
   mc.add(MakeCriteriaUpdater({{"trials_per_update", trials_per}}));
   mc.add(MakeCriteriaWriter({{"trials_per_write", trials_per}, {"output_file", "tmp/patch_fh.txt"}}));
-  auto mc2 = test_serialize_unique(mc);
+  MonteCarlo mc2 = test_serialize(mc);
   //mc2.run_until_complete();
   return mc2;
 }
 
 TEST(MonteCarlo, patch) {
-  auto mc2 = patchmc(0, 370);
-  mc2->attempt(1e3);
-  FileXYZPatch().write_for_vmd("tmp/test.xyz", mc2->configuration());
+  MonteCarlo mc2 = patchmc(0, 370);
+  mc2.attempt(1e3);
+  FileXYZPatch().write_for_vmd("tmp/test.xyz", mc2.configuration());
 }
 
 TEST(MonteCarlo, patch_LONG) {
-  auto mc2 = patchmc(0, 370);
-  mc2->attempt(1e6);
-  FileXYZPatch().write_for_vmd("tmp/test.xyz", mc2->configuration());
+  MonteCarlo mc2 = patchmc(0, 370);
+  mc2.attempt(1e6);
+  FileXYZPatch().write_for_vmd("tmp/test.xyz", mc2.configuration());
 }
 
 //TEST(MonteCarlo, patch_clones_LONG) {
