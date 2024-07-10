@@ -124,8 +124,8 @@ void prefetch(System system, const int sync = 0) {
     }
   }
 
-  Prefetch mc2 = test_serialize(*mc);
-  EXPECT_EQ(1, mc2.trials_per_check());
+  auto mc2 = test_serialize_unique(*mc);
+  EXPECT_EQ(1, mc2->trials_per_check());
 }
 
 TEST(Prefetch, MUVT) {
