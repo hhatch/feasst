@@ -80,8 +80,8 @@ std::unique_ptr<MonteCarlo> monte_carlo(const int thread, const int min, const i
 // 0 1 2 3 4 5 6                : 8 total
 //           5 6 7 8 9          : 7 total
 //                 8 9 10 11 12 : 6 total
-std::unique_ptr<Clones> make_clones(const int max, const int min = 0, const int overlap = 4) {
-  std::unique_ptr<Clones> clones = std::make_unique<Clones>();
+Clones make_clones(const int max, const int min = 0, const int overlap = 4) {
+  Clones clones;
   std::vector<std::vector<int> > bounds = WindowExponential({
     {"maximum", str(max)},
     {"minimum", str(min)},
@@ -91,26 +91,27 @@ std::unique_ptr<Clones> make_clones(const int max, const int min = 0, const int 
   for (int index = 0; index < static_cast<int>(bounds.size()); ++index) {
     const std::vector<int> bound = bounds[index];
     INFO(bound[0] << " " << bound[1]);
-    std::unique_ptr<MonteCarlo> clone = monte_carlo(index, bound[0], bound[1]);
+    std::unique_ptr<MonteCarlo> mcu = monte_carlo(index, bound[0], bound[1]);
+    std::shared_ptr<MonteCarlo> mcs = std::move(mcu);
 //    clone->set(MakeRandomMT19937({{"seed", "123"}}));
-    clones->get_clones()->push_back(std::move(clone));
+    clones.add(mcs);
   }
-  return clones;
+  return test_serialize(clones);
 }
 
 TEST(Clones, lj_fh) {
-  auto clones2 = make_clones(12);
-  EXPECT_EQ(clones2->num(), 2);
-  DEBUG("num " << clones2->clone(0).configuration().num_particles());
-  DEBUG("num " << clones2->clone(1).configuration().num_particles());
-  clones2->initialize_and_run_until_complete({{"omp_batch", str(1e1)}});
-  DEBUG("0: " << feasst_str(clones2->flat_histogram(0)->bias().ln_prob().values()));
-  DEBUG("1: " << feasst_str(clones2->flat_histogram(1)->bias().ln_prob().values()));
-  EXPECT_NEAR(clones2->ln_prob().value(0), -36.9, 0.7);
-  MakeCheckpoint({{"checkpoint_file", "tmp/rstclone"}})->write(*clones2);
+  Clones clones2 = make_clones(12);
+  EXPECT_EQ(clones2.num(), 2);
+  DEBUG("num " << clones2.clone(0).configuration().num_particles());
+  DEBUG("num " << clones2.clone(1).configuration().num_particles());
+  clones2.initialize_and_run_until_complete({{"omp_batch", str(1e1)}});
+  DEBUG("0: " << feasst_str(clones2.flat_histogram(0)->bias().ln_prob().values()));
+  DEBUG("1: " << feasst_str(clones2.flat_histogram(1)->bias().ln_prob().values()));
+  EXPECT_NEAR(clones2.ln_prob().value(0), -36.9, 0.7);
+  MakeCheckpoint({{"checkpoint_file", "tmp/rstclone"}})->write(clones2);
   Clones clones3;
-  //MakeCheckpoint({{"checkpoint_file", "tmp/rstclone"}})->read(&clones3);
-  //EXPECT_TRUE(clones3.ln_prob().is_equal(clones2->ln_prob(), 1e-8));
+  MakeCheckpoint({{"checkpoint_file", "tmp/rstclone"}})->read(&clones3);
+  EXPECT_TRUE(clones3.ln_prob().is_equal(clones2.ln_prob(), 1e-8));
 
   Histogram macrostates;
   std::vector<double> energy, energy0, energy1;
@@ -137,9 +138,9 @@ double energy_av4(const int macro, const MonteCarlo& mc) {
 }
 
 TEST(Clones, lj_fh_LONG) {
-  auto clones = make_clones(5, 1, 1);
-  //auto clones2 = test_serialize_unique(*clones);
-  clones->initialize_and_run_until_complete(
+  Clones clones = make_clones(5, 1, 1);
+  Clones clones2 = test_serialize(clones);
+  clones2.initialize_and_run_until_complete(
     {{"omp_batch", str(1e5)}, {"ln_prob_file", "tmp/clones_fh.txt"}});
   for (int sweeps = 20; sweeps <= 1000; sweeps+=10) {
   //for (int sweeps = 20; sweeps <= 100; sweeps+=10) {
