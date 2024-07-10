@@ -30,6 +30,7 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 //    timer_analyze_ = timer_.add("analyze");
 //    timer_modify_ = timer_.add("modify");
 //    timer_checkpoint_ = timer_.add("checkpoint");
+  system_ = std::make_unique<System>();
 }
 
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
