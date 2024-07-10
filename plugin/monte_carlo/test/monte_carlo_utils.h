@@ -9,6 +9,9 @@
 #include "configuration/include/file_xyz.h"
 #include "configuration/include/particle_factory.h"
 #include "system/include/system.h"
+#include "monte_carlo/include/trial_factory.h"
+#include "monte_carlo/include/analyze_factory.h"
+#include "monte_carlo/include/modify_factory.h"
 #include "monte_carlo/include/trial_select.h"
 #include "monte_carlo/include/acceptance.h"
 

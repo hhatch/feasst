@@ -5,6 +5,7 @@
 #include "math/include/utils_math.h"
 #include "system/include/visit_model_cell.h"
 #include "monte_carlo/include/monte_carlo.h"
+#include "monte_carlo/include/trial_factory.h"
 #include "monte_carlo/include/remove_trial.h"
 
 namespace feasst {

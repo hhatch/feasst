@@ -4,6 +4,7 @@
 #include "utils/include/timer.h"
 #include "math/include/utils_math.h"
 #include "system/include/visit_model_cell.h"
+#include "monte_carlo/include/analyze_factory.h"
 #include "monte_carlo/include/monte_carlo.h"
 #include "monte_carlo/include/remove_analyze.h"
 
