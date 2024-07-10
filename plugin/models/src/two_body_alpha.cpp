@@ -1,9 +1,6 @@
 #include <cmath>
-#include <iostream>
-#include <sstream>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "math/include/constants.h"
 #include "models/include/two_body_alpha.h"
 
 namespace feasst {

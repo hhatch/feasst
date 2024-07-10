@@ -1,9 +1,7 @@
 #include <cmath>
-#include <vector>
-#include <sstream>
 #include "utils/include/serialize.h"
-#include "math/include/euler.h"
 #include "math/include/matrix.h"
+#include "math/include/euler.h"
 
 namespace feasst {
 

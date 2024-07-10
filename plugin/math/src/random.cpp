@@ -1,16 +1,13 @@
 #include <cmath>  // acos
-#include <string>
-#include <sstream>
-#include <iostream>
 #include "utils/include/arguments.h"
 #include "utils/include/io.h"
 #include "utils/include/serialize.h"
+#include "utils/include/cache.h"
 #include "math/include/position.h"
-#include "math/include/random.h"
 #include "math/include/utils_math.h"
 #include "math/include/constants.h"
 #include "math/include/matrix.h"
-#include "utils/include/cache.h"
+#include "math/include/random.h"
 
 namespace feasst {
 
