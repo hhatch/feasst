@@ -28,7 +28,6 @@
 #include "cluster/include/trial_avb2.h"
 #include "cluster/include/trial_avb4.h"
 #include "gibbs/include/compute_gibbs_particle_transfer.h"
-#include "chain/include/select_end_segment.h"
 #include "chain/include/perturb_pivot.h"
 #include "chain/include/select_segment.h"
 #include "chain/include/perturb_crankshaft.h"

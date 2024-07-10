@@ -3,10 +3,8 @@
 #include "utils/include/serialize.h"
 #include "utils/include/io.h"
 #include "math/include/random.h"
-#include "configuration/include/domain.h"
 #include "charge/include/trial_add_multiple.h"
 #include "charge/include/trial_remove_multiple.h"
-#include "morph/include/compute_morph.h"
 #include "morph/include/trial_morph.h"
 #include "morph/include/trial_morph_expanded.h"
 

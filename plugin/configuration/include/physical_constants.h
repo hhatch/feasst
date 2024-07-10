@@ -112,8 +112,7 @@ class CODATA2018 : public PhysicalConstants {
 
   std::shared_ptr<PhysicalConstants> create(std::istream& istr) const override {
     return std::make_shared<CODATA2018>(istr); }
-  void serialize(std::ostream& ostr) const override {
-    ostr << class_name() << " "; }
+  void serialize(std::ostream& ostr) const override;
   explicit CODATA2018(std::istream& istr);
   virtual ~CODATA2018() {}
 };
@@ -147,8 +146,7 @@ class CODATA2014 : public PhysicalConstants {
 
   std::shared_ptr<PhysicalConstants> create(std::istream& istr) const override {
     return std::make_shared<CODATA2014>(istr); }
-  void serialize(std::ostream& ostr) const override {
-    ostr << class_name() << " "; }
+  void serialize(std::ostream& ostr) const override;
   explicit CODATA2014(std::istream& istr);
   virtual ~CODATA2014() {}
 };
@@ -182,8 +180,7 @@ class CODATA2010 : public PhysicalConstants {
 
   std::shared_ptr<PhysicalConstants> create(std::istream& istr) const override {
     return std::make_shared<CODATA2010>(istr); }
-  void serialize(std::ostream& ostr) const override {
-    ostr << class_name() << " "; }
+  void serialize(std::ostream& ostr) const override;
   explicit CODATA2010(std::istream& istr);
   virtual ~CODATA2010() {}
 };

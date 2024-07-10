@@ -1,4 +1,3 @@
-#include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
@@ -6,7 +5,6 @@
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
-#include "system/include/ideal_gas.h"
 #include "steppers/include/pair_distribution.h"
 
 namespace feasst {

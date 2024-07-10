@@ -4,7 +4,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/file.h"
 #include "utils/include/debug.h"
-#include "utils/include/serialize.h"
+#include "utils/include/io.h"
 #include "configuration/include/file_particle.h"
 
 namespace feasst {

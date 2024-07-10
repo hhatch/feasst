@@ -6,7 +6,6 @@
 #include "math/include/utils_math.h"
 #include "math/include/random_mt19937.h" // HWH remove this
 #include "configuration/include/domain.h"
-#include "system/include/ideal_gas.h"
 #include "system/include/system.h"
 #include "monte_carlo/include/acceptance.h"
 #include "chain/include/trial_grow.h"

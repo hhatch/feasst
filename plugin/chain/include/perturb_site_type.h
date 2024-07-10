@@ -2,7 +2,7 @@
 #ifndef FEASST_MONTE_CARLO_PERTURB_SITE_TYPE_H_
 #define FEASST_MONTE_CARLO_PERTURB_SITE_TYPE_H_
 
-#include "monte_carlo/include/perturb_anywhere.h"
+#include "monte_carlo/include/perturb.h"
 
 namespace feasst {
 

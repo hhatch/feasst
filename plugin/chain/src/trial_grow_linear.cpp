@@ -6,6 +6,10 @@
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
 #include "chain/include/trial_grow_linear.h"
+#include "monte_carlo/include/perturb_distance.h"
+#include "monte_carlo/include/trial_select_particle.h"
+#include "monte_carlo/include/trial_select_bond.h"
+#include "monte_carlo/include/perturb_anywhere.h"
 #include "monte_carlo/include/trial_compute_move.h"
 
 namespace feasst {

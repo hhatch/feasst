@@ -1,17 +1,12 @@
-#include <sstream>
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
-#include "utils/include/io.h"
 #include "utils/include/serialize.h"
-#include "math/include/utils_math.h"
 #include "configuration/include/particle_factory.h"
 #include "configuration/include/group.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/model_params.h"
 #include "configuration/include/configuration.h"
 #include "system/include/cells.h"
-#include "system/include/model_two_body.h"
-#include "system/include/model_one_body.h"
 #include "system/include/visit_model_inner.h"
 #include "system/include/visit_model_cell.h"
 

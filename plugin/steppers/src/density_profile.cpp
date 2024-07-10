@@ -1,15 +1,13 @@
 #include <deque>
-#include <cmath>
+#include <numeric>  // accumulate
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
-#include "math/include/utils_math.h"
 #include "configuration/include/site.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/visit_configuration.h"
 #include "configuration/include/configuration.h"
 #include "system/include/system.h"
-#include "system/include/ideal_gas.h"
 #include "steppers/include/density_profile.h"
 
 namespace feasst {

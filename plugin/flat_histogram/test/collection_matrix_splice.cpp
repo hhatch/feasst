@@ -18,6 +18,7 @@
 #include "steppers/include/energy.h"
 #include "steppers/include/criteria_writer.h"
 #include "steppers/include/criteria_updater.h"
+#include "steppers/include/seek_analyze.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/transition_matrix.h"
 #include "flat_histogram/include/wltm.h"

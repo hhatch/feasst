@@ -5,7 +5,6 @@
 #include "configuration/include/model_params.h"
 #include "configuration/include/domain.h"
 #include "configuration/include/configuration.h"
-#include "system/include/lennard_jones.h"
 #include "system/include/visit_model_inner.h"
 #include "opt_lj/include/visit_model_opt_lj.h"
 

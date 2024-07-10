@@ -112,4 +112,11 @@ PhysicalConstantsCustom::PhysicalConstantsCustom(std::istream& istr)
   compute_derived_();
 }
 
+void CODATA2018::serialize(std::ostream& ostr) const {
+  ostr << class_name() << " "; }
+void CODATA2014::serialize(std::ostream& ostr) const {
+  ostr << class_name() << " "; }
+void CODATA2010::serialize(std::ostream& ostr) const {
+  ostr << class_name() << " "; }
+
 }  // namespace feasst

@@ -10,7 +10,6 @@
 #include "flat_histogram/include/ln_probability.h"
 #include "flat_histogram/include/flat_histogram.h"
 #include "flat_histogram/include/collection_matrix.h"
-#include "steppers/include/seek_analyze.h"
 
 namespace feasst {
 

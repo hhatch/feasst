@@ -1,8 +1,5 @@
-#include <cmath>
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
-#include "math/include/random.h"
-#include "configuration/include/domain.h"
 #include "monte_carlo/include/trial_select_particle.h"
 #include "morph/include/perturb_particle_type.h"
 #include "morph/include/compute_morph.h"
