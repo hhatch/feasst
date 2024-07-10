@@ -1,6 +1,9 @@
 #include <cmath>  // abs
 #include <chrono> // sleep
 #include <thread> // sleep
+#ifdef _OPENMP
+  #include <omp.h>
+#endif  // _OPENMP
 #include "utils/include/arguments.h"
 #include "utils/include/serialize.h"
 #include "utils/include/progress_report.h"
