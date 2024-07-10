@@ -1,6 +1,7 @@
 #include "utils/include/arguments.h"
 #include "utils/include/utils.h"  // is_equal
 #include "utils/include/serialize_extra.h"
+#include "utils/include/io.h"
 #include "math/include/constants.h"
 #include "system/include/visit_model.h"
 #include "system/include/potential.h"

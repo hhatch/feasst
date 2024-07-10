@@ -163,7 +163,7 @@ std::shared_ptr<EnergyMap> EnergyMap::create(argtype * args) const {
 }
 
 std::shared_ptr<EnergyMap> EnergyMap::factory(const std::string name, argtype * args) {
-  DEBUG("name: " << name << ", args: " << str(*args));
+//  DEBUG("name: " << name << ", args: " << str(*args));
   return template_factory(deserialize_map(), name, args);
 }
 

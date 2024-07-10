@@ -1,4 +1,5 @@
 #include "utils/include/arguments.h"
+#include "utils/include/io.h"
 #include "utils/include/utils.h"
 #include "utils/include/serialize.h"
 #include "configuration/include/particle_factory.h"

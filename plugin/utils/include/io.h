@@ -6,15 +6,10 @@
 #include <sstream>
 #include <vector>
 #include <deque>
-#include <iomanip>  // setprecision
-#include <limits>  // numeric_limits
 #include <map>
+#include "utils/include/max_precision.h"
 
 namespace feasst {
-
-/// Used to output maximum precision to screen
-/// [e.g., INFO(MAX_PRECISION << "energy: " << energy)].
-#define MAX_PRECISION std::setprecision(std::numeric_limits<double>::digits10+2)
 
 /// Return the feasst install directory as a string.
 std::string install_dir();

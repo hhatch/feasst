@@ -1,6 +1,7 @@
 #include <cmath>
 #include <limits>
 #include "utils/include/debug.h"
+#include "utils/include/io.h"
 #include "utils/include/serialize.h"
 
 namespace feasst {

@@ -187,7 +187,7 @@ void AngleHarmonic::random_branch(
     *ln_met *= -1;
   };
   for (double& w : weight) w /= weight.back();
-  DEBUG(feasst_str(weight));
+//  DEBUG(feasst_str(weight));
   const int index = random->index_from_cumulative_probability(weight);
   *radians_a2a1m1 = steps[index].t1;
   *radians_a2a1m2 = steps[index].t2;

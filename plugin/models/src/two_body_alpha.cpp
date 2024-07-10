@@ -1,5 +1,6 @@
 #include <cmath>
 #include "utils/include/arguments.h"
+#include "utils/include/io.h"
 #include "utils/include/serialize.h"
 #include "models/include/two_body_alpha.h"
 

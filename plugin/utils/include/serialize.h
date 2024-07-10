@@ -10,7 +10,8 @@
 #include <memory>
 #include <map>
 #include "utils/include/debug.h"
-#include "utils/include/io.h"
+#include "utils/include/max_precision.h"
+#include "utils/include/io.h"  // can remove this... one day
 
 namespace feasst {
 

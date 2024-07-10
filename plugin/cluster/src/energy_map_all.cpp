@@ -199,8 +199,8 @@ bool EnergyMapAll::is_cluster_(
 
 void EnergyMapAll::check(const Configuration& config) const {
   if (!is_equal(map(), map_new(), NEAR_ZERO)) {
-    DEBUG(feasst_str(map()));
-    DEBUG(feasst_str(map_new()));
+//    DEBUG(feasst_str(map()));
+//    DEBUG(feasst_str(map_new()));
     ERROR("maps are not equal");
   }
 

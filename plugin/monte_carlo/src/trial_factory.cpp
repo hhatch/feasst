@@ -42,7 +42,7 @@ void TrialFactory::update_cumul_prob_() {
     }
   }
   DEBUG("adjustable_weights_ " << adjustable_weights_);
-  DEBUG("weights " << feasst_str(weights));
+//  DEBUG("weights " << feasst_str(weights));
   if (weights.size() > 0) {
     *get_cumulative_probability_() = feasst::cumulative_probability(weights);
   }
