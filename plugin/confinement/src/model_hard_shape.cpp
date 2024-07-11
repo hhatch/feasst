@@ -1,10 +1,10 @@
 #include "utils/include/serialize.h"
 #include "utils/include/arguments.h"
 #include "math/include/constants.h"
+#include "shape/include/shape_file.h"
 #include "configuration/include/site.h"
 #include "configuration/include/model_params.h"
 #include "confinement/include/model_hard_shape.h"
-#include "shape/include/shape_file.h"
 
 namespace feasst {
 
