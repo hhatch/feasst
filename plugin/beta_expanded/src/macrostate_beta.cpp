@@ -53,4 +53,10 @@ void MacrostateBeta::serialize(std::ostream& ostr) const {
   feasst_serialize_version(1048, ostr);
 }
 
+double MacrostateBeta::value(const System& system,
+    const Criteria& criteria,
+    const Acceptance& acceptance) const {
+  return system.thermo_params().beta();
+}
+
 }  // namespace feasst

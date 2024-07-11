@@ -29,7 +29,7 @@ ModelLJShape::ModelLJShape(argtype * args) : ModelLJShape() {
   shift_ = std::make_shared<ModelLJShapeEnergyAtCutoff>();
 }
 ModelLJShape::ModelLJShape(argtype args) : ModelLJShape(&args) {
-  FEASST_CHECK_ALL_USED(args);
+  feasst_check_all_used(args);
 }
 
 ModelLJShape::ModelLJShape(std::shared_ptr<Shape> shape,
