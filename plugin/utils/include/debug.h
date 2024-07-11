@@ -4,10 +4,6 @@
 
 #include <string>
 #include <sstream>
-#include <iostream>
-#ifdef _OPENMP
-  #include <omp.h>
-#endif  // _OPENMP
 #include "utils/include/custom_exception.h"
 
 namespace feasst {
@@ -41,25 +37,16 @@ constexpr int VERBOSE_LEVEL = 3;
 std::string feasst_dir_trim_(const char* file_name);
 
 /// Throw exception
-# ifdef _OPENMP
 # define FEASST_MACRO_EXCEPTION(message, name) \
 { \
   std::stringstream macro_err_msg_; \
-  macro_err_msg_ << "# " << name << omp_get_thread_num() << " " \
+  macro_err_msg_ << "#" << name << feasst::feasst_omp_thread() << " " \
            << feasst::feasst_dir_trim_(__FILE__) \
            << ":" << __LINE__ << ": " << message; \
   throw feasst::CustomException(macro_err_msg_); \
 }
-# else  // _OPENMP
-# define FEASST_MACRO_EXCEPTION(message, name) \
-{ \
-  std::stringstream macro_err_msg_; \
-  macro_err_msg_ << "# " << name << " " \
-           << feasst::feasst_dir_trim_(__FILE__) \
-           << ":" << __LINE__ << ": " << message; \
-  throw feasst::CustomException(macro_err_msg_); \
-}
-# endif  // _OPENMP
+
+std::string feasst_omp_thread();
 
 /// If the assertion condition is not true, throw exception with message.
 # define ASSERT(condition, message) \
@@ -108,25 +95,17 @@ FAIL() << "Expected failure"; \
   FAIL() << "Unrecognized exception"; \
 
 /// Debug with message to standard output.
-# ifdef _OPENMP
 # define FEASST_MACRO_OUTPUT(message, name, level) \
 { \
   if (feasst::VERBOSE_LEVEL >= level) { \
-    std::cout << "# " << name << omp_get_thread_num() \
-              << " [" << feasst::feasst_dir_trim_(__FILE__) << ":" << __LINE__ \
-              << "] " << message << std::endl; \
+    std::stringstream ss; \
+    ss << " [" << feasst::feasst_dir_trim_(__FILE__) << ":" << __LINE__ \
+              << "] " << message; \
+    feasst_macro_output(name, ss.str()); \
   } \
 }
-# else  // _OPENMP
-# define FEASST_MACRO_OUTPUT(message, name, level) \
-{ \
-  if (feasst::VERBOSE_LEVEL >= level) { \
-    std::cout << "# " << name \
-              << " [" << feasst::feasst_dir_trim_(__FILE__) << ":" << __LINE__ \
-              << "] " << message << std::endl; \
-  } \
-}
-#endif  // _OPENMP
+
+void feasst_macro_output(const std::string& name, std::string message);
 
 /// Define and name the various levels of verbosity.
 # define WARN(message) FEASST_MACRO_OUTPUT(message, "Warn ", 2)
