@@ -2,6 +2,10 @@
 #ifndef FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 #define FEASST_FLAT_HISTOGRAM_MACROSTATE_H_
 
+#include <map>
+#include <string>
+#include <memory>
+
 namespace feasst {
 
 class Acceptance;
@@ -38,7 +42,7 @@ class Macrostate {
   //@{
 
   /// Arguments as described above, but with explicit histogram object.
-  Macrostate(const Histogram& histogram, argtype args = argtype());
+  explicit Macrostate(const Histogram& histogram, argtype args = argtype());
   Macrostate(const Histogram& histogram, argtype * args);
 
   /**
@@ -86,8 +90,10 @@ class Macrostate {
 //  void swap_soft_bounds(Macrostate * macrostate);
 
   // HWH hackish adjust_bounds interface. See CollectionMatrixSplice.
-  int set_soft_max(const int index, const System& sys, const Criteria& criteria);
-  int set_soft_min(const int index, const System& sys, const Criteria& criteria);
+  int set_soft_max(const int index, const System& sys,
+                   const Criteria& criteria);
+  int set_soft_min(const int index, const System& sys,
+                   const Criteria& criteria);
   void add_to_soft_max(const int num) { soft_max_ += num; }
   void remove_from_soft_min(const int num) { soft_min_ -= num; }
 

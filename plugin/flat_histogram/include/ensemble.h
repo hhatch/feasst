@@ -2,6 +2,8 @@
 #ifndef FEASST_FLAT_HISTOGRAM_ENSEMBLE_H_
 #define FEASST_FLAT_HISTOGRAM_ENSEMBLE_H_
 
+#include <map>
+#include <string>
 #include <vector>
 #include "math/include/histogram.h"
 #include "flat_histogram/include/ln_probability.h"
@@ -93,7 +95,7 @@ class Ensemble {
  private:
   Histogram macrostates_;
   LnProbability ln_prob_;
-  double delta_conjugate_ = 0.; // record reweight change in conjugate
+  double delta_conjugate_ = 0.;  // record reweight change in conjugate
 };
 
 /**
@@ -111,7 +113,7 @@ class GrandCanonicalEnsemble : public Ensemble {
     const double beta_mu);
 
   // Same as above, but taken from spliced Clones.
-  GrandCanonicalEnsemble(const Clones& clones);
+  explicit GrandCanonicalEnsemble(const Clones& clones);
 
   /// Return the conjugate to the macrostate, \f$\beta\mu\f$.
   double beta_mu() const { return conjugate(); }

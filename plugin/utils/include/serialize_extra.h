@@ -3,6 +3,8 @@
 #ifndef FEASST_UTILS_SERIALIZE_EXTRA_H_
 #define FEASST_UTILS_SERIALIZE_EXTRA_H_
 
+#include <memory>
+#include <string>
 #include "utils/include/serialize.h"
 
 namespace feasst {

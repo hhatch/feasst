@@ -7,8 +7,6 @@
 
 namespace feasst {
 
-typedef std::map<std::string, std::string> argtype;
-
 /**
   Input custom window values directly by manual input of the segment, defined
   in Window.

@@ -2,6 +2,7 @@
 #ifndef FEASST_FLAT_HISTOGRAM_FLAT_HISTOGRAM_H_
 #define FEASST_FLAT_HISTOGRAM_FLAT_HISTOGRAM_H_
 
+#include <vector>
 #include <memory>
 #include <map>
 #include <string>
@@ -25,7 +26,7 @@ typedef std::map<std::string, std::string> argtype;
  */
 class FlatHistogram : public Criteria {
  public:
-  FlatHistogram() {} // do not use this constructor.
+  FlatHistogram() {}  // do not use this constructor.
 
   //@{
   /** @name Arguments
@@ -89,7 +90,8 @@ class FlatHistogram : public Criteria {
 
   // HWH hackish implementation for prefetch
   // Revert changes from previous trial.
-  void revert_(const bool accepted, const bool endpoint, const double ln_prob) override;
+  void revert_(const bool accepted, const bool endpoint,
+               const double ln_prob) override;
   // HWH rename: delete
   void finalize(const Acceptance& acceptance) override;
   void revert(const Acceptance& acceptance) override { finalize(acceptance); }
@@ -104,12 +106,13 @@ class FlatHistogram : public Criteria {
   // HWH hackish adjust_bounds interface. See CollectionMatrixSplice.
   int set_soft_max(const int index, const System& sys) override;
   int set_soft_min(const int index, const System& sys) override;
-  void set_cm(const bool inc_max, const int macro, const Criteria& crit) override;
+  void set_cm(const bool inc_max, const int macro,
+              const Criteria& crit) override;
   void adjust_bounds(const bool left_most, const bool right_most,
     const bool left_complete, const bool right_complete,
-    const bool all_min_size,
-    const int min_size, const System& system, const System * upper_sys,
-    Criteria * criteria, bool * adjusted_up, std::vector<int> * states) override;
+    const bool all_min_size, const int min_size, const System& system,
+    const System * upper_sys, Criteria * criteria, bool * adjusted_up,
+    std::vector<int> * states) override;
   const FlatHistogram& flat_histogram() const override { return *this; }
   int soft_min() const override;
   int soft_max() const override;
@@ -119,7 +122,7 @@ class FlatHistogram : public Criteria {
   std::shared_ptr<Criteria> create(argtype * args) const override {
     return std::make_shared<FlatHistogram>(args); }
   void serialize(std::ostream& ostr) const override;
-  FlatHistogram(std::istream& istr);
+  explicit FlatHistogram(std::istream& istr);
   std::unique_ptr<FlatHistogram> flat_histogram(const Criteria& criteria);
   ~FlatHistogram() {}
 

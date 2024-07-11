@@ -2,6 +2,8 @@
 #ifndef FEASST_FLAT_HISTOGRAM_BIAS_COLLECTION_MATRIX_H_
 #define FEASST_FLAT_HISTOGRAM_BIAS_COLLECTION_MATRIX_H_
 
+#include <map>
+#include <string>
 #include <vector>
 #include <memory>
 #include "math/include/accumulator.h"
@@ -87,7 +89,7 @@ class CollectionMatrix {
     const int block = -1) const;
 
   /// Return the matrix
-  const std::vector<std::vector<Accumulator> >& matrix() const { return matrix_; }
+  const std::vector<std::vector<Accumulator> >& matrix() const;
 
 //  /// Return the standard deviation of the change in the ln_prob relative to
 //  /// the bin below.

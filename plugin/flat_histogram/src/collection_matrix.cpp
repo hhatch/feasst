@@ -263,4 +263,8 @@ std::vector<LnProbability> CollectionMatrix::ln_prob_blocks() const {
   return ln_probs;
 }
 
+const std::vector<std::vector<Accumulator> >& CollectionMatrix::matrix() const {
+  return matrix_;
+}
+
 }  // namespace feasst

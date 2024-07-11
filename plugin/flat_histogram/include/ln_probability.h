@@ -14,7 +14,7 @@ class LnProbability {
   LnProbability() {}
 
   /// Construct with given values.
-  LnProbability(const std::vector<double>& values) {
+  explicit LnProbability(const std::vector<double>& values) {
     values_ = values; }
 
   /// Return the value of the bin.
@@ -88,7 +88,7 @@ class LnProbability {
   bool is_equal(const LnProbability& ln_prob, const double tolerance) const;
 
   void serialize(std::ostream& ostr) const;
-  LnProbability(std::istream& istr);
+  explicit LnProbability(std::istream& istr);
 
  private:
   std::vector<double> values_;

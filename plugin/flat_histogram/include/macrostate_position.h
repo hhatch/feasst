@@ -2,6 +2,7 @@
 #ifndef FEASST_FLAT_HISTOGRAM_MACROSTATE_POSITION_H_
 #define FEASST_FLAT_HISTOGRAM_MACROSTATE_POSITION_H_
 
+#include <memory>
 #include "flat_histogram/include/macrostate.h"
 
 namespace feasst {
@@ -28,7 +29,8 @@ class MacrostatePosition : public Macrostate {
   //@{
 
   /// Arguments as described above, but with explicit histogram object.
-  MacrostatePosition(const Histogram& histogram, argtype args = argtype());
+  explicit MacrostatePosition(const Histogram& histogram,
+                              argtype args = argtype());
   MacrostatePosition(const Histogram& histogram, argtype * args);
 
   double value(const System& system,
@@ -37,7 +39,7 @@ class MacrostatePosition : public Macrostate {
   std::shared_ptr<Macrostate> create(std::istream& istr) const override;
   std::shared_ptr<Macrostate> create(argtype * args) const override;
   void serialize(std::ostream& ostr) const override;
-  MacrostatePosition(std::istream& istr);
+  explicit MacrostatePosition(std::istream& istr);
   virtual ~MacrostatePosition() {}
 
   //@}

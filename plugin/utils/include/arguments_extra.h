@@ -2,6 +2,9 @@
 #ifndef FEASST_UTILS_ARGUMENTS_EXTRA_H_
 #define FEASST_UTILS_ARGUMENTS_EXTRA_H_
 
+#include <utility>
+#include <string>
+#include <vector>
 #include "utils/include/arguments.h"
 
 namespace feasst {
