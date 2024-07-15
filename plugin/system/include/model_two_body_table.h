@@ -10,6 +10,7 @@
 
 namespace feasst {
 
+class CutOff;
 class ModelParams;
 class Table1D;
 
@@ -74,7 +75,7 @@ class ModelTwoBodyTable : public ModelTwoBody {
     return std::make_shared<ModelTwoBodyTable>(istr); }
   void serialize(std::ostream& ostr) const override;
   explicit ModelTwoBodyTable(std::istream& istr);
-  virtual ~ModelTwoBodyTable() {}
+  virtual ~ModelTwoBodyTable();
 
  protected:
   void serialize_model_two_body_table_(std::ostream& ostr) const;
@@ -82,7 +83,7 @@ class ModelTwoBodyTable : public ModelTwoBody {
  private:
   double hard_sphere_threshold_inv_sq_;
   std::vector<std::vector<std::shared_ptr<Table1D> > > table_;
-  CutOff cutoff_inv_sq_;
+  std::unique_ptr<CutOff> cutoff_inv_sq_;
 };
 
 inline std::shared_ptr<ModelTwoBodyTable> MakeModelTwoBodyTable(
