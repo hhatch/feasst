@@ -1,7 +1,7 @@
-CutoffOuter
+VisitModelInnerNN
 =====================================================
 
-.. doxygenclass:: feasst::CutoffOuter
+.. doxygenclass:: feasst::VisitModelInnerNN
    :project: FEASST
    :members:
-   :membergroups: Arguments
+   

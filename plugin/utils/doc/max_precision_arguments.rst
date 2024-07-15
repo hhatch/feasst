@@ -1,7 +1,5 @@
-CutoffOuter
+utils/include/max_precision
 =====================================================
 
-.. doxygenclass:: feasst::CutoffOuter
+.. doxygenfile:: utils/include/max_precision.h
    :project: FEASST
-   :members:
-   

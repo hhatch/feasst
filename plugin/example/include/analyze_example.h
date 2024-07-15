@@ -10,7 +10,7 @@
 
 namespace feasst {
 
-class Accumulator;  // Forward declare for fast compilation.
+class Accumulator;
 
 typedef std::map<std::string, std::string> argtype;
 
