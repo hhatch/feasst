@@ -370,3 +370,4 @@ To Do List
 * Allow one script to contain multiple MonteCarlo, CollectionMatrixSplice, Prefetch in any order? (checkpointing is difficult)
 * When trials start, check to see if there is a trial that uses weight_per_number_fraction but there are fixed particles (or, see if there are weight_per_number for all types unless excluded?)
 * Speed up compilation. Try... https://stackoverflow.com/a/373179 .. pimpl, less includes, forward declare, etc. Remove Propertied entities, etc.
+* Add a FAQ for sim questions, such as, an overview of various table potential options, etc.

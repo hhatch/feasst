@@ -36,10 +36,20 @@ class ModelLJShape : public ModelOneBody,
 
   //@{
   /** @name Arguments
-    - Same arguments as ShapeFile.
+    - ShapeFile arguments.
     - alpha: set the exponent (default: 3.).
     - delta: set the delta parameter (default: 0.).
     - disable_shift: disable shifting of the potential to zero (default: false).
+    - wall_sigma: If != 0 (default: 0), use Lorentz-Berthelot mixing rules
+      between this wall sigma and the fluid sigma.
+      Otherwise, the sigma for each site type may be set with the argument
+      Potential::sigma[i].
+    - wall_epsilon: If != 0 (default: 0), use a slighly modified version of
+      Lorentz-Berthelot mixing rules between this wall epsilon and the fluid.
+      To account for negative epsilon (attractions), the mixing rule is
+      sign(wall_epsilon)sqrt(|wall_epsilon|*fluid_epsilon).
+      Otherwise, the epsilon for each site type may be set with the argument
+      Potential::epsilon[i].
    */
   explicit ModelLJShape(argtype args);
   explicit ModelLJShape(argtype * args);
@@ -49,12 +59,8 @@ class ModelLJShape : public ModelOneBody,
    */
   //@{
 
-  ModelLJShape(
-    std::shared_ptr<Shape> shape,
-    argtype args = argtype());
-
-  ModelLJShape(std::shared_ptr<Shape> shape,
-    argtype * args);
+  explicit ModelLJShape(std::shared_ptr<Shape> shape, argtype args = argtype());
+  ModelLJShape(std::shared_ptr<Shape> shape, argtype * args);
 
   /// Precompute the shift factor for optimization.
   void precompute(const ModelParams& existing) override;
@@ -64,6 +70,12 @@ class ModelLJShape : public ModelOneBody,
     const Site& site,
     const Configuration& config,
     const ModelParams& model_params) override;
+
+  /// Return the sigma (in case optionally mixed)
+  double sigma(const int site_type, const ModelParams& params);
+
+  /// Return the epsilon (in case optionally mixed)
+  double epsilon(const int site_type, const ModelParams& params);
 
   double energy(const double epsilon, const double sigma,
     const double distance) const;
@@ -82,6 +94,12 @@ class ModelLJShape : public ModelOneBody,
   double delta_;
   bool disable_shift_;
   std::shared_ptr<ModelLJShapeEnergyAtCutoff> shift_;
+  double wall_sigma_;
+  Sigma mixed_sigma_;
+  double wall_epsilon_;
+  Epsilon mixed_epsilon_;
+
+  void parse_args_(argtype * args);
 };
 
 inline std::shared_ptr<ModelLJShape> MakeModelLJShape(
