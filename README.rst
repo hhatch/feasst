@@ -90,7 +90,7 @@ How to install (i.e., compile the executables)
     mkdir feasst/build
     cd feasst/build
     cmake ..
-    make install -j4
+    make install -j$(nproc)
     # Optional Python packages for feasst tutorials (virtual environment recommended)
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
