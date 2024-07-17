@@ -190,18 +190,6 @@ void Potential::precompute(Configuration * config) {
   if (!group_.empty()) {
     group_index_ = config->group_index(group_);
   }
-  visit_model_->precompute(config);
-  const ModelParams& params = model_params(*config);
-  model_->precompute(params);
-  ASSERT(config->dimension() == 2 || config->dimension() == 3,
-    "Domain must be 2 or 3 dimensions. Please initialize Domain::side_length.");
-  const double max_cutoff = maximum(params.select("cutoff").values());
-  const double half_min_side = 0.5*config->domain().inscribed_sphere_diameter();
-  if (max_cutoff - NEAR_ZERO > half_min_side) {
-    WARN("The maximum cutoff:" << max_cutoff << " is greater than half the " <<
-         "minimum side length: " << half_min_side);
-  }
-
   // ModelParam override args
   if (override_args_.size() != 0) {
     argtype args = override_args_;
@@ -230,7 +218,19 @@ void Potential::precompute(Configuration * config) {
     }
     feasst_check_all_used(args);
   }
-  
+
+  visit_model_->precompute(config);
+  const ModelParams& params = model_params(*config);
+  model_->precompute(params);
+  ASSERT(config->dimension() == 2 || config->dimension() == 3,
+    "Domain must be 2 or 3 dimensions. Please initialize Domain::side_length.");
+  const double max_cutoff = maximum(params.select("cutoff").values());
+  const double half_min_side = 0.5*config->domain().inscribed_sphere_diameter();
+  if (max_cutoff - NEAR_ZERO > half_min_side) {
+    WARN("The maximum cutoff:" << max_cutoff << " is greater than half the " <<
+         "minimum side length: " << half_min_side);
+  }
+
   if (table_size_ > 0) {
     ASSERT(model_->num_body() == 2, "tables are only implemented for two "
       << "body simulations");

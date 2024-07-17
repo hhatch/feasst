@@ -371,3 +371,4 @@ To Do List
 * When trials start, check to see if there is a trial that uses weight_per_number_fraction but there are fixed particles (or, see if there are weight_per_number for all types unless excluded?)
 * Speed up compilation. Try... https://stackoverflow.com/a/373179 .. pimpl, less includes, forward declare, etc. Remove Propertied entities, etc.
 * Add a FAQ for sim questions, such as, an overview of various table potential options, etc.
+* Optimize BondVisitor that uses deserialize_map and strings in inner loop

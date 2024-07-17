@@ -194,6 +194,7 @@ class TrialSelect {
   bool is_particle_type_set_ = false;
   bool is_ghost_;
   std::shared_ptr<Properties> properties_;
+  int aniso_index_ = -1;
 
   // not checkpointed
   double probability_;

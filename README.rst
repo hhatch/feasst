@@ -90,8 +90,8 @@ How to install (i.e., compile the executables)
     mkdir feasst/build
     cd feasst/build
     cmake ..
-    make install -j4
-    # Optional Python packages for feasst tutorials (virtual environment recommended)
+    make install -j$(nproc)
+    # optional python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
 The executables `fst` and `rst` should appear in `/path/to/feasst/build/bin/`.
