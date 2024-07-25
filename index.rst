@@ -13,7 +13,7 @@ Contents:
 
 .. toctree::
 
-   README
+   README_html
    tutorial/README
    plugin/text_interface
    particle/README

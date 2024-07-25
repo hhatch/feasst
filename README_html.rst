@@ -25,7 +25,7 @@ Features
    :target: https://pages.nist.gov/feasst
    :align: right
 
-The features available in the Text Interface are summarized as follows:
+The features available in the :doc:`/plugin/text_interface` are summarized as follows:
 
 Monte Carlo simulation techniques
 
@@ -75,10 +75,10 @@ How to get started
 ===============================================
 
 * Compile the executables as described below.
-* Find tutorials on the website linked above that are closest to what you would like to accomplish.
+* Find :doc:`tutorial/README` that are closest to what you would like to accomplish.
 * Reproduce the expected result of those tutorials.
-* Use the text interface documentation to better understand and modify the tutorial to accomplish your goals.
-* When you contact us with issues, include the text input file instead of the Python code that generates that text file.
+* Use the :doc:`../plugin/text_interface` documentation to better understand and modify the tutorial to accomplish your goals.
+* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python code that generates that text file.
 
 How to install (i.e., compile the executables)
 ===============================================
@@ -99,10 +99,18 @@ The executables `fst` and `rst` should appear in `$HOME/feasst/build/bin/`.
 Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
 It is important to provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../" above).
 
+Example text input
+===============================================
+
+The following text input is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
+The simulation can be run by copy and pasting the box below into the text file `input.txt`, followed by the command `$HOME/feasst/build/bin/fst < input.txt`.
+
+.. literalinclude:: tutorial/example.txt
+
 Troubleshooting install
 ------------------------
 
-Please contact us if you run into an issue not listed below.
+Please :doc:`/CONTACT` us if you run into an issue not listed below.
 
 CentOS 7
 ~~~~~~~~~
@@ -157,3 +165,8 @@ You can access the documentation of a specific version of FEASST as follows.
     git checkout a50b4fe943832f012373f23658a9497990d70d21
     google-chrome index.html
 
+.. include:: CONTACT.rst
+
+.. include:: DISCLAIMER.rst
+
+.. include:: LICENSE.rst
