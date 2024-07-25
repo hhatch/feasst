@@ -71,16 +71,7 @@ Modern software
 * OpenMP parallelization and prefetching
 * Checkpoint files to save, restart and analyze simulations
 
-How to get started
-===============================================
-
-* Compile the executables as described below.
-* Find tutorials on the website linked above that are closest to what you would like to accomplish.
-* Reproduce the expected result of those tutorials.
-* Use the text interface documentation to better understand and modify the tutorial to accomplish your goals.
-* When you contact us with issues, include the text input file instead of the Python code that generates that text file.
-
-How to install (i.e., compile the executables)
+How to compile
 ===============================================
 
 .. code-block:: bash
@@ -95,9 +86,18 @@ How to install (i.e., compile the executables)
     # optional python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
+FEASST requires a C++ compiler, CMake and Python3, while git is optional.
 The executables `fst` and `rst` should appear in `$HOME/feasst/build/bin/`.
 Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
 It is important to provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../" above).
+
+How to get started
+===============================================
+
+* Find tutorials on the website linked above that are closest to what you would like to accomplish.
+* Reproduce the expected result of those tutorials.
+* Use the text interface documentation to better understand and modify the tutorial to accomplish your goals.
+* When you contact us with issues, include the text input file instead of the Python code that generates that text file.
 
 Troubleshooting install
 ------------------------

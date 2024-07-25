@@ -71,16 +71,7 @@ Modern software
 * OpenMP parallelization and prefetching
 * Checkpoint files to save, restart and analyze simulations
 
-How to get started
-===============================================
-
-* Compile the executables as described below.
-* Find :doc:`tutorial/README` that are closest to what you would like to accomplish.
-* Reproduce the expected result of those tutorials.
-* Use the :doc:`../plugin/text_interface` documentation to better understand and modify the tutorial to accomplish your goals.
-* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python code that generates that text file.
-
-How to install (i.e., compile the executables)
+How to compile
 ===============================================
 
 .. code-block:: bash
@@ -95,6 +86,7 @@ How to install (i.e., compile the executables)
     # optional python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
+FEASST requires a C++ compiler, CMake and Python3, while git is optional.
 The executables `fst` and `rst` should appear in `$HOME/feasst/build/bin/`.
 Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
 It is important to provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../" above).
@@ -103,9 +95,17 @@ Example text input
 ===============================================
 
 The following text input is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
-The simulation can be run by copy and pasting the box below into the text file `input.txt`, followed by the command `$HOME/feasst/build/bin/fst < input.txt`.
+The simulation can be run by copying and pasting the box below into the text file `input.txt`, followed by the command `$HOME/feasst/build/bin/fst < input.txt`.
 
 .. literalinclude:: tutorial/example.txt
+
+How to get started
+===============================================
+
+* Find :doc:`tutorial/README` that are closest to what you would like to accomplish.
+* Reproduce the expected result of those tutorials.
+* Use the :doc:`../plugin/text_interface` documentation to better understand and modify the tutorial to accomplish your goals.
+* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python code that generates that text file.
 
 Troubleshooting install
 ------------------------
