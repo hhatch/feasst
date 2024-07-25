@@ -78,14 +78,15 @@ How to get started
 * Find :doc:`tutorial/README` that are closest to what you would like to accomplish.
 * Reproduce the expected result of those tutorials.
 * Use the :doc:`../plugin/text_interface` documentation to better understand and modify the tutorial to accomplish your goals.
-* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python script that generates that text file.
+* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python code that generates that text file.
 
 How to install (i.e., compile the executables)
 ===============================================
 
 .. code-block:: bash
 
-    [apt/yum/dnf/brew] install g++ cmake git python3
+    #[apt/yum/dnf/brew] install g++ cmake git python3
+    cd $HOME # replace with preferred location
     git clone https://github.com/usnistgov/feasst.git
     mkdir feasst/build
     cd feasst/build
@@ -94,9 +95,17 @@ How to install (i.e., compile the executables)
     # optional python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
-The executables `fst` and `rst` should appear in `/path/to/feasst/build/bin/`.
+The executables `fst` and `rst` should appear in `$HOME/feasst/build/bin/`.
 Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
 It is important to provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../" above).
+
+Example text input
+===============================================
+
+The following text input is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
+The simulation can be run by copy and pasting the box below into the text file `input.txt`, followed by the command `$HOME/feasst/build/bin/fst < input.txt`.
+
+.. literalinclude:: tutorial/example.txt
 
 Troubleshooting install
 ------------------------
