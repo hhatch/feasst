@@ -77,7 +77,7 @@ How to compile
 .. code-block:: bash
 
     #[apt/yum/dnf/brew] install g++ cmake git python3
-    cd $HOME # replace with preferred location
+    cd $HOME # replace this with your preference throughout
     git clone https://github.com/usnistgov/feasst.git
     mkdir feasst/build
     cd feasst/build
@@ -87,51 +87,49 @@ How to compile
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
 FEASST requires a C++ compiler, CMake and Python3, while git is optional.
-The executables `fst` and `rst` should appear in `$HOME/feasst/build/bin/`.
-Text input files are run using `fst < input.txt` while simulations are restarted using `rst checkpoint.txt`.
-It is important to provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../" above).
+The executables ``fst`` and ``rst`` should appear in ``$HOME/feasst/build/bin/``.
+Text input files are run using ``fst < input.txt`` and simulations are restarted using ``rst checkpoint.txt``.
+For pyfeasst, provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../").
 
-Example text input
+Basic simulation example
 ===============================================
 
-The following text input is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
-The simulation can be run by copying and pasting the box below into the text file `input.txt`, followed by the command `$HOME/feasst/build/bin/fst < input.txt`.
+The following text input file is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
 
 .. literalinclude:: tutorial/example.txt
 
 How to get started
 ===============================================
 
+* Complete the :doc:`first <tutorial/tutorial>` and :doc:`second tutorial<tutorial/launch>`.
+
+  * Copy/paste or use the URL to find the code (e.g., https://pages.nist.gov/feasst/tutorial/launch.html is ``$HOME/feasst/tutorial/launch.py``).
+  * See ``python launch.py --help`` (e.g., adjust ``--feasst_install`` or ``--hours_terminate``).
 * Find :doc:`tutorial/README` that are closest to what you would like to accomplish.
-* Reproduce the expected result of those tutorials.
-* Use the :doc:`../plugin/text_interface` documentation to better understand and modify the tutorial to accomplish your goals.
-* When you :doc:`../CONTACT` us with issues, include the text input file instead of the Python code that generates that text file.
+* Reproduce the expected result of those :doc:`tutorial/README`.
+* To modify the tutorial to accomplish your goals, refer to the :doc:`../plugin/text_interface` documentation.
+* Compare the energy of a :doc:`reference configuration<plugin/monte_carlo/tutorial/tutorial_0_ref_configs>` with a trusted source.
 
 Troubleshooting install
 ------------------------
 
 Please :doc:`/CONTACT` us if you run into an issue not listed below.
 
-CentOS 7
-~~~~~~~~~
+Ubuntu 18, 20, 22, 24 and Rocky 8 and 9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CMake version is usually too old.
-Try the command cmake3 instead of cmake.
-
-Rocky 8
-~~~~~~~~
-
-* yum install gcc-c++
+* We are not aware of any install issues with these OS.
 
 Ubuntu 16
 ~~~~~~~~~~
 
 * Update to CMake 3 (https://cmake.org/download/)
 
-Ubuntu 18, 20, 22
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CentOS 7
+~~~~~~~~~
 
-* We are not aware of any install issues with these OS.
+CMake version is usually too old.
+Try the command cmake3 instead of cmake.
 
 Cray (NERSC CORI)
 ~~~~~~~~~~~~~~~~~~
