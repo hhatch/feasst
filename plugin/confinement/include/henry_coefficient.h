@@ -28,6 +28,9 @@ class HenryCoefficient : public Analyze {
    */
   //@{
 
+  /// Return the number of beta derivatives, starting with 1.
+  int num_beta_taylor() const { return static_cast<int>(beta_taylor_.size()); }
+
   std::string header(const Criteria& criteria,
     const System& system,
     const TrialFactory& trials) const override;

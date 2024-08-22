@@ -22,7 +22,7 @@ class MapHenryCoefficient {
 
 static MapHenryCoefficient mapper_ = MapHenryCoefficient();
 
-HenryCoefficient::HenryCoefficient(argtype * args) : Analyze(&args) {
+HenryCoefficient::HenryCoefficient(argtype * args) : Analyze(args) {
   ASSERT(trials_per_update() == 1, "should update every step");
   const int num_beta_taylor = integer("num_beta_taylor", args, 0);
   beta_taylor_.resize(num_beta_taylor);
@@ -65,12 +65,14 @@ void HenryCoefficient::update(const Criteria& criteria,
   const double en = trial_factory.trial(0).accept().energy_new();
   DEBUG("en: " << en);
   const double beta = system.thermo_params().beta();
+  get_accumulator()->accumulate(std::exp(-beta*en));
+
+  // moments for extrapolation
   double unebu = std::exp(-beta*en);
   for (int ibd = 0; ibd < static_cast<int>(beta_taylor_.size()); ++ibd) {
     unebu *= -en;
     beta_taylor_[ibd].accumulate(unebu/factorial(ibd+1));
   }
-  get_accumulator()->accumulate(std::exp(-beta*en));
 }
 
 std::string HenryCoefficient::write(const Criteria& criteria,
@@ -80,8 +82,9 @@ std::string HenryCoefficient::write(const Criteria& criteria,
   ss << accumulator().status();
   if (num_beta_taylor() > 0) {
     ss << ",\"beta_taylor\": [";
-    for (int ibt = 0; ibt < num_beta_taylor() + 1; ++ibt) {
-      ss << beta_taylor(ibt) << ",";
+    ss << accumulator().average() << ",";
+    for (int ibt = 1; ibt < num_beta_taylor() + 1; ++ibt) {
+      ss << beta_taylor_[ibt - 1].average() << ",";
     }
     ss << "],";
   }
@@ -98,7 +101,7 @@ void HenryCoefficient::serialize(std::ostream& ostr) const {
 
 HenryCoefficient::HenryCoefficient(std::istream& istr) : Analyze(istr) {
   const int version = feasst_deserialize_version(istr);
-  ASSERT(version => 9492 && version <= 9493, "mismatch version:" << version);
+  ASSERT(version >= 9492 && version <= 9493, "mismatch version:" << version);
   if (version >= 9493) {
     feasst_deserialize_fstobj(&beta_taylor_, istr);
   }
