@@ -155,6 +155,7 @@ class Accumulator {
 
   void serialize(std::ostream& ostr) const;
   explicit Accumulator(std::istream& istr);
+  ~Accumulator();
 
   //@}
  private:
