@@ -192,6 +192,20 @@ if (USE_OPENMP)
   endif()
 endif()
 
+# prep feasst.(i/h) (as well as documentation)
+execute_process(
+  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  RESULT_VARIABLE EXIT_CODE
+)
+
+if (NOT ${EXIT_CODE} EQUAL 0)
+    message(
+            FATAL_ERROR
+            "There was a problem generating feasst.h using the following command: \"python3 ../py/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
+    )
+endif()
+
 # FEASST plugins
 set (FEASST_PLUGIN_DIR "${CMAKE_SOURCE_DIR}/plugin")
 include_directories (${FEASST_PLUGIN_DIR})
@@ -480,20 +494,6 @@ if (USE_SPHINX)
   add_dependencies(pdf latex)
 
 endif (USE_SPHINX)
-
-# prep feasst.(i/h) (as well as documentation)
-execute_process(
-  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  RESULT_VARIABLE EXIT_CODE
-)
-
-if (NOT ${EXIT_CODE} EQUAL 0)
-    message(
-            FATAL_ERROR
-            "There was a problem generating feasst.h using the following command: \"python3 ../py/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
-    )
-endif()
 
 # GTEST
 if (USE_GTEST)
