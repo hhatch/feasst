@@ -481,6 +481,20 @@ if (USE_SPHINX)
 
 endif (USE_SPHINX)
 
+# prep feasst.(i/h) (as well as documentation)
+execute_process(
+  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  RESULT_VARIABLE EXIT_CODE
+)
+
+if (NOT ${EXIT_CODE} EQUAL 0)
+    message(
+            FATAL_ERROR
+            "There was a problem generating feasst.h using the following command: \"python3 ../py/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
+    )
+endif()
+
 # GTEST
 if (USE_GTEST)
   message("USING GTEST")
@@ -535,20 +549,6 @@ if (USE_GTEST)
   add_test(NAME test COMMAND ./bin/unittest --gtest_shuffle --gtest_filter=-*LONG)
 
 endif(USE_GTEST)
-
-# prep feasst.(i/h) (as well as documentation)
-execute_process(
-  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  RESULT_VARIABLE EXIT_CODE
-)
-
-if (NOT ${EXIT_CODE} EQUAL 0)
-    message(
-            FATAL_ERROR
-            "There was a problem generating feasst.h using the following command: \"python3 ../py/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
-    )
-endif()
 
 # build feasst library
 add_library (feasstlib INTERFACE)
