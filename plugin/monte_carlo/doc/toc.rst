@@ -1,57 +1,58 @@
 
 .. toctree::
 
+   TrialCompute
+   TrialComputeAdd
    Tunable
    Acceptance
-   Action
-   WriteModelParams
-   WriteCheckpoint
    Constraint
    ConstrainNumParticles
-   MonteCarlo
    Perturb
+   PerturbMove
+   PerturbRotate
+   PerturbTranslate
+   PerturbAnywhere
+   TrialComputeMove
+   TrialComputeRemove
+   TrialComputeTranslate
+   TrialComputeVolume
+   TrialSelect
+   TrialSelectParticle
+   TrialSelectAll
+   TrialSelectBond
+   TrialSelectAngle
+   TrialSelectDihedral
+   TrialStage
+   Action
+   RemoveTrial
+   ConvertToRefPotential
+   WriteModelParams
+   RemoveAnalyze
+   WriteCheckpoint
+   MonteCarlo
+   PerturbAdd
    PerturbRemove
    PerturbVolume
-   RemoveTrial
+   RefPotential
+   RemoveModify
    Run
    Stepper
    Analyze
    AnalyzeFactory
    Modify
    ModifyFactory
-   RefPotential
-   PerturbMove
-   PerturbTranslate
-   RemoveModify
-   TrialCompute
-   TrialComputeRemove
-   TrialComputeMove
-   TrialComputeTranslate
-   TrialComputeVolume
-   PerturbRotate
-   PerturbAnywhere
-   PerturbAdd
-   RemoveAnalyze
-   TrialComputeAdd
-   TrialSelect
-   TrialSelectParticle
-   TrialSelectBond
-   TrialSelectAll
-   TrialSelectAngle
-   TrialSelectDihedral
-   TrialStage
    PerturbDistance
    PerturbDistanceAngle
    PerturbDihedral
    Trial
-   TrialRemove
-   TrialMove
-   TrialRotate
-   TrialTranslate
    TrialAdd
    TrialFactory
    TrialTransfer
+   TrialRemove
    TrialVolume
+   TrialMove
+   TrialRotate
+   TrialTranslate
    Criteria
    Metropolis
    AlwaysReject

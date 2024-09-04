@@ -8,13 +8,13 @@
    Macrostate
    Ensemble
    MacrostateEnergy
-   MacrostateNumParticles
    MacrostatePosition
-   TransitionMatrix
    WangLandau
    Window
    CollectionMatrixSplice
-   WindowCustom
    WindowExponential
    WLTM
+   MacrostateNumParticles
+   TransitionMatrix
+   WindowCustom
    Clones

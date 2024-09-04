@@ -11,7 +11,6 @@
    DensityProfile
    Energy
    ExtensiveMoments
-   HeatCapacity
    IncrementPhase
    Log
    MeanSquaredDisplacement
@@ -24,6 +23,7 @@
    WallClockLimit
    WrapParticles
    CriteriaUpdater
+   HeatCapacity
    Movie
    PairDistributionInner
    Scattering

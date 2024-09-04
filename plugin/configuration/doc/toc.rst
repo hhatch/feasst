@@ -2,19 +2,19 @@
 .. toctree::
 
    Properties
-   Bond
-   Configuration
-   Domain
-   Group
    ModelParam
    NeighborCriteria
    PhysicalConstants
-   Select
    Site
+   VisitParticles
+   VisitConfiguration
+   Bond
    Particle
    FileParticle
    ParticleFactory
-   VisitParticles
-   VisitConfiguration
-   PrinterXYZ
+   Configuration
+   Domain
    FileVMD
+   PrinterXYZ
+   Group
+   Select

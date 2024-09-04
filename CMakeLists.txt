@@ -44,6 +44,7 @@ option(USE_GCOV "Use Coverage" OFF)
 option(USE_FFTW "Use FFTW" OFF)
 option(USE_PYBIND11 "Use PYBIND11" OFF)
 option(USE_MPI "Use MPI" OFF)
+option(USE_HEADER_CHECK "Use stand-alone header check (requires cleanup)" OFF)
 set(FFTW_DIR "$ENV{HOME}/software/fftw-3.3.10/build/")
 option(USE_NETCDF "Use NetCDF" OFF)
 set(NETCDF_DIR "$ENV{HOME}/local")
@@ -537,7 +538,7 @@ endif(USE_GTEST)
 
 # prep feasst.(i/h) (as well as documentation)
 execute_process(
-  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0
+  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   RESULT_VARIABLE EXIT_CODE
 )

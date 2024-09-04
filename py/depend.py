@@ -11,6 +11,7 @@ import argparse
 parser = argparse.ArgumentParser()
 optional = parser.add_argument_group('optional arguments')
 optional.add_argument("--update_doc", "-u", help="update documentation rst?", type=int, default=1)
+optional.add_argument("--check_headers", "-c", help="if ON, make a cpp that includes each header to check self-sufficiency", type=str, default='OFF')
 required = parser.add_argument_group('required arguments')
 required.add_argument("--source_dir", "-s", help="/path/to/feasst", type=str, required=True)
 args = parser.parse_args()
@@ -65,6 +66,17 @@ def dependency(path):
       if dep1 not in (headers + external_libs):
         hi=0
         #raise Exception(dep1, 'is included by', dep[0], 'but has wrong directory structure')
+
+  # optionally print self-sufficient check of header files
+  if args.check_headers == 'ON':
+    for header in headers:
+      print(header)
+      #print(header[:-2])
+      cpp = args.source_dir + '/plugin/' + header[:-2] + '_tmphcheck.cpp'
+      cpp = cpp.replace('/include/', '/src/')
+      print(cpp)
+      with open(cpp, 'w') as file1:
+        file1.write('#include "'+header+'"')
   return depends
 
 # bubble sort by moving headers up if they include a file not below them.

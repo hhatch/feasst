@@ -1,20 +1,20 @@
 
 .. toctree::
 
+   DihedralRyckaertBellemans
+   DihedralTraPPE
+   DihedralHarmonic
+   AngleHarmonic
    FENE
    BondHarmonic
    Yukawa
    TwoBodyTable
    SquareWell
    TablePotential
-   DihedralTraPPE
-   DihedralRyckaertBellemans
-   DihedralHarmonic
-   AngleHarmonic
+   MieLambdaR
    TwoBodyAlpha
    LennardJonesAlpha
    LennardJonesCutShift
    LennardJonesForceShift
-   MieLambdaR
    Mie
    Jagla

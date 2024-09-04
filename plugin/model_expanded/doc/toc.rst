@@ -5,5 +5,5 @@
    PerturbModel
    ComputeModel
    ConstrainModelIndex
-   MacrostateModel
    TrialModel
+   MacrostateModel

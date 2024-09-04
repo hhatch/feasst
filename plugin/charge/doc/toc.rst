@@ -4,10 +4,10 @@
    utils
    ElectricField
    ChargeSelf
+   ChargeScreened
    DebyeHuckel
    Coulomb
    ChargeScreenedIntra
-   ChargeScreened
    TrialRemoveMultiple
    TrialAddMultiple
    TrialTransferMultiple
