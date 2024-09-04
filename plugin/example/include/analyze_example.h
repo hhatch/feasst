@@ -80,6 +80,7 @@ class AnalyzeExample : public Analyze {
   std::shared_ptr<Analyze> create(argtype * args) const override {
     return std::make_shared<AnalyzeExample>(args); }
   explicit AnalyzeExample(std::istream& istr);
+  ~AnalyzeExample();
 
   //@}
  private:
