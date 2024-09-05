@@ -29,8 +29,6 @@ set(FEASST_PLUGINS "threads;utils;math;configuration;system;opt_lj;steppers;mont
 #set(FEASST_PLUGINS "threads;utils;math;configuration;system;opt_lj;steppers;monte_carlo;models;mayer;patch;example;shape;confinement;chain;flat_histogram;charge;morph;cluster;prefetch;egce;beta_expanded;aniso;netcdf")
 #set(FEASST_PLUGINS "threads;utils;math;configuration;system;opt_lj;steppers;monte_carlo;models;mayer;patch;example;shape;confinement;chain;flat_histogram;charge;morph;cluster;prefetch;egce;beta_expanded;aniso;fftw")
 #set(FEASST_PLUGINS "threads;utils;math;configuration;system;opt_lj;steppers;monte_carlo;models;patch;mayer;example;shape;confinement;chain;flat_histogram;charge;morph;cluster;prefetch;egce;beta_expanded;aniso;xtc")
-# Note, if you change the plugin list and want to use the python interface,
-# you also need to run "../py/run.sh ../dev/tools/depend.py -s ../"
 
 # set path to XDR if using xtc plugin
 set(XDRFILE_DIR "$ENV{HOME}/software/xdrfile-1.1b/build")
@@ -194,7 +192,7 @@ endif()
 
 # prep feasst.(i/h) (as well as documentation)
 execute_process(
-  COMMAND python3 ${CMAKE_SOURCE_DIR}/py/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
+  COMMAND python3 ${CMAKE_SOURCE_DIR}/dev/tools/depend.py -s ${CMAKE_SOURCE_DIR} --update_doc 0 --check_headers ${USE_HEADER_CHECK}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   RESULT_VARIABLE EXIT_CODE
 )
@@ -202,7 +200,7 @@ execute_process(
 if (NOT ${EXIT_CODE} EQUAL 0)
     message(
             FATAL_ERROR
-            "There was a problem generating feasst.h using the following command: \"python3 ../py/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
+            "There was a problem generating feasst.h using the following command: \"python3 ../dev/tools/depend.py -s ../\" Ensure that python3 is available, and try to run this command manually to report any issues to the developers."
     )
 endif()
 
