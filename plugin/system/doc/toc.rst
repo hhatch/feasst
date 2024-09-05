@@ -1,6 +1,7 @@
 
 .. toctree::
 
+   Cells
    Model
    BondFourBody
    RigidDihedral
@@ -8,9 +9,10 @@
    RigidAngle
    AngleSquareWell
    BondTwoBody
-   BondSquareWell
    RigidBond
+   BondSquareWell
    BondVisitor
+   CutoffOuter
    ModelOneBody
    ModelEmpty
    ModelThreeBody
@@ -20,20 +22,18 @@
    LennardJones
    ModelTwoBodyFactory
    ModelTwoBodyTable
+   Potential
    PotentialFactory
    SynchronizeData
    EnergyMap
+   System
    ThermoParams
    VisitModel
    DontVisitModel
    LongRangeCorrections
    VisitModelBond
    VisitModelCell
+   VisitModelCutoffOuter
    VisitModelInner
    VisitModelIntra
    VisitModelIntraMap
-   System
-   VisitModelCutoffOuter
-   Potential
-   CutoffOuter
-   Cells

@@ -12,8 +12,6 @@
    Energy
    ExtensiveMoments
    IncrementPhase
-   Log
-   MeanSquaredDisplacement
    NumParticles
    ProfileTrials
    ReadConfigFromFile
@@ -24,9 +22,11 @@
    WrapParticles
    CriteriaUpdater
    HeatCapacity
+   MeanSquaredDisplacement
    Movie
-   PairDistributionInner
    Scattering
    AnalyzeData
    WriteStepper
+   Log
+   PairDistributionInner
    CPUTime

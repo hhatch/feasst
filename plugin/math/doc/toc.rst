@@ -2,23 +2,23 @@
 .. toctree::
 
    constants
-   Formula
-   Histogram
-   Matrix
+   Euler
+   Minimize
+   GoldenSearch
+   Position
    quadratic_equation
-   Random
-   RandomModulo
-   RandomMT19937
    Solver
-   SolverBisection
    SolverBrentDekker
    SolverNewtonRaphson
    Table
-   utils_math
-   Euler
    Accumulator
-   Position
+   Formula
    FormulaExponential
    FormulaPolynomial
-   Minimize
-   GoldenSearch
+   Histogram
+   Matrix
+   Random
+   RandomModulo
+   RandomMT19937
+   SolverBisection
+   utils_math
