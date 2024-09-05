@@ -1,7 +1,7 @@
 """
 This is a simple test of a henry coefficient calculation where a particle is inserted in a box
 where half the box leads to overlap (e.g., a hard wall potential).
-The <e^-{beta U}> term should be 1/2.
+The <e^-(beta U)> term should be 1/2.
 """
 
 import argparse
