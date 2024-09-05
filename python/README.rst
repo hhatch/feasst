@@ -37,4 +37,4 @@ Python usage is as follows:
     for line in text_input.split('\n'):
         feasst.parse(mc, line)
 
-The depreciated Python interface using SWIG is described in :doc:`/../py/README`.
+The deprecated Python interface using SWIG is described in :doc:`/../py/README`.
