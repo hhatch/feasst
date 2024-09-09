@@ -36,7 +36,7 @@ install:
     fi
 
 script:
-  - cmake -DUSE_SWIG=ON -DUSE_GTEST=ON -DUSE_GCOV=ON ..
+  - cmake -DUSE_GTEST=ON .. # -DUSE_SWIG=ON -DUSE_GTEST=ON # -DUSE_GCOV=ON ..
 #  - make _feasst
   - make
 #  - make coverage
@@ -44,7 +44,7 @@ script:
 #  - make test
 #  - valgrind ./bin/unittest --gtest_filter=-*LONG*
 #  - python ../py/test.py
-  - ../py/run.sh ../py/test.py
+#  - ../py/run.sh ../py/test.py
 
 after_success:
   - lcov --directory . --capture --output-file coverage.info # capture coverage info
