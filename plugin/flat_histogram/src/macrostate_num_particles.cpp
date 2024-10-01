@@ -36,8 +36,6 @@ double MacrostateNumParticles::value(const System& system,
 
 FEASST_MAPPER(MacrostateNumParticles, argtype({{"width", "1"}, {"max", "1"}}));
 
-static MapMacrostateNumParticles mapper_ = MapMacrostateNumParticles();
-
 std::shared_ptr<Macrostate> MacrostateNumParticles::create(std::istream& istr) const {
   return std::make_shared<MacrostateNumParticles>(istr);
 }

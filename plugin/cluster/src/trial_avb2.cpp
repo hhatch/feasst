@@ -69,15 +69,7 @@ void TrialAVB2Half::serialize(std::ostream& ostr) const {
   feasst_serialize_version(1634, ostr);
 }
 
-class MapTrialAVB2 {
- public:
-  MapTrialAVB2() {
-    auto obj = MakeTrialAVB2();
-    obj->deserialize_map()["TrialAVB2"] = obj;
-  }
-};
-
-static MapTrialAVB2 mapper_trial_avb2__ = MapTrialAVB2();
+FEASST_MAPPER(TrialAVB2,);
 
 TrialAVB2::TrialAVB2(argtype * args) : TrialFactoryNamed() {
   class_name_ = "TrialAVB2";

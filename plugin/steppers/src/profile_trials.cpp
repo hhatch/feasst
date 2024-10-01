@@ -6,15 +6,7 @@
 
 namespace feasst {
 
-class MapProfileTrials {
- public:
-  MapProfileTrials() {
-    auto obj = MakeProfileTrials();
-    obj->deserialize_map()["ProfileTrials"] = obj;
-  }
-};
-
-static MapProfileTrials mapper_ = MapProfileTrials();
+FEASST_MAPPER(ProfileTrials,);
 
 ProfileTrials::ProfileTrials(argtype * args) : Analyze(args) {}
 ProfileTrials::ProfileTrials(argtype args) : ProfileTrials(&args) {
