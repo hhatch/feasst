@@ -1,10 +1,11 @@
 cmake_minimum_required (VERSION 3.5)
 project (FEASST)
+set(FEASST_VERSION v0.25.3)
 set (CMAKE_CXX_STANDARD 14)
 cmake_policy(SET CMP0042 NEW) # removes warning about macosx_rpath
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -pedantic -g -pthread")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g -pthread")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -Wall -pedantic -g -pthread")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -pedantic -g -pthread")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g -pthread -fanalyzer")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -pg -g") #profile
 
@@ -147,7 +148,7 @@ set(EXECUTABLE_OUTPUT_PATH "bin")
 #message("FEASST_VERBOSE_LEVEL ${FEASST_VERBOSE_LEVEL}")
 add_definitions("-DFEASST_VERBOSE_LEVEL_=${FEASST_VERBOSE_LEVEL}")
 #unset(FEASST_VERBOSE_LEVEL CACHE)
-add_definitions("-DFEASST_VERSION_=\"v0.25.3\"")
+add_definitions("-DFEASST_VERSION_=\"${FEASST_VERSION}\"")
 add_definitions("-DFEASST_DIR_=\"${CMAKE_SOURCE_DIR}\"")
 
 # OMP
@@ -419,8 +420,8 @@ if (USE_SPHINX)
     @ONLY)
 
   configure_file(
-    "${CMAKE_SOURCE_DIR}/dev/sphinx/README_html.rst.in"
-    "${CMAKE_SOURCE_DIR}/README_html.rst"
+    "${CMAKE_SOURCE_DIR}/dev/sphinx/overview.rst.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/overview.rst"
     @ONLY)
 
   # copy favicon, leave notice and extended layout

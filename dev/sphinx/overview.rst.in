@@ -1,5 +1,5 @@
 *************************
-README
+Overview
 *************************
 
 The Free Energy and Advanced Sampling Simulation Toolkit (FEASST) is a free,
@@ -21,7 +21,7 @@ simulations with Monte Carlo methods.
 Features
 ================================================================================
 
-.. image:: dev/sphinx/feasst.png
+.. image:: ../dev/sphinx/feasst.png
    :target: https://pages.nist.gov/feasst
    :align: right
 
@@ -76,17 +76,17 @@ How to compile with BASH
 
 .. code-block:: bash
 
-    #[apt/yum/dnf/brew] install g++ cmake python3
+    #[apt/yum/dnf/brew] install g++ cmake
     cd $HOME # replace this with your preference throughout
     wget https://github.com/usnistgov/feasst/archive/refs/tags/@FEASST_VERSION@.tar.gz
     tar -xf @FEASST_VERSION@.tar.gz --transform s/-/-v/
     mkdir feasst-@FEASST_VERSION@/build; cd $_
     cmake ..
     make install -j$(nproc)
-    # optional python packages for feasst tutorials
+    # optional Python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst
 
-FEASST requires a C++14 compiler, CMake and Python3.
+FEASST requires a C++14 compiler and CMake.
 The executables ``fst`` and ``rst`` should appear in ``$HOME/feasst/build/bin/``.
 Text input files are run using ``fst < input.txt`` and simulations are restarted using ``rst checkpoint.txt``.
 For pyfeasst, provide pip a path to the specific pyfeasst directory in feasst to ensure the versions match (e.g., do not leave out the "../").
