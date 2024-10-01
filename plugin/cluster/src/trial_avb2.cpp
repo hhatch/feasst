@@ -24,15 +24,7 @@ void gen_avb2_args_(const bool out_to_in, argtype * args,
   }
 }
 
-class MapTrialAVB2Half {
- public:
-  MapTrialAVB2Half() {
-    auto obj = MakeTrialAVB2Half({{"out_to_in", "true"}});
-    obj->deserialize_map()["TrialAVB2Half"] = obj;
-  }
-};
-
-static MapTrialAVB2Half mapper_ = MapTrialAVB2Half();
+FEASST_MAPPER(TrialAVB2Half, argtype({{"out_to_in", "true"}}));
 
 TrialAVB2Half::TrialAVB2Half(argtype * args) : Trial(args) {
   class_name_ = "TrialAVB2Half";
