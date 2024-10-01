@@ -34,14 +34,7 @@ double MacrostateNumParticles::value(const System& system,
   return num_.num_particles(system, acceptance);
 }
 
-class MapMacrostateNumParticles {
- public:
-  MapMacrostateNumParticles() {
-    auto hist = MakeHistogram({{"width", "1"}, {"max", "1"}});
-    MacrostateNumParticles(*hist).deserialize_map()["MacrostateNumParticles"] =
-      MakeMacrostateNumParticles(*hist);
-  }
-};
+FEASST_MAPPER(MacrostateNumParticles, argtype({{"width", "1"}, {"max", "1"}}));
 
 static MapMacrostateNumParticles mapper_ = MapMacrostateNumParticles();
 
