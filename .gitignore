@@ -34,3 +34,6 @@ plugin/feasst/include/feasst.h
 
 # interface files
 dev/v0*
+
+# sphinx
+README_html.rst

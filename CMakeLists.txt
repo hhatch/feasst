@@ -443,6 +443,11 @@ if (USE_SPHINX)
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
 
+  configure_file(
+    "${CMAKE_SOURCE_DIR}/dev/sphinx/README_html.rst.in"
+    "${CMAKE_SOURCE_DIR}/README_html.rst"
+    @ONLY)
+
   # copy favicon, leave notice and extended layout
   configure_file(
     ${CMAKE_SOURCE_DIR}/dev/sphinx/_build/_static/favicon.ico ${BINARY_BUILD_DIR}/favicon.ico COPYONLY)

@@ -18,4 +18,4 @@ simulations with Monte Carlo methods.
 
    Discussion list: https://groups.google.com/a/list.nist.gov/d/forum/feasst
 
-See the website linked above (or README_html.rst) for more information.
+See the website linked above for more information.
