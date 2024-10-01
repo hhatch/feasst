@@ -144,32 +144,10 @@ string(REGEX REPLACE "^ " "" EXTRA_LIBS "${EXTRA_LIBS}")
 
 set(EXECUTABLE_OUTPUT_PATH "bin")
 
-# Get the current working branch
-execute_process(
-  COMMAND git rev-parse --abbrev-ref HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE GIT_BRANCH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-# Get the latest abbreviated commit hash of the working branch
-execute_process(
-  COMMAND git describe --abbrev=10 --dirty --always --tags
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE GIT_COMMIT_HASH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-execute_process(
-  COMMAND git describe --abbrev=0
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE GIT_COMMIT_HASH_SHORT
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
 #message("FEASST_VERBOSE_LEVEL ${FEASST_VERBOSE_LEVEL}")
 add_definitions("-DFEASST_VERBOSE_LEVEL_=${FEASST_VERBOSE_LEVEL}")
 #unset(FEASST_VERBOSE_LEVEL CACHE)
-add_definitions("-DFEASST_VERSION_=\"${GIT_COMMIT_HASH}-${GIT_BRANCH}\"")
+add_definitions("-DFEASST_VERSION_=\"v0.25.3\"")
 add_definitions("-DFEASST_DIR_=\"${CMAKE_SOURCE_DIR}\"")
 
 # OMP
@@ -434,9 +412,6 @@ if (USE_SPHINX)
 
   # LATEX output directory
   set(SPHINX_LATEX_DIR "${CMAKE_CURRENT_BINARY_DIR}/latex")
-
-  # FEASST version
-  set(FEASST_VERSION ${GIT_COMMIT_HASH})
 
   configure_file(
     "${CMAKE_SOURCE_DIR}/dev/sphinx/conf.py.in"
