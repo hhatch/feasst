@@ -6,7 +6,7 @@
 
 namespace feasst {
 
-FEASST_MAPPER(ProfileTrials, argtpye({{"trials_per_update", "1e3"}}));
+FEASST_MAPPER(ProfileTrials, argtype({{"trials_per_update", "1e3"}}));
 
 ProfileTrials::ProfileTrials(argtype * args) : Analyze(args) {
   if (trials_per_update() < 1e3) {
