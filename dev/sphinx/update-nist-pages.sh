@@ -11,7 +11,7 @@ grep -v "_arguments.rst: WARNING: document" tt | grep -v "_arguments.rst:4: WARN
 # update the version manually in CMakeLists
 # remove debugging compiler flags in CMakeLists
 # add feasst.h and remove depend.py from CMakeLists
-# tag the main with this same version before building
+# tag the main with this same version before building html
 version=$(git describe)
 #branch=`git branch | grep \* | cut -d ' ' -f2`
 mv html html2
