@@ -362,6 +362,7 @@ class MonteCarlo {
   // temporary and not serialized
   std::pair<std::string, argtype> next_arg_;
 
+  void record_next_arg_(arglist * args);
   bool duplicate_stepper_output_file_(const std::string output_file);
 };
 

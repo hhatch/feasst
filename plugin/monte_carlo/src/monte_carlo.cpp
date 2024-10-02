@@ -60,6 +60,12 @@ MonteCarlo::MonteCarlo(std::shared_ptr<Random> random) {
 MonteCarlo::MonteCarlo() : MonteCarlo(std::make_shared<RandomMT19937>()) {}
 MonteCarlo::~MonteCarlo() {}
 
+void MonteCarlo:: record_next_arg_(arglist *args) {
+  if (args->size() > 0) {
+    next_arg_ = *args->begin();
+  }
+}
+
 void MonteCarlo::parse_args(arglist * args, const bool silent) {
   DEBUG("first " << args->begin()->first);
   if (!silent) {
@@ -72,7 +78,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Random*>(MakeRandomMT19937().get()), args);
   if (ran) {
     DEBUG("parsing Random");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     set(ran);
     return;
   }
@@ -80,7 +86,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse Checkpoint
   if (args->begin()->first == "Checkpoint") {
     DEBUG("parsing Checkpoint");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     set(MakeCheckpoint(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -89,7 +95,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse Configuration
   if (args->begin()->first == "Configuration") {
     DEBUG("parsing Configuration");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(MakeConfiguration(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -98,7 +104,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse NeighborCriteria
   if (args->begin()->first == "NeighborCriteria") {
     DEBUG("parsing NeighborCriteria");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(MakeNeighborCriteria(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -107,7 +113,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse Potential
   if (args->begin()->first == "Potential") {
     DEBUG("parsing Potential");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     const int config = integer("configuration_index", &(args->begin()->second), 0);
     add(MakePotential(args->begin()->second), config);
     args->erase(args->begin());
@@ -117,7 +123,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse reference Potential
   if (args->begin()->first == "ReferencePotential") {
     DEBUG("parsing ReferencePotential");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add_to_reference(MakePotential(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -126,7 +132,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse optimized Potential
   if (args->begin()->first == "OptimizedPotential") {
     DEBUG("parsing OptimizedPotential");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add_to_optimized(MakePotential(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -135,7 +141,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
   // parse ThermoParams
   if (args->begin()->first == "ThermoParams") {
     DEBUG("parsing ThermoParams");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     set(MakeThermoParams(args->begin()->second));
     args->erase(args->begin());
     return;
@@ -146,7 +152,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Criteria*>(MakeMetropolis().get()), args);
   if (crit) {
     DEBUG("parsing Criteria");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     set(crit);
     return;
   }
@@ -156,7 +162,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Trial*>(MakeTrial().get()), args);
   if (trial) {
     DEBUG("parsing Trial");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(trial);
     return;
   }
@@ -166,7 +172,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<TrialFactoryNamed*>(std::make_shared<TrialFactoryNamed>().get()), args);
   if (trials) {
     DEBUG("parsing TrialFactoryNamed");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(trials);
     return;
   }
@@ -176,7 +182,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Analyze*>(std::make_shared<Analyze>().get()), args);
   if (an) {
     DEBUG("parsing Analyze");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(an);
     return;
   }
@@ -186,7 +192,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Modify*>(std::make_shared<Modify>().get()), args);
   if (mod) {
     DEBUG("parsing Modify");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     add(mod);
     return;
   }
@@ -196,7 +202,7 @@ void MonteCarlo::parse_args(arglist * args, const bool silent) {
     parse(dynamic_cast<Action*>(std::make_shared<Action>().get()), args);
   if (act) {
     DEBUG("parsing Action");
-    next_arg_ = *args->begin();
+    record_next_arg_(args);
     run(act);
     return;
   }
