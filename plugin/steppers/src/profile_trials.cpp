@@ -6,9 +6,14 @@
 
 namespace feasst {
 
-FEASST_MAPPER(ProfileTrials,);
+FEASST_MAPPER(ProfileTrials, argtpye({{"trials_per_update", "1e3"}}));
 
-ProfileTrials::ProfileTrials(argtype * args) : Analyze(args) {}
+ProfileTrials::ProfileTrials(argtype * args) : Analyze(args) {
+  if (trials_per_update() < 1e3) {
+    WARN("trials_per_update(" << trials_per_update() << ") should be " <<
+      ">= 1e3 to ensure profiling does not slow the simulation.");
+  }
+}
 ProfileTrials::ProfileTrials(argtype args) : ProfileTrials(&args) {
   feasst_check_all_used(args);
 }
@@ -27,7 +32,11 @@ std::string ProfileTrials::header(const Criteria& criteria,
     const TrialFactory& trial_factory) const {
   std::stringstream ss;
   for (const std::shared_ptr<Trial>& trial : trial_factory.trials()) {
-    ss << trial->class_name() << " ";
+    std::string name = trial->class_name();
+    if (name == "Trial") {
+      name = trial->description();
+    }
+    ss << name << ",";
   }
   ss << std::endl;
   return ss.str();
@@ -56,8 +65,15 @@ std::string ProfileTrials::write(const Criteria& criteria,
     const System& system,
     const TrialFactory& trial_factory) {
   std::stringstream ss;
+  if (rewrite_header()) {
+    ss << header(criteria, system, trial_factory);
+  }
+  double total = 0.;
   for (const Accumulator& prof : profile_) {
-    ss << prof.sum() << " ";
+    total += prof.sum();
+  }
+  for (const Accumulator& prof : profile_) {
+    ss << prof.sum()/total << ",";
   }
   ss << std::endl;
   DEBUG(ss.str());
