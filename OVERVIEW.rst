@@ -6,7 +6,7 @@ Overview
 
 .. include:: build/build.rst
 
-Text input file example
+Example input file
 ===============================================
 
 .. literalinclude:: tutorial/example.txt
