@@ -1,6 +1,6 @@
 
-#ifndef FEASST_CONFINEMENT_ZERO_POTENTIAL_H_
-#define FEASST_CONFINEMENT_ZERO_POTENTIAL_H_
+#ifndef FEASST_CONFINEMENT_ZERO_BACKGROUND_H_
+#define FEASST_CONFINEMENT_ZERO_BACKGROUND_H_
 
 #include <memory>
 #include <vector>
@@ -12,14 +12,14 @@ namespace feasst {
   Add the negative of the current energy as Background so that the total energy
   is now zero.
  */
-class ZeroPotential : public Action {
+class ZeroBackground : public Action {
  public:
   //@{
   /** @name Arguments
     - configuration_index: index of configuration potential (default: 0).
    */
-  explicit ZeroPotential(argtype args = argtype());
-  explicit ZeroPotential(argtype * args);
+  explicit ZeroBackground(argtype args = argtype());
+  explicit ZeroBackground(argtype * args);
 
   //@}
   /** @name Public Functions
@@ -28,23 +28,23 @@ class ZeroPotential : public Action {
 
   void run(MonteCarlo * mc) override;
   std::shared_ptr<Action> create(std::istream& istr) const override {
-    return std::make_shared<ZeroPotential>(istr); }
+    return std::make_shared<ZeroBackground>(istr); }
   std::shared_ptr<Action> create(argtype * args) const override {
-    return std::make_shared<ZeroPotential>(args); }
+    return std::make_shared<ZeroBackground>(args); }
   void serialize(std::ostream& ostr) const override;
-  explicit ZeroPotential(std::istream& istr);
-  virtual ~ZeroPotential() {}
+  explicit ZeroBackground(std::istream& istr);
+  virtual ~ZeroBackground() {}
 
   //@}
  private:
   int configuration_index_;
 };
 
-inline std::shared_ptr<ZeroPotential> MakeZeroPotential(
+inline std::shared_ptr<ZeroBackground> MakeZeroBackground(
     argtype args = argtype()) {
-  return std::make_shared<ZeroPotential>(args);
+  return std::make_shared<ZeroBackground>(args);
 }
 
 }  // namespace feasst
 
-#endif  // FEASST_CONFINEMENT_ZERO_POTENTIAL_H_
+#endif  // FEASST_CONFINEMENT_ZERO_BACKGROUND_H_

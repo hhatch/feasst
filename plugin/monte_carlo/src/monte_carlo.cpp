@@ -785,6 +785,7 @@ void MonteCarlo::run_for_hours(const double hours) {
 Criteria * MonteCarlo::get_criteria() { return criteria_.get(); }
 
 const Criteria& MonteCarlo::criteria() const {
+  ASSERT(criteria_, "Criteria not set.");
   return const_cast<Criteria&>(*criteria_);
 }
 
