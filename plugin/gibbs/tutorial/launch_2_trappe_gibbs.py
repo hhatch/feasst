@@ -16,7 +16,8 @@ PARSER.add_argument('--feasst_install', type=str, default='../../../build/',
                     help='FEASST install directory (e.g., the path to build)')
 PARSER.add_argument('--fstprt', type=str, default='/feasst/particle/n-butane.fstprt',
                     help='FEASST particle definition')
-PARSER.add_argument('--temperature', type=float, default=350, help='temperature in Kelvin')
+PARSER.add_argument('--temperature_lower', type=float, default=300, help='lowest simulated temperature in Kelvin')
+PARSER.add_argument('--temperature_upper', type=float, default=350, help='highest simulated temperature in Kelvin')
 PARSER.add_argument('--cutoff', type=float, default=12, help='real space cutoff distance')
 PARSER.add_argument('--cubic_side_length_vapor', type=float, default=63,
                     help='initial PBC of vapor')
@@ -37,7 +38,7 @@ PARSER.add_argument('--production_cycles', type=int, default=int(1e2),
                     help='number of cycles for production')
 PARSER.add_argument('--hours_checkpoint', type=float, default=0.2, help='hours per checkpoint')
 PARSER.add_argument('--hours_terminate', type=float, default=1, help='hours until termination')
-PARSER.add_argument('--procs_per_node', type=int, default=1, help='number of processors')
+PARSER.add_argument('--procs_per_node', type=int, default=2, help='number of processors')
 PARSER.add_argument('--run_type', '-r', type=int, default=0,
                     help='0: run, 1: submit to queue, 2: post-process')
 PARSER.add_argument('--seed', type=int, default=-1,
@@ -61,9 +62,9 @@ PARAMS['minutes'] = int(PARAMS['hours_terminate']*60) # minutes allocated on que
 PARAMS['hours_terminate'] = 0.95*PARAMS['hours_terminate'] - 0.05 # terminate FEASST before SLURM
 PARAMS['hours_terminate'] *= PARAMS['procs_per_node'] # real time -> cpu time
 PARAMS['hours_checkpoint'] *= PARAMS['procs_per_node']
-PARAMS['num_sims'] = PARAMS['num_nodes']
-PARAMS['procs_per_sim'] = PARAMS['procs_per_node']
-PARAMS['beta'] = 1./(PARAMS['temperature']*physical_constants.MolarGasConstant().value()/1e3) # mol/kJ
+PARAMS['procs_per_sim'] = 1
+PARAMS['num_sims'] = PARAMS['num_nodes']*PARAMS['procs_per_node']
+PARAMS['temperatures'] = np.linspace(PARAMS['temperature_lower'],PARAMS['temperature_upper'], num=PARAMS['num_sims']).tolist()
 PARAMS['mu_init']=10
 PARAMS['equil'] = PARAMS['equilibration_cycles']*PARAMS['tpc']
 PARAMS['double_equil'] = 2*PARAMS['equil']
@@ -89,6 +90,10 @@ Remove name_contains add""".format(**PARAMS)
 else:
     PARAMS['liquid_config'] = """xyz_file {xyz_liquid}""".format(**PARAMS)
     PARAMS['init_liquid'] = ''
+
+def sim_node_dependent_params(params):
+    """ Set parameters that depend upon the sim or node here. """
+    params['beta'] = 1./(params['temperatures'][params['sim']]*physical_constants.MolarGasConstant().value()/1e3) # mol/kJ
 
 def write_partial(f, bond, angle, dihedral, params):
     if params['num_sites'] == 2:
@@ -250,39 +255,41 @@ Run until complete
 
 def post_process(params):
     z_factor = 13
-    na = physical_constants.AvogadroConstant().value()
-    dens_conv = 1./na*params['molecular_weight']/1e3*1e30 # convert from N/V units of molecules/A^3 to kg/m
-    vapor_density = pd.read_csv(params['prefix']+"0_c0_dens.csv")
-    vapor_density['average'] *= dens_conv
-    vapor_density['block_stdev'] *= dens_conv
-    vapor_density['diff'] = np.abs(vapor_density['average']-30.6)
-    vapor_density['tol'] = np.sqrt(vapor_density['block_stdev']**2+(2**2))
-    print(vapor_density)
-    diverged = vapor_density[vapor_density['diff'] > z_factor*vapor_density['tol']]
-    if len(diverged) > 0:
-        print(diverged)
-    assert len(diverged) == 0
-    liquid_density = pd.read_csv(params['prefix']+"0_c1_dens.csv")
-    liquid_density['average'] *= dens_conv
-    liquid_density['block_stdev'] *= dens_conv
-    liquid_density['diff'] = np.abs(liquid_density['average']-508)
-    liquid_density['tol'] = np.sqrt(liquid_density['block_stdev']**2+(2**2))
-    print(liquid_density)
-    diverged = liquid_density[liquid_density['diff'] > z_factor*liquid_density['tol']]
-    if len(diverged) > 0:
-        print(diverged)
-    assert len(diverged) == 0
-    pres_conv = 1e33/na # convert from kJ/mol/A^3 to Pa (J/m^3)
-    pressure = pd.read_csv(params['prefix']+"0_pressure.csv")
-    pressure['average'] *= pres_conv
-    pressure['block_stdev'] *= pres_conv
-    pressure['diff'] = np.abs(pressure['average']-1.1976E+06)
-    pressure['tol'] = np.sqrt(pressure['block_stdev']**2+(3.6212E+02)**2)
-    print(pressure)
+    for p in range(params['num_sims']):
+        if params['temperatures'][p] == 350 and "n-butane" in params['fstprt']:
+            na = physical_constants.AvogadroConstant().value()
+            dens_conv = 1./na*params['molecular_weight']/1e3*1e30 # convert from N/V units of molecules/A^3 to kg/m
+            vapor_density = pd.read_csv(params['prefix']+str(p)+"_c0_dens.csv")
+            vapor_density['average'] *= dens_conv
+            vapor_density['block_stdev'] *= dens_conv
+            vapor_density['diff'] = np.abs(vapor_density['average']-30.6)
+            vapor_density['tol'] = np.sqrt(vapor_density['block_stdev']**2+(2**2))
+            print(vapor_density)
+            diverged = vapor_density[vapor_density['diff'] > z_factor*vapor_density['tol']]
+            if len(diverged) > 0:
+                print(diverged)
+            assert len(diverged) == 0
+            liquid_density = pd.read_csv(params['prefix']+str(p)+"_c1_dens.csv")
+            liquid_density['average'] *= dens_conv
+            liquid_density['block_stdev'] *= dens_conv
+            liquid_density['diff'] = np.abs(liquid_density['average']-508)
+            liquid_density['tol'] = np.sqrt(liquid_density['block_stdev']**2+(2**2))
+            print(liquid_density)
+            diverged = liquid_density[liquid_density['diff'] > z_factor*liquid_density['tol']]
+            if len(diverged) > 0:
+                print(diverged)
+            assert len(diverged) == 0
+            pres_conv = 1e33/na # convert from kJ/mol/A^3 to Pa (J/m^3)
+            pressure = pd.read_csv(params['prefix']+str(p)+"_pressure.csv")
+            pressure['average'] *= pres_conv
+            pressure['block_stdev'] *= pres_conv
+            pressure['diff'] = np.abs(pressure['average']-1.1976E+06)
+            pressure['tol'] = np.sqrt(pressure['block_stdev']**2+(3.6212E+02)**2)
+            print(pressure)
 
 if __name__ == '__main__':
     fstio.run_simulations(params=PARAMS,
-                          sim_node_dependent_params=None,
+                          sim_node_dependent_params=sim_node_dependent_params,
                           write_feasst_script=write_feasst_script,
                           post_process=post_process,
                           queue_function=fstio.slurm_single_node,
