@@ -179,7 +179,6 @@ def write_feasst_script(params, script_file):
     """ Write fst script for a single simulation with keys of params {} enclosed. """
     with open(script_file, 'w', encoding='utf-8') as myfile:
         myfile.write("""
-# first, initialize multiple clones into windows
 MonteCarlo
 RandomMT19937 seed {seed}
 Configuration {vapor_config} particle_type0 {fstprt} cutoff {cutoff}
@@ -239,13 +238,13 @@ Remove name0 GibbsInitialize name1 Tune name2 Log name3 Movie name4 Movie name5 
 Metropolis trials_per_cycle {tpc} cycles_to_complete {production_cycles}
 Log trials_per_write {tpc} output_file {prefix}{sim}.csv
 CopyFollowingLines for_num_configurations 2 replace_with_index [config]
+    Density trials_per_write {tpc} output_file {prefix}{sim}_c[config]_dens.csv
     Movie   trials_per_write {tpc} output_file {prefix}{sim}_c[config].xyz
     Energy  trials_per_write {tpc} output_file {prefix}{sim}_c[config]_en.csv
-    Density trials_per_write {tpc} output_file {prefix}{sim}_c[config]_dens.csv
 EndCopy
 GhostTrialVolume trials_per_update 1e3 trials_per_write {tpc} output_file {prefix}{sim}_pressure.csv
-CPUTime trials_per_write {tpc} output_file {prefix}{sim}_cpu.csv
 ProfileCPU trials_per_write {tpc} output_file {prefix}{sim}_profile.csv
+CPUTime    trials_per_write {tpc} output_file {prefix}{sim}_cpu.csv
 Run until complete
 """.format(**params))
 
