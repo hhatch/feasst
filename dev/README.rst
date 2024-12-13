@@ -390,4 +390,6 @@ To Do List
 * Have the tests override hours checkpoint , etc so that users don't have bad values
 * Maybe make some kind of class that factories out the creation of analyze and modify (e.g., all using the same trials_per_iteration, file name prefixes, etc)
 * Remove CollectionMatrixSplice from tutorials?
-* Enable DCCB with Gibbs (transfer issue, or all cb ?)
+* Enable DCCB with Gibbs (transfer issue, or all cb ?)- ACtually, it seems to be cell lists that are the problem (the ref potential)
+* fstprt files use label strings instead of numbers (document this, 0-O, 1-H for spce, etc)
+* pip install feasst
