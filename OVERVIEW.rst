@@ -109,22 +109,6 @@ Windows 10
 * Install Windows subsystem for Linux (Ubuntu 16)
 * See Ubuntu 16
 
-Documentation for a specific version of FEASST
-===============================================
-
-You can access the documentation of a specific version of FEASST as follows.
-
-.. code-block:: bash
-
-    git clone https://github.com/usnistgov/feasst.git
-    cd feasst
-    git checkout nist-pages
-    git log
-    # find the commit of your version from git log
-    # (e.g., 0.19.0 is a50b4fe943832f012373f23658a9497990d70d21)
-    git checkout a50b4fe943832f012373f23658a9497990d70d21
-    google-chrome index.html
-
 .. include:: CONTACT.rst
 
 .. include:: DISCLAIMER.rst

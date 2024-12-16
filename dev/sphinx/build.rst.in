@@ -14,6 +14,8 @@ FEASST requires C++14 and CMake, and is compiled with the following BASH command
     make install -j$(nproc)
     # optional Python packages for feasst tutorials
     pip install jupyter matplotlib pandas scipy ../pyfeasst # ../ ensures pyfeasst matches feasst
+    # The online documentation changes. Open documentation locally. For macOS, use open.
+    xdg-open ../html/index.html
 
 How to run a simulation
 ===============================================
