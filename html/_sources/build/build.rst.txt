@@ -1,0 +1,30 @@
+How to compile
+===============================================
+
+FEASST requires C++14 and CMake, and is compiled with the following BASH commands:
+
+.. code-block:: bash
+
+    #[apt/yum/dnf/brew] install g++ cmake
+    cd $HOME # replace this with your preference throughout
+    curl -OL https://github.com/usnistgov/feasst/archive/refs/tags/v0.25.5.tar.gz
+    tar -xf v0.25.5.tar.gz
+    mkdir feasst-0.25.5/build; cd $_
+    cmake ..
+    make install -j$(nproc)
+    # optional Python packages for feasst tutorials
+    pip install jupyter matplotlib pandas scipy ../pyfeasst # ../ ensures pyfeasst matches feasst
+
+How to run a simulation
+===============================================
+
+Input a text file to the compiled executable.
+
+.. code-block:: bash
+
+    $HOME/feasst-0.25.5/build/bin/fst < $HOME/feasst-0.25.5/tutorial/example.txt
+
+The following text input file is explained in detail in the first :doc:`tutorial <tutorial/tutorial>`.
+
+.. literalinclude:: tutorial/example.txt
+
