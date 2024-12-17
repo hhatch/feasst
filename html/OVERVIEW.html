@@ -178,16 +178,17 @@ New users can start with the <a class="reference external" href="https://pages.n
 <section id="how-to-compile">
 <h2>How to compile<a class="headerlink" href="#how-to-compile" title="Link to this heading"></a></h2>
 <p>FEASST requires C++14 and CMake, and is compiled with the following BASH commands:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#[apt/yum/dnf/brew] install g++ cmake</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># [apt/yum/dnf/brew] install g++ cmake; or find in &quot;module avail&quot;</span>
 <span class="nb">cd</span><span class="w"> </span><span class="nv">$HOME</span><span class="w"> </span><span class="c1"># replace this with your preference throughout</span>
 curl<span class="w"> </span>-OL<span class="w"> </span>https://github.com/usnistgov/feasst/archive/refs/tags/v0.25.6.tar.gz
 tar<span class="w"> </span>-xf<span class="w"> </span>v0.25.6.tar.gz
 mkdir<span class="w"> </span>feasst-0.25.6/build<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$_</span>
 cmake<span class="w"> </span>..
 make<span class="w"> </span>install<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
-<span class="c1"># optional Python packages for feasst tutorials</span>
+<span class="c1"># Optional Python packages used in tutorials. Virtual environment recommended:</span>
+<span class="c1"># https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments</span>
 pip<span class="w"> </span>install<span class="w"> </span>jupyter<span class="w"> </span>matplotlib<span class="w"> </span>pandas<span class="w"> </span>scipy<span class="w"> </span>../pyfeasst<span class="w"> </span><span class="c1"># ../ ensures pyfeasst matches feasst</span>
-<span class="c1"># The online documentation changes. Open documentation locally. For macOS, use open.</span>
+<span class="c1"># Because online documentation changes, open specific version. For macOS, xdg-open -&gt; open</span>
 xdg-open<span class="w"> </span>../html/index.html
 </pre></div>
 </div>
