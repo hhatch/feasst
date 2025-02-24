@@ -5,7 +5,7 @@ FEASST requires C++14 and CMake, and is compiled with the following BASH command
 
 .. code-block:: bash
 
-    # [apt/yum/dnf/brew] install g++ cmake curl tar. On HPC, try "module avail; module load"
+    # [apt/yum/dnf/brew] install g++ cmake curl tar. On HPC, try "module avail/load"
     cd $HOME # replace this with your preference throughout
     curl -OL https://github.com/usnistgov/feasst/archive/refs/tags/v@FEASST_VERSION@.tar.gz # download
     tar -xf v@FEASST_VERSION@.tar.gz           # uncompress
@@ -16,7 +16,7 @@ FEASST requires C++14 and CMake, and is compiled with the following BASH command
     # https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments
     pip install jupyter matplotlib pandas scipy ../pyfeasst # ../ ensures pyfeasst matches feasst
     # Because online documentation changes with verison, open local version documentation.
-    xdg-open ../html/index.html      # For macOS, replace "xdg-open" with "open"
+    xdg-open ../html/index.html      # on macOS, replace "xdg-open" with "open"
 
 How to run a simulation
 ===============================================
