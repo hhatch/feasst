@@ -421,8 +421,8 @@ if (USE_SPHINX)
     @ONLY)
 
   configure_file(
-    "${CMAKE_SOURCE_DIR}/dev/sphinx/build.rst.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/build.rst"
+    "${CMAKE_SOURCE_DIR}/dev/sphinx/README.rst.in"
+    "${CMAKE_SOURCE_DIR}/README.rst"
     @ONLY)
 
   # copy favicon, leave notice and extended layout
