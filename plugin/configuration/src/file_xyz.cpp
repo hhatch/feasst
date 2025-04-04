@@ -97,7 +97,7 @@ bool FileXYZ::load_frame(std::ifstream& xyz_file,
       int read_sites = 0;
       while (read_sites < num_sites) {
         const int st = site_types[read_sites];
-        ASSERT(st != -1, "Trying to determine the order of molecules in an "
+        ASSERT(st != -1, "Trying to determine the order of particles in an "
           << "XYZ file that is apparently multicomponent, but the site types "
           << "were not given in integers so FEASST cannot determine the "
           << "appropriate order.");
